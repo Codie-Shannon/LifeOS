@@ -4,15 +4,14 @@ namespace LifeOS.Modules.Timer.Services;
 
 public sealed class TimerService
 {
-    private TimerSession? _currentSession;
-    private DateTimeOffset? _lastStartedAt;
+    private TimedTask? _currentTask;
 
-    public TimerSession? CurrentSession => _currentSession;
+    public TimedTask? CurrentSession => _currentTask;
 
-    public TimerState State => _currentSession?.State ?? TimerState.Stopped;
+    public TimedTaskState State => _currentTask?.State ?? TimedTaskState.Stopped;
 
-    public TimerSession Start(
-        string clientName,
+    public TimedTask Start(
+        string contactName,
         string projectName,
         string workType,
         bool isBillable,
@@ -20,111 +19,98 @@ public sealed class TimerService
         decimal taxSetAsidePercent,
         string notes)
     {
-        if (_currentSession is not null && _currentSession.State == TimerState.Running)
+        if (_currentTask is not null && _currentTask.State == TimedTaskState.Running)
         {
-            throw new InvalidOperationException("A timer session is already running.");
+            throw new InvalidOperationException("A timed task is already running.");
         }
 
-        _lastStartedAt = DateTimeOffset.Now;
+        var now = DateTimeOffset.Now;
 
-        _currentSession = new TimerSession
+        _currentTask = new TimedTask
         {
-            ClientName = clientName.Trim(),
+            Name = $"{contactName.Trim()} · {projectName.Trim()}",
+            ContactName = contactName.Trim(),
             ProjectName = projectName.Trim(),
             WorkType = workType.Trim(),
+            TaskType = TimedTaskType.Work,
+            Mode = TimedTaskMode.Exclusive,
             IsBillable = isBillable,
             HourlyRate = hourlyRate,
             TaxSetAsidePercent = taxSetAsidePercent,
             Notes = notes.Trim(),
-            State = TimerState.Running
+            StartedAt = now,
+            LastStartedAt = now,
+            State = TimedTaskState.Running
         };
 
-        return _currentSession;
+        return _currentTask;
     }
 
     public void Pause()
     {
-        if (_currentSession is null || _currentSession.State != TimerState.Running)
+        if (_currentTask is null || _currentTask.State != TimedTaskState.Running)
         {
             return;
         }
 
         var now = DateTimeOffset.Now;
-        var startedAt = _lastStartedAt ?? _currentSession.StartedAt;
 
-        _currentSession.AccumulatedDuration += now - startedAt;
-        _currentSession.State = TimerState.Paused;
-        _lastStartedAt = null;
+        if (_currentTask.LastStartedAt is not null)
+        {
+            _currentTask.AccumulatedDuration += now - _currentTask.LastStartedAt.Value;
+        }
+
+        _currentTask.State = TimedTaskState.Paused;
+        _currentTask.LastStartedAt = null;
     }
 
     public void Resume()
     {
-        if (_currentSession is null || _currentSession.State != TimerState.Paused)
+        if (_currentTask is null || _currentTask.State != TimedTaskState.Paused)
         {
             return;
         }
 
-        _lastStartedAt = DateTimeOffset.Now;
-        _currentSession.State = TimerState.Running;
+        _currentTask.LastStartedAt = DateTimeOffset.Now;
+        _currentTask.State = TimedTaskState.Running;
     }
 
-    public TimerSession? Stop()
+    public TimedTask? Stop()
     {
-        if (_currentSession is null)
+        if (_currentTask is null)
         {
             return null;
         }
 
-        if (_currentSession.State == TimerState.Running)
+        var now = DateTimeOffset.Now;
+
+        if (_currentTask.State == TimedTaskState.Running)
         {
             Pause();
         }
 
-        _currentSession.EndedAt = DateTimeOffset.Now;
-        _currentSession.State = TimerState.Stopped;
+        _currentTask.EndedAt = now;
+        _currentTask.State = TimedTaskState.Done;
 
-        var completedSession = _currentSession;
-        _currentSession = null;
-        _lastStartedAt = null;
+        var completedTask = _currentTask.CreateSnapshot(now);
 
-        return completedSession;
+        _currentTask = null;
+
+        return completedTask;
     }
 
     public TimeSpan GetCurrentDuration()
     {
-        if (_currentSession is null)
-        {
-            return TimeSpan.Zero;
-        }
-
-        if (_currentSession.State == TimerState.Running)
-        {
-            var now = DateTimeOffset.Now;
-            var startedAt = _lastStartedAt ?? _currentSession.StartedAt;
-            return _currentSession.AccumulatedDuration + (now - startedAt);
-        }
-
-        return _currentSession.AccumulatedDuration;
+        return _currentTask?.GetCurrentDuration() ?? TimeSpan.Zero;
     }
 
     public decimal GetCurrentEarnedAmount()
     {
-        if (_currentSession is null || !_currentSession.IsBillable)
-        {
-            return 0m;
-        }
-
-        var hours = (decimal)GetCurrentDuration().TotalHours;
-        return Math.Round(hours * _currentSession.HourlyRate, 2);
+        return _currentTask?.GetEarnedAmount() ?? 0m;
     }
 
     public decimal GetCurrentTaxSetAside()
     {
-        if (_currentSession is null)
-        {
-            return 0m;
-        }
-
-        return Math.Round(GetCurrentEarnedAmount() * (_currentSession.TaxSetAsidePercent / 100m), 2);
+        return _currentTask?.GetTaxSetAside() ?? 0m;
     }
 }

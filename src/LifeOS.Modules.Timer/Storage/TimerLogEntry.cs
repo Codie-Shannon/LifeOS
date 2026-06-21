@@ -5,12 +5,21 @@ namespace LifeOS.Modules.Timer.Storage;
 public sealed class TimerLogEntry
 {
     public Guid Id { get; init; }
+    public Guid TimedTaskId { get; init; }
+
+    public string TimedTaskName { get; init; } = string.Empty;
+    public string TaskType { get; init; } = string.Empty;
+    public string TaskMode { get; init; } = string.Empty;
+
     public DateOnly Date { get; init; }
     public TimeOnly StartTime { get; init; }
     public TimeOnly EndTime { get; init; }
 
     public double DurationMinutes { get; init; }
-    public string ClientName { get; init; } = string.Empty;
+
+    public Guid? ContactId { get; init; }
+    public string ContactName { get; init; } = string.Empty;
+
     public string ProjectName { get; init; } = string.Empty;
     public string WorkType { get; init; } = string.Empty;
     public bool IsBillable { get; init; }
@@ -23,34 +32,41 @@ public sealed class TimerLogEntry
 
     public string Notes { get; init; } = string.Empty;
 
-    public static TimerLogEntry FromSession(TimerSession session)
+    public static TimerLogEntry FromTimedTask(TimedTask task)
     {
-        var endedAt = session.EndedAt ?? DateTimeOffset.Now;
-        var duration = session.AccumulatedDuration;
+        var endedAt = task.EndedAt ?? DateTimeOffset.Now;
+        var duration = task.GetCurrentDuration(endedAt);
 
-        var earnedAmount = session.GetEarnedAmount();
-        var taxSetAsideAmount = session.GetTaxSetAside();
+        var earnedAmount = task.GetEarnedAmount(endedAt);
+        var taxSetAsideAmount = task.GetTaxSetAside(endedAt);
 
         return new TimerLogEntry
         {
-            Id = session.Id,
-            Date = DateOnly.FromDateTime(session.StartedAt.LocalDateTime),
-            StartTime = TimeOnly.FromDateTime(session.StartedAt.LocalDateTime),
+            Id = Guid.NewGuid(),
+            TimedTaskId = task.Id,
+            TimedTaskName = task.DisplayName,
+            TaskType = task.TaskType.ToString(),
+            TaskMode = task.Mode.ToString(),
+
+            Date = DateOnly.FromDateTime(task.StartedAt.LocalDateTime),
+            StartTime = TimeOnly.FromDateTime(task.StartedAt.LocalDateTime),
             EndTime = TimeOnly.FromDateTime(endedAt.LocalDateTime),
             DurationMinutes = Math.Round(duration.TotalMinutes, 2),
 
-            ClientName = session.ClientName,
-            ProjectName = session.ProjectName,
-            WorkType = session.WorkType,
-            IsBillable = session.IsBillable,
+            ContactId = task.ContactId,
+            ContactName = task.ContactName,
 
-            HourlyRate = session.HourlyRate,
+            ProjectName = task.ProjectName,
+            WorkType = task.WorkType,
+            IsBillable = task.IsBillable,
+
+            HourlyRate = task.HourlyRate,
             EarnedAmount = earnedAmount,
-            TaxSetAsidePercent = session.TaxSetAsidePercent,
+            TaxSetAsidePercent = task.TaxSetAsidePercent,
             TaxSetAsideAmount = taxSetAsideAmount,
             SafeAfterTaxAmount = earnedAmount - taxSetAsideAmount,
 
-            Notes = session.Notes
+            Notes = task.Notes
         };
     }
 }

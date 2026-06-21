@@ -6,7 +6,7 @@ namespace LifeOS.Modules.Timer.Storage;
 public sealed class TimerCsvLogWriter
 {
     private const string Header =
-        "Id,Date,StartTime,EndTime,DurationMinutes,ClientName,ProjectName,WorkType,IsBillable,HourlyRate,EarnedAmount,TaxSetAsidePercent,TaxSetAsideAmount,SafeAfterTaxAmount,Notes";
+        "Id,TimedTaskId,TimedTaskName,TaskType,TaskMode,Date,StartTime,EndTime,DurationMinutes,ContactId,ContactName,ProjectName,WorkType,IsBillable,HourlyRate,EarnedAmount,TaxSetAsidePercent,TaxSetAsideAmount,SafeAfterTaxAmount,Notes";
 
     public string LogFilePath { get; }
 
@@ -67,7 +67,7 @@ public sealed class TimerCsvLogWriter
 
             var values = ParseCsvLine(line);
 
-            if (values.Count < 15)
+            if (values.Count < 20)
             {
                 continue;
             }
@@ -75,20 +75,25 @@ public sealed class TimerCsvLogWriter
             entries.Add(new TimerLogEntry
             {
                 Id = Guid.TryParse(values[0], out var id) ? id : Guid.Empty,
-                Date = DateOnly.Parse(values[1], CultureInfo.InvariantCulture),
-                StartTime = TimeOnly.Parse(values[2], CultureInfo.InvariantCulture),
-                EndTime = TimeOnly.Parse(values[3], CultureInfo.InvariantCulture),
-                DurationMinutes = double.Parse(values[4], CultureInfo.InvariantCulture),
-                ClientName = values[5],
-                ProjectName = values[6],
-                WorkType = values[7],
-                IsBillable = bool.Parse(values[8]),
-                HourlyRate = decimal.Parse(values[9], CultureInfo.InvariantCulture),
-                EarnedAmount = decimal.Parse(values[10], CultureInfo.InvariantCulture),
-                TaxSetAsidePercent = decimal.Parse(values[11], CultureInfo.InvariantCulture),
-                TaxSetAsideAmount = decimal.Parse(values[12], CultureInfo.InvariantCulture),
-                SafeAfterTaxAmount = decimal.Parse(values[13], CultureInfo.InvariantCulture),
-                Notes = values[14]
+                TimedTaskId = Guid.TryParse(values[1], out var taskId) ? taskId : Guid.Empty,
+                TimedTaskName = values[2],
+                TaskType = values[3],
+                TaskMode = values[4],
+                Date = DateOnly.Parse(values[5], CultureInfo.InvariantCulture),
+                StartTime = TimeOnly.Parse(values[6], CultureInfo.InvariantCulture),
+                EndTime = TimeOnly.Parse(values[7], CultureInfo.InvariantCulture),
+                DurationMinutes = double.Parse(values[8], CultureInfo.InvariantCulture),
+                ContactId = Guid.TryParse(values[9], out var contactId) ? contactId : null,
+                ContactName = values[10],
+                ProjectName = values[11],
+                WorkType = values[12],
+                IsBillable = bool.Parse(values[13]),
+                HourlyRate = decimal.Parse(values[14], CultureInfo.InvariantCulture),
+                EarnedAmount = decimal.Parse(values[15], CultureInfo.InvariantCulture),
+                TaxSetAsidePercent = decimal.Parse(values[16], CultureInfo.InvariantCulture),
+                TaxSetAsideAmount = decimal.Parse(values[17], CultureInfo.InvariantCulture),
+                SafeAfterTaxAmount = decimal.Parse(values[18], CultureInfo.InvariantCulture),
+                Notes = values[19]
             });
         }
 
@@ -99,11 +104,16 @@ public sealed class TimerCsvLogWriter
     {
         return string.Join(",",
             Escape(entry.Id.ToString()),
+            Escape(entry.TimedTaskId.ToString()),
+            Escape(entry.TimedTaskName),
+            Escape(entry.TaskType),
+            Escape(entry.TaskMode),
             Escape(entry.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)),
             Escape(entry.StartTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture)),
             Escape(entry.EndTime.ToString("HH:mm:ss", CultureInfo.InvariantCulture)),
             Escape(entry.DurationMinutes.ToString("0.##", CultureInfo.InvariantCulture)),
-            Escape(entry.ClientName),
+            Escape(entry.ContactId?.ToString() ?? string.Empty),
+            Escape(entry.ContactName),
             Escape(entry.ProjectName),
             Escape(entry.WorkType),
             Escape(entry.IsBillable.ToString()),

@@ -194,11 +194,11 @@ public partial class MainWindow : Window
 
     private void PauseResumeButton_Click(object sender, RoutedEventArgs e)
     {
-        if (_timerService.State == TimerState.Running)
+        if (_timerService.State == TimedTaskState.Running)
         {
             _timerService.Pause();
         }
-        else if (_timerService.State == TimerState.Paused)
+        else if (_timerService.State == TimedTaskState.Paused)
         {
             _timerService.Resume();
         }
@@ -234,7 +234,7 @@ public partial class MainWindow : Window
         {
             try
             {
-                var logEntry = TimerLogEntry.FromSession(completedSession);
+                var logEntry = TimerLogEntry.FromTimedTask(completedSession);
                 _logWriter.Append(logEntry);
             }
             catch (Exception ex)
@@ -335,9 +335,9 @@ public partial class MainWindow : Window
 
         if (session is not null)
         {
-            var client = string.IsNullOrWhiteSpace(session.ClientName)
+            var client = string.IsNullOrWhiteSpace(session.ContactName)
                 ? "No client"
-                : session.ClientName;
+                : session.ContactName;
 
             var project = string.IsNullOrWhiteSpace(session.ProjectName)
                 ? "No project"
@@ -352,19 +352,19 @@ public partial class MainWindow : Window
 
         CompactMoneyDisplay.Text = $"{earned:C} earned · {tax:C} tax";
 
-        StartButton.IsEnabled = _timerService.State == TimerState.Stopped;
-        PauseResumeButton.IsEnabled = _timerService.State is TimerState.Running or TimerState.Paused;
-        StopButton.IsEnabled = _timerService.State is TimerState.Running or TimerState.Paused;
+        StartButton.IsEnabled = _timerService.State == TimedTaskState.Stopped;
+        PauseResumeButton.IsEnabled = _timerService.State is TimedTaskState.Running or TimedTaskState.Paused;
+        StopButton.IsEnabled = _timerService.State is TimedTaskState.Running or TimedTaskState.Paused;
 
-        PauseResumeButton.Content = _timerService.State == TimerState.Paused
+        PauseResumeButton.Content = _timerService.State == TimedTaskState.Paused
             ? "Resume"
             : "Pause";
 
         if (_timerService.CurrentSession is not null)
         {
-            var client = string.IsNullOrWhiteSpace(_timerService.CurrentSession.ClientName)
+            var client = string.IsNullOrWhiteSpace(_timerService.CurrentSession.ContactName)
                 ? "No client"
-                : _timerService.CurrentSession.ClientName;
+                : _timerService.CurrentSession.ContactName;
 
             _trayIconService?.UpdateTooltip(
                 $"Life OS TimerAgent - {client} - {TimerDisplay.Text}");

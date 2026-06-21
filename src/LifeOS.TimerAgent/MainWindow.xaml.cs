@@ -22,6 +22,7 @@ public partial class MainWindow : Window
     private GlobalHotKeyService? _hotKeyService;
     private TrayIconService? _trayIconService;
     private bool _allowClose;
+    private bool _isCompactMode;
 
     public MainWindow()
     {
@@ -151,6 +152,12 @@ public partial class MainWindow : Window
         base.OnClosed(e);
     }
 
+    private void ToggleCompactButton_Click(object sender, RoutedEventArgs e)
+    {
+        _isCompactMode = !_isCompactMode;
+        ApplyWindowMode();
+    }
+
     private void StartButton_Click(object sender, RoutedEventArgs e)
     {
         if (!TryReadMoneyFields(out var hourlyRate, out var taxPercent))
@@ -249,6 +256,48 @@ public partial class MainWindow : Window
         ShowTimerWindow();
     }
 
+    private void ApplyWindowMode()
+    {
+        if (_isCompactMode)
+        {
+            FieldsPanel.Visibility = Visibility.Collapsed;
+            NotesTotalsPanel.Visibility = Visibility.Collapsed;
+            HeaderSubtitle.Visibility = Visibility.Collapsed;
+
+            ToggleCompactButton.Content = "Full";
+
+            Width = 420;
+            Height = 300;
+            MinWidth = 380;
+            MinHeight = 280;
+            MaxWidth = 420;
+            MaxHeight = 300;
+
+            ResizeMode = ResizeMode.NoResize;
+        }
+        else
+        {
+            FieldsPanel.Visibility = Visibility.Visible;
+            NotesTotalsPanel.Visibility = Visibility.Visible;
+            HeaderSubtitle.Visibility = Visibility.Visible;
+
+            ToggleCompactButton.Content = "Compact";
+
+            MaxWidth = double.PositiveInfinity;
+            MaxHeight = double.PositiveInfinity;
+
+            Width = 540;
+            Height = 720;
+            MinWidth = 480;
+            MinHeight = 620;
+
+            ResizeMode = ResizeMode.CanResize;
+        }
+
+        Topmost = false;
+        Topmost = true;
+    }
+
     private void RefreshTimerUi()
     {
         var duration = _timerService.GetCurrentDuration();
@@ -260,9 +309,26 @@ public partial class MainWindow : Window
         var tax = _timerService.GetCurrentTaxSetAside();
         var safeAfterTax = earned - tax;
 
-        EarnedDisplay.Text = $"Earned: {earned:C}";
-        TaxDisplay.Text = $"Tax set-aside: {tax:C}";
-        SafeAfterTaxDisplay.Text = $"Safe after tax: {safeAfterTax:C}";
+        var session = _timerService.CurrentSession;
+
+        if (session is not null)
+        {
+            var client = string.IsNullOrWhiteSpace(session.ClientName)
+                ? "No client"
+                : session.ClientName;
+
+            var project = string.IsNullOrWhiteSpace(session.ProjectName)
+                ? "No project"
+                : session.ProjectName;
+
+            CompactSummaryDisplay.Text = $"{client} · {project}";
+        }
+        else
+        {
+            CompactSummaryDisplay.Text = "No active session";
+        }
+
+        CompactMoneyDisplay.Text = $"{earned:C} earned · {tax:C} tax";
 
         StartButton.IsEnabled = _timerService.State == TimerState.Stopped;
         PauseResumeButton.IsEnabled = _timerService.State is TimerState.Running or TimerState.Paused;

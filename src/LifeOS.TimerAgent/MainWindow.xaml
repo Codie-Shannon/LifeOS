@@ -3,257 +3,400 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Life OS TimerAgent"
         Height="720"
-        Width="540"
-        MinHeight="240"
-        MinWidth="360"
+        Width="560"
+        MinHeight="260"
+        MinWidth="390"
         WindowStartupLocation="CenterScreen"
         Topmost="True"
-        Background="#0F172A">
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        Background="Transparent"
+        AllowsTransparency="True">
 
-    <Grid x:Name="RootLayout" Margin="18">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="14"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="14"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="14"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Window.Resources>
 
-        <!-- Header -->
-        <DockPanel Grid.Row="0" LastChildFill="True">
-            <Button x:Name="ToggleCompactButton"
-                    DockPanel.Dock="Right"
-                    Content="Compact"
-                    Width="92"
-                    Height="34"
-                    Margin="12,0,0,0"
-                    Click="ToggleCompactButton_Click"/>
+        <!-- Base colours:
+             App background: #F5F7FB
+             Card white:     #FFFFFF
+             Border:         #E5E7EB
+             Text:           #111827
+             Muted:          #6B7280
+             Primary blue:   #2563EB
+             Success green:  #059669
+             Danger red:     #DC2626
+        -->
 
-            <StackPanel>
-                <TextBlock Text="Life OS TimerAgent"
-                           Foreground="White"
-                           FontSize="26"
+        <Style x:Key="LifeButton" TargetType="Button">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="MinHeight" Value="38"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F3F4F6"/>
+                                <Setter Property="BorderBrush" Value="#9CA3AF"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#E5E7EB"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#F9FAFB"/>
+                                <Setter Property="Foreground" Value="#9CA3AF"/>
+                                <Setter Property="BorderBrush" Value="#E5E7EB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource LifeButton}">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="BorderBrush" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="PrimaryButtonHover" TargetType="Button" BasedOn="{StaticResource PrimaryButton}"/>
+
+        <Style x:Key="SoftButton" TargetType="Button" BasedOn="{StaticResource LifeButton}">
+            <Setter Property="Background" Value="#EEF2FF"/>
+            <Setter Property="BorderBrush" Value="#C7D2FE"/>
+            <Setter Property="Foreground" Value="#1E40AF"/>
+        </Style>
+
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource LifeButton}">
+            <Setter Property="Background" Value="#DC2626"/>
+            <Setter Property="BorderBrush" Value="#DC2626"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="QuietDangerButton" TargetType="Button" BasedOn="{StaticResource LifeButton}">
+            <Setter Property="Background" Value="#FEF2F2"/>
+            <Setter Property="BorderBrush" Value="#FECACA"/>
+            <Setter Property="Foreground" Value="#991B1B"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="CaretBrush" Value="#111827"/>
+            <Setter Property="MinHeight" Value="36"/>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style x:Key="LabelText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="MutedText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#6B7280"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="22"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Border Background="#F5F7FB"
+        BorderBrush="#D1D5DB"
+        BorderThickness="1"
+        CornerRadius="24">
+
+        <ScrollViewer x:Name="MainScrollViewer"
+              VerticalScrollBarVisibility="Auto"
+              HorizontalScrollBarVisibility="Disabled">
+
+            <Grid x:Name="RootLayout" Margin="18">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="14"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="14"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="14"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Custom header -->
+                <DockPanel Grid.Row="0"
+                       LastChildFill="True"
+                       MouseLeftButtonDown="Header_MouseLeftButtonDown">
+
+                    <StackPanel DockPanel.Dock="Right"
+                            Orientation="Horizontal"
+                            Margin="12,0,0,0">
+
+                        <Button x:Name="ToggleCompactButton"
+                            Content="Compact"
+                            Width="94"
+                            Height="38"
+                            Style="{StaticResource SoftButton}"
+                            Click="ToggleCompactButton_Click"/>
+
+                        <Button Content="Hide"
+                            Width="72"
+                            Height="38"
+                            Margin="8,0,0,0"
+                            Style="{StaticResource LifeButton}"
+                            Click="HideWindowButton_Click"/>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock x:Name="WindowTitleText"
+                           Text="Life OS TimerAgent"
+                           Foreground="#111827"
+                           FontSize="28"
                            FontWeight="Bold"/>
 
-                <TextBlock x:Name="HeaderSubtitle"
-                           Text="Track contractor work, earned income, and tax set-aside."
-                           Foreground="#CBD5E1"
-                           FontSize="14"
-                           Margin="0,4,0,0"/>
-            </StackPanel>
-        </DockPanel>
+                        <TextBlock x:Name="HeaderSubtitle"
+                               Text="Track work, earned income, unpaid money, and tax set-aside."
+                               Foreground="#6B7280"
+                               FontSize="13"
+                               Margin="0,4,0,0"/>
+                    </StackPanel>
+                </DockPanel>
 
-        <!-- Timer display -->
-        <Border Grid.Row="2"
-                Background="#111827"
-                BorderBrush="#334155"
-                BorderThickness="1"
-                CornerRadius="18"
-                Padding="20">
-            <StackPanel HorizontalAlignment="Stretch">
-                <TextBlock x:Name="CompactSummaryDisplay"
-                           Text="No active session"
-                           Foreground="#CBD5E1"
-                           FontSize="14"
-                           FontWeight="SemiBold"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,8"/>
+                <!-- Timer display -->
+                <Border Grid.Row="2"
+                    Style="{StaticResource CardBorder}">
 
-                <TextBlock x:Name="TimerDisplay"
-                           Text="00:00:00"
-                           Foreground="White"
-                           FontSize="50"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"/>
+                    <StackPanel HorizontalAlignment="Stretch">
 
-                <TextBlock x:Name="StateDisplay"
-                           Text="Stopped"
-                           Foreground="#94A3B8"
-                           FontSize="15"
-                           HorizontalAlignment="Center"
-                           Margin="0,6,0,0"/>
+                        <Border Background="#EEF2FF"
+                            BorderBrush="#C7D2FE"
+                            BorderThickness="1"
+                            CornerRadius="999"
+                            Padding="10,6"
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,12">
 
-                <TextBlock x:Name="CompactMoneyDisplay"
-                           Text="$0.00 earned · $0.00 tax"
-                           Foreground="#86EFAC"
-                           FontSize="13"
-                           HorizontalAlignment="Center"
-                           Margin="0,8,0,0"/>
+                            <TextBlock x:Name="CompactSummaryDisplay"
+                                   Text="No active session"
+                                   Foreground="#1E40AF"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"/>
+                        </Border>
 
-                <UniformGrid Columns="3"
-                             Margin="0,18,0,0">
-                    <Button x:Name="StartButton"
-                            Content="Start"
-                            Height="42"
-                            Margin="4"
-                            Click="StartButton_Click"/>
+                        <TextBlock x:Name="TimerDisplay"
+                               Text="00:00:00"
+                               Foreground="#111827"
+                               FontSize="52"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
 
-                    <Button x:Name="PauseResumeButton"
-                            Content="Pause"
-                            Height="42"
-                            Margin="4"
-                            IsEnabled="False"
-                            Click="PauseResumeButton_Click"/>
+                        <TextBlock x:Name="StateDisplay"
+                               Text="Stopped"
+                               Foreground="#2563EB"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Margin="0,4,0,0"/>
 
-                    <Button x:Name="StopButton"
-                            Content="Stop"
-                            Height="42"
-                            Margin="4"
-                            IsEnabled="False"
-                            Click="StopButton_Click"/>
-                </UniformGrid>
-            </StackPanel>
-        </Border>
+                        <TextBlock x:Name="CompactMoneyDisplay"
+                               Text="$0.00 earned · $0.00 tax"
+                               Foreground="#059669"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,0"/>
 
-        <!-- Session fields -->
-        <Border x:Name="FieldsPanel"
-                Grid.Row="4"
-                Background="#111827"
-                BorderBrush="#334155"
-                BorderThickness="1"
-                CornerRadius="18"
-                Padding="18">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                        <UniformGrid x:Name="TimerButtonsPanel"
+                             Columns="3"
+                             Margin="0,14,0,0">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                            <Button x:Name="StartButton"
+                                Content="Start"
+                                Height="44"
+                                Margin="5"
+                                Style="{StaticResource PrimaryButton}"
+                                Click="StartButton_Click"/>
 
-                <TextBlock Grid.Row="0" Grid.Column="0"
-                           Text="Client"
-                           Foreground="#CBD5E1"
-                           VerticalAlignment="Center"/>
+                            <Button x:Name="PauseResumeButton"
+                                Content="Pause"
+                                Height="44"
+                                Margin="5"
+                                IsEnabled="False"
+                                Style="{StaticResource SoftButton}"
+                                Click="PauseResumeButton_Click"/>
 
-                <TextBox x:Name="ClientTextBox"
-                         Grid.Row="0" Grid.Column="1"
-                         Text="AIE"
-                         Height="34"/>
+                            <Button x:Name="StopButton"
+                                Content="Stop"
+                                Height="44"
+                                Margin="5"
+                                IsEnabled="False"
+                                Style="{StaticResource DangerButton}"
+                                Click="StopButton_Click"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
 
-                <TextBlock Grid.Row="2" Grid.Column="0"
-                           Text="Project"
-                           Foreground="#CBD5E1"
-                           VerticalAlignment="Center"/>
+                <!-- Session fields -->
+                <Border x:Name="FieldsPanel"
+                    Grid.Row="4"
+                    Style="{StaticResource CardBorder}">
 
-                <TextBox x:Name="ProjectTextBox"
-                         Grid.Row="2" Grid.Column="1"
-                         Text="INFO mailbox"
-                         Height="34"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="4" Grid.Column="0"
-                           Text="Work type"
-                           Foreground="#CBD5E1"
-                           VerticalAlignment="Center"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                <TextBox x:Name="WorkTypeTextBox"
-                         Grid.Row="4" Grid.Column="1"
-                         Text="Workflow/Admin"
-                         Height="34"/>
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                               Text="Client"
+                               Style="{StaticResource LabelText}"/>
 
-                <TextBlock Grid.Row="6" Grid.Column="0"
-                           Text="Rate"
-                           Foreground="#CBD5E1"
-                           VerticalAlignment="Center"/>
+                        <TextBox x:Name="ClientTextBox"
+                             Grid.Row="0" Grid.Column="1"
+                             Text="AIE"/>
 
-                <TextBox x:Name="RateTextBox"
-                         Grid.Row="6" Grid.Column="1"
-                         Text="35"
-                         Height="34"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0"
+                               Text="Project"
+                               Style="{StaticResource LabelText}"/>
 
-                <TextBlock Grid.Row="8" Grid.Column="0"
-                           Text="Tax %"
-                           Foreground="#CBD5E1"
-                           VerticalAlignment="Center"/>
+                        <TextBox x:Name="ProjectTextBox"
+                             Grid.Row="2" Grid.Column="1"
+                             Text="INFO mailbox"/>
 
-                <TextBox x:Name="TaxTextBox"
-                         Grid.Row="8" Grid.Column="1"
-                         Text="20"
-                         Height="34"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0"
+                               Text="Work type"
+                               Style="{StaticResource LabelText}"/>
 
-                <CheckBox x:Name="BillableCheckBox"
-                          Grid.Row="10" Grid.Column="1"
-                          Content="Billable"
-                          Foreground="#CBD5E1"
-                          IsChecked="True"/>
+                        <TextBox x:Name="WorkTypeTextBox"
+                             Grid.Row="4" Grid.Column="1"
+                             Text="Workflow/Admin"/>
+
+                        <TextBlock Grid.Row="6" Grid.Column="0"
+                               Text="Rate"
+                               Style="{StaticResource LabelText}"/>
+
+                        <TextBox x:Name="RateTextBox"
+                             Grid.Row="6" Grid.Column="1"
+                             Text="35"/>
+
+                        <TextBlock Grid.Row="8" Grid.Column="0"
+                               Text="Tax %"
+                               Style="{StaticResource LabelText}"/>
+
+                        <TextBox x:Name="TaxTextBox"
+                             Grid.Row="8" Grid.Column="1"
+                             Text="20"/>
+
+                        <CheckBox x:Name="BillableCheckBox"
+                              Grid.Row="10" Grid.Column="1"
+                              Content="Billable"
+                              IsChecked="True"/>
+                    </Grid>
+                </Border>
+
+                <!-- Notes and totals -->
+                <Border x:Name="NotesTotalsPanel"
+                    Grid.Row="6"
+                    Style="{StaticResource CardBorder}">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="80"/>
+                            <RowDefinition Height="16"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="8"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="8"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                               Text="Notes"
+                               Style="{StaticResource LabelText}"/>
+
+                        <TextBox x:Name="NotesTextBox"
+                             Grid.Row="2"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"/>
+
+                        <TextBlock x:Name="EarnedDisplay"
+                               Grid.Row="4"
+                               Text="Earned: $0.00"
+                               Foreground="#111827"
+                               FontSize="15"
+                               FontWeight="SemiBold"/>
+
+                        <TextBlock x:Name="TaxDisplay"
+                               Grid.Row="6"
+                               Text="Tax set-aside: $0.00"
+                               Foreground="#D97706"
+                               FontSize="15"
+                               FontWeight="SemiBold"/>
+
+                        <TextBlock x:Name="SafeAfterTaxDisplay"
+                               Grid.Row="8"
+                               Text="Safe after tax: $0.00"
+                               Foreground="#059669"
+                               FontSize="15"
+                               FontWeight="SemiBold"/>
+
+                        <TextBlock x:Name="LogPathDisplay"
+                               Grid.Row="10"
+                               Text=""
+                               Foreground="#9CA3AF"
+                               FontSize="11"
+                               TextWrapping="Wrap"/>
+                    </Grid>
+                </Border>
             </Grid>
-        </Border>
-
-        <!-- Notes and totals -->
-        <Border x:Name="NotesTotalsPanel"
-                Grid.Row="6"
-                Background="#111827"
-                BorderBrush="#334155"
-                BorderThickness="1"
-                CornerRadius="18"
-                Padding="18">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="90"/>
-                    <RowDefinition Height="16"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="8"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="8"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="12"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0"
-                           Text="Notes"
-                           Foreground="#CBD5E1"/>
-
-                <TextBox x:Name="NotesTextBox"
-                         Grid.Row="2"
-                         TextWrapping="Wrap"
-                         AcceptsReturn="True"
-                         VerticalScrollBarVisibility="Auto"/>
-
-                <TextBlock x:Name="EarnedDisplay"
-                           Grid.Row="4"
-                           Text="Earned: $0.00"
-                           Foreground="White"
-                           FontSize="16"
-                           FontWeight="SemiBold"/>
-
-                <TextBlock x:Name="TaxDisplay"
-                           Grid.Row="6"
-                           Text="Tax set-aside: $0.00"
-                           Foreground="#FBBF24"
-                           FontSize="16"
-                           FontWeight="SemiBold"/>
-
-                <TextBlock x:Name="SafeAfterTaxDisplay"
-                           Grid.Row="8"
-                           Text="Safe after tax: $0.00"
-                           Foreground="#86EFAC"
-                           FontSize="16"
-                           FontWeight="SemiBold"/>
-
-                <TextBlock x:Name="LogPathDisplay"
-                           Grid.Row="10"
-                           Text=""
-                           Foreground="#94A3B8"
-                           FontSize="12"
-                           TextWrapping="Wrap"/>
-            </Grid>
-        </Border>
-    </Grid>
+        </ScrollViewer>
+    </Border>
 </Window>

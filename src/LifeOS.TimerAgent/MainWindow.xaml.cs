@@ -1,13 +1,14 @@
-﻿using System.ComponentModel;
-using System.Globalization;
-using System.IO;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Threading;
-using LifeOS.Modules.Timer.Models;
+﻿using LifeOS.Modules.Timer.Models;
 using LifeOS.Modules.Timer.Services;
 using LifeOS.Modules.Timer.Storage;
 using LifeOS.TimerAgent.Services;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Threading;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
 
@@ -205,6 +206,19 @@ public partial class MainWindow : Window
         RefreshTimerUi();
     }
 
+    private void Header_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ButtonState == MouseButtonState.Pressed)
+        {
+            DragMove();
+        }
+    }
+
+    private void HideWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        Hide();
+    }
+
     private void StopButton_Click(object sender, RoutedEventArgs e)
     {
         var currentSession = _timerService.CurrentSession;
@@ -264,14 +278,18 @@ public partial class MainWindow : Window
             NotesTotalsPanel.Visibility = Visibility.Collapsed;
             HeaderSubtitle.Visibility = Visibility.Collapsed;
 
+            WindowTitleText.Text = "TimerAgent";
             ToggleCompactButton.Content = "Full";
 
-            Width = 420;
-            Height = 300;
-            MinWidth = 380;
-            MinHeight = 280;
-            MaxWidth = 420;
-            MaxHeight = 300;
+            MainScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+            MainScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+
+            Width = 440;
+            Height = 350;
+            MinWidth = 440;
+            MinHeight = 350;
+            MaxWidth = 440;
+            MaxHeight = 350;
 
             ResizeMode = ResizeMode.NoResize;
         }
@@ -281,15 +299,19 @@ public partial class MainWindow : Window
             NotesTotalsPanel.Visibility = Visibility.Visible;
             HeaderSubtitle.Visibility = Visibility.Visible;
 
+            WindowTitleText.Text = "Life OS TimerAgent";
             ToggleCompactButton.Content = "Compact";
+
+            MainScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            MainScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
 
             MaxWidth = double.PositiveInfinity;
             MaxHeight = double.PositiveInfinity;
 
-            Width = 540;
+            Width = 560;
             Height = 720;
-            MinWidth = 480;
-            MinHeight = 620;
+            MinWidth = 500;
+            MinHeight = 640;
 
             ResizeMode = ResizeMode.CanResize;
         }

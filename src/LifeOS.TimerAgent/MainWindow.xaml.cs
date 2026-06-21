@@ -35,7 +35,6 @@ public partial class MainWindow : Window
 
     private GlobalHotKeyService? _hotKeyService;
     private TrayIconService? _trayIconService;
-
     private bool _allowClose;
     private TimedTask? _editingTask;
     private ContactProfile? _editingContact;
@@ -63,7 +62,6 @@ public partial class MainWindow : Window
         {
             Interval = TimeSpan.FromSeconds(1)
         };
-
         _uiTimer.Tick += (_, _) => RefreshUi();
 
         LoadStateOrSeedDemoData();
@@ -104,10 +102,8 @@ public partial class MainWindow : Window
     protected override void OnClosed(EventArgs e)
     {
         SaveState();
-
         _hotKeyService?.Dispose();
         _trayIconService?.Dispose();
-
         base.OnClosed(e);
     }
 
@@ -125,7 +121,6 @@ public partial class MainWindow : Window
                 : _contacts.FirstOrDefault(contact => contact.Id == state.SelectedContactId.Value) ?? _contacts.FirstOrDefault();
 
             _timerManager.ReplaceTasks(state.TimedTasks, state.SelectedTaskId);
-
             return;
         }
 
@@ -170,7 +165,6 @@ public partial class MainWindow : Window
         _contacts.Add(aie);
         _contacts.Add(totalDoor);
         _contacts.Add(lifeOs);
-
         _selectedContact = aie;
 
         _timerManager.CreateTask(
@@ -241,21 +235,9 @@ public partial class MainWindow : Window
         }
 
         _trayIconService = new TrayIconService();
-
-        _trayIconService.ShowRequested += (_, _) =>
-        {
-            Dispatcher.Invoke(ShowTimerWindow);
-        };
-
-        _trayIconService.HideRequested += (_, _) =>
-        {
-            Dispatcher.Invoke(Hide);
-        };
-
-        _trayIconService.ExitRequested += (_, _) =>
-        {
-            Dispatcher.Invoke(ExitApplication);
-        };
+        _trayIconService.ShowRequested += (_, _) => Dispatcher.Invoke(ShowTimerWindow);
+        _trayIconService.HideRequested += (_, _) => Dispatcher.Invoke(Hide);
+        _trayIconService.ExitRequested += (_, _) => Dispatcher.Invoke(ExitApplication);
     }
 
     private void SetupGlobalHotKey()
@@ -268,12 +250,7 @@ public partial class MainWindow : Window
         try
         {
             _hotKeyService = new GlobalHotKeyService();
-
-            _hotKeyService.HotKeyPressed += (_, _) =>
-            {
-                Dispatcher.Invoke(ToggleWindowVisibility);
-            };
-
+            _hotKeyService.HotKeyPressed += (_, _) => Dispatcher.Invoke(ToggleWindowVisibility);
             _hotKeyService.Register(
                 this,
                 hotKeyId: 9001,
@@ -295,7 +272,6 @@ public partial class MainWindow : Window
         Show();
         WindowState = WindowState.Normal;
         Activate();
-
         Topmost = false;
         Topmost = true;
     }
@@ -358,8 +334,8 @@ public partial class MainWindow : Window
 
     private void RefreshLists()
     {
-        var selectedTaskId = (TimedTasksListBox.SelectedItem as TimedTask)?.Id;
-        var selectedContactId = (ContactsListBox.SelectedItem as ContactProfile)?.Id;
+        var selectedTaskId = (TimedTasksListBox.SelectedItem as TimedTask)?.Id ?? _timerManager.SelectedTask?.Id;
+        var selectedContactId = (ContactsListBox.SelectedItem as ContactProfile)?.Id ?? _selectedContact?.Id;
 
         TimedTasksListBox.ItemsSource = null;
         TimedTasksListBox.ItemsSource = _timerManager.Tasks;
@@ -391,11 +367,15 @@ public partial class MainWindow : Window
             ActiveTaskMetaText.Text = "Select a task from the list";
             TimerDisplay.Text = "00:00:00";
             StateDisplay.Text = "Stopped";
-            CompactMoneyDisplay.Text = "$0.00 earned · $0.00 tax";
+            CompactMoneyDisplay.Text = "$0.00 earned · $0.00 tax · $0.00 safe";
 
             StartButton.IsEnabled = false;
             PauseResumeButton.IsEnabled = false;
             StopButton.IsEnabled = false;
+
+            ListStartPauseButton.Content = "Start";
+            ListStartPauseButton.IsEnabled = false;
+            ListStopButton.IsEnabled = false;
         }
         else
         {
@@ -413,10 +393,16 @@ public partial class MainWindow : Window
             StartButton.IsEnabled = selectedTask.State is TimedTaskState.Stopped or TimedTaskState.Paused;
             PauseResumeButton.IsEnabled = selectedTask.State is TimedTaskState.Running or TimedTaskState.Paused;
             StopButton.IsEnabled = selectedTask.State is TimedTaskState.Running or TimedTaskState.Paused;
+            PauseResumeButton.Content = selectedTask.State == TimedTaskState.Paused ? "Resume" : "Pause";
 
-            PauseResumeButton.Content = selectedTask.State == TimedTaskState.Paused
-                ? "Resume"
-                : "Pause";
+            ListStartPauseButton.IsEnabled = selectedTask.State is TimedTaskState.Stopped or TimedTaskState.Running or TimedTaskState.Paused;
+            ListStopButton.IsEnabled = selectedTask.State is TimedTaskState.Running or TimedTaskState.Paused;
+            ListStartPauseButton.Content = selectedTask.State switch
+            {
+                TimedTaskState.Running => "Pause",
+                TimedTaskState.Paused => "Resume",
+                _ => "Start"
+            };
         }
 
         RefreshTotals();
@@ -426,13 +412,11 @@ public partial class MainWindow : Window
     private void RefreshTotals()
     {
         var logEntries = _logWriter.ReadAll();
-
         var today = DateOnly.FromDateTime(DateTime.Now);
         var weekStartDate = DateOnly.FromDateTime(GetStartOfWeek(DateTime.Now));
 
         var todayEntries = logEntries.Where(entry => entry.Date == today).ToList();
         var weekEntries = logEntries.Where(entry => entry.Date >= weekStartDate).ToList();
-
         var currentTasks = _timerManager.Tasks
             .Where(task => task.State is TimedTaskState.Running or TimedTaskState.Paused)
             .ToList();
@@ -478,9 +462,7 @@ public partial class MainWindow : Window
 
         if (active is not null && selected is not null && active.Id != selected.Id)
         {
-            StatusStripText.Text =
-                $"Active: {active.DisplayName} · {FormatDuration(active.GetCurrentDuration())}   |   Selected: {selected.DisplayName}";
-
+            StatusStripText.Text = $"Active: {active.DisplayName} · {FormatDuration(active.GetCurrentDuration())} | Selected: {selected.DisplayName}";
             _trayIconService?.UpdateTooltip($"TimerAgent - {active.DisplayName} - {FormatDuration(active.GetCurrentDuration())}");
             return;
         }
@@ -493,7 +475,6 @@ public partial class MainWindow : Window
         }
 
         var runningParallel = _timerManager.RunningTasks.FirstOrDefault();
-
         if (runningParallel is not null)
         {
             StatusStripText.Text = $"Running: {runningParallel.DisplayName} · {FormatDuration(runningParallel.GetCurrentDuration())}";
@@ -501,10 +482,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        StatusStripText.Text = selected is null
-            ? "No active timed task"
-            : $"Selected: {selected.DisplayName}";
-
+        StatusStripText.Text = selected is null ? "No active timed task" : $"Selected: {selected.DisplayName}";
         _trayIconService?.UpdateTooltip("TimerAgent - Stopped");
     }
 
@@ -526,6 +504,64 @@ public partial class MainWindow : Window
         }
     }
 
+    private void ListStartPauseButton_Click(object sender, RoutedEventArgs e)
+    {
+        var task = GetSelectedListTaskOrWarn();
+        if (task is null)
+        {
+            return;
+        }
+
+        if (task.State == TimedTaskState.Running)
+        {
+            _timerManager.PauseTask(task.Id);
+        }
+        else if (task.State == TimedTaskState.Paused)
+        {
+            _timerManager.ResumeTask(task.Id);
+        }
+        else
+        {
+            _timerManager.StartTask(task.Id);
+        }
+
+        SaveState();
+        RefreshLists();
+        RefreshUi();
+    }
+
+    private void ListStopButton_Click(object sender, RoutedEventArgs e)
+    {
+        var task = GetSelectedListTaskOrWarn();
+        if (task is null)
+        {
+            return;
+        }
+
+        StopTaskAndWriteLog(task);
+        SaveState();
+        RefreshLists();
+        RefreshUi();
+    }
+
+    private TimedTask? GetSelectedListTaskOrWarn()
+    {
+        if (TimedTasksListBox.SelectedItem is TimedTask task)
+        {
+            _timerManager.SelectTask(task.Id);
+            return task;
+        }
+
+        var selectedTask = _timerManager.SelectedTask;
+        if (selectedTask is not null)
+        {
+            return selectedTask;
+        }
+
+        ShowWarning("Select a timed task first.");
+        return null;
+    }
+
     private void SelectTaskButton_Click(object sender, RoutedEventArgs e)
     {
         if (TimedTasksListBox.SelectedItem is not TimedTask task)
@@ -542,7 +578,6 @@ public partial class MainWindow : Window
     private void StartButton_Click(object sender, RoutedEventArgs e)
     {
         var task = _timerManager.SelectedTask;
-
         if (task is null)
         {
             ShowWarning("Select a timed task first.");
@@ -558,7 +593,6 @@ public partial class MainWindow : Window
     private void PauseResumeButton_Click(object sender, RoutedEventArgs e)
     {
         var task = _timerManager.SelectedTask;
-
         if (task is null)
         {
             return;
@@ -581,49 +615,60 @@ public partial class MainWindow : Window
     private void StopButton_Click(object sender, RoutedEventArgs e)
     {
         var task = _timerManager.SelectedTask;
-
         if (task is null)
         {
             return;
         }
 
-        var completedTask = _timerManager.StopTask(task.Id);
-
-        if (completedTask is not null)
-        {
-            try
-            {
-                var logEntry = TimerLogEntry.FromTimedTask(completedTask);
-                _logWriter.Append(logEntry);
-            }
-            catch (Exception ex)
-            {
-                WpfMessageBox.Show(
-                    $"The task stopped, but the log could not be saved.\n\n{ex.Message}",
-                    "Log save failed",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            }
-        }
-
+        StopTaskAndWriteLog(task);
         SaveState();
         RefreshLists();
         RefreshUi();
+    }
+
+    private void StopTaskAndWriteLog(TimedTask task)
+    {
+        if (task.State is not (TimedTaskState.Running or TimedTaskState.Paused))
+        {
+            return;
+        }
+
+        var completedTask = _timerManager.StopTask(task.Id);
+        if (completedTask is null)
+        {
+            return;
+        }
+
+        try
+        {
+            var logEntry = TimerLogEntry.FromTimedTask(completedTask);
+            _logWriter.Append(logEntry);
+        }
+        catch (Exception ex)
+        {
+            WpfMessageBox.Show(
+                $"The task stopped, but the log could not be saved.\n\n{ex.Message}",
+                "Log save failed",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
     }
 
     private void CreateTaskButton_Click(object sender, RoutedEventArgs e)
     {
         _editingTask = null;
 
+        var defaultContact = _selectedContact ?? _contacts.FirstOrDefault();
+
         TaskDetailsTitle.Text = "Create timed task";
         TaskNameTextBox.Text = string.Empty;
-        TaskContactComboBox.SelectedItem = _selectedContact ?? _contacts.FirstOrDefault();
+        TaskContactComboBox.SelectedItem = defaultContact;
         TaskProjectTextBox.Text = string.Empty;
-        TaskWorkTypeTextBox.Text = (_selectedContact ?? _contacts.FirstOrDefault())?.DefaultWorkType ?? string.Empty;
+        TaskWorkTypeTextBox.Text = defaultContact?.DefaultWorkType ?? string.Empty;
         TaskTypeComboBox.SelectedItem = TimedTaskType.Work;
         TaskModeComboBox.SelectedItem = TimedTaskMode.Exclusive;
-        TaskRateTextBox.Text = ((_selectedContact ?? _contacts.FirstOrDefault())?.DefaultHourlyRate ?? 35m).ToString(CultureInfo.CurrentCulture);
-        TaskTaxTextBox.Text = ((_selectedContact ?? _contacts.FirstOrDefault())?.DefaultTaxSetAsidePercent ?? 20m).ToString(CultureInfo.CurrentCulture);
+        TaskRateTextBox.Text = (defaultContact?.DefaultHourlyRate ?? 35m).ToString(CultureInfo.CurrentCulture);
+        TaskTaxTextBox.Text = (defaultContact?.DefaultTaxSetAsidePercent ?? 20m).ToString(CultureInfo.CurrentCulture);
         TaskBillableCheckBox.IsChecked = true;
 
         ShowPage(TimerAgentPage.TaskDetails);
@@ -632,7 +677,6 @@ public partial class MainWindow : Window
     private void EditTaskButton_Click(object sender, RoutedEventArgs e)
     {
         var task = _timerManager.SelectedTask;
-
         if (task is null)
         {
             ShowWarning("Select a timed task first.");
@@ -673,7 +717,6 @@ public partial class MainWindow : Window
         var taskType = TaskTypeComboBox.SelectedItem is TimedTaskType selectedTaskType
             ? selectedTaskType
             : TimedTaskType.Work;
-
         var mode = TaskModeComboBox.SelectedItem is TimedTaskMode selectedMode
             ? selectedMode
             : TimedTaskMode.Exclusive;
@@ -708,7 +751,6 @@ public partial class MainWindow : Window
         }
 
         _editingTask = null;
-
         SaveState();
         RefreshLists();
         ShowPage(TimerAgentPage.List);
@@ -716,9 +758,16 @@ public partial class MainWindow : Window
 
     private void ArchiveTaskButton_Click(object sender, RoutedEventArgs e)
     {
-        if (TimedTasksListBox.SelectedItem is not TimedTask task)
+        var task = _timerManager.SelectedTask ?? TimedTasksListBox.SelectedItem as TimedTask;
+        if (task is null)
         {
             ShowWarning("Select a timed task first.");
+            return;
+        }
+
+        if (task.State is TimedTaskState.Running or TimedTaskState.Paused)
+        {
+            ShowWarning("Stop the task before archiving it.");
             return;
         }
 
@@ -726,6 +775,7 @@ public partial class MainWindow : Window
         SaveState();
         RefreshLists();
         RefreshUi();
+        ShowPage(TimerAgentPage.List);
     }
 
     private void CreateContactButton_Click(object sender, RoutedEventArgs e)
@@ -808,12 +858,10 @@ public partial class MainWindow : Window
             _editingContact.DefaultHourlyRate = rate;
             _editingContact.DefaultTaxSetAsidePercent = tax;
             _editingContact.UpdatedAt = DateTimeOffset.Now;
-
             _selectedContact = _editingContact;
         }
 
         _editingContact = null;
-
         SaveState();
         RefreshLists();
         ShowPage(TimerAgentPage.Contacts);
@@ -855,7 +903,6 @@ public partial class MainWindow : Window
     {
         _editingTask = null;
         _editingContact = null;
-
         ShowPage(TimerAgentPage.List);
     }
 
@@ -906,3 +953,4 @@ public partial class MainWindow : Window
             MessageBoxImage.Warning);
     }
 }
+

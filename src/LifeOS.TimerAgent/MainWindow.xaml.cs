@@ -402,12 +402,13 @@ public partial class MainWindow : Window
             var duration = selectedTask.GetCurrentDuration();
             var earned = selectedTask.GetEarnedAmount();
             var tax = selectedTask.GetTaxSetAside();
+            var safe = selectedTask.GetSafeAfterTax();
 
             ActiveTaskNameText.Text = selectedTask.DisplayName;
             ActiveTaskMetaText.Text = $"{selectedTask.TaskType} · {selectedTask.Mode} · {selectedTask.WorkType}";
             TimerDisplay.Text = FormatDuration(duration);
             StateDisplay.Text = selectedTask.State.ToString();
-            CompactMoneyDisplay.Text = $"{earned:C} earned · {tax:C} tax";
+            CompactMoneyDisplay.Text = $"{earned:C} earned · {tax:C} tax · {safe:C} safe";
 
             StartButton.IsEnabled = selectedTask.State is TimedTaskState.Stopped or TimedTaskState.Paused;
             PauseResumeButton.IsEnabled = selectedTask.State is TimedTaskState.Running or TimedTaskState.Paused;
@@ -432,7 +433,9 @@ public partial class MainWindow : Window
         var todayEntries = logEntries.Where(entry => entry.Date == today).ToList();
         var weekEntries = logEntries.Where(entry => entry.Date >= weekStartDate).ToList();
 
-        var runningTasks = _timerManager.Tasks.ToList();
+        var currentTasks = _timerManager.Tasks
+            .Where(task => task.State is TimedTaskState.Running or TimedTaskState.Paused)
+            .ToList();
 
         var todayMinutes = todayEntries.Sum(entry => entry.DurationMinutes);
         var weekMinutes = weekEntries.Sum(entry => entry.DurationMinutes);
@@ -442,7 +445,7 @@ public partial class MainWindow : Window
         var weekEarned = weekEntries.Sum(entry => entry.EarnedAmount);
         var allEarned = logEntries.Sum(entry => entry.EarnedAmount);
 
-        foreach (var task in runningTasks)
+        foreach (var task in currentTasks)
         {
             var currentMinutes = task.GetCurrentDuration().TotalMinutes;
             var currentEarned = task.GetEarnedAmount();
@@ -471,6 +474,16 @@ public partial class MainWindow : Window
     private void RefreshStatusStrip()
     {
         var active = _timerManager.ActiveExclusiveTask;
+        var selected = _timerManager.SelectedTask;
+
+        if (active is not null && selected is not null && active.Id != selected.Id)
+        {
+            StatusStripText.Text =
+                $"Active: {active.DisplayName} · {FormatDuration(active.GetCurrentDuration())}   |   Selected: {selected.DisplayName}";
+
+            _trayIconService?.UpdateTooltip($"TimerAgent - {active.DisplayName} - {FormatDuration(active.GetCurrentDuration())}");
+            return;
+        }
 
         if (active is not null)
         {
@@ -488,9 +501,9 @@ public partial class MainWindow : Window
             return;
         }
 
-        StatusStripText.Text = _timerManager.SelectedTask is null
+        StatusStripText.Text = selected is null
             ? "No active timed task"
-            : $"Selected: {_timerManager.SelectedTask.DisplayName}";
+            : $"Selected: {selected.DisplayName}";
 
         _trayIconService?.UpdateTooltip("TimerAgent - Stopped");
     }

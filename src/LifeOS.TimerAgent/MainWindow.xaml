@@ -148,23 +148,45 @@
                                Foreground="#6B7280"
                                FontSize="12"/>
 
-                    <StackPanel Grid.Row="4" Orientation="Horizontal">
-                        <TextBlock Text="{Binding State}"
-                                   Foreground="#2563EB"
-                                   FontSize="12"
-                                   FontWeight="SemiBold"/>
-                        <TextBlock Text=" · "
-                                   Foreground="#9CA3AF"
-                                   FontSize="12"/>
-                        <TextBlock Text="{Binding Mode}"
-                                   Foreground="#6B7280"
-                                   FontSize="12"/>
-                        <TextBlock Text=" · "
-                                   Foreground="#9CA3AF"
-                                   FontSize="12"/>
-                        <TextBlock Text="{Binding TaskType}"
-                                   Foreground="#6B7280"
-                                   FontSize="12"/>
+                    <StackPanel Grid.Row="4">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding State}"
+                   Foreground="#2563EB"
+                   FontSize="12"
+                   FontWeight="SemiBold"/>
+                            <TextBlock Text=" · "
+                   Foreground="#9CA3AF"
+                   FontSize="12"/>
+                            <TextBlock Text="{Binding Mode}"
+                   Foreground="#6B7280"
+                   FontSize="12"/>
+                            <TextBlock Text=" · "
+                   Foreground="#9CA3AF"
+                   FontSize="12"/>
+                            <TextBlock Text="{Binding TaskType}"
+                   Foreground="#6B7280"
+                   FontSize="12"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Text="$"
+                   Foreground="#059669"
+                   FontSize="12"
+                   FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding HourlyRate}"
+                   Foreground="#059669"
+                   FontSize="12"
+                   FontWeight="SemiBold"/>
+                            <TextBlock Text="/hr · tax "
+                   Foreground="#6B7280"
+                   FontSize="12"/>
+                            <TextBlock Text="{Binding TaxSetAsidePercent}"
+                   Foreground="#6B7280"
+                   FontSize="12"/>
+                            <TextBlock Text="%"
+                   Foreground="#6B7280"
+                   FontSize="12"/>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -262,7 +284,7 @@
                         Style="{StaticResource SoftButton}"
                         Click="TimerNavButton_Click"/>
 
-                <Button Content="Contacts"
+                <Button Content="People"
                         Height="40"
                         Margin="3"
                         Style="{StaticResource SoftButton}"
@@ -277,26 +299,34 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="10"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0"
-                            Content="+ Create timed task"
+                    <TextBlock Grid.Row="0"
+                       Text="Timed tasks"
+                       Foreground="#111827"
+                       FontSize="20"
+                       FontWeight="Bold"/>
+
+                    <Button Grid.Row="2"
+                        Content="+ Create timed task"
                             Height="42"
                             Style="{StaticResource PrimaryButton}"
                             Click="CreateTaskButton_Click"/>
 
                     <ListBox x:Name="TimedTasksListBox"
-                             Grid.Row="2"
+                             Grid.Row="4"
                              ItemTemplate="{StaticResource TimedTaskTemplate}"
                              BorderThickness="0"
                              Background="Transparent"
                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                              SelectionChanged="TimedTasksListBox_SelectionChanged"/>
 
-                    <UniformGrid Grid.Row="4" Columns="3">
+                    <UniformGrid Grid.Row="6" Columns="3">
                         <Button Content="Select"
                                 Height="42"
                                 Margin="3"
@@ -359,7 +389,7 @@
                                        HorizontalAlignment="Center"/>
 
                             <TextBlock x:Name="CompactMoneyDisplay"
-                                       Text="$0.00 earned · $0.00 tax"
+                                       Text="$0.00 earned · $0.00 tax · $0.00 safe"
                                        Foreground="#059669"
                                        FontSize="13"
                                        FontWeight="SemiBold"
@@ -445,9 +475,11 @@
                     </UniformGrid>
                 </Grid>
 
-                <!-- CONTACTS PAGE -->
+                <!-- PEOPLE / CONTACTS PAGE -->
                 <Grid x:Name="ContactsPage" Visibility="Collapsed">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="10"/>
                         <RowDefinition Height="*"/>
@@ -455,21 +487,27 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <Button Grid.Row="0"
+                    <TextBlock Grid.Row="0"
+                       Text="People and organisations"
+                       Foreground="#111827"
+                       FontSize="20"
+                       FontWeight="Bold"/>
+
+                    <Button Grid.Row="2"
                             Content="+ Create contact"
                             Height="42"
                             Style="{StaticResource PrimaryButton}"
                             Click="CreateContactButton_Click"/>
 
                     <ListBox x:Name="ContactsListBox"
-                             Grid.Row="2"
+                             Grid.Row="4"
                              ItemTemplate="{StaticResource ContactTemplate}"
                              BorderThickness="0"
                              Background="Transparent"
                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                              SelectionChanged="ContactsListBox_SelectionChanged"/>
 
-                    <UniformGrid Grid.Row="4" Columns="3">
+                    <UniformGrid Grid.Row="6" Columns="3">
                         <Button Content="Select"
                                 Height="42"
                                 Margin="3"

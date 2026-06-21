@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LifeOS.Core/LifeOS.Core.csproj" />
+    <Project Path="src/LifeOS.Modules.Timer/LifeOS.Modules.Timer.csproj" />
+    <Project Path="src/LifeOS.TimerAgent/LifeOS.TimerAgent.csproj" />
+  </Folder>
+</Solution>

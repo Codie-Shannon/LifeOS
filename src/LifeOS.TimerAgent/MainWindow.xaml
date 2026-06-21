@@ -4,8 +4,8 @@
         Title="Life OS TimerAgent"
         Height="720"
         Width="560"
-        MinHeight="260"
-        MinWidth="390"
+        MinHeight="640"
+        MinWidth="500"
         WindowStartupLocation="CenterScreen"
         Topmost="True"
         WindowStyle="None"
@@ -14,18 +14,6 @@
         AllowsTransparency="True">
 
     <Window.Resources>
-
-        <!-- Base colours:
-             App background: #F5F7FB
-             Card white:     #FFFFFF
-             Border:         #E5E7EB
-             Text:           #111827
-             Muted:          #6B7280
-             Primary blue:   #2563EB
-             Success green:  #059669
-             Danger red:     #DC2626
-        -->
-
         <Style x:Key="LifeButton" TargetType="Button">
             <Setter Property="Background" Value="#FFFFFF"/>
             <Setter Property="Foreground" Value="#111827"/>
@@ -46,17 +34,14 @@
                             <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center"/>
                         </Border>
-
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#F3F4F6"/>
                                 <Setter Property="BorderBrush" Value="#9CA3AF"/>
                             </Trigger>
-
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="Background" Value="#E5E7EB"/>
                             </Trigger>
-
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Background" Value="#F9FAFB"/>
                                 <Setter Property="Foreground" Value="#9CA3AF"/>
@@ -73,8 +58,6 @@
             <Setter Property="BorderBrush" Value="#2563EB"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
-
-        <Style x:Key="PrimaryButtonHover" TargetType="Button" BasedOn="{StaticResource PrimaryButton}"/>
 
         <Style x:Key="SoftButton" TargetType="Button" BasedOn="{StaticResource LifeButton}">
             <Setter Property="Background" Value="#EEF2FF"/>
@@ -105,6 +88,16 @@
             <Setter Property="MinHeight" Value="36"/>
         </Style>
 
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="#111827"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="MinHeight" Value="36"/>
+        </Style>
+
         <Style TargetType="CheckBox">
             <Setter Property="Foreground" Value="#374151"/>
             <Setter Property="FontSize" Value="13"/>
@@ -125,278 +118,574 @@
             <Setter Property="Background" Value="#FFFFFF"/>
             <Setter Property="BorderBrush" Value="#E5E7EB"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="22"/>
-            <Setter Property="Padding" Value="20"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Padding" Value="18"/>
         </Style>
 
+        <DataTemplate x:Key="TimedTaskTemplate">
+            <Border Background="#FFFFFF"
+                    BorderBrush="#E5E7EB"
+                    BorderThickness="1"
+                    CornerRadius="16"
+                    Padding="14"
+                    Margin="0,0,0,10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="6"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="6"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="{Binding DisplayName}"
+                               Foreground="#111827"
+                               FontSize="15"
+                               FontWeight="Bold"/>
+
+                    <TextBlock Grid.Row="2"
+                               Text="{Binding WorkType}"
+                               Foreground="#6B7280"
+                               FontSize="12"/>
+
+                    <StackPanel Grid.Row="4" Orientation="Horizontal">
+                        <TextBlock Text="{Binding State}"
+                                   Foreground="#2563EB"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"/>
+                        <TextBlock Text=" · "
+                                   Foreground="#9CA3AF"
+                                   FontSize="12"/>
+                        <TextBlock Text="{Binding Mode}"
+                                   Foreground="#6B7280"
+                                   FontSize="12"/>
+                        <TextBlock Text=" · "
+                                   Foreground="#9CA3AF"
+                                   FontSize="12"/>
+                        <TextBlock Text="{Binding TaskType}"
+                                   Foreground="#6B7280"
+                                   FontSize="12"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ContactTemplate">
+            <Border Background="#FFFFFF"
+                    BorderBrush="#E5E7EB"
+                    BorderThickness="1"
+                    CornerRadius="16"
+                    Padding="14"
+                    Margin="0,0,0,10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="6"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="6"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="{Binding DisplayName}"
+                               Foreground="#111827"
+                               FontSize="15"
+                               FontWeight="Bold"/>
+
+                    <TextBlock Grid.Row="2"
+                               Text="{Binding Type}"
+                               Foreground="#2563EB"
+                               FontSize="12"
+                               FontWeight="SemiBold"/>
+
+                    <TextBlock Grid.Row="4"
+                               Text="{Binding DefaultWorkType}"
+                               Foreground="#6B7280"
+                               FontSize="12"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
     </Window.Resources>
 
     <Border Background="#F5F7FB"
-        BorderBrush="#D1D5DB"
-        BorderThickness="1"
-        CornerRadius="24">
+            BorderBrush="#D1D5DB"
+            BorderThickness="1"
+            CornerRadius="24">
 
-        <ScrollViewer x:Name="MainScrollViewer"
-              VerticalScrollBarVisibility="Auto"
-              HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <Grid x:Name="RootLayout" Margin="18">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="14"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="14"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="14"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+            <!-- Header / drag area -->
+            <Grid Grid.Row="0" MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-                <!-- Custom header -->
-                <DockPanel Grid.Row="0"
-                       LastChildFill="True"
-                       MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                <StackPanel>
+                    <TextBlock Text="TimerAgent"
+                               Foreground="#111827"
+                               FontSize="28"
+                               FontWeight="Bold"/>
 
-                    <StackPanel DockPanel.Dock="Right"
-                            Orientation="Horizontal"
-                            Margin="12,0,0,0">
-
-                        <Button x:Name="ToggleCompactButton"
-                            Content="Compact"
-                            Width="94"
-                            Height="38"
-                            Style="{StaticResource SoftButton}"
-                            Click="ToggleCompactButton_Click"/>
-
-                        <Button Content="Hide"
-                            Width="72"
-                            Height="38"
-                            Margin="8,0,0,0"
-                            Style="{StaticResource LifeButton}"
-                            Click="HideWindowButton_Click"/>
-                    </StackPanel>
-
-                    <StackPanel>
-                        <TextBlock x:Name="WindowTitleText"
-                           Text="Life OS TimerAgent"
-                           Foreground="#111827"
-                           FontSize="28"
-                           FontWeight="Bold"/>
-
-                        <TextBlock x:Name="HeaderSubtitle"
-                               Text="Track work, earned income, unpaid money, and tax set-aside."
+                    <TextBlock x:Name="StatusStripText"
+                               Text="No active timed task"
                                Foreground="#6B7280"
                                FontSize="13"
-                               Margin="0,4,0,0"/>
-                    </StackPanel>
-                </DockPanel>
+                               Margin="0,3,0,0"/>
+                </StackPanel>
 
-                <!-- Timer display -->
-                <Border Grid.Row="2"
-                    Style="{StaticResource CardBorder}">
-
-                    <StackPanel HorizontalAlignment="Stretch">
-
-                        <Border Background="#EEF2FF"
-                            BorderBrush="#C7D2FE"
-                            BorderThickness="1"
-                            CornerRadius="999"
-                            Padding="10,6"
-                            HorizontalAlignment="Center"
-                            Margin="0,0,0,12">
-
-                            <TextBlock x:Name="CompactSummaryDisplay"
-                                   Text="No active session"
-                                   Foreground="#1E40AF"
-                                   FontSize="13"
-                                   FontWeight="SemiBold"
-                                   HorizontalAlignment="Center"/>
-                        </Border>
-
-                        <TextBlock x:Name="TimerDisplay"
-                               Text="00:00:00"
-                               Foreground="#111827"
-                               FontSize="52"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"/>
-
-                        <TextBlock x:Name="StateDisplay"
-                               Text="Stopped"
-                               Foreground="#2563EB"
-                               FontSize="15"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"
-                               Margin="0,4,0,0"/>
-
-                        <TextBlock x:Name="CompactMoneyDisplay"
-                               Text="$0.00 earned · $0.00 tax"
-                               Foreground="#059669"
-                               FontSize="13"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center"
-                               Margin="0,8,0,0"/>
-
-                        <UniformGrid x:Name="TimerButtonsPanel"
-                             Columns="3"
-                             Margin="0,14,0,0">
-
-                            <Button x:Name="StartButton"
-                                Content="Start"
-                                Height="44"
-                                Margin="5"
-                                Style="{StaticResource PrimaryButton}"
-                                Click="StartButton_Click"/>
-
-                            <Button x:Name="PauseResumeButton"
-                                Content="Pause"
-                                Height="44"
-                                Margin="5"
-                                IsEnabled="False"
-                                Style="{StaticResource SoftButton}"
-                                Click="PauseResumeButton_Click"/>
-
-                            <Button x:Name="StopButton"
-                                Content="Stop"
-                                Height="44"
-                                Margin="5"
-                                IsEnabled="False"
-                                Style="{StaticResource DangerButton}"
-                                Click="StopButton_Click"/>
-                        </UniformGrid>
-                    </StackPanel>
-                </Border>
-
-                <!-- Session fields -->
-                <Border x:Name="FieldsPanel"
-                    Grid.Row="4"
-                    Style="{StaticResource CardBorder}">
-
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="10"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="10"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="10"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="10"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="10"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Grid.Row="0" Grid.Column="0"
-                               Text="Client"
-                               Style="{StaticResource LabelText}"/>
-
-                        <TextBox x:Name="ClientTextBox"
-                             Grid.Row="0" Grid.Column="1"
-                             Text="AIE"/>
-
-                        <TextBlock Grid.Row="2" Grid.Column="0"
-                               Text="Project"
-                               Style="{StaticResource LabelText}"/>
-
-                        <TextBox x:Name="ProjectTextBox"
-                             Grid.Row="2" Grid.Column="1"
-                             Text="INFO mailbox"/>
-
-                        <TextBlock Grid.Row="4" Grid.Column="0"
-                               Text="Work type"
-                               Style="{StaticResource LabelText}"/>
-
-                        <TextBox x:Name="WorkTypeTextBox"
-                             Grid.Row="4" Grid.Column="1"
-                             Text="Workflow/Admin"/>
-
-                        <TextBlock Grid.Row="6" Grid.Column="0"
-                               Text="Rate"
-                               Style="{StaticResource LabelText}"/>
-
-                        <TextBox x:Name="RateTextBox"
-                             Grid.Row="6" Grid.Column="1"
-                             Text="35"/>
-
-                        <TextBlock Grid.Row="8" Grid.Column="0"
-                               Text="Tax %"
-                               Style="{StaticResource LabelText}"/>
-
-                        <TextBox x:Name="TaxTextBox"
-                             Grid.Row="8" Grid.Column="1"
-                             Text="20"/>
-
-                        <CheckBox x:Name="BillableCheckBox"
-                              Grid.Row="10" Grid.Column="1"
-                              Content="Billable"
-                              IsChecked="True"/>
-                    </Grid>
-                </Border>
-
-                <!-- Notes and totals -->
-                <Border x:Name="NotesTotalsPanel"
-                    Grid.Row="6"
-                    Style="{StaticResource CardBorder}">
-
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="10"/>
-                            <RowDefinition Height="80"/>
-                            <RowDefinition Height="16"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="8"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="8"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="12"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Grid.Row="0"
-                               Text="Notes"
-                               Style="{StaticResource LabelText}"/>
-
-                        <TextBox x:Name="NotesTextBox"
-                             Grid.Row="2"
-                             TextWrapping="Wrap"
-                             AcceptsReturn="True"
-                             VerticalScrollBarVisibility="Auto"/>
-
-                        <TextBlock x:Name="EarnedDisplay"
-                               Grid.Row="4"
-                               Text="Earned: $0.00"
-                               Foreground="#111827"
-                               FontSize="15"
-                               FontWeight="SemiBold"/>
-
-                        <TextBlock x:Name="TaxDisplay"
-                               Grid.Row="6"
-                               Text="Tax set-aside: $0.00"
-                               Foreground="#D97706"
-                               FontSize="15"
-                               FontWeight="SemiBold"/>
-
-                        <TextBlock x:Name="SafeAfterTaxDisplay"
-                               Grid.Row="8"
-                               Text="Safe after tax: $0.00"
-                               Foreground="#059669"
-                               FontSize="15"
-                               FontWeight="SemiBold"/>
-
-                        <TextBlock x:Name="LogPathDisplay"
-                               Grid.Row="10"
-                               Text=""
-                               Foreground="#9CA3AF"
-                               FontSize="11"
-                               TextWrapping="Wrap"/>
-                    </Grid>
-                </Border>
+                <Button Grid.Column="1"
+                        Content="Hide"
+                        Width="72"
+                        Height="38"
+                        Style="{StaticResource LifeButton}"
+                        Click="HideWindowButton_Click"/>
             </Grid>
-        </ScrollViewer>
+
+            <!-- Fixed top actions -->
+            <UniformGrid Grid.Row="2" Columns="3">
+                <Button Content="List"
+                        Height="40"
+                        Margin="3"
+                        Style="{StaticResource SoftButton}"
+                        Click="ListNavButton_Click"/>
+
+                <Button Content="Timer"
+                        Height="40"
+                        Margin="3"
+                        Style="{StaticResource SoftButton}"
+                        Click="TimerNavButton_Click"/>
+
+                <Button Content="Contacts"
+                        Height="40"
+                        Margin="3"
+                        Style="{StaticResource SoftButton}"
+                        Click="ContactsNavButton_Click"/>
+            </UniformGrid>
+
+            <!-- Content area -->
+            <Grid Grid.Row="4">
+
+                <!-- LIST PAGE -->
+                <Grid x:Name="ListPage">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Grid.Row="0"
+                            Content="+ Create timed task"
+                            Height="42"
+                            Style="{StaticResource PrimaryButton}"
+                            Click="CreateTaskButton_Click"/>
+
+                    <ListBox x:Name="TimedTasksListBox"
+                             Grid.Row="2"
+                             ItemTemplate="{StaticResource TimedTaskTemplate}"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             SelectionChanged="TimedTasksListBox_SelectionChanged"/>
+
+                    <UniformGrid Grid.Row="4" Columns="3">
+                        <Button Content="Select"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource LifeButton}"
+                                Click="SelectTaskButton_Click"/>
+
+                        <Button Content="Edit"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource LifeButton}"
+                                Click="EditTaskButton_Click"/>
+
+                        <Button Content="Archive"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource QuietDangerButton}"
+                                Click="ArchiveTaskButton_Click"/>
+                    </UniformGrid>
+                </Grid>
+
+                <!-- TIMER PAGE -->
+                <Grid x:Name="TimerPage" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="14"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="14"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Style="{StaticResource CardBorder}">
+                        <StackPanel>
+                            <TextBlock x:Name="ActiveTaskNameText"
+                                       Text="No timed task selected"
+                                       Foreground="#111827"
+                                       FontSize="18"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"/>
+
+                            <TextBlock x:Name="ActiveTaskMetaText"
+                                       Text="Select a task from the list"
+                                       Foreground="#6B7280"
+                                       FontSize="13"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,4,0,0"/>
+
+                            <TextBlock x:Name="TimerDisplay"
+                                       Text="00:00:00"
+                                       Foreground="#111827"
+                                       FontSize="62"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,16,0,0"/>
+
+                            <TextBlock x:Name="StateDisplay"
+                                       Text="Stopped"
+                                       Foreground="#2563EB"
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"/>
+
+                            <TextBlock x:Name="CompactMoneyDisplay"
+                                       Text="$0.00 earned · $0.00 tax"
+                                       Foreground="#059669"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,8,0,0"/>
+
+                            <UniformGrid Columns="3" Margin="0,20,0,0">
+                                <Button x:Name="StartButton"
+                                        Content="Start"
+                                        Height="44"
+                                        Margin="5"
+                                        Style="{StaticResource PrimaryButton}"
+                                        Click="StartButton_Click"/>
+
+                                <Button x:Name="PauseResumeButton"
+                                        Content="Pause"
+                                        Height="44"
+                                        Margin="5"
+                                        IsEnabled="False"
+                                        Style="{StaticResource SoftButton}"
+                                        Click="PauseResumeButton_Click"/>
+
+                                <Button x:Name="StopButton"
+                                        Content="Stop"
+                                        Height="44"
+                                        Margin="5"
+                                        IsEnabled="False"
+                                        Style="{StaticResource DangerButton}"
+                                        Click="StopButton_Click"/>
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="2" Style="{StaticResource CardBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Today" Style="{StaticResource MutedText}"/>
+                                <TextBlock x:Name="TodayTotalsText"
+                                           Text="0h · $0.00"
+                                           Foreground="#111827"
+                                           FontSize="15"
+                                           FontWeight="Bold"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="This week" Style="{StaticResource MutedText}"/>
+                                <TextBlock x:Name="WeekTotalsText"
+                                           Text="0h · $0.00"
+                                           Foreground="#111827"
+                                           FontSize="15"
+                                           FontWeight="Bold"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="All time" Style="{StaticResource MutedText}"/>
+                                <TextBlock x:Name="AllTotalsText"
+                                           Text="0h · $0.00"
+                                           Foreground="#111827"
+                                           FontSize="15"
+                                           FontWeight="Bold"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <UniformGrid Grid.Row="4" Columns="2">
+                        <Button Content="Switch"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource LifeButton}"
+                                Click="ListNavButton_Click"/>
+
+                        <Button Content="Edit details"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource LifeButton}"
+                                Click="EditTaskButton_Click"/>
+                    </UniformGrid>
+                </Grid>
+
+                <!-- CONTACTS PAGE -->
+                <Grid x:Name="ContactsPage" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Button Grid.Row="0"
+                            Content="+ Create contact"
+                            Height="42"
+                            Style="{StaticResource PrimaryButton}"
+                            Click="CreateContactButton_Click"/>
+
+                    <ListBox x:Name="ContactsListBox"
+                             Grid.Row="2"
+                             ItemTemplate="{StaticResource ContactTemplate}"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             SelectionChanged="ContactsListBox_SelectionChanged"/>
+
+                    <UniformGrid Grid.Row="4" Columns="3">
+                        <Button Content="Select"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource LifeButton}"
+                                Click="SelectContactButton_Click"/>
+
+                        <Button Content="Edit"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource LifeButton}"
+                                Click="EditContactButton_Click"/>
+
+                        <Button Content="Archive"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource QuietDangerButton}"
+                                Click="ArchiveContactButton_Click"/>
+                    </UniformGrid>
+                </Grid>
+
+                <!-- TASK DETAILS PAGE -->
+                <Grid x:Name="TaskDetailsPage" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               x:Name="TaskDetailsTitle"
+                               Text="Timed task details"
+                               Foreground="#111827"
+                               FontSize="20"
+                               FontWeight="Bold"/>
+
+                    <ScrollViewer Grid.Row="2"
+                                  VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Text="Name" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="TaskNameTextBox" Grid.Row="2"/>
+
+                            <TextBlock Grid.Row="4" Text="Contact" Style="{StaticResource LabelText}"/>
+                            <ComboBox x:Name="TaskContactComboBox"
+                                      Grid.Row="6"
+                                      DisplayMemberPath="DisplayName"
+                                      SelectionChanged="TaskContactComboBox_SelectionChanged"/>
+
+                            <TextBlock Grid.Row="8" Text="Project" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="TaskProjectTextBox" Grid.Row="10"/>
+
+                            <TextBlock Grid.Row="12" Text="Work type" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="TaskWorkTypeTextBox" Grid.Row="14"/>
+
+                            <Grid Grid.Row="16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Task type" Style="{StaticResource LabelText}"/>
+                                    <ComboBox x:Name="TaskTypeComboBox" Margin="0,6,0,0"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Mode" Style="{StaticResource LabelText}"/>
+                                    <ComboBox x:Name="TaskModeComboBox" Margin="0,6,0,0"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Grid.Row="18" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Rate" Style="{StaticResource LabelText}"/>
+                                    <TextBox x:Name="TaskRateTextBox" Text="35" Margin="0,6,0,0"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Tax %" Style="{StaticResource LabelText}"/>
+                                    <TextBox x:Name="TaskTaxTextBox" Text="20" Margin="0,6,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </ScrollViewer>
+
+                    <UniformGrid Grid.Row="4" Columns="3">
+                        <Button Content="Save"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource PrimaryButton}"
+                                Click="SaveTaskButton_Click"/>
+
+                        <Button Content="Cancel"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource LifeButton}"
+                                Click="CancelDetailsButton_Click"/>
+
+                        <CheckBox x:Name="TaskBillableCheckBox"
+                                  Content="Billable"
+                                  IsChecked="True"
+                                  VerticalAlignment="Center"
+                                  Margin="10,0,0,0"/>
+                    </UniformGrid>
+                </Grid>
+
+                <!-- CONTACT DETAILS PAGE -->
+                <Grid x:Name="ContactDetailsPage" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               x:Name="ContactDetailsTitle"
+                               Text="Contact details"
+                               Foreground="#111827"
+                               FontSize="20"
+                               FontWeight="Bold"/>
+
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Text="Display name" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="ContactNameTextBox" Grid.Row="2"/>
+
+                            <TextBlock Grid.Row="4" Text="Type" Style="{StaticResource LabelText}"/>
+                            <ComboBox x:Name="ContactTypeComboBox" Grid.Row="6"/>
+
+                            <TextBlock Grid.Row="8" Text="Default work type" Style="{StaticResource LabelText}"/>
+                            <TextBox x:Name="ContactDefaultWorkTypeTextBox" Grid.Row="10"/>
+
+                            <Grid Grid.Row="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Default rate" Style="{StaticResource LabelText}"/>
+                                    <TextBox x:Name="ContactDefaultRateTextBox" Text="35" Margin="0,6,0,0"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Default tax %" Style="{StaticResource LabelText}"/>
+                                    <TextBox x:Name="ContactDefaultTaxTextBox" Text="20" Margin="0,6,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </ScrollViewer>
+
+                    <UniformGrid Grid.Row="4" Columns="2">
+                        <Button Content="Save"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource PrimaryButton}"
+                                Click="SaveContactButton_Click"/>
+
+                        <Button Content="Cancel"
+                                Height="42"
+                                Margin="3"
+                                Style="{StaticResource LifeButton}"
+                                Click="CancelDetailsButton_Click"/>
+                    </UniformGrid>
+                </Grid>
+
+            </Grid>
+        </Grid>
     </Border>
 </Window>

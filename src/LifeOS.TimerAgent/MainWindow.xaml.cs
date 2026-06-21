@@ -1,29 +1,43 @@
-﻿using LifeOS.Modules.Timer.Models;
-using LifeOS.Modules.Timer.Services;
-using LifeOS.Modules.Timer.Storage;
-using LifeOS.TimerAgent.Services;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using LifeOS.Core.Models;
+using LifeOS.Modules.Timer.Models;
+using LifeOS.Modules.Timer.Services;
+using LifeOS.Modules.Timer.Storage;
+using LifeOS.TimerAgent.Services;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using MessageBox = System.Windows.MessageBox;
+using WpfMessageBox = System.Windows.MessageBox;
 
 namespace LifeOS.TimerAgent;
 
 public partial class MainWindow : Window
 {
-    private readonly TimerService _timerService;
+    private enum TimerAgentPage
+    {
+        List,
+        Timer,
+        Contacts,
+        TaskDetails,
+        ContactDetails
+    }
+
+    private readonly TimerManager _timerManager = new();
+    private readonly List<ContactProfile> _contacts = new();
     private readonly TimerCsvLogWriter _logWriter;
     private readonly DispatcherTimer _uiTimer;
 
     private GlobalHotKeyService? _hotKeyService;
     private TrayIconService? _trayIconService;
+
     private bool _allowClose;
-    private bool _isCompactMode;
+    private TimedTask? _editingTask;
+    private ContactProfile? _editingContact;
+    private ContactProfile? _selectedContact;
 
     public MainWindow()
     {
@@ -31,8 +45,6 @@ public partial class MainWindow : Window
 
         Loaded += MainWindow_Loaded;
         PreviewKeyDown += MainWindow_PreviewKeyDown;
-
-        _timerService = new TimerService();
 
         var appDataFolder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -42,17 +54,20 @@ public partial class MainWindow : Window
         var logFilePath = Path.Combine(appDataFolder, "timer-log.csv");
         _logWriter = new TimerCsvLogWriter(logFilePath);
 
-        LogPathDisplay.Text =
-            $"Shortcut: Ctrl + Alt + Space to show/hide\nLog file: {logFilePath}";
-
         _uiTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromSeconds(1)
         };
 
-        _uiTimer.Tick += (_, _) => RefreshTimerUi();
+        _uiTimer.Tick += (_, _) => RefreshUi();
 
-        RefreshTimerUi();
+        SeedDemoData();
+        SetupDropdowns();
+        RefreshLists();
+        ShowPage(TimerAgentPage.List);
+
+        _uiTimer.Start();
+        RefreshUi();
     }
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -67,70 +82,6 @@ public partial class MainWindow : Window
         {
             ExitApplication();
         }
-    }
-
-    private void SetupTrayIcon()
-    {
-        _trayIconService = new TrayIconService();
-
-        _trayIconService.ShowRequested += (_, _) =>
-        {
-            Dispatcher.Invoke(ShowTimerWindow);
-        };
-
-        _trayIconService.HideRequested += (_, _) =>
-        {
-            Dispatcher.Invoke(Hide);
-        };
-
-        _trayIconService.ExitRequested += (_, _) =>
-        {
-            Dispatcher.Invoke(ExitApplication);
-        };
-    }
-
-    private void SetupGlobalHotKey()
-    {
-        try
-        {
-            _hotKeyService = new GlobalHotKeyService();
-
-            _hotKeyService.HotKeyPressed += (_, _) =>
-            {
-                Dispatcher.Invoke(ToggleWindowVisibility);
-            };
-
-            _hotKeyService.Register(
-                this,
-                hotKeyId: 9001,
-                key: Key.Space,
-                modifiers: HotKeyModifiers.Control | HotKeyModifiers.Alt | HotKeyModifiers.NoRepeat);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(
-                $"TimerAgent is running, but the global shortcut could not be registered.\n\n{ex.Message}",
-                "Shortcut unavailable",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-        }
-    }
-
-    private void ShowTimerWindow()
-    {
-        Show();
-        WindowState = WindowState.Normal;
-
-        Activate();
-
-        Topmost = false;
-        Topmost = true;
-    }
-
-    private void ExitApplication()
-    {
-        _allowClose = true;
-        Close();
     }
 
     protected override void OnClosing(CancelEventArgs e)
@@ -153,57 +104,175 @@ public partial class MainWindow : Window
         base.OnClosed(e);
     }
 
-    private void ToggleCompactButton_Click(object sender, RoutedEventArgs e)
+    private void SeedDemoData()
     {
-        _isCompactMode = !_isCompactMode;
-        ApplyWindowMode();
+        if (_contacts.Count > 0)
+        {
+            return;
+        }
+
+        var aie = new ContactProfile
+        {
+            DisplayName = "AIE",
+            Type = ContactType.Client,
+            DefaultHourlyRate = 35m,
+            DefaultTaxSetAsidePercent = 20m,
+            DefaultWorkType = "Workflow/Admin"
+        };
+
+        var totalDoor = new ContactProfile
+        {
+            DisplayName = "Total Door",
+            Type = ContactType.Client,
+            DefaultHourlyRate = 30m,
+            DefaultTaxSetAsidePercent = 20m,
+            DefaultWorkType = "OCR/Cin7"
+        };
+
+        var lifeOs = new ContactProfile
+        {
+            DisplayName = "Life OS",
+            Type = ContactType.Organisation,
+            DefaultHourlyRate = 0m,
+            DefaultTaxSetAsidePercent = 0m,
+            DefaultWorkType = "Product build"
+        };
+
+        _contacts.Add(aie);
+        _contacts.Add(totalDoor);
+        _contacts.Add(lifeOs);
+
+        _selectedContact = aie;
+
+        _timerManager.CreateTask(
+            name: "INFO mailbox outline",
+            contactId: aie.Id,
+            contactName: aie.DisplayName,
+            projectName: "INFO mailbox",
+            workType: aie.DefaultWorkType,
+            taskType: TimedTaskType.Work,
+            mode: TimedTaskMode.Exclusive,
+            isBillable: true,
+            hourlyRate: aie.DefaultHourlyRate,
+            taxSetAsidePercent: aie.DefaultTaxSetAsidePercent,
+            notes: string.Empty);
+
+        _timerManager.CreateTask(
+            name: "Supplier bills / Cin7 proof",
+            contactId: totalDoor.Id,
+            contactName: totalDoor.DisplayName,
+            projectName: "Supplier bills",
+            workType: totalDoor.DefaultWorkType,
+            taskType: TimedTaskType.Work,
+            mode: TimedTaskMode.Exclusive,
+            isBillable: true,
+            hourlyRate: totalDoor.DefaultHourlyRate,
+            taxSetAsidePercent: totalDoor.DefaultTaxSetAsidePercent,
+            notes: string.Empty);
+
+        _timerManager.CreateTask(
+            name: "TimerAgent UI refactor",
+            contactId: lifeOs.Id,
+            contactName: lifeOs.DisplayName,
+            projectName: "TimerAgent",
+            workType: lifeOs.DefaultWorkType,
+            taskType: TimedTaskType.Work,
+            mode: TimedTaskMode.Exclusive,
+            isBillable: false,
+            hourlyRate: 0m,
+            taxSetAsidePercent: 0m,
+            notes: string.Empty);
     }
 
-    private void StartButton_Click(object sender, RoutedEventArgs e)
+    private void SetupDropdowns()
     {
-        if (!TryReadMoneyFields(out var hourlyRate, out var taxPercent))
+        TaskTypeComboBox.ItemsSource = Enum.GetValues(typeof(TimedTaskType));
+        TaskModeComboBox.ItemsSource = Enum.GetValues(typeof(TimedTaskMode));
+        ContactTypeComboBox.ItemsSource = Enum.GetValues(typeof(ContactType));
+    }
+
+    private void SetupTrayIcon()
+    {
+        if (_trayIconService is not null)
+        {
+            return;
+        }
+
+        _trayIconService = new TrayIconService();
+
+        _trayIconService.ShowRequested += (_, _) =>
+        {
+            Dispatcher.Invoke(ShowTimerWindow);
+        };
+
+        _trayIconService.HideRequested += (_, _) =>
+        {
+            Dispatcher.Invoke(Hide);
+        };
+
+        _trayIconService.ExitRequested += (_, _) =>
+        {
+            Dispatcher.Invoke(ExitApplication);
+        };
+    }
+
+    private void SetupGlobalHotKey()
+    {
+        if (_hotKeyService is not null)
         {
             return;
         }
 
         try
         {
-            _timerService.Start(
-                ClientTextBox.Text,
-                ProjectTextBox.Text,
-                WorkTypeTextBox.Text,
-                BillableCheckBox.IsChecked == true,
-                hourlyRate,
-                taxPercent,
-                NotesTextBox.Text);
+            _hotKeyService = new GlobalHotKeyService();
 
-            _uiTimer.Start();
+            _hotKeyService.HotKeyPressed += (_, _) =>
+            {
+                Dispatcher.Invoke(ToggleWindowVisibility);
+            };
 
-            SetInputEnabled(false);
-            RefreshTimerUi();
+            _hotKeyService.Register(
+                this,
+                hotKeyId: 9001,
+                key: Key.Space,
+                modifiers: HotKeyModifiers.Control | HotKeyModifiers.Alt | HotKeyModifiers.NoRepeat);
         }
         catch (Exception ex)
         {
-            MessageBox.Show(
-                ex.Message,
-                "Timer start failed",
+            WpfMessageBox.Show(
+                $"TimerAgent is running, but the global shortcut could not be registered.\n\n{ex.Message}",
+                "Shortcut unavailable",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
     }
 
-    private void PauseResumeButton_Click(object sender, RoutedEventArgs e)
+    private void ShowTimerWindow()
     {
-        if (_timerService.State == TimedTaskState.Running)
+        Show();
+        WindowState = WindowState.Normal;
+        Activate();
+
+        Topmost = false;
+        Topmost = true;
+    }
+
+    private void ToggleWindowVisibility()
+    {
+        if (IsVisible && WindowState != WindowState.Minimized)
         {
-            _timerService.Pause();
-        }
-        else if (_timerService.State == TimedTaskState.Paused)
-        {
-            _timerService.Resume();
+            Hide();
+            return;
         }
 
-        RefreshTimerUi();
+        ShowTimerWindow();
+    }
+
+    private void ExitApplication()
+    {
+        _allowClose = true;
+        Close();
     }
 
     private void Header_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -219,225 +288,557 @@ public partial class MainWindow : Window
         Hide();
     }
 
-    private void StopButton_Click(object sender, RoutedEventArgs e)
+    private void ListNavButton_Click(object sender, RoutedEventArgs e)
     {
-        var currentSession = _timerService.CurrentSession;
+        ShowPage(TimerAgentPage.List);
+    }
 
-        if (currentSession is not null)
+    private void TimerNavButton_Click(object sender, RoutedEventArgs e)
+    {
+        ShowPage(TimerAgentPage.Timer);
+    }
+
+    private void ContactsNavButton_Click(object sender, RoutedEventArgs e)
+    {
+        ShowPage(TimerAgentPage.Contacts);
+    }
+
+    private void ShowPage(TimerAgentPage page)
+    {
+        ListPage.Visibility = page == TimerAgentPage.List ? Visibility.Visible : Visibility.Collapsed;
+        TimerPage.Visibility = page == TimerAgentPage.Timer ? Visibility.Visible : Visibility.Collapsed;
+        ContactsPage.Visibility = page == TimerAgentPage.Contacts ? Visibility.Visible : Visibility.Collapsed;
+        TaskDetailsPage.Visibility = page == TimerAgentPage.TaskDetails ? Visibility.Visible : Visibility.Collapsed;
+        ContactDetailsPage.Visibility = page == TimerAgentPage.ContactDetails ? Visibility.Visible : Visibility.Collapsed;
+
+        RefreshUi();
+    }
+
+    private void RefreshLists()
+    {
+        var selectedTaskId = (TimedTasksListBox.SelectedItem as TimedTask)?.Id;
+        var selectedContactId = (ContactsListBox.SelectedItem as ContactProfile)?.Id;
+
+        TimedTasksListBox.ItemsSource = null;
+        TimedTasksListBox.ItemsSource = _timerManager.Tasks;
+
+        ContactsListBox.ItemsSource = null;
+        ContactsListBox.ItemsSource = _contacts.Where(contact => contact.IsActive).ToList();
+
+        TaskContactComboBox.ItemsSource = null;
+        TaskContactComboBox.ItemsSource = _contacts.Where(contact => contact.IsActive).ToList();
+
+        if (selectedTaskId is not null)
         {
-            currentSession.Notes = NotesTextBox.Text.Trim();
+            TimedTasksListBox.SelectedItem = _timerManager.Tasks.FirstOrDefault(task => task.Id == selectedTaskId.Value);
         }
 
-        var completedSession = _timerService.Stop();
+        if (selectedContactId is not null)
+        {
+            ContactsListBox.SelectedItem = _contacts.FirstOrDefault(contact => contact.Id == selectedContactId.Value);
+        }
+    }
 
-        if (completedSession is not null)
+    private void RefreshUi()
+    {
+        var selectedTask = _timerManager.SelectedTask;
+
+        if (selectedTask is null)
+        {
+            ActiveTaskNameText.Text = "No timed task selected";
+            ActiveTaskMetaText.Text = "Select a task from the list";
+            TimerDisplay.Text = "00:00:00";
+            StateDisplay.Text = "Stopped";
+            CompactMoneyDisplay.Text = "$0.00 earned · $0.00 tax";
+
+            StartButton.IsEnabled = false;
+            PauseResumeButton.IsEnabled = false;
+            StopButton.IsEnabled = false;
+        }
+        else
+        {
+            var duration = selectedTask.GetCurrentDuration();
+            var earned = selectedTask.GetEarnedAmount();
+            var tax = selectedTask.GetTaxSetAside();
+
+            ActiveTaskNameText.Text = selectedTask.DisplayName;
+            ActiveTaskMetaText.Text = $"{selectedTask.TaskType} · {selectedTask.Mode} · {selectedTask.WorkType}";
+            TimerDisplay.Text = FormatDuration(duration);
+            StateDisplay.Text = selectedTask.State.ToString();
+            CompactMoneyDisplay.Text = $"{earned:C} earned · {tax:C} tax";
+
+            StartButton.IsEnabled = selectedTask.State is TimedTaskState.Stopped or TimedTaskState.Paused;
+            PauseResumeButton.IsEnabled = selectedTask.State is TimedTaskState.Running or TimedTaskState.Paused;
+            StopButton.IsEnabled = selectedTask.State is TimedTaskState.Running or TimedTaskState.Paused;
+
+            PauseResumeButton.Content = selectedTask.State == TimedTaskState.Paused
+                ? "Resume"
+                : "Pause";
+        }
+
+        RefreshTotals();
+        RefreshStatusStrip();
+    }
+
+    private void RefreshTotals()
+    {
+        var logEntries = _logWriter.ReadAll();
+
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var weekStartDate = DateOnly.FromDateTime(GetStartOfWeek(DateTime.Now));
+
+        var todayEntries = logEntries.Where(entry => entry.Date == today).ToList();
+        var weekEntries = logEntries.Where(entry => entry.Date >= weekStartDate).ToList();
+
+        var runningTasks = _timerManager.Tasks.ToList();
+
+        var todayMinutes = todayEntries.Sum(entry => entry.DurationMinutes);
+        var weekMinutes = weekEntries.Sum(entry => entry.DurationMinutes);
+        var allMinutes = logEntries.Sum(entry => entry.DurationMinutes);
+
+        var todayEarned = todayEntries.Sum(entry => entry.EarnedAmount);
+        var weekEarned = weekEntries.Sum(entry => entry.EarnedAmount);
+        var allEarned = logEntries.Sum(entry => entry.EarnedAmount);
+
+        foreach (var task in runningTasks)
+        {
+            var currentMinutes = task.GetCurrentDuration().TotalMinutes;
+            var currentEarned = task.GetEarnedAmount();
+
+            allMinutes += currentMinutes;
+            allEarned += currentEarned;
+
+            if (DateOnly.FromDateTime(task.StartedAt.LocalDateTime) == today)
+            {
+                todayMinutes += currentMinutes;
+                todayEarned += currentEarned;
+            }
+
+            if (DateOnly.FromDateTime(task.StartedAt.LocalDateTime) >= weekStartDate)
+            {
+                weekMinutes += currentMinutes;
+                weekEarned += currentEarned;
+            }
+        }
+
+        TodayTotalsText.Text = $"{FormatHours(todayMinutes)} · {todayEarned:C}";
+        WeekTotalsText.Text = $"{FormatHours(weekMinutes)} · {weekEarned:C}";
+        AllTotalsText.Text = $"{FormatHours(allMinutes)} · {allEarned:C}";
+    }
+
+    private void RefreshStatusStrip()
+    {
+        var active = _timerManager.ActiveExclusiveTask;
+
+        if (active is not null)
+        {
+            StatusStripText.Text = $"Active: {active.DisplayName} · {FormatDuration(active.GetCurrentDuration())}";
+            _trayIconService?.UpdateTooltip($"TimerAgent - {active.DisplayName} - {FormatDuration(active.GetCurrentDuration())}");
+            return;
+        }
+
+        var runningParallel = _timerManager.RunningTasks.FirstOrDefault();
+
+        if (runningParallel is not null)
+        {
+            StatusStripText.Text = $"Running: {runningParallel.DisplayName} · {FormatDuration(runningParallel.GetCurrentDuration())}";
+            _trayIconService?.UpdateTooltip($"TimerAgent - {runningParallel.DisplayName}");
+            return;
+        }
+
+        StatusStripText.Text = _timerManager.SelectedTask is null
+            ? "No active timed task"
+            : $"Selected: {_timerManager.SelectedTask.DisplayName}";
+
+        _trayIconService?.UpdateTooltip("TimerAgent - Stopped");
+    }
+
+    private void TimedTasksListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (TimedTasksListBox.SelectedItem is TimedTask task)
+        {
+            _timerManager.SelectTask(task.Id);
+            RefreshUi();
+        }
+    }
+
+    private void ContactsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ContactsListBox.SelectedItem is ContactProfile contact)
+        {
+            _selectedContact = contact;
+        }
+    }
+
+    private void SelectTaskButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (TimedTasksListBox.SelectedItem is not TimedTask task)
+        {
+            ShowWarning("Select a timed task first.");
+            return;
+        }
+
+        _timerManager.SelectTask(task.Id);
+        ShowPage(TimerAgentPage.Timer);
+    }
+
+    private void StartButton_Click(object sender, RoutedEventArgs e)
+    {
+        var task = _timerManager.SelectedTask;
+
+        if (task is null)
+        {
+            ShowWarning("Select a timed task first.");
+            return;
+        }
+
+        _timerManager.StartTask(task.Id);
+        RefreshLists();
+        ShowPage(TimerAgentPage.Timer);
+    }
+
+    private void PauseResumeButton_Click(object sender, RoutedEventArgs e)
+    {
+        var task = _timerManager.SelectedTask;
+
+        if (task is null)
+        {
+            return;
+        }
+
+        if (task.State == TimedTaskState.Running)
+        {
+            _timerManager.PauseTask(task.Id);
+        }
+        else if (task.State == TimedTaskState.Paused)
+        {
+            _timerManager.ResumeTask(task.Id);
+        }
+
+        RefreshLists();
+        RefreshUi();
+    }
+
+    private void StopButton_Click(object sender, RoutedEventArgs e)
+    {
+        var task = _timerManager.SelectedTask;
+
+        if (task is null)
+        {
+            return;
+        }
+
+        var completedTask = _timerManager.StopTask(task.Id);
+
+        if (completedTask is not null)
         {
             try
             {
-                var logEntry = TimerLogEntry.FromTimedTask(completedSession);
+                var logEntry = TimerLogEntry.FromTimedTask(completedTask);
                 _logWriter.Append(logEntry);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    $"The timer stopped, but the log could not be saved.\n\n{ex.Message}",
+                WpfMessageBox.Show(
+                    $"The task stopped, but the log could not be saved.\n\n{ex.Message}",
                     "Log save failed",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
         }
 
-        _uiTimer.Stop();
-
-        SetInputEnabled(true);
-        RefreshTimerUi();
-
-        MessageBox.Show(
-            "Timer session saved to CSV.",
-            "Life OS TimerAgent",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        RefreshLists();
+        RefreshUi();
     }
 
-    private void ToggleWindowVisibility()
+    private void CreateTaskButton_Click(object sender, RoutedEventArgs e)
     {
-        if (IsVisible && WindowState != WindowState.Minimized)
+        _editingTask = null;
+
+        TaskDetailsTitle.Text = "Create timed task";
+        TaskNameTextBox.Text = string.Empty;
+        TaskContactComboBox.SelectedItem = _selectedContact ?? _contacts.FirstOrDefault();
+        TaskProjectTextBox.Text = string.Empty;
+        TaskWorkTypeTextBox.Text = (_selectedContact ?? _contacts.FirstOrDefault())?.DefaultWorkType ?? string.Empty;
+        TaskTypeComboBox.SelectedItem = TimedTaskType.Work;
+        TaskModeComboBox.SelectedItem = TimedTaskMode.Exclusive;
+        TaskRateTextBox.Text = ((_selectedContact ?? _contacts.FirstOrDefault())?.DefaultHourlyRate ?? 35m).ToString(CultureInfo.CurrentCulture);
+        TaskTaxTextBox.Text = ((_selectedContact ?? _contacts.FirstOrDefault())?.DefaultTaxSetAsidePercent ?? 20m).ToString(CultureInfo.CurrentCulture);
+        TaskBillableCheckBox.IsChecked = true;
+
+        ShowPage(TimerAgentPage.TaskDetails);
+    }
+
+    private void EditTaskButton_Click(object sender, RoutedEventArgs e)
+    {
+        var task = _timerManager.SelectedTask;
+
+        if (task is null)
         {
-            Hide();
+            ShowWarning("Select a timed task first.");
             return;
         }
 
-        ShowTimerWindow();
+        _editingTask = task;
+
+        TaskDetailsTitle.Text = "Edit timed task";
+        TaskNameTextBox.Text = task.Name;
+        TaskContactComboBox.SelectedItem = _contacts.FirstOrDefault(contact => contact.Id == task.ContactId);
+        TaskProjectTextBox.Text = task.ProjectName;
+        TaskWorkTypeTextBox.Text = task.WorkType;
+        TaskTypeComboBox.SelectedItem = task.TaskType;
+        TaskModeComboBox.SelectedItem = task.Mode;
+        TaskRateTextBox.Text = task.HourlyRate.ToString(CultureInfo.CurrentCulture);
+        TaskTaxTextBox.Text = task.TaxSetAsidePercent.ToString(CultureInfo.CurrentCulture);
+        TaskBillableCheckBox.IsChecked = task.IsBillable;
+
+        ShowPage(TimerAgentPage.TaskDetails);
     }
 
-    private void ApplyWindowMode()
+    private void SaveTaskButton_Click(object sender, RoutedEventArgs e)
     {
-        if (_isCompactMode)
+        if (!decimal.TryParse(TaskRateTextBox.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out var rate))
         {
-            FieldsPanel.Visibility = Visibility.Collapsed;
-            NotesTotalsPanel.Visibility = Visibility.Collapsed;
-            HeaderSubtitle.Visibility = Visibility.Collapsed;
+            ShowWarning("Enter a valid hourly rate.");
+            return;
+        }
 
-            WindowTitleText.Text = "TimerAgent";
-            ToggleCompactButton.Content = "Full";
+        if (!decimal.TryParse(TaskTaxTextBox.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out var taxPercent))
+        {
+            ShowWarning("Enter a valid tax percentage.");
+            return;
+        }
 
-            MainScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
-            MainScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+        var contact = TaskContactComboBox.SelectedItem as ContactProfile;
+        var taskType = TaskTypeComboBox.SelectedItem is TimedTaskType selectedTaskType
+            ? selectedTaskType
+            : TimedTaskType.Work;
 
-            Width = 440;
-            Height = 350;
-            MinWidth = 440;
-            MinHeight = 350;
-            MaxWidth = 440;
-            MaxHeight = 350;
+        var mode = TaskModeComboBox.SelectedItem is TimedTaskMode selectedMode
+            ? selectedMode
+            : TimedTaskMode.Exclusive;
 
-            ResizeMode = ResizeMode.NoResize;
+        if (_editingTask is null)
+        {
+            _timerManager.CreateTask(
+                name: TaskNameTextBox.Text,
+                contactId: contact?.Id,
+                contactName: contact?.DisplayName ?? string.Empty,
+                projectName: TaskProjectTextBox.Text,
+                workType: TaskWorkTypeTextBox.Text,
+                taskType: taskType,
+                mode: mode,
+                isBillable: TaskBillableCheckBox.IsChecked == true,
+                hourlyRate: rate,
+                taxSetAsidePercent: taxPercent,
+                notes: string.Empty);
         }
         else
         {
-            FieldsPanel.Visibility = Visibility.Visible;
-            NotesTotalsPanel.Visibility = Visibility.Visible;
-            HeaderSubtitle.Visibility = Visibility.Visible;
-
-            WindowTitleText.Text = "Life OS TimerAgent";
-            ToggleCompactButton.Content = "Compact";
-
-            MainScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-            MainScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-
-            MaxWidth = double.PositiveInfinity;
-            MaxHeight = double.PositiveInfinity;
-
-            Width = 560;
-            Height = 720;
-            MinWidth = 500;
-            MinHeight = 640;
-
-            ResizeMode = ResizeMode.CanResize;
+            _editingTask.Name = TaskNameTextBox.Text.Trim();
+            _editingTask.ContactId = contact?.Id;
+            _editingTask.ContactName = contact?.DisplayName ?? string.Empty;
+            _editingTask.ProjectName = TaskProjectTextBox.Text.Trim();
+            _editingTask.WorkType = TaskWorkTypeTextBox.Text.Trim();
+            _editingTask.TaskType = taskType;
+            _editingTask.Mode = mode;
+            _editingTask.IsBillable = TaskBillableCheckBox.IsChecked == true;
+            _editingTask.HourlyRate = rate;
+            _editingTask.TaxSetAsidePercent = taxPercent;
         }
 
-        Topmost = false;
-        Topmost = true;
+        _editingTask = null;
+
+        RefreshLists();
+        ShowPage(TimerAgentPage.List);
     }
 
-    private void RefreshTimerUi()
+    private void ArchiveTaskButton_Click(object sender, RoutedEventArgs e)
     {
-        var duration = _timerService.GetCurrentDuration();
-        TimerDisplay.Text = duration.ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture);
-
-        StateDisplay.Text = _timerService.State.ToString();
-
-        var earned = _timerService.GetCurrentEarnedAmount();
-        var tax = _timerService.GetCurrentTaxSetAside();
-        var safeAfterTax = earned - tax;
-
-        var session = _timerService.CurrentSession;
-
-        if (session is not null)
+        if (TimedTasksListBox.SelectedItem is not TimedTask task)
         {
-            var client = string.IsNullOrWhiteSpace(session.ContactName)
-                ? "No client"
-                : session.ContactName;
+            ShowWarning("Select a timed task first.");
+            return;
+        }
 
-            var project = string.IsNullOrWhiteSpace(session.ProjectName)
-                ? "No project"
-                : session.ProjectName;
+        _timerManager.ArchiveTask(task.Id);
+        RefreshLists();
+        RefreshUi();
+    }
 
-            CompactSummaryDisplay.Text = $"{client} · {project}";
+    private void CreateContactButton_Click(object sender, RoutedEventArgs e)
+    {
+        _editingContact = null;
+
+        ContactDetailsTitle.Text = "Create contact";
+        ContactNameTextBox.Text = string.Empty;
+        ContactTypeComboBox.SelectedItem = ContactType.Client;
+        ContactDefaultWorkTypeTextBox.Text = string.Empty;
+        ContactDefaultRateTextBox.Text = "35";
+        ContactDefaultTaxTextBox.Text = "20";
+
+        ShowPage(TimerAgentPage.ContactDetails);
+    }
+
+    private void EditContactButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (ContactsListBox.SelectedItem is not ContactProfile contact)
+        {
+            ShowWarning("Select a contact first.");
+            return;
+        }
+
+        _editingContact = contact;
+
+        ContactDetailsTitle.Text = "Edit contact";
+        ContactNameTextBox.Text = contact.DisplayName;
+        ContactTypeComboBox.SelectedItem = contact.Type;
+        ContactDefaultWorkTypeTextBox.Text = contact.DefaultWorkType;
+        ContactDefaultRateTextBox.Text = contact.DefaultHourlyRate.ToString(CultureInfo.CurrentCulture);
+        ContactDefaultTaxTextBox.Text = contact.DefaultTaxSetAsidePercent.ToString(CultureInfo.CurrentCulture);
+
+        ShowPage(TimerAgentPage.ContactDetails);
+    }
+
+    private void SaveContactButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(ContactNameTextBox.Text))
+        {
+            ShowWarning("Enter a contact name.");
+            return;
+        }
+
+        if (!decimal.TryParse(ContactDefaultRateTextBox.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out var rate))
+        {
+            ShowWarning("Enter a valid default rate.");
+            return;
+        }
+
+        if (!decimal.TryParse(ContactDefaultTaxTextBox.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out var tax))
+        {
+            ShowWarning("Enter a valid default tax percentage.");
+            return;
+        }
+
+        var type = ContactTypeComboBox.SelectedItem is ContactType selectedType
+            ? selectedType
+            : ContactType.Other;
+
+        if (_editingContact is null)
+        {
+            var contact = new ContactProfile
+            {
+                DisplayName = ContactNameTextBox.Text.Trim(),
+                Type = type,
+                DefaultWorkType = ContactDefaultWorkTypeTextBox.Text.Trim(),
+                DefaultHourlyRate = rate,
+                DefaultTaxSetAsidePercent = tax
+            };
+
+            _contacts.Add(contact);
+            _selectedContact = contact;
         }
         else
         {
-            CompactSummaryDisplay.Text = "No active session";
+            _editingContact.DisplayName = ContactNameTextBox.Text.Trim();
+            _editingContact.Type = type;
+            _editingContact.DefaultWorkType = ContactDefaultWorkTypeTextBox.Text.Trim();
+            _editingContact.DefaultHourlyRate = rate;
+            _editingContact.DefaultTaxSetAsidePercent = tax;
+            _editingContact.UpdatedAt = DateTimeOffset.Now;
+
+            _selectedContact = _editingContact;
         }
 
-        CompactMoneyDisplay.Text = $"{earned:C} earned · {tax:C} tax";
+        _editingContact = null;
 
-        StartButton.IsEnabled = _timerService.State == TimedTaskState.Stopped;
-        PauseResumeButton.IsEnabled = _timerService.State is TimedTaskState.Running or TimedTaskState.Paused;
-        StopButton.IsEnabled = _timerService.State is TimedTaskState.Running or TimedTaskState.Paused;
+        RefreshLists();
+        ShowPage(TimerAgentPage.Contacts);
+    }
 
-        PauseResumeButton.Content = _timerService.State == TimedTaskState.Paused
-            ? "Resume"
-            : "Pause";
-
-        if (_timerService.CurrentSession is not null)
+    private void SelectContactButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (ContactsListBox.SelectedItem is not ContactProfile contact)
         {
-            var client = string.IsNullOrWhiteSpace(_timerService.CurrentSession.ContactName)
-                ? "No client"
-                : _timerService.CurrentSession.ContactName;
-
-            _trayIconService?.UpdateTooltip(
-                $"Life OS TimerAgent - {client} - {TimerDisplay.Text}");
+            ShowWarning("Select a contact first.");
+            return;
         }
-        else
+
+        _selectedContact = contact;
+        CreateTaskButton_Click(sender, e);
+    }
+
+    private void ArchiveContactButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (ContactsListBox.SelectedItem is not ContactProfile contact)
         {
-            _trayIconService?.UpdateTooltip("Life OS TimerAgent - Stopped");
+            ShowWarning("Select a contact first.");
+            return;
+        }
+
+        contact.IsActive = false;
+
+        if (_selectedContact?.Id == contact.Id)
+        {
+            _selectedContact = _contacts.FirstOrDefault(activeContact => activeContact.IsActive);
+        }
+
+        RefreshLists();
+        RefreshUi();
+    }
+
+    private void CancelDetailsButton_Click(object sender, RoutedEventArgs e)
+    {
+        _editingTask = null;
+        _editingContact = null;
+
+        ShowPage(TimerAgentPage.List);
+    }
+
+    private void TaskContactComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_editingTask is not null)
+        {
+            return;
+        }
+
+        if (TaskContactComboBox.SelectedItem is not ContactProfile contact)
+        {
+            return;
+        }
+
+        TaskRateTextBox.Text = contact.DefaultHourlyRate.ToString(CultureInfo.CurrentCulture);
+        TaskTaxTextBox.Text = contact.DefaultTaxSetAsidePercent.ToString(CultureInfo.CurrentCulture);
+
+        if (string.IsNullOrWhiteSpace(TaskWorkTypeTextBox.Text))
+        {
+            TaskWorkTypeTextBox.Text = contact.DefaultWorkType;
         }
     }
 
-    private bool TryReadMoneyFields(out decimal hourlyRate, out decimal taxPercent)
+    private static DateTime GetStartOfWeek(DateTime date)
     {
-        hourlyRate = 0m;
-        taxPercent = 0m;
-
-        if (!decimal.TryParse(RateTextBox.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out hourlyRate))
-        {
-            MessageBox.Show(
-                "Enter a valid hourly rate.",
-                "Invalid rate",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-
-            RateTextBox.Focus();
-            return false;
-        }
-
-        if (hourlyRate < 0)
-        {
-            MessageBox.Show(
-                "Hourly rate cannot be negative.",
-                "Invalid rate",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-
-            RateTextBox.Focus();
-            return false;
-        }
-
-        if (!decimal.TryParse(TaxTextBox.Text, NumberStyles.Number, CultureInfo.CurrentCulture, out taxPercent))
-        {
-            MessageBox.Show(
-                "Enter a valid tax percentage.",
-                "Invalid tax percentage",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-
-            TaxTextBox.Focus();
-            return false;
-        }
-
-        if (taxPercent < 0 || taxPercent > 100)
-        {
-            MessageBox.Show(
-                "Tax percentage must be between 0 and 100.",
-                "Invalid tax percentage",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-
-            TaxTextBox.Focus();
-            return false;
-        }
-
-        return true;
+        var diff = (7 + (date.DayOfWeek - DayOfWeek.Monday)) % 7;
+        return date.Date.AddDays(-diff);
     }
 
-    private void SetInputEnabled(bool isEnabled)
+    private static string FormatDuration(TimeSpan duration)
     {
-        ClientTextBox.IsEnabled = isEnabled;
-        ProjectTextBox.IsEnabled = isEnabled;
-        WorkTypeTextBox.IsEnabled = isEnabled;
-        RateTextBox.IsEnabled = isEnabled;
-        TaxTextBox.IsEnabled = isEnabled;
-        BillableCheckBox.IsEnabled = isEnabled;
+        return duration.ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture);
+    }
+
+    private static string FormatHours(double minutes)
+    {
+        var hours = minutes / 60d;
+        return $"{hours:0.##}h";
+    }
+
+    private void ShowWarning(string message)
+    {
+        WpfMessageBox.Show(
+            message,
+            "Life OS TimerAgent",
+            MessageBoxButton.OK,
+            MessageBoxImage.Warning);
     }
 }

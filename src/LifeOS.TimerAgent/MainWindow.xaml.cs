@@ -10,6 +10,7 @@ using LifeOS.Modules.Timer.Models;
 using LifeOS.Modules.Timer.Services;
 using LifeOS.Modules.Timer.Storage;
 using LifeOS.TimerAgent.Services;
+using LifeOS.TimerAgent.Storage;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using WpfMessageBox = System.Windows.MessageBox;
 
@@ -29,6 +30,7 @@ public partial class MainWindow : Window
     private readonly TimerManager _timerManager = new();
     private readonly List<ContactProfile> _contacts = new();
     private readonly TimerCsvLogWriter _logWriter;
+    private readonly TimerAgentStateStore _stateStore;
     private readonly DispatcherTimer _uiTimer;
 
     private GlobalHotKeyService? _hotKeyService;
@@ -52,7 +54,10 @@ public partial class MainWindow : Window
             "TimerAgent");
 
         var logFilePath = Path.Combine(appDataFolder, "timer-log.csv");
+        var stateFilePath = Path.Combine(appDataFolder, "timeragent-state.json");
+
         _logWriter = new TimerCsvLogWriter(logFilePath);
+        _stateStore = new TimerAgentStateStore(stateFilePath);
 
         _uiTimer = new DispatcherTimer
         {
@@ -61,7 +66,7 @@ public partial class MainWindow : Window
 
         _uiTimer.Tick += (_, _) => RefreshUi();
 
-        SeedDemoData();
+        LoadStateOrSeedDemoData();
         SetupDropdowns();
         RefreshLists();
         ShowPage(TimerAgentPage.List);
@@ -98,10 +103,34 @@ public partial class MainWindow : Window
 
     protected override void OnClosed(EventArgs e)
     {
+        SaveState();
+
         _hotKeyService?.Dispose();
         _trayIconService?.Dispose();
 
         base.OnClosed(e);
+    }
+
+    private void LoadStateOrSeedDemoData()
+    {
+        var state = _stateStore.Load();
+
+        if (state.Contacts.Count > 0 || state.TimedTasks.Count > 0)
+        {
+            _contacts.Clear();
+            _contacts.AddRange(state.Contacts.Where(contact => contact.IsActive));
+
+            _selectedContact = state.SelectedContactId is null
+                ? _contacts.FirstOrDefault()
+                : _contacts.FirstOrDefault(contact => contact.Id == state.SelectedContactId.Value) ?? _contacts.FirstOrDefault();
+
+            _timerManager.ReplaceTasks(state.TimedTasks, state.SelectedTaskId);
+
+            return;
+        }
+
+        SeedDemoData();
+        SaveState();
     }
 
     private void SeedDemoData()
@@ -182,6 +211,19 @@ public partial class MainWindow : Window
             hourlyRate: 0m,
             taxSetAsidePercent: 0m,
             notes: string.Empty);
+    }
+
+    private void SaveState()
+    {
+        var state = new TimerAgentAppState
+        {
+            Contacts = _contacts.ToList(),
+            TimedTasks = _timerManager.GetAllTasksIncludingArchived().ToList(),
+            SelectedContactId = _selectedContact?.Id,
+            SelectedTaskId = _timerManager.SelectedTask?.Id
+        };
+
+        _stateStore.Save(state);
     }
 
     private void SetupDropdowns()
@@ -458,6 +500,7 @@ public partial class MainWindow : Window
         if (TimedTasksListBox.SelectedItem is TimedTask task)
         {
             _timerManager.SelectTask(task.Id);
+            SaveState();
             RefreshUi();
         }
     }
@@ -479,6 +522,7 @@ public partial class MainWindow : Window
         }
 
         _timerManager.SelectTask(task.Id);
+        SaveState();
         ShowPage(TimerAgentPage.Timer);
     }
 
@@ -493,6 +537,7 @@ public partial class MainWindow : Window
         }
 
         _timerManager.StartTask(task.Id);
+        SaveState();
         RefreshLists();
         ShowPage(TimerAgentPage.Timer);
     }
@@ -515,6 +560,7 @@ public partial class MainWindow : Window
             _timerManager.ResumeTask(task.Id);
         }
 
+        SaveState();
         RefreshLists();
         RefreshUi();
     }
@@ -547,6 +593,7 @@ public partial class MainWindow : Window
             }
         }
 
+        SaveState();
         RefreshLists();
         RefreshUi();
     }
@@ -649,6 +696,7 @@ public partial class MainWindow : Window
 
         _editingTask = null;
 
+        SaveState();
         RefreshLists();
         ShowPage(TimerAgentPage.List);
     }
@@ -662,6 +710,7 @@ public partial class MainWindow : Window
         }
 
         _timerManager.ArchiveTask(task.Id);
+        SaveState();
         RefreshLists();
         RefreshUi();
     }
@@ -752,6 +801,7 @@ public partial class MainWindow : Window
 
         _editingContact = null;
 
+        SaveState();
         RefreshLists();
         ShowPage(TimerAgentPage.Contacts);
     }
@@ -783,6 +833,7 @@ public partial class MainWindow : Window
             _selectedContact = _contacts.FirstOrDefault(activeContact => activeContact.IsActive);
         }
 
+        SaveState();
         RefreshLists();
         RefreshUi();
     }

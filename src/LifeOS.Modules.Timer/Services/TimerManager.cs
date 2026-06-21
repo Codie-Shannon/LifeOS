@@ -62,6 +62,25 @@ public sealed class TimerManager
         return task;
     }
 
+    public void ReplaceTasks(IEnumerable<TimedTask> tasks, Guid? selectedTaskId = null)
+    {
+        _tasks.Clear();
+
+        foreach (var task in tasks.Where(task => !task.IsArchived))
+        {
+            _tasks.Add(task);
+        }
+
+        SelectedTask = selectedTaskId is null
+            ? _tasks.FirstOrDefault()
+            : _tasks.FirstOrDefault(task => task.Id == selectedTaskId.Value) ?? _tasks.FirstOrDefault();
+    }
+
+    public IReadOnlyList<TimedTask> GetAllTasksIncludingArchived()
+    {
+        return _tasks.ToList();
+    }
+
     public bool SelectTask(Guid taskId)
     {
         var task = FindTask(taskId);

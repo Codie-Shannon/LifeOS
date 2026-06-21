@@ -43,6 +43,15 @@ public partial class MainWindow : Window
     private ContactProfile? _editingContact;
     private ContactProfile? _selectedContact;
 
+    private const double ManagerWindowWidth = 560;
+    private const double ManagerWindowHeight = 720;
+    private const double ManagerWindowMinWidth = 500;
+    private const double ManagerWindowMinHeight = 640;
+    private const double CompactWindowWidth = 410;
+    private const double CompactWindowHeight = 170;
+    private const double CompactWindowMinWidth = 360;
+    private const double CompactWindowMinHeight = 130;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -319,6 +328,11 @@ public partial class MainWindow : Window
         ShowPage(TimerAgentPage.Timer);
     }
 
+    private void FullTimerButton_Click(object sender, RoutedEventArgs e)
+    {
+        ShowPage(TimerAgentPage.List);
+    }
+
     private void ContactsNavButton_Click(object sender, RoutedEventArgs e)
     {
         ShowPage(TimerAgentPage.Contacts);
@@ -326,13 +340,55 @@ public partial class MainWindow : Window
 
     private void ShowPage(TimerAgentPage page)
     {
+        var isCompactTimer = page == TimerAgentPage.Timer;
+
         ListPage.Visibility = page == TimerAgentPage.List ? Visibility.Visible : Visibility.Collapsed;
-        TimerPage.Visibility = page == TimerAgentPage.Timer ? Visibility.Visible : Visibility.Collapsed;
+        TimerPage.Visibility = isCompactTimer ? Visibility.Visible : Visibility.Collapsed;
         ContactsPage.Visibility = page == TimerAgentPage.Contacts ? Visibility.Visible : Visibility.Collapsed;
         TaskDetailsPage.Visibility = page == TimerAgentPage.TaskDetails ? Visibility.Visible : Visibility.Collapsed;
         ContactDetailsPage.Visibility = page == TimerAgentPage.ContactDetails ? Visibility.Visible : Visibility.Collapsed;
 
+        ApplyWindowMode(isCompactTimer);
         RefreshUi();
+    }
+
+    private void ApplyWindowMode(bool isCompactTimer)
+    {
+        if (isCompactTimer)
+        {
+            ManagerHeader.Visibility = Visibility.Collapsed;
+            ManagerNav.Visibility = Visibility.Collapsed;
+            StatusStripBorder.Visibility = Visibility.Collapsed;
+
+            ContentRoot.Margin = new Thickness(8);
+            HeaderSpacerRow.Height = new GridLength(0);
+            NavSpacerRow.Height = new GridLength(0);
+            StatusSpacerRow.Height = new GridLength(0);
+
+            MinWidth = CompactWindowMinWidth;
+            MinHeight = CompactWindowMinHeight;
+            Width = CompactWindowWidth;
+            Height = CompactWindowHeight;
+            ResizeMode = ResizeMode.NoResize;
+            Topmost = true;
+            return;
+        }
+
+        ManagerHeader.Visibility = Visibility.Visible;
+        ManagerNav.Visibility = Visibility.Visible;
+        StatusStripBorder.Visibility = Visibility.Visible;
+
+        ContentRoot.Margin = new Thickness(16);
+        HeaderSpacerRow.Height = new GridLength(10);
+        NavSpacerRow.Height = new GridLength(10);
+        StatusSpacerRow.Height = new GridLength(10);
+
+        MinWidth = ManagerWindowMinWidth;
+        MinHeight = ManagerWindowMinHeight;
+        Width = ManagerWindowWidth;
+        Height = ManagerWindowHeight;
+        ResizeMode = ResizeMode.CanResize;
+        Topmost = true;
     }
 
     private void RefreshLists()
@@ -372,8 +428,8 @@ public partial class MainWindow : Window
             StateDisplay.Text = "Stopped";
             CompactMoneyDisplay.Text = "$0.00 earned · $0.00 tax · $0.00 safe";
 
-            StartButton.IsEnabled = false;
-            PauseResumeButton.IsEnabled = false;
+            SmartTimerActionButton.Content = "Start";
+            SmartTimerActionButton.IsEnabled = false;
             StopButton.IsEnabled = false;
 
             ListStartPauseButton.Content = "Start";
@@ -393,10 +449,14 @@ public partial class MainWindow : Window
             StateDisplay.Text = selectedTask.State.ToString();
             CompactMoneyDisplay.Text = $"{earned:C} earned · {tax:C} tax · {safe:C} safe";
 
-            StartButton.IsEnabled = selectedTask.State is TimedTaskState.Stopped or TimedTaskState.Paused;
-            PauseResumeButton.IsEnabled = selectedTask.State is TimedTaskState.Running or TimedTaskState.Paused;
+            SmartTimerActionButton.Content = selectedTask.State switch
+            {
+                TimedTaskState.Running => "Pause",
+                TimedTaskState.Paused => "Resume",
+                _ => "Start"
+            };
+            SmartTimerActionButton.IsEnabled = selectedTask.State is TimedTaskState.Stopped or TimedTaskState.Running or TimedTaskState.Paused;
             StopButton.IsEnabled = selectedTask.State is TimedTaskState.Running or TimedTaskState.Paused;
-            PauseResumeButton.Content = selectedTask.State == TimedTaskState.Paused ? "Resume" : "Pause";
 
             ListStartPauseButton.IsEnabled = selectedTask.State is TimedTaskState.Stopped or TimedTaskState.Running or TimedTaskState.Paused;
             ListStopButton.IsEnabled = selectedTask.State is TimedTaskState.Running or TimedTaskState.Paused;
@@ -595,6 +655,33 @@ public partial class MainWindow : Window
         ShowPage(TimerAgentPage.Timer);
     }
 
+    private void SmartTimerActionButton_Click(object sender, RoutedEventArgs e)
+    {
+        var task = _timerManager.SelectedTask;
+        if (task is null)
+        {
+            ShowWarning("Select a timed task first.");
+            return;
+        }
+
+        if (task.State == TimedTaskState.Running)
+        {
+            _timerManager.PauseTask(task.Id);
+        }
+        else if (task.State == TimedTaskState.Paused)
+        {
+            _timerManager.ResumeTask(task.Id);
+        }
+        else
+        {
+            _timerManager.StartTask(task.Id);
+        }
+
+        SaveState();
+        RefreshLists();
+        RefreshUi();
+    }
+
     private void StartButton_Click(object sender, RoutedEventArgs e)
     {
         var task = _timerManager.SelectedTask;
@@ -604,7 +691,15 @@ public partial class MainWindow : Window
             return;
         }
 
-        _timerManager.StartTask(task.Id);
+        if (task.State == TimedTaskState.Paused)
+        {
+            _timerManager.ResumeTask(task.Id);
+        }
+        else
+        {
+            _timerManager.StartTask(task.Id);
+        }
+
         SaveState();
         RefreshLists();
         ShowPage(TimerAgentPage.Timer);

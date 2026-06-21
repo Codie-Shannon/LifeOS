@@ -230,18 +230,19 @@
             BorderBrush="#D1D5DB"
             BorderThickness="1"
             CornerRadius="24">
-        <Grid Margin="16">
+        <Grid x:Name="ContentRoot" Margin="16">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
+                <RowDefinition x:Name="HeaderRow" Height="Auto" />
+                <RowDefinition x:Name="HeaderSpacerRow" Height="10" />
+                <RowDefinition x:Name="NavRow" Height="Auto" />
+                <RowDefinition x:Name="NavSpacerRow" Height="10" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="10" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition x:Name="StatusSpacerRow" Height="10" />
+                <RowDefinition x:Name="StatusRow" Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0"
+            <Border x:Name="ManagerHeader"
+                    Grid.Row="0"
                     Background="#111827"
                     CornerRadius="18"
                     Padding="16,14"
@@ -270,7 +271,7 @@
                 </Grid>
             </Border>
 
-            <UniformGrid Grid.Row="2" Columns="3">
+            <UniformGrid x:Name="ManagerNav" Grid.Row="2" Columns="3">
                 <Button Content="List"
                         Height="40"
                         Margin="3"
@@ -344,97 +345,125 @@
                 </Grid>
 
                 <Grid x:Name="TimerPage" Visibility="Collapsed">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="14" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="14" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Border Grid.Row="0" Style="{StaticResource CardBorder}">
-                        <StackPanel>
-                            <TextBlock x:Name="ActiveTaskNameText"
-                                       Text="No timed task selected"
-                                       Foreground="#111827"
-                                       FontSize="19"
-                                       FontWeight="Bold"
-                                       TextWrapping="Wrap" />
-                            <TextBlock x:Name="ActiveTaskMetaText"
-                                       Text="Select a task from the list"
-                                       Foreground="#6B7280"
-                                       FontSize="13"
-                                       Margin="0,6,0,0" />
-                            <TextBlock x:Name="TimerDisplay"
-                                       Text="00:00:00"
-                                       Foreground="#111827"
-                                       FontSize="52"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,20,0,8" />
-                            <TextBlock x:Name="StateDisplay"
-                                       Text="Stopped"
-                                       Foreground="#2563EB"
-                                       FontSize="14"
-                                       FontWeight="SemiBold"
-                                       HorizontalAlignment="Center" />
-                            <TextBlock x:Name="CompactMoneyDisplay"
-                                       Text="$0.00 earned · $0.00 tax · $0.00 safe"
-                                       Foreground="#374151"
-                                       FontSize="13"
-                                       HorizontalAlignment="Center"
-                                       Margin="0,8,0,0" />
-                        </StackPanel>
-                    </Border>
-
-                    <UniformGrid Grid.Row="2" Columns="3">
-                        <Button x:Name="StartButton"
-                                Content="Start"
-                                Height="44"
-                                Margin="3"
-                                Style="{StaticResource PrimaryButton}"
-                                Click="StartButton_Click" />
-                        <Button x:Name="PauseResumeButton"
-                                Content="Pause"
-                                Height="44"
-                                Margin="3"
-                                Style="{StaticResource LifeButton}"
-                                Click="PauseResumeButton_Click" />
-                        <Button x:Name="StopButton"
-                                Content="Stop"
-                                Height="44"
-                                Margin="3"
-                                Style="{StaticResource DangerButton}"
-                                Click="StopButton_Click" />
-                    </UniformGrid>
-
-                    <Border Grid.Row="4" Style="{StaticResource CardBorder}">
+                    <Border Background="#FFFFFF"
+                            BorderBrush="#E5E7EB"
+                            BorderThickness="1"
+                            CornerRadius="18"
+                            Padding="10"
+                            MouseLeftButtonDown="Header_MouseLeftButtonDown">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="10" />
+                                <RowDefinition Height="4" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="6" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Task totals"
-                                       Foreground="#111827"
-                                       FontSize="16"
-                                       FontWeight="Bold" />
-                            <UniformGrid Grid.Row="2" Columns="3">
-                                <StackPanel Margin="3">
-                                    <TextBlock Text="Current work day" Style="{StaticResource MutedText}" />
-                                    <TextBlock x:Name="TodayTotalsText" Text="0h · $0.00" FontWeight="Bold" />
+
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock x:Name="ActiveTaskNameText"
+                                           Text="No timed task selected"
+                                           Foreground="#111827"
+                                           FontSize="14"
+                                           FontWeight="Bold"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center" />
+
+                                <Button Grid.Column="1"
+                                        Content="List"
+                                        Width="58"
+                                        Height="28"
+                                        Margin="8,0,0,0"
+                                        Padding="8,4"
+                                        Style="{StaticResource SoftButton}"
+                                        Click="FullTimerButton_Click" />
+                            </Grid>
+
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock x:Name="TimerDisplay"
+                                           Text="00:00:00"
+                                           Foreground="#111827"
+                                           FontSize="26"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center" />
+
+                                <StackPanel Grid.Column="1"
+                                            Margin="10,0,0,0"
+                                            VerticalAlignment="Center">
+                                    <TextBlock x:Name="StateDisplay"
+                                               Text="Stopped"
+                                               Foreground="#2563EB"
+                                               FontSize="11"
+                                               FontWeight="SemiBold"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <TextBlock x:Name="CompactMoneyDisplay"
+                                               Text="$0.00 earned · $0.00 tax · $0.00 safe"
+                                               Foreground="#374151"
+                                               FontSize="10"
+                                               TextTrimming="CharacterEllipsis"
+                                               Margin="0,1,0,0" />
+                                    <TextBlock x:Name="ActiveTaskMetaText"
+                                               Text="Select a task from the list"
+                                               Foreground="#6B7280"
+                                               FontSize="9"
+                                               TextTrimming="CharacterEllipsis"
+                                               Margin="0,1,0,0" />
                                 </StackPanel>
-                                <StackPanel Margin="3">
-                                    <TextBlock Text="This week" Style="{StaticResource MutedText}" />
-                                    <TextBlock x:Name="WeekTotalsText" Text="0h · $0.00" FontWeight="Bold" />
-                                </StackPanel>
-                                <StackPanel Margin="3">
-                                    <TextBlock Text="All time" Style="{StaticResource MutedText}" />
-                                    <TextBlock x:Name="AllTotalsText" Text="0h · $0.00" FontWeight="Bold" />
-                                </StackPanel>
-                            </UniformGrid>
+                            </Grid>
+
+                            <Grid Grid.Row="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="8" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="8" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Button x:Name="SmartTimerActionButton"
+                                        Grid.Column="0"
+                                        Content="Start"
+                                        Height="28"
+                                        Padding="6,3"
+                                        FontSize="11"
+                                        Style="{StaticResource PrimaryButton}"
+                                        Click="SmartTimerActionButton_Click" />
+
+                                <Button x:Name="StopButton"
+                                        Grid.Column="2"
+                                        Content="Stop"
+                                        Height="28"
+                                        Padding="6,3"
+                                        FontSize="11"
+                                        Style="{StaticResource DangerButton}"
+                                        Click="StopButton_Click" />
+
+                                <Button Grid.Column="4"
+                                        Content="Hide"
+                                        Height="28"
+                                        Padding="6,3"
+                                        FontSize="11"
+                                        Style="{StaticResource LifeButton}"
+                                        Click="HideWindowButton_Click" />
+                            </Grid>
                         </Grid>
                     </Border>
+
+                    <StackPanel Visibility="Collapsed">
+                        <TextBlock x:Name="TodayTotalsText" Text="0h · $0.00" />
+                        <TextBlock x:Name="WeekTotalsText" Text="0h · $0.00" />
+                        <TextBlock x:Name="AllTotalsText" Text="0h · $0.00" />
+                    </StackPanel>
                 </Grid>
 
                 <Grid x:Name="ContactsPage" Visibility="Collapsed">
@@ -685,7 +714,8 @@
                 </Grid>
             </Grid>
 
-            <Border Grid.Row="6"
+            <Border x:Name="StatusStripBorder"
+                    Grid.Row="6"
                     Background="#E5E7EB"
                     CornerRadius="14"
                     Padding="12,8">

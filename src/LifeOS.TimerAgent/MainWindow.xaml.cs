@@ -33,6 +33,9 @@ public partial class MainWindow : Window
     private readonly TimerAgentStateStore _stateStore;
     private readonly DispatcherTimer _uiTimer;
 
+    private static readonly TimeSpan WorkDayCutoff = TimeSpan.FromHours(4);
+    private static readonly TimeSpan NewWorkDayGap = TimeSpan.FromHours(2);
+
     private GlobalHotKeyService? _hotKeyService;
     private TrayIconService? _trayIconService;
     private bool _allowClose;
@@ -411,46 +414,63 @@ public partial class MainWindow : Window
 
     private void RefreshTotals()
     {
-        var logEntries = _logWriter.ReadAll();
-        var today = DateOnly.FromDateTime(DateTime.Now);
-        var weekStartDate = DateOnly.FromDateTime(GetStartOfWeek(DateTime.Now));
+        var selectedTask = _timerManager.SelectedTask;
 
-        var todayEntries = logEntries.Where(entry => entry.Date == today).ToList();
-        var weekEntries = logEntries.Where(entry => entry.Date >= weekStartDate).ToList();
-        var currentTasks = _timerManager.Tasks
-            .Where(task => task.State is TimedTaskState.Running or TimedTaskState.Paused)
+        if (selectedTask is null)
+        {
+            TodayTotalsText.Text = "0h · $0.00";
+            WeekTotalsText.Text = "0h · $0.00";
+            AllTotalsText.Text = "0h · $0.00";
+            return;
+        }
+
+        var allLogEntries = _logWriter.ReadAll().ToList();
+        var selectedTaskEntries = allLogEntries
+            .Where(entry => entry.TimedTaskId == selectedTask.Id)
             .ToList();
 
-        var todayMinutes = todayEntries.Sum(entry => entry.DurationMinutes);
+        var currentWorkDate = GetCurrentWorkDate(allLogEntries);
+        var weekStartDate = DateOnly.FromDateTime(GetStartOfWeek(currentWorkDate.ToDateTime(TimeOnly.MinValue)));
+
+        var currentWorkDayEntries = selectedTaskEntries
+            .Where(entry => GetEntryWorkDate(entry) == currentWorkDate)
+            .ToList();
+
+        var weekEntries = selectedTaskEntries
+            .Where(entry => GetEntryWorkDate(entry) >= weekStartDate)
+            .ToList();
+
+        var currentWorkDayMinutes = currentWorkDayEntries.Sum(entry => entry.DurationMinutes);
         var weekMinutes = weekEntries.Sum(entry => entry.DurationMinutes);
-        var allMinutes = logEntries.Sum(entry => entry.DurationMinutes);
+        var allMinutes = selectedTaskEntries.Sum(entry => entry.DurationMinutes);
 
-        var todayEarned = todayEntries.Sum(entry => entry.EarnedAmount);
+        var currentWorkDayEarned = currentWorkDayEntries.Sum(entry => entry.EarnedAmount);
         var weekEarned = weekEntries.Sum(entry => entry.EarnedAmount);
-        var allEarned = logEntries.Sum(entry => entry.EarnedAmount);
+        var allEarned = selectedTaskEntries.Sum(entry => entry.EarnedAmount);
 
-        foreach (var task in currentTasks)
+        if (selectedTask.State is TimedTaskState.Running or TimedTaskState.Paused)
         {
-            var currentMinutes = task.GetCurrentDuration().TotalMinutes;
-            var currentEarned = task.GetEarnedAmount();
+            var currentMinutes = selectedTask.GetCurrentDuration().TotalMinutes;
+            var currentEarned = selectedTask.GetEarnedAmount();
+            var taskWorkDate = GetWorkDate(selectedTask.StartedAt.LocalDateTime);
 
             allMinutes += currentMinutes;
             allEarned += currentEarned;
 
-            if (DateOnly.FromDateTime(task.StartedAt.LocalDateTime) == today)
+            if (taskWorkDate == currentWorkDate || selectedTask.State == TimedTaskState.Running)
             {
-                todayMinutes += currentMinutes;
-                todayEarned += currentEarned;
+                currentWorkDayMinutes += currentMinutes;
+                currentWorkDayEarned += currentEarned;
             }
 
-            if (DateOnly.FromDateTime(task.StartedAt.LocalDateTime) >= weekStartDate)
+            if (taskWorkDate >= weekStartDate)
             {
                 weekMinutes += currentMinutes;
                 weekEarned += currentEarned;
             }
         }
 
-        TodayTotalsText.Text = $"{FormatHours(todayMinutes)} · {todayEarned:C}";
+        TodayTotalsText.Text = $"{FormatHours(currentWorkDayMinutes)} · {currentWorkDayEarned:C}";
         WeekTotalsText.Text = $"{FormatHours(weekMinutes)} · {weekEarned:C}";
         AllTotalsText.Text = $"{FormatHours(allMinutes)} · {allEarned:C}";
     }
@@ -927,6 +947,58 @@ public partial class MainWindow : Window
         }
     }
 
+    private static DateOnly GetCurrentWorkDate(IReadOnlyCollection<TimerLogEntry> logEntries)
+    {
+        var now = DateTime.Now;
+        var defaultWorkDate = GetWorkDate(now);
+
+        if (now.TimeOfDay < WorkDayCutoff)
+        {
+            return defaultWorkDate;
+        }
+
+        var lastEndedAt = logEntries
+            .Select(GetEntryEndDateTime)
+            .Where(endedAt => endedAt <= now)
+            .OrderByDescending(endedAt => endedAt)
+            .FirstOrDefault();
+
+        if (lastEndedAt != default && now - lastEndedAt <= NewWorkDayGap)
+        {
+            return GetWorkDate(lastEndedAt);
+        }
+
+        return defaultWorkDate;
+    }
+
+    private static DateOnly GetEntryWorkDate(TimerLogEntry entry)
+    {
+        return GetWorkDate(GetEntryStartDateTime(entry));
+    }
+
+    private static DateOnly GetWorkDate(DateTime dateTime)
+    {
+        return DateOnly.FromDateTime(dateTime.Subtract(WorkDayCutoff));
+    }
+
+    private static DateTime GetEntryStartDateTime(TimerLogEntry entry)
+    {
+        return entry.Date.ToDateTime(entry.StartTime);
+    }
+
+    private static DateTime GetEntryEndDateTime(TimerLogEntry entry)
+    {
+        var start = GetEntryStartDateTime(entry);
+        var end = entry.Date.ToDateTime(entry.EndTime);
+
+        if (end < start)
+        {
+            end = end.AddDays(1);
+        }
+
+        return end;
+    }
+
     private static DateTime GetStartOfWeek(DateTime date)
     {
         var diff = (7 + (date.DayOfWeek - DayOfWeek.Monday)) % 7;
@@ -953,4 +1025,5 @@ public partial class MainWindow : Window
             MessageBoxImage.Warning);
     }
 }
+
 

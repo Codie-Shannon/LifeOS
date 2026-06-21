@@ -121,13 +121,45 @@
             <Setter Property="Padding" Value="18" />
         </Style>
 
+        <Style x:Key="StretchListBoxItem" TargetType="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="ItemBorder"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="2"
+                                CornerRadius="18"
+                                Padding="0">
+                            <ContentPresenter HorizontalAlignment="Stretch" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#F8FAFC" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#2563EB" />
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#EFF6FF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <DataTemplate x:Key="TimedTaskTemplate">
             <Border Background="#FFFFFF"
                     BorderBrush="#E5E7EB"
                     BorderThickness="1"
                     CornerRadius="16"
                     Padding="14"
-                    Margin="0,0,0,10">
+                    Margin="0"
+                    HorizontalAlignment="Stretch">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -166,7 +198,8 @@
                     BorderThickness="1"
                     CornerRadius="16"
                     Padding="14"
-                    Margin="0,0,0,10">
+                    Margin="0"
+                    HorizontalAlignment="Stretch">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -282,8 +315,10 @@
                     <ListBox x:Name="TimedTasksListBox"
                              Grid.Row="4"
                              ItemTemplate="{StaticResource TimedTaskTemplate}"
+                             ItemContainerStyle="{StaticResource StretchListBoxItem}"
                              BorderThickness="0"
                              Background="Transparent"
+                             HorizontalContentAlignment="Stretch"
                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                              SelectionChanged="TimedTasksListBox_SelectionChanged" />
 
@@ -380,13 +415,13 @@
                                 <RowDefinition Height="10" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Totals"
+                            <TextBlock Text="Task totals"
                                        Foreground="#111827"
                                        FontSize="16"
                                        FontWeight="Bold" />
                             <UniformGrid Grid.Row="2" Columns="3">
                                 <StackPanel Margin="3">
-                                    <TextBlock Text="Today" Style="{StaticResource MutedText}" />
+                                    <TextBlock Text="Current work day" Style="{StaticResource MutedText}" />
                                     <TextBlock x:Name="TodayTotalsText" Text="0h · $0.00" FontWeight="Bold" />
                                 </StackPanel>
                                 <StackPanel Margin="3">
@@ -428,8 +463,10 @@
                     <ListBox x:Name="ContactsListBox"
                              Grid.Row="4"
                              ItemTemplate="{StaticResource ContactTemplate}"
+                             ItemContainerStyle="{StaticResource StretchListBoxItem}"
                              BorderThickness="0"
                              Background="Transparent"
+                             HorizontalContentAlignment="Stretch"
                              ScrollViewer.VerticalScrollBarVisibility="Auto"
                              SelectionChanged="ContactsListBox_SelectionChanged" />
 
@@ -487,7 +524,7 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel Grid.Row="0">
-                                <TextBlock Text="Task name" Style="{StaticResource LabelText}" />
+                                <TextBlock Text="Task / project name" Style="{StaticResource LabelText}" />
                                 <TextBox x:Name="TaskNameTextBox" Margin="0,6,0,0" />
                             </StackPanel>
 
@@ -500,8 +537,13 @@
                             </StackPanel>
 
                             <StackPanel Grid.Row="4">
-                                <TextBlock Text="Project" Style="{StaticResource LabelText}" />
-                                <TextBox x:Name="TaskProjectTextBox" Margin="0,6,0,0" />
+                                <TextBlock Text="Description" Style="{StaticResource LabelText}" />
+                                <TextBox x:Name="TaskProjectTextBox"
+                                         Margin="0,6,0,0"
+                                         TextWrapping="Wrap"
+                                         AcceptsReturn="True"
+                                         MinHeight="72"
+                                         VerticalScrollBarVisibility="Auto" />
                             </StackPanel>
 
                             <StackPanel Grid.Row="6">

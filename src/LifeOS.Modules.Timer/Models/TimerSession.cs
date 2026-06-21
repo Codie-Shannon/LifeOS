@@ -19,38 +19,25 @@ public sealed class TimerSession
     public TimeSpan AccumulatedDuration { get; set; } = TimeSpan.Zero;
     public TimerState State { get; set; } = TimerState.Stopped;
 
-    public TimeSpan GetCurrentDuration(DateTimeOffset? now = null)
-    {
-        if (State != TimerState.Running)
-        {
-            return AccumulatedDuration;
-        }
-
-        var currentTime = now ?? DateTimeOffset.Now;
-        return currentTime - StartedAt;
-    }
-
-    public decimal GetEarnedAmount(DateTimeOffset? now = null)
+    public decimal GetEarnedAmount()
     {
         if (!IsBillable)
         {
             return 0m;
         }
 
-        var duration = GetCurrentDuration(now);
-        var hours = (decimal)duration.TotalHours;
-
+        var hours = (decimal)AccumulatedDuration.TotalHours;
         return Math.Round(hours * HourlyRate, 2);
     }
 
-    public decimal GetTaxSetAside(DateTimeOffset? now = null)
+    public decimal GetTaxSetAside()
     {
-        var earned = GetEarnedAmount(now);
+        var earned = GetEarnedAmount();
         return Math.Round(earned * (TaxSetAsidePercent / 100m), 2);
     }
 
-    public decimal GetSafeAfterTax(DateTimeOffset? now = null)
+    public decimal GetSafeAfterTax()
     {
-        return GetEarnedAmount(now) - GetTaxSetAside(now);
+        return GetEarnedAmount() - GetTaxSetAside();
     }
 }

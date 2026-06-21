@@ -8,6 +8,8 @@ using LifeOS.Modules.Timer.Models;
 using LifeOS.Modules.Timer.Services;
 using LifeOS.Modules.Timer.Storage;
 using LifeOS.TimerAgent.Services;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using MessageBox = System.Windows.MessageBox;
 
 namespace LifeOS.TimerAgent;
 
@@ -18,11 +20,15 @@ public partial class MainWindow : Window
     private readonly DispatcherTimer _uiTimer;
 
     private GlobalHotKeyService? _hotKeyService;
+    private TrayIconService? _trayIconService;
     private bool _allowClose;
 
     public MainWindow()
     {
         InitializeComponent();
+
+        Loaded += MainWindow_Loaded;
+        PreviewKeyDown += MainWindow_PreviewKeyDown;
 
         _timerService = new TimerService();
 
@@ -47,19 +53,42 @@ public partial class MainWindow : Window
         RefreshTimerUi();
     }
 
-    protected override void OnSourceInitialized(EventArgs e)
+    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        base.OnSourceInitialized(e);
+        SetupTrayIcon();
+        SetupGlobalHotKey();
+    }
 
-        PreviewKeyDown += (_, keyEventArgs) =>
+    private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape)
         {
-            if (keyEventArgs.Key == Key.Escape)
-            {
-                _allowClose = true;
-                Close();
-            }
+            ExitApplication();
+        }
+    }
+
+    private void SetupTrayIcon()
+    {
+        _trayIconService = new TrayIconService();
+
+        _trayIconService.ShowRequested += (_, _) =>
+        {
+            Dispatcher.Invoke(ShowTimerWindow);
         };
 
+        _trayIconService.HideRequested += (_, _) =>
+        {
+            Dispatcher.Invoke(Hide);
+        };
+
+        _trayIconService.ExitRequested += (_, _) =>
+        {
+            Dispatcher.Invoke(ExitApplication);
+        };
+    }
+
+    private void SetupGlobalHotKey()
+    {
         try
         {
             _hotKeyService = new GlobalHotKeyService();
@@ -85,6 +114,23 @@ public partial class MainWindow : Window
         }
     }
 
+    private void ShowTimerWindow()
+    {
+        Show();
+        WindowState = WindowState.Normal;
+
+        Activate();
+
+        Topmost = false;
+        Topmost = true;
+    }
+
+    private void ExitApplication()
+    {
+        _allowClose = true;
+        Close();
+    }
+
     protected override void OnClosing(CancelEventArgs e)
     {
         if (!_allowClose)
@@ -100,6 +146,8 @@ public partial class MainWindow : Window
     protected override void OnClosed(EventArgs e)
     {
         _hotKeyService?.Dispose();
+        _trayIconService?.Dispose();
+
         base.OnClosed(e);
     }
 
@@ -198,13 +246,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        Show();
-        WindowState = WindowState.Normal;
-
-        Activate();
-
-        Topmost = false;
-        Topmost = true;
+        ShowTimerWindow();
     }
 
     private void RefreshTimerUi()
@@ -229,6 +271,20 @@ public partial class MainWindow : Window
         PauseResumeButton.Content = _timerService.State == TimerState.Paused
             ? "Resume"
             : "Pause";
+
+        if (_timerService.CurrentSession is not null)
+        {
+            var client = string.IsNullOrWhiteSpace(_timerService.CurrentSession.ClientName)
+                ? "No client"
+                : _timerService.CurrentSession.ClientName;
+
+            _trayIconService?.UpdateTooltip(
+                $"Life OS TimerAgent - {client} - {TimerDisplay.Text}");
+        }
+        else
+        {
+            _trayIconService?.UpdateTooltip("Life OS TimerAgent - Stopped");
+        }
     }
 
     private bool TryReadMoneyFields(out decimal hourlyRate, out decimal taxPercent)

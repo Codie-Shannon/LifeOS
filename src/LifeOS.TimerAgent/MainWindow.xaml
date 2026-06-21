@@ -31,49 +31,122 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="12">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
                         </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#F3F4F6" />
-                                <Setter Property="BorderBrush" Value="#9CA3AF" />
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#E5E7EB" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Background" Value="#F9FAFB" />
-                                <Setter Property="Foreground" Value="#9CA3AF" />
-                                <Setter Property="BorderBrush" Value="#E5E7EB" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F8FAFC" />
+                    <Setter Property="Foreground" Value="#111827" />
+                    <Setter Property="BorderBrush" Value="#9CA3AF" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#E5E7EB" />
+                    <Setter Property="Foreground" Value="#111827" />
+                    <Setter Property="BorderBrush" Value="#6B7280" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#F9FAFB" />
+                    <Setter Property="Foreground" Value="#9CA3AF" />
+                    <Setter Property="BorderBrush" Value="#E5E7EB" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource LifeButton}">
             <Setter Property="Background" Value="#2563EB" />
             <Setter Property="BorderBrush" Value="#2563EB" />
             <Setter Property="Foreground" Value="White" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1D4ED8" />
+                    <Setter Property="BorderBrush" Value="#1D4ED8" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#1E40AF" />
+                    <Setter Property="BorderBrush" Value="#1E40AF" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#BFDBFE" />
+                    <Setter Property="BorderBrush" Value="#BFDBFE" />
+                    <Setter Property="Foreground" Value="#EFF6FF" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="SoftButton" TargetType="Button" BasedOn="{StaticResource LifeButton}">
             <Setter Property="Background" Value="#EEF2FF" />
             <Setter Property="BorderBrush" Value="#C7D2FE" />
             <Setter Property="Foreground" Value="#1E40AF" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E0E7FF" />
+                    <Setter Property="BorderBrush" Value="#A5B4FC" />
+                    <Setter Property="Foreground" Value="#1E3A8A" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#C7D2FE" />
+                    <Setter Property="BorderBrush" Value="#818CF8" />
+                    <Setter Property="Foreground" Value="#1E3A8A" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#F8FAFC" />
+                    <Setter Property="BorderBrush" Value="#E5E7EB" />
+                    <Setter Property="Foreground" Value="#9CA3AF" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource LifeButton}">
             <Setter Property="Background" Value="#DC2626" />
             <Setter Property="BorderBrush" Value="#DC2626" />
             <Setter Property="Foreground" Value="White" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#B91C1C" />
+                    <Setter Property="BorderBrush" Value="#B91C1C" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#991B1B" />
+                    <Setter Property="BorderBrush" Value="#991B1B" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#FECACA" />
+                    <Setter Property="BorderBrush" Value="#FECACA" />
+                    <Setter Property="Foreground" Value="#FEF2F2" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="QuietDangerButton" TargetType="Button" BasedOn="{StaticResource LifeButton}">
             <Setter Property="Background" Value="#FEF2F2" />
             <Setter Property="BorderBrush" Value="#FECACA" />
             <Setter Property="Foreground" Value="#991B1B" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FEE2E2" />
+                    <Setter Property="BorderBrush" Value="#FCA5A5" />
+                    <Setter Property="Foreground" Value="#7F1D1D" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#FECACA" />
+                    <Setter Property="BorderBrush" Value="#F87171" />
+                    <Setter Property="Foreground" Value="#7F1D1D" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#F9FAFB" />
+                    <Setter Property="BorderBrush" Value="#E5E7EB" />
+                    <Setter Property="Foreground" Value="#9CA3AF" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style TargetType="TextBox">
@@ -92,9 +165,130 @@
             <Setter Property="Foreground" Value="#111827" />
             <Setter Property="BorderBrush" Value="#D1D5DB" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Padding" Value="8,5" />
+            <Setter Property="Padding" Value="10,6" />
             <Setter Property="FontSize" Value="13" />
-            <Setter Property="MinHeight" Value="36" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="DropDownToggle"
+                                          Focusable="False"
+                                          ClickMode="Press"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="ComboChrome"
+                                                Background="{Binding Background, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                BorderBrush="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                CornerRadius="12"
+                                                MinHeight="38">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="34" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <ContentPresenter Grid.Column="0"
+                                                                  IsHitTestVisible="False"
+                                                                  Margin="10,0,0,0"
+                                                                  VerticalAlignment="Center"
+                                                                  HorizontalAlignment="Left"
+                                                                  Content="{Binding SelectionBoxItem, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                                  ContentStringFormat="{Binding SelectionBoxItemStringFormat, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                                  TextElement.Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBox}}" />
+
+                                                <Path Grid.Column="1"
+                                                      Width="10"
+                                                      Height="6"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      Fill="#6B7280"
+                                                      Data="M 0 0 L 5 6 L 10 0 Z" />
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="ComboChrome" Property="Background" Value="#F8FAFC" />
+                                                <Setter TargetName="ComboChrome" Property="BorderBrush" Value="#9CA3AF" />
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="ComboChrome" Property="Background" Value="#EFF6FF" />
+                                                <Setter TargetName="ComboChrome" Property="BorderBrush" Value="#2563EB" />
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter TargetName="ComboChrome" Property="Background" Value="#F9FAFB" />
+                                                <Setter TargetName="ComboChrome" Property="BorderBrush" Value="#E5E7EB" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+
+                            <Popup x:Name="PART_Popup"
+                                   Placement="Bottom"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   PopupAnimation="Fade">
+                                <Border Background="#FFFFFF"
+                                        BorderBrush="#CBD5E1"
+                                        BorderThickness="1"
+                                        CornerRadius="12"
+                                        Padding="4"
+                                        MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                        MaxHeight="260">
+                                    <ScrollViewer CanContentScroll="True"
+                                                  VerticalScrollBarVisibility="Auto">
+                                        <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="False">
+                                <Setter TargetName="PART_Popup" Property="MinHeight" Value="95" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="#111827" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="ItemChrome"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter Property="Background" Value="#EFF6FF" />
+                                <Setter Property="Foreground" Value="#1E40AF" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#DBEAFE" />
+                                <Setter Property="Foreground" Value="#1E3A8A" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#9CA3AF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style TargetType="CheckBox">

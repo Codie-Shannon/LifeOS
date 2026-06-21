@@ -1,10 +1,13 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using LifeOS.Modules.Timer.Models;
 using LifeOS.Modules.Timer.Services;
 using LifeOS.Modules.Timer.Storage;
+using LifeOS.TimerAgent.Services;
 
 namespace LifeOS.TimerAgent;
 
@@ -13,6 +16,9 @@ public partial class MainWindow : Window
     private readonly TimerService _timerService;
     private readonly TimerCsvLogWriter _logWriter;
     private readonly DispatcherTimer _uiTimer;
+
+    private GlobalHotKeyService? _hotKeyService;
+    private bool _allowClose;
 
     public MainWindow()
     {
@@ -28,7 +34,8 @@ public partial class MainWindow : Window
         var logFilePath = Path.Combine(appDataFolder, "timer-log.csv");
         _logWriter = new TimerCsvLogWriter(logFilePath);
 
-        LogPathDisplay.Text = $"Log file: {logFilePath}";
+        LogPathDisplay.Text =
+            $"Shortcut: Ctrl + Alt + Space to show/hide\nLog file: {logFilePath}";
 
         _uiTimer = new DispatcherTimer
         {
@@ -38,6 +45,62 @@ public partial class MainWindow : Window
         _uiTimer.Tick += (_, _) => RefreshTimerUi();
 
         RefreshTimerUi();
+    }
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+
+        PreviewKeyDown += (_, keyEventArgs) =>
+        {
+            if (keyEventArgs.Key == Key.Escape)
+            {
+                _allowClose = true;
+                Close();
+            }
+        };
+
+        try
+        {
+            _hotKeyService = new GlobalHotKeyService();
+
+            _hotKeyService.HotKeyPressed += (_, _) =>
+            {
+                Dispatcher.Invoke(ToggleWindowVisibility);
+            };
+
+            _hotKeyService.Register(
+                this,
+                hotKeyId: 9001,
+                key: Key.Space,
+                modifiers: HotKeyModifiers.Control | HotKeyModifiers.Alt | HotKeyModifiers.NoRepeat);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"TimerAgent is running, but the global shortcut could not be registered.\n\n{ex.Message}",
+                "Shortcut unavailable",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+    }
+
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        if (!_allowClose)
+        {
+            e.Cancel = true;
+            Hide();
+            return;
+        }
+
+        base.OnClosing(e);
+    }
+
+    protected override void OnClosed(EventArgs e)
+    {
+        _hotKeyService?.Dispose();
+        base.OnClosed(e);
     }
 
     private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -125,6 +188,23 @@ public partial class MainWindow : Window
             "Life OS TimerAgent",
             MessageBoxButton.OK,
             MessageBoxImage.Information);
+    }
+
+    private void ToggleWindowVisibility()
+    {
+        if (IsVisible && WindowState != WindowState.Minimized)
+        {
+            Hide();
+            return;
+        }
+
+        Show();
+        WindowState = WindowState.Normal;
+
+        Activate();
+
+        Topmost = false;
+        Topmost = true;
     }
 
     private void RefreshTimerUi()

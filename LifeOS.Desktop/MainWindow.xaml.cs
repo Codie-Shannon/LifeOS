@@ -4,6 +4,8 @@ using LifeOS.Shared.Shell;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using LifeOS.Core.FollowUps;
+using LifeOS.Shared.FollowUps;
 
 namespace LifeOS.Desktop;
 
@@ -19,6 +21,17 @@ public partial class MainWindow : Window
     private TextBox? _foodFuelBufferTextBox;
     private TextBox? _emergencyBufferTextBox;
 
+    private List<FollowUpItem> _followUps = FollowUpStorage.Load();
+
+    private TextBox? _followUpPersonTextBox;
+    private TextBox? _followUpContextTextBox;
+    private TextBox? _followUpNextActionTextBox;
+    private TextBox? _followUpDateTextBox;
+    private ComboBox? _followUpStatusComboBox;
+    private ComboBox? _followUpPriorityComboBox;
+    private CheckBox? _followUpMoneyLinkedCheckBox;
+    private TextBox? _followUpNotesTextBox;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -31,7 +44,7 @@ public partial class MainWindow : Window
 
     private void AgendaNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.Agenda);
 
-    private void FollowUpsNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.FollowUps);
+    private void FollowUpsNavButton_Click(object sender, RoutedEventArgs e) => ShowFollowUpsPage();
 
     private void ProjectsNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.Projects);
 
@@ -43,6 +56,110 @@ public partial class MainWindow : Window
     {
         UpdateMoneyPressureInputFromTextBoxes();
         ShowMoneyPressurePage();
+    }
+
+    private void AddFollowUpButton_Click(object sender, RoutedEventArgs e)
+    {
+        var person = _followUpPersonTextBox?.Text.Trim() ?? string.Empty;
+        var context = _followUpContextTextBox?.Text.Trim() ?? string.Empty;
+        var nextAction = _followUpNextActionTextBox?.Text.Trim() ?? string.Empty;
+        var notes = _followUpNotesTextBox?.Text.Trim() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(person))
+        {
+            person = "Unnamed follow-up";
+        }
+
+        if (string.IsNullOrWhiteSpace(context))
+        {
+            context = "No context entered.";
+        }
+
+        if (string.IsNullOrWhiteSpace(nextAction))
+        {
+            nextAction = "No next action entered.";
+        }
+
+        DateOnly? followUpDate = null;
+
+        if (DateOnly.TryParse(_followUpDateTextBox?.Text.Trim(), out var parsedDate))
+        {
+            followUpDate = parsedDate;
+        }
+
+        var status = _followUpStatusComboBox?.SelectedItem is FollowUpStatus selectedStatus
+            ? selectedStatus
+            : FollowUpStatus.Waiting;
+
+        var priority = _followUpPriorityComboBox?.SelectedItem is FollowUpPriority selectedPriority
+            ? selectedPriority
+            : FollowUpPriority.Normal;
+
+        _followUps.Add(new FollowUpItem
+        {
+            PersonOrOrganisation = person,
+            Context = context,
+            NextAction = nextAction,
+            FollowUpDate = followUpDate,
+            Status = status,
+            Priority = priority,
+            IsMoneyLinked = _followUpMoneyLinkedCheckBox?.IsChecked == true,
+            Notes = notes,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        });
+
+        FollowUpStorage.Save(_followUps);
+        ShowFollowUpsPage();
+    }
+
+    private void SaveFollowUpsButton_Click(object sender, RoutedEventArgs e)
+    {
+        FollowUpStorage.Save(_followUps);
+        ShowFollowUpsPage();
+    }
+
+    private void ResetFollowUpsButton_Click(object sender, RoutedEventArgs e)
+    {
+        FollowUpStorage.Reset();
+        _followUps = FollowUpStorage.Load();
+        ShowFollowUpsPage();
+    }
+
+    private void CompleteFollowUpButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        var item = _followUps.FirstOrDefault(item => item.Id == id);
+
+        if (item is null)
+        {
+            return;
+        }
+
+        item.Status = FollowUpStatus.Completed;
+        item.UpdatedAt = DateTime.Now;
+
+        FollowUpStorage.Save(_followUps);
+        ShowFollowUpsPage();
+    }
+
+    private void DeleteFollowUpButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        _followUps = _followUps
+            .Where(item => item.Id != id)
+            .ToList();
+
+        FollowUpStorage.Save(_followUps);
+        ShowFollowUpsPage();
     }
 
     private void UpdateMoneyPressureInputFromTextBoxes()
@@ -111,6 +228,57 @@ public partial class MainWindow : Window
         var guardrailPanel = CreateInfoPanel(
             "Phase 10 scope",
             $"Manual input with local JSON persistence. Saved file: {MoneyPressureStorage.FilePath}. No database, bank sync, invoices, mobile app, or full money module yet.");
+
+        guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(guardrailPanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private void ShowFollowUpsPage()
+    {
+        var module = LifeOSModuleCatalog.GetModule(LifeOSModuleKind.FollowUps);
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var summary = FollowUpCalculator.Calculate(_followUps, today);
+
+        SetHeader(module.Title, $"{module.Title} • Local follow-up foundation");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Follow-Ups",
+            "First editable waiting-on/follow-up foundation. Track who you are waiting on, what the next action is, whether money is linked, and when to follow up."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Open follow-ups", summary.TotalOpen.ToString(), "Active"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting", summary.WaitingCount.ToString(), "Waiting-on"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs action", summary.NeedsActionCount.ToString(), "Action"));
+        metricsPanel.Children.Add(CreateDashboardCard("Overdue", summary.OverdueCount.ToString(), "Pressure"));
+        metricsPanel.Children.Add(CreateDashboardCard("Due today", summary.DueTodayCount.ToString(), "Today"));
+        metricsPanel.Children.Add(CreateDashboardCard("Money-linked", summary.MoneyLinkedCount.ToString(), "Work/money"));
+
+        root.Children.Add(metricsPanel);
+
+        var reasonsText = string.Join(Environment.NewLine, summary.Reasons.Select(reason => $"• {reason}"));
+        var reasonsPanel = CreateInfoPanel("Why follow-ups matter this week", reasonsText);
+        reasonsPanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(reasonsPanel);
+
+        var inputPanel = CreateFollowUpInputPanel();
+        inputPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(inputPanel);
+
+        var listPanel = CreateFollowUpListPanel();
+        listPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(listPanel);
+
+        var guardrailPanel = CreateInfoPanel(
+            "Phase 11 scope",
+            $"Local follow-up tracking with JSON persistence. Saved file: {FollowUpStorage.FilePath}. No email import, calendar sync, reminders, notifications, or CRM system yet.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);
@@ -303,6 +471,300 @@ public partial class MainWindow : Window
         return panel;
     }
 
+    private Border CreateFollowUpInputPanel()
+    {
+        var panel = CreatePanel();
+
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Add follow-up",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Keep this lightweight. This is for waiting-on items, client replies, payment confirmation, and next-action dates.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var grid = new Grid();
+
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+        for (var i = 0; i < 5; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        }
+
+        _followUpPersonTextBox = CreateStandardTextBox("Example: Vanessa / OSHE");
+        _followUpContextTextBox = CreateStandardTextBox("Example: OnboardingFlow scoped work");
+        _followUpNextActionTextBox = CreateStandardTextBox("Example: Follow up Monday 20 July");
+        _followUpDateTextBox = CreateStandardTextBox(DateOnly.FromDateTime(DateTime.Today).AddDays(3).ToString("yyyy-MM-dd"));
+        _followUpNotesTextBox = CreateStandardTextBox("Optional notes");
+
+        _followUpStatusComboBox = CreateEnumComboBox(FollowUpStatus.Waiting);
+        _followUpPriorityComboBox = CreateEnumComboBox(FollowUpPriority.Normal);
+
+        _followUpMoneyLinkedCheckBox = new CheckBox
+        {
+            Content = "Money-linked / paid-work linked",
+            Foreground = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
+            Margin = new Thickness(0, 8, 14, 14)
+        };
+
+        AddInputField(grid, "Person / organisation", _followUpPersonTextBox, 0, 0);
+        AddInputField(grid, "Context", _followUpContextTextBox, 0, 1);
+        AddInputField(grid, "Next action", _followUpNextActionTextBox, 1, 0);
+        AddInputField(grid, "Follow-up date (yyyy-mm-dd)", _followUpDateTextBox, 1, 1);
+        AddInputField(grid, "Status", _followUpStatusComboBox, 2, 0);
+        AddInputField(grid, "Priority", _followUpPriorityComboBox, 2, 1);
+        AddInputField(grid, "Notes", _followUpNotesTextBox, 3, 0);
+
+        Grid.SetRow(_followUpMoneyLinkedCheckBox, 3);
+        Grid.SetColumn(_followUpMoneyLinkedCheckBox, 1);
+        grid.Children.Add(_followUpMoneyLinkedCheckBox);
+
+        root.Children.Add(grid);
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Margin = new Thickness(0, 18, 0, 0)
+        };
+
+        var addButton = CreateActionButton("Add Follow-Up", Color.FromRgb(56, 189, 248), Color.FromRgb(15, 23, 42));
+        addButton.Click += AddFollowUpButton_Click;
+
+        var saveButton = CreateActionButton("Save Follow-Ups", Color.FromRgb(34, 197, 94), Color.FromRgb(15, 23, 42));
+        saveButton.Click += SaveFollowUpsButton_Click;
+
+        var resetButton = CreateActionButton("Reset Defaults", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetFollowUpsButton_Click;
+
+        buttonRow.Children.Add(addButton);
+        buttonRow.Children.Add(saveButton);
+        buttonRow.Children.Add(resetButton);
+
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateFollowUpListPanel()
+    {
+        var panel = CreatePanel();
+
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Current follow-ups",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        if (_followUps.Count == 0)
+        {
+            root.Children.Add(new TextBlock
+            {
+                Text = "No follow-ups yet.",
+                Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+                Margin = new Thickness(0, 12, 0, 0)
+            });
+
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in _followUps.OrderBy(item => item.FollowUpDate ?? DateOnly.MaxValue))
+        {
+            root.Children.Add(CreateFollowUpItemCard(item));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateFollowUpItemCard(FollowUpItem item)
+    {
+        var card = new Border
+        {
+            Background = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(36, 50, 68)),
+            BorderThickness = new Thickness(1),
+            CornerRadius = new CornerRadius(14),
+            Padding = new Thickness(16),
+            Margin = new Thickness(0, 14, 0, 0)
+        };
+
+        var root = new StackPanel();
+
+        var header = new DockPanel();
+
+        header.Children.Add(new TextBlock
+        {
+            Text = item.PersonOrOrganisation,
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            FontSize = 18,
+            FontWeight = FontWeights.Bold
+        });
+
+        var badge = new TextBlock
+        {
+            Text = $"{item.Status} • {item.Priority}",
+            Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248)),
+            FontSize = 12,
+            FontWeight = FontWeights.SemiBold,
+            HorizontalAlignment = HorizontalAlignment.Right
+        };
+
+        DockPanel.SetDock(badge, Dock.Right);
+        header.Children.Add(badge);
+
+        root.Children.Add(header);
+
+        root.Children.Add(new TextBlock
+        {
+            Text = item.Context,
+            Foreground = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
+            FontSize = 14,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 8, 0, 0)
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = $"Next action: {item.NextAction}",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 0)
+        });
+
+        var dateText = item.FollowUpDate.HasValue
+            ? item.FollowUpDate.Value.ToString("yyyy-MM-dd")
+            : "No date";
+
+        root.Children.Add(new TextBlock
+        {
+            Text = $"Follow-up date: {dateText} | Money-linked: {(item.IsMoneyLinked ? "Yes" : "No")}",
+            Foreground = new SolidColorBrush(Color.FromRgb(100, 116, 139)),
+            FontSize = 12,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 0)
+        });
+
+        if (!string.IsNullOrWhiteSpace(item.Notes))
+        {
+            root.Children.Add(new TextBlock
+            {
+                Text = item.Notes,
+                Foreground = new SolidColorBrush(Color.FromRgb(100, 116, 139)),
+                FontSize = 12,
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 6, 0, 0)
+            });
+        }
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Margin = new Thickness(0, 12, 0, 0)
+        };
+
+        var completeButton = CreateSmallActionButton("Mark Complete");
+        completeButton.Tag = item.Id;
+        completeButton.Click += CompleteFollowUpButton_Click;
+
+        var deleteButton = CreateSmallActionButton("Delete");
+        deleteButton.Tag = item.Id;
+        deleteButton.Click += DeleteFollowUpButton_Click;
+
+        buttonRow.Children.Add(completeButton);
+        buttonRow.Children.Add(deleteButton);
+
+        root.Children.Add(buttonRow);
+
+        card.Child = root;
+        return card;
+    }
+
+    private static TextBox CreateStandardTextBox(string text = "")
+    {
+        return new TextBox
+        {
+            Text = text,
+            Margin = new Thickness(0, 6, 14, 14),
+            Padding = new Thickness(10, 8, 10, 8),
+            Background = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(51, 65, 85)),
+            BorderThickness = new Thickness(1),
+            FontSize = 14
+        };
+    }
+
+    private static ComboBox CreateEnumComboBox<TEnum>(TEnum selectedValue)
+        where TEnum : struct, Enum
+    {
+        var comboBox = new ComboBox
+        {
+            ItemsSource = Enum.GetValues<TEnum>(),
+            SelectedItem = selectedValue,
+            Margin = new Thickness(0, 6, 14, 14),
+            Padding = new Thickness(8, 6, 8, 6),
+            Background = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(51, 65, 85)),
+            BorderThickness = new Thickness(1),
+            FontSize = 14
+        };
+
+        return comboBox;
+    }
+
+    private static Button CreateActionButton(string text, Color background, Color foreground)
+    {
+        return new Button
+        {
+            Content = text,
+            Padding = new Thickness(16, 10, 16, 10),
+            Margin = new Thickness(0, 0, 10, 0),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = new SolidColorBrush(background),
+            Foreground = new SolidColorBrush(foreground),
+            BorderBrush = new SolidColorBrush(background),
+            FontWeight = FontWeights.SemiBold,
+            Cursor = System.Windows.Input.Cursors.Hand
+        };
+    }
+
+    private static Button CreateSmallActionButton(string text)
+    {
+        return new Button
+        {
+            Content = text,
+            Padding = new Thickness(10, 6, 10, 6),
+            Margin = new Thickness(0, 0, 8, 0),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = new SolidColorBrush(Color.FromRgb(30, 41, 59)),
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(51, 65, 85)),
+            FontSize = 12,
+            Cursor = System.Windows.Input.Cursors.Hand
+        };
+    }
+
     private void SaveMoneyPressureButton_Click(object sender, RoutedEventArgs e)
     {
         UpdateMoneyPressureInputFromTextBoxes();
@@ -352,7 +814,7 @@ public partial class MainWindow : Window
         return fallback;
     }
 
-    private static void AddInputField(Grid grid, string label, TextBox textBox, int row, int column)
+    private static void AddInputField(Grid grid, string label, Control control, int row, int column)
     {
         var stack = new StackPanel();
 
@@ -364,7 +826,7 @@ public partial class MainWindow : Window
             FontWeight = FontWeights.SemiBold
         });
 
-        stack.Children.Add(textBox);
+        stack.Children.Add(control);
 
         Grid.SetRow(stack, row);
         Grid.SetColumn(stack, column);

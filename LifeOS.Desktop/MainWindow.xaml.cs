@@ -1,13 +1,24 @@
-﻿using System.Windows;
+﻿using LifeOS.Core.Money;
+using LifeOS.Shared.Money;
+using LifeOS.Shared.Shell;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using LifeOS.Shared.Shell;
-using LifeOS.Shared.Money;
 
 namespace LifeOS.Desktop;
 
 public partial class MainWindow : Window
 {
+    private readonly MoneyPressureManualInput _moneyPressureInput = new();
+
+    private TextBox? _currentBalanceTextBox;
+    private TextBox? _paidIncomeTextBox;
+    private TextBox? _pendingIncomeTextBox;
+    private TextBox? _billsDueTextBox;
+    private TextBox? _deductionsDueTextBox;
+    private TextBox? _foodFuelBufferTextBox;
+    private TextBox? _emergencyBufferTextBox;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -27,6 +38,19 @@ public partial class MainWindow : Window
     private void TimerAgentNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.TimerAgent);
 
     private void SettingsNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.Settings);
+
+    private void RecalculateMoneyPressureButton_Click(object sender, RoutedEventArgs e)
+    {
+        _moneyPressureInput.CurrentBalance = ReadMoneyValue(_currentBalanceTextBox, _moneyPressureInput.CurrentBalance);
+        _moneyPressureInput.PaidIncome = ReadMoneyValue(_paidIncomeTextBox, _moneyPressureInput.PaidIncome);
+        _moneyPressureInput.PendingIncome = ReadMoneyValue(_pendingIncomeTextBox, _moneyPressureInput.PendingIncome);
+        _moneyPressureInput.BillsDue = ReadMoneyValue(_billsDueTextBox, _moneyPressureInput.BillsDue);
+        _moneyPressureInput.DeductionsDue = ReadMoneyValue(_deductionsDueTextBox, _moneyPressureInput.DeductionsDue);
+        _moneyPressureInput.FoodFuelBuffer = ReadMoneyValue(_foodFuelBufferTextBox, _moneyPressureInput.FoodFuelBuffer);
+        _moneyPressureInput.EmergencyBuffer = ReadMoneyValue(_emergencyBufferTextBox, _moneyPressureInput.EmergencyBuffer);
+
+        ShowMoneyPressurePage();
+    }
 
     private void ShowModulePage(LifeOSModuleKind kind)
     {
@@ -56,28 +80,22 @@ public partial class MainWindow : Window
     private void ShowMoneyPressurePage()
     {
         var module = LifeOSModuleCatalog.GetModule(LifeOSModuleKind.MoneyPressure);
-        var summary = MoneyPressureDemoData.CreateSummary();
+        var summary = _moneyPressureInput.Calculate();
 
-        SetHeader(module.Title, $"{module.Title} • {module.Badge}");
+        SetHeader(module.Title, $"{module.Title} • Manual input foundation");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "Money Pressure",
-            "First real shared LifeOS module foundation. This page uses shared Core calculations with demo/manual-style data."));
+            "First editable Money Pressure foundation. Enter manual weekly values, then recalculate safe-to-spend. This still uses shared Core calculation logic."));
 
-        var metricsPanel = new WrapPanel
-        {
-            Margin = new Thickness(0, 22, 0, 0)
-        };
+        var inputPanel = CreateMoneyPressureInputPanel();
+        inputPanel.Margin = new Thickness(0, 22, 0, 0);
+        root.Children.Add(inputPanel);
 
-        metricsPanel.Children.Add(CreateDashboardCard("Safe to spend", FormatMoney(summary.SafeToSpend), summary.PressureLabel));
-        metricsPanel.Children.Add(CreateDashboardCard("Current balance", FormatMoney(summary.CurrentBalance), "Manual entry"));
-        metricsPanel.Children.Add(CreateDashboardCard("Paid income", FormatMoney(summary.ConfirmedPaidIncome), "Counted as safe"));
-        metricsPanel.Children.Add(CreateDashboardCard("Pending income", FormatMoney(summary.PendingIncome), "Not safe yet"));
-        metricsPanel.Children.Add(CreateDashboardCard("Bills due", FormatMoney(summary.BillsDue), "This week"));
-        metricsPanel.Children.Add(CreateDashboardCard("Deductions", FormatMoney(summary.DeductionsDue), "Active"));
-
+        var metricsPanel = CreateMoneyPressureMetricsPanel(summary);
+        metricsPanel.Margin = new Thickness(0, 22, 0, 0);
         root.Children.Add(metricsPanel);
 
         var reasonsText = string.Join(Environment.NewLine, summary.Reasons.Select(reason => $"• {reason}"));
@@ -87,8 +105,8 @@ public partial class MainWindow : Window
         root.Children.Add(reasonsPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "Phase 8 scope",
-            "This is demo/manual-style data only. No bank sync, invoices, database, mobile app, or full money module yet. The goal is proving the shared safe-to-spend calculation path.");
+            "Phase 9 scope",
+            "Manual input only. No save/load, database, bank sync, invoices, mobile app, or full money module yet. Phase 10 will add local persistence.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);
@@ -165,6 +183,152 @@ public partial class MainWindow : Window
         root.Children.Add(guardrail);
 
         MainContentControl.Content = root;
+    }
+
+    private Border CreateMoneyPressureInputPanel()
+    {
+        var panel = CreatePanel();
+
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Manual weekly inputs",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "These values are temporary for Phase 9. They recalculate the summary but are not saved yet.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var grid = new Grid();
+
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+        for (var i = 0; i < 3; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        }
+
+        _currentBalanceTextBox = CreateMoneyInputTextBox(_moneyPressureInput.CurrentBalance);
+        _paidIncomeTextBox = CreateMoneyInputTextBox(_moneyPressureInput.PaidIncome);
+        _pendingIncomeTextBox = CreateMoneyInputTextBox(_moneyPressureInput.PendingIncome);
+        _billsDueTextBox = CreateMoneyInputTextBox(_moneyPressureInput.BillsDue);
+        _deductionsDueTextBox = CreateMoneyInputTextBox(_moneyPressureInput.DeductionsDue);
+        _foodFuelBufferTextBox = CreateMoneyInputTextBox(_moneyPressureInput.FoodFuelBuffer);
+        _emergencyBufferTextBox = CreateMoneyInputTextBox(_moneyPressureInput.EmergencyBuffer);
+
+        AddInputField(grid, "Current balance", _currentBalanceTextBox, 0, 0);
+        AddInputField(grid, "Paid income", _paidIncomeTextBox, 0, 1);
+        AddInputField(grid, "Pending income", _pendingIncomeTextBox, 0, 2);
+
+        AddInputField(grid, "Bills due", _billsDueTextBox, 1, 0);
+        AddInputField(grid, "Deductions", _deductionsDueTextBox, 1, 1);
+        AddInputField(grid, "Food/fuel buffer", _foodFuelBufferTextBox, 1, 2);
+
+        AddInputField(grid, "Emergency buffer", _emergencyBufferTextBox, 2, 0);
+
+        root.Children.Add(grid);
+
+        var recalculateButton = new Button
+        {
+            Content = "Recalculate Money Pressure",
+            Padding = new Thickness(16, 10, 16, 10),
+            Margin = new Thickness(0, 18, 0, 0),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = new SolidColorBrush(Color.FromRgb(56, 189, 248)),
+            Foreground = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(56, 189, 248)),
+            FontWeight = FontWeights.SemiBold,
+            Cursor = System.Windows.Input.Cursors.Hand
+        };
+
+        recalculateButton.Click += RecalculateMoneyPressureButton_Click;
+
+        root.Children.Add(recalculateButton);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private static TextBox CreateMoneyInputTextBox(decimal value)
+    {
+        return new TextBox
+        {
+            Text = value.ToString("0.00"),
+            Margin = new Thickness(0, 6, 14, 14),
+            Padding = new Thickness(10, 8, 10, 8),
+            Background = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(51, 65, 85)),
+            BorderThickness = new Thickness(1),
+            FontSize = 14
+        };
+    }
+
+    private static decimal ReadMoneyValue(TextBox? textBox, decimal fallback)
+    {
+        if (textBox is null)
+        {
+            return fallback;
+        }
+
+        var text = textBox.Text
+            .Replace("$", string.Empty)
+            .Replace(",", string.Empty)
+            .Trim();
+
+        if (decimal.TryParse(text, out var value))
+        {
+            return Math.Max(0m, value);
+        }
+
+        return fallback;
+    }
+
+    private static void AddInputField(Grid grid, string label, TextBox textBox, int row, int column)
+    {
+        var stack = new StackPanel();
+
+        stack.Children.Add(new TextBlock
+        {
+            Text = label,
+            Foreground = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
+            FontSize = 13,
+            FontWeight = FontWeights.SemiBold
+        });
+
+        stack.Children.Add(textBox);
+
+        Grid.SetRow(stack, row);
+        Grid.SetColumn(stack, column);
+
+        grid.Children.Add(stack);
+    }
+
+    private WrapPanel CreateMoneyPressureMetricsPanel(MoneyPressureSummary summary)
+    {
+        var metricsPanel = new WrapPanel();
+
+        metricsPanel.Children.Add(CreateDashboardCard("Safe to spend", FormatMoney(summary.SafeToSpend), summary.PressureLabel));
+        metricsPanel.Children.Add(CreateDashboardCard("Current balance", FormatMoney(summary.CurrentBalance), "Manual entry"));
+        metricsPanel.Children.Add(CreateDashboardCard("Paid income", FormatMoney(summary.ConfirmedPaidIncome), "Counted as safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pending income", FormatMoney(summary.PendingIncome), "Not safe yet"));
+        metricsPanel.Children.Add(CreateDashboardCard("Bills due", FormatMoney(summary.BillsDue), "This week"));
+        metricsPanel.Children.Add(CreateDashboardCard("Deductions", FormatMoney(summary.DeductionsDue), "Active"));
+        metricsPanel.Children.Add(CreateDashboardCard("Food/fuel buffer", FormatMoney(summary.FoodFuelBuffer), "Reserved"));
+        metricsPanel.Children.Add(CreateDashboardCard("Emergency buffer", FormatMoney(summary.EmergencyBuffer), "Reserved"));
+
+        return metricsPanel;
     }
 
     private void ShowPlaceholderPage(string title, string description, string detail)

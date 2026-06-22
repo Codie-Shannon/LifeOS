@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using LifeOS.Shared.Shell;
+using LifeOS.Shared.Money;
 
 namespace LifeOS.Desktop;
 
@@ -15,7 +16,7 @@ public partial class MainWindow : Window
 
     private void CommandCentreNavButton_Click(object sender, RoutedEventArgs e) => ShowCommandCentre();
 
-    private void MoneyPressureNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.MoneyPressure);
+    private void MoneyPressureNavButton_Click(object sender, RoutedEventArgs e) => ShowMoneyPressurePage();
 
     private void AgendaNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.Agenda);
 
@@ -48,6 +49,49 @@ public partial class MainWindow : Window
         var statusPanel = CreateInfoPanel("Build status", GetModuleStatusText(module));
         statusPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(statusPanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private void ShowMoneyPressurePage()
+    {
+        var module = LifeOSModuleCatalog.GetModule(LifeOSModuleKind.MoneyPressure);
+        var summary = MoneyPressureDemoData.CreateSummary();
+
+        SetHeader(module.Title, $"{module.Title} • {module.Badge}");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Money Pressure",
+            "First real shared LifeOS module foundation. This page uses shared Core calculations with demo/manual-style data."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Safe to spend", FormatMoney(summary.SafeToSpend), summary.PressureLabel));
+        metricsPanel.Children.Add(CreateDashboardCard("Current balance", FormatMoney(summary.CurrentBalance), "Manual entry"));
+        metricsPanel.Children.Add(CreateDashboardCard("Paid income", FormatMoney(summary.ConfirmedPaidIncome), "Counted as safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pending income", FormatMoney(summary.PendingIncome), "Not safe yet"));
+        metricsPanel.Children.Add(CreateDashboardCard("Bills due", FormatMoney(summary.BillsDue), "This week"));
+        metricsPanel.Children.Add(CreateDashboardCard("Deductions", FormatMoney(summary.DeductionsDue), "Active"));
+
+        root.Children.Add(metricsPanel);
+
+        var reasonsText = string.Join(Environment.NewLine, summary.Reasons.Select(reason => $"• {reason}"));
+
+        var reasonsPanel = CreateInfoPanel("Why this week has pressure", reasonsText);
+        reasonsPanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(reasonsPanel);
+
+        var guardrailPanel = CreateInfoPanel(
+            "Phase 8 scope",
+            "This is demo/manual-style data only. No bank sync, invoices, database, mobile app, or full money module yet. The goal is proving the shared safe-to-spend calculation path.");
+
+        guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(guardrailPanel);
 
         MainContentControl.Content = root;
     }
@@ -267,6 +311,11 @@ public partial class MainWindow : Window
             CornerRadius = new CornerRadius(18),
             Padding = new Thickness(24)
         };
+    }
+
+    private static string FormatMoney(decimal value)
+    {
+        return value.ToString("C");
     }
 }
 

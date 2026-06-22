@@ -9,7 +9,7 @@ namespace LifeOS.Desktop;
 
 public partial class MainWindow : Window
 {
-    private readonly MoneyPressureManualInput _moneyPressureInput = new();
+    private MoneyPressureManualInput _moneyPressureInput = MoneyPressureStorage.Load();
 
     private TextBox? _currentBalanceTextBox;
     private TextBox? _paidIncomeTextBox;
@@ -41,6 +41,12 @@ public partial class MainWindow : Window
 
     private void RecalculateMoneyPressureButton_Click(object sender, RoutedEventArgs e)
     {
+        UpdateMoneyPressureInputFromTextBoxes();
+        ShowMoneyPressurePage();
+    }
+
+    private void UpdateMoneyPressureInputFromTextBoxes()
+    {
         _moneyPressureInput.CurrentBalance = ReadMoneyValue(_currentBalanceTextBox, _moneyPressureInput.CurrentBalance);
         _moneyPressureInput.PaidIncome = ReadMoneyValue(_paidIncomeTextBox, _moneyPressureInput.PaidIncome);
         _moneyPressureInput.PendingIncome = ReadMoneyValue(_pendingIncomeTextBox, _moneyPressureInput.PendingIncome);
@@ -48,8 +54,6 @@ public partial class MainWindow : Window
         _moneyPressureInput.DeductionsDue = ReadMoneyValue(_deductionsDueTextBox, _moneyPressureInput.DeductionsDue);
         _moneyPressureInput.FoodFuelBuffer = ReadMoneyValue(_foodFuelBufferTextBox, _moneyPressureInput.FoodFuelBuffer);
         _moneyPressureInput.EmergencyBuffer = ReadMoneyValue(_emergencyBufferTextBox, _moneyPressureInput.EmergencyBuffer);
-
-        ShowMoneyPressurePage();
     }
 
     private void ShowModulePage(LifeOSModuleKind kind)
@@ -105,8 +109,8 @@ public partial class MainWindow : Window
         root.Children.Add(reasonsPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "Phase 9 scope",
-            "Manual input only. No save/load, database, bank sync, invoices, mobile app, or full money module yet. Phase 10 will add local persistence.");
+            "Phase 10 scope",
+            $"Manual input with local JSON persistence. Saved file: {MoneyPressureStorage.FilePath}. No database, bank sync, invoices, mobile app, or full money module yet.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);
@@ -239,11 +243,17 @@ public partial class MainWindow : Window
 
         root.Children.Add(grid);
 
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Margin = new Thickness(0, 18, 0, 0)
+        };
+
         var recalculateButton = new Button
         {
             Content = "Recalculate Money Pressure",
             Padding = new Thickness(16, 10, 16, 10),
-            Margin = new Thickness(0, 18, 0, 0),
+            Margin = new Thickness(0, 0, 10, 0),
             HorizontalAlignment = HorizontalAlignment.Left,
             Background = new SolidColorBrush(Color.FromRgb(56, 189, 248)),
             Foreground = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
@@ -254,10 +264,57 @@ public partial class MainWindow : Window
 
         recalculateButton.Click += RecalculateMoneyPressureButton_Click;
 
-        root.Children.Add(recalculateButton);
+        var saveButton = new Button
+        {
+            Content = "Save Inputs",
+            Padding = new Thickness(16, 10, 16, 10),
+            Margin = new Thickness(0, 0, 10, 0),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = new SolidColorBrush(Color.FromRgb(34, 197, 94)),
+            Foreground = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(34, 197, 94)),
+            FontWeight = FontWeights.SemiBold,
+            Cursor = System.Windows.Input.Cursors.Hand
+        };
+
+        saveButton.Click += SaveMoneyPressureButton_Click;
+
+        var resetButton = new Button
+        {
+            Content = "Reset Defaults",
+            Padding = new Thickness(16, 10, 16, 10),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Background = new SolidColorBrush(Color.FromRgb(30, 41, 59)),
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(51, 65, 85)),
+            FontWeight = FontWeights.SemiBold,
+            Cursor = System.Windows.Input.Cursors.Hand
+        };
+
+        resetButton.Click += ResetMoneyPressureButton_Click;
+
+        buttonRow.Children.Add(recalculateButton);
+        buttonRow.Children.Add(saveButton);
+        buttonRow.Children.Add(resetButton);
+
+        root.Children.Add(buttonRow);
 
         panel.Child = root;
         return panel;
+    }
+
+    private void SaveMoneyPressureButton_Click(object sender, RoutedEventArgs e)
+    {
+        UpdateMoneyPressureInputFromTextBoxes();
+        MoneyPressureStorage.Save(_moneyPressureInput);
+        ShowMoneyPressurePage();
+    }
+
+    private void ResetMoneyPressureButton_Click(object sender, RoutedEventArgs e)
+    {
+        MoneyPressureStorage.Reset();
+        _moneyPressureInput = new MoneyPressureManualInput();
+        ShowMoneyPressurePage();
     }
 
     private static TextBox CreateMoneyInputTextBox(decimal value)

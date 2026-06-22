@@ -1023,23 +1023,21 @@ public partial class MainWindow : Window
 
     private void TaskContactComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (_editingTask is not null)
-        {
-            return;
-        }
-
         if (TaskContactComboBox.SelectedItem is not ContactProfile contact)
         {
             return;
         }
 
+        // When editing an existing task, do not auto-overwrite saved task values.
+        if (_editingTask is not null)
+        {
+            return;
+        }
+
+        // When creating a new task, changing the contact should apply that contact's defaults.
         TaskRateTextBox.Text = contact.DefaultHourlyRate.ToString(CultureInfo.CurrentCulture);
         TaskTaxTextBox.Text = contact.DefaultTaxSetAsidePercent.ToString(CultureInfo.CurrentCulture);
-
-        if (string.IsNullOrWhiteSpace(TaskWorkTypeTextBox.Text))
-        {
-            TaskWorkTypeTextBox.Text = contact.DefaultWorkType;
-        }
+        TaskWorkTypeTextBox.Text = contact.DefaultWorkType;
     }
 
     private static DateOnly GetCurrentWorkDate(IReadOnlyCollection<TimerLogEntry> logEntries)

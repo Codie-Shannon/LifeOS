@@ -20,4 +20,11 @@ public sealed class ContactProfile
 
     public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.Now;
     public DateTimeOffset? UpdatedAt { get; set; }
+
+    public override string ToString()
+    {
+        return string.IsNullOrWhiteSpace(DisplayName)
+            ? "Unnamed contact"
+            : DisplayName;
+    }
 }

@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using LifeOS.Core.FollowUps;
 using LifeOS.Shared.FollowUps;
+using LifeOS.Shared.CommandCentre;
 
 namespace LifeOS.Desktop;
 
@@ -303,56 +304,59 @@ public partial class MainWindow : Window
 
     private void ShowCommandCentre()
     {
-        SetHeader("Command Centre", "Weekly pressure command centre • Desktop shell v0.1");
+        var summary = CommandCentreSummaryService.Create();
+
+        SetHeader("Command Centre", $"Weekly pressure command centre • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "LifeOS Command Centre",
-            "Desktop is the daily-use power version and proving ground. Mobile will use the same core LifeOS model and pressure-test the UX. TimerAgent remains a desktop-only utility that feeds LifeOS work/time/income data."));
+            "This is now reading real local LifeOS data from Money Pressure and Follow-Ups. Desktop proves the full model; mobile will pressure-test the optimized daily-use version."));
 
-        var wrap = new WrapPanel
+        var metricsPanel = new WrapPanel
         {
             Margin = new Thickness(0, 22, 0, 0)
         };
 
-        wrap.Children.Add(CreateDashboardCard(
-            "Money Pressure",
-            "Safe-to-spend, income, bills, deductions, and weekly danger points.",
-            "Shared core module"));
+        metricsPanel.Children.Add(CreateDashboardCard("Overall pressure", summary.OverallPressureLabel, "This week"));
+        metricsPanel.Children.Add(CreateDashboardCard("Safe to spend", FormatMoney(summary.MoneyPressure.SafeToSpend), summary.MoneyPressure.PressureLabel));
+        metricsPanel.Children.Add(CreateDashboardCard("Pending income", FormatMoney(summary.MoneyPressure.PendingIncome), "Not safe yet"));
+        metricsPanel.Children.Add(CreateDashboardCard("Open follow-ups", summary.FollowUps.TotalOpen.ToString(), "Waiting-on"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs action", summary.FollowUps.NeedsActionCount.ToString(), "Action"));
+        metricsPanel.Children.Add(CreateDashboardCard("Money-linked", summary.FollowUps.MoneyLinkedCount.ToString(), "Work/money"));
 
-        wrap.Children.Add(CreateDashboardCard(
-            "Agenda",
-            "Appointments, tasks, fixed/flexible events, and time pressure.",
-            "Shared core module"));
+        root.Children.Add(metricsPanel);
 
-        wrap.Children.Add(CreateDashboardCard(
-            "Follow-Ups",
-            "People, client replies, waiting-on items, and money-linked follow-ups.",
-            "Shared core module"));
+        var actionPanel = CreateInfoPanel(
+            "Next safest action",
+            summary.NextSafestAction);
 
-        wrap.Children.Add(CreateDashboardCard(
-            "Projects",
-            "Portfolio builds, proof projects, shipped versions, and active focus.",
-            "Shared core module"));
+        actionPanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(actionPanel);
 
-        wrap.Children.Add(CreateDashboardCard(
-            "TimerAgent",
-            "Desktop-only utility for billable work sessions, earned income, tax set-aside, and CSV work logs.",
-            "Desktop-only utility"));
+        var reasonsText = string.Join(Environment.NewLine, summary.Reasons.Select(reason => $"• {reason}"));
 
-        wrap.Children.Add(CreateDashboardCard(
-            "Settings",
-            "Theme, storage, export, backup, and shared app preferences.",
-            "Platform settings"));
+        var reasonsPanel = CreateInfoPanel(
+            "Why this week has pressure",
+            reasonsText);
 
-        root.Children.Add(wrap);
+        reasonsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reasonsPanel);
 
-        var guardrail = CreateInfoPanel(
-            "Permanent platform rule",
-            "Core features should reach both desktop and mobile. Experimental features start on desktop. Platform-specific features stay platform-specific.");
-        guardrail.Margin = new Thickness(0, 8, 0, 0);
-        root.Children.Add(guardrail);
+        var timerPanel = CreateInfoPanel(
+            "TimerAgent status",
+            "TimerAgent remains a desktop-only utility for focused work, billable sessions, earned income, tax set-aside, and CSV logs. A later phase can read TimerAgent work-session data into this Command Centre.");
+
+        timerPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(timerPanel);
+
+        var guardrailPanel = CreateInfoPanel(
+            "Phase 12 scope",
+            "Command Centre now combines saved Money Pressure and Follow-Ups data. No agenda module, TimerAgent CSV import, database, bank sync, mobile app, or AI layer yet.");
+
+        guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(guardrailPanel);
 
         MainContentControl.Content = root;
     }

@@ -1,5 +1,7 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="LifeOS.Desktop/LifeOS.Desktop.csproj" Id="e81337bb-ed32-42ef-aee7-e71dd3da41e7" />
+    <Project Path="LifeOS.Shared/LifeOS.Shared.csproj" Id="fbc131f9-5f52-496c-a197-37d7f9970d9f" />
     <Project Path="src/LifeOS.Core/LifeOS.Core.csproj" />
     <Project Path="src/LifeOS.Modules.Timer/LifeOS.Modules.Timer.csproj" />
     <Project Path="src/LifeOS.TimerAgent/LifeOS.TimerAgent.csproj" />

@@ -34,8 +34,6 @@ TimerAgent answers those questions without needing a full accounting system, clo
 
 ## Screenshots
 
-> Add the screenshot files listed below into `docs/screenshots/`. The README already embeds the most important ones.
-
 ### Task list / manager view
 
 ![TimerAgent task list](docs/screenshots/01-task-list-full-width.png)

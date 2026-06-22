@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using LifeOS.Shared.Shell;
 
 namespace LifeOS.Desktop;
 
@@ -13,35 +14,58 @@ public partial class MainWindow : Window
     }
 
     private void CommandCentreNavButton_Click(object sender, RoutedEventArgs e) => ShowCommandCentre();
-    private void MoneyPressureNavButton_Click(object sender, RoutedEventArgs e) => ShowPlaceholderPage(
-        "Money Pressure",
-        "Planned shared LifeOS module for safe-to-spend, manual balance, income, bills, pay-later, deductions, and weekly pressure.",
-        "This will be shared between desktop and mobile.");
 
-    private void AgendaNavButton_Click(object sender, RoutedEventArgs e) => ShowPlaceholderPage(
-        "Agenda",
-        "Planned shared LifeOS module for appointments, tasks, payments, follow-ups, fixed/flexible commitments, and date-based pressure.",
-        "Desktop will test the full model first. Mobile will receive the optimized daily-use version.");
+    private void MoneyPressureNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.MoneyPressure);
 
-    private void FollowUpsNavButton_Click(object sender, RoutedEventArgs e) => ShowPlaceholderPage(
-        "Follow-Ups",
-        "Planned shared LifeOS module for people, organisations, client replies, waiting-on items, expected dates, and money-linked follow-ups.",
-        "This module turns mental waiting-on clutter into a clear next-action list.");
+    private void AgendaNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.Agenda);
 
-    private void ProjectsNavButton_Click(object sender, RoutedEventArgs e) => ShowPlaceholderPage(
-        "Projects",
-        "Planned shared LifeOS module for active builds, client proofs, portfolio work, shipped versions, and project pressure.",
-        "This module will help connect work output to proof, case studies, and business momentum.");
+    private void FollowUpsNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.FollowUps);
 
-    private void TimerAgentNavButton_Click(object sender, RoutedEventArgs e) => ShowPlaceholderPage(
-        "TimerAgent",
-        "TimerAgent is already shipped as the first desktop-only LifeOS utility.",
-        "It tracks focused work, billable sessions, earned income, tax set-aside, and CSV logs. Future LifeOS versions will read TimerAgent work data into weekly pressure summaries.");
+    private void ProjectsNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.Projects);
 
-    private void SettingsNavButton_Click(object sender, RoutedEventArgs e) => ShowPlaceholderPage(
-        "Settings",
-        "Planned shared settings for Light / Dark / System theme, local storage, export and backup, privacy controls, and desktop/mobile preferences.",
-        "Theme support belongs at the LifeOS platform layer, not inside one individual module.");
+    private void TimerAgentNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.TimerAgent);
+
+    private void SettingsNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.Settings);
+
+    private void ShowModulePage(LifeOSModuleKind kind)
+    {
+        var module = LifeOSModuleCatalog.GetModule(kind);
+
+        SetHeader(module.Title, $"{module.Title} • {module.Badge}");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(module.Title, module.DetailDescription));
+
+        var rolePanel = CreateInfoPanel("Platform role", module.PlatformRole);
+        rolePanel.Margin = new Thickness(0, 22, 0, 0);
+        root.Children.Add(rolePanel);
+
+        var nextPanel = CreateInfoPanel("Next build focus", module.NextBuildFocus);
+        nextPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(nextPanel);
+
+        var statusPanel = CreateInfoPanel("Build status", GetModuleStatusText(module));
+        statusPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(statusPanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private static string GetModuleStatusText(LifeOSModuleDefinition module)
+    {
+        if (module.IsDesktopOnly)
+        {
+            return "This is a desktop-only LifeOS utility. It can feed data into the shared LifeOS system, but it is not expected to exist as the same tray/hotkey/overlay tool on mobile.";
+        }
+
+        if (module.IsSharedCoreModule)
+        {
+            return "This is a shared LifeOS module. Desktop can prove the workflow first, while mobile receives the optimized daily-use version.";
+        }
+
+        return "This module is part of the LifeOS shell direction.";
+    }
 
     private void ShowCommandCentre()
     {

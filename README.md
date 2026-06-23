@@ -2,60 +2,66 @@
 
 LifeOS is a weekly pressure command centre.
 
-It shows what money, work, payments, deductions, appointments, tasks, messages, and follow-ups are putting pressure on the week, then helps decide what is safe to do next.
+It shows what money, work, payments, deductions, agenda items, follow-ups, deferred obligations, and weekly review items are putting pressure on the week, then helps decide what is safe to do next.
 
 LifeOS is not mainly a budget app, calendar app, task app, timer app, or banking app. Those are modules and inputs. LifeOS is the pressure layer that connects them.
 
-## LifeOS Desktop v0.1
+## LifeOS Desktop v0.2
 
-LifeOS Desktop v0.1 is the first working proof of the LifeOS weekly pressure command centre.
+LifeOS Desktop v0.2 is the second working proof of the LifeOS weekly pressure command centre.
 
-It includes a WPF desktop shell, shared platform architecture, Money Pressure manual inputs with local persistence, Follow-Ups tracking with local persistence, and a Command Centre summary that combines local money and follow-up pressure.
+v0.1 proved that LifeOS exists as a real desktop application. v0.2 upgrades the app so it understands more of the week: agenda pressure, pay-later/deferred obligations, and weekly close-out review.
 
-This version proves the core LifeOS direction:
+This version includes:
 
-- Desktop is the daily-use power version and proving ground.
-- Mobile will be the daily-use optimized version and pressure test.
-- Core and Shared projects hold reusable LifeOS logic and app-facing structure.
-- TimerAgent remains a desktop-only utility that feeds work/time/income data into LifeOS.
+- WPF desktop shell
+- MainWindow-only UI for fast iteration
+- shared Core / Shared architecture
+- Money Pressure manual inputs with local JSON persistence
+- Follow-Ups tracking with local JSON persistence
+- Agenda foundation with local JSON persistence
+- Pay Later foundation with local JSON persistence
+- Weekly Close-Out foundation with local JSON persistence
+- Command Centre summary reading local pressure data
+- TimerAgent framed as a desktop-only utility that can later feed work/time/income into LifeOS
 
 This is a private alpha/proof build, not a public commercial release.
 
-## Screenshots
+## Current Screenshot
 
-### Command Centre Summary
+![LifeOS Desktop v0.2 Command Centre](docs/screenshots/v0.2/01-lifeos-v02-command-centre.png)
 
-![LifeOS Command Centre summary](docs/screenshots/01-command-centre-summary.png)
+## v0.2 Screenshots
 
-### Money Pressure Inputs
+### Command Centre
 
-![LifeOS Money Pressure inputs](docs/screenshots/02-money-pressure-inputs.png)
+![LifeOS Desktop v0.2 Command Centre](docs/screenshots/v0.2/01-lifeos-v02-command-centre.png)
 
-### Follow-Ups Foundation
+### Agenda
 
-![LifeOS Follow-Ups foundation](docs/screenshots/03-follow-ups-foundation.png)
+![LifeOS Desktop v0.2 Agenda](docs/screenshots/v0.2/02-lifeos-v02-agenda.png)
 
-### TimerAgent Desktop Utility
+### Pay Later
 
-![LifeOS TimerAgent desktop utility positioning](docs/screenshots/04-timeragent-desktop-utility.png)
+![LifeOS Desktop v0.2 Pay Later](docs/screenshots/v0.2/03-lifeos-v02-pay-later.png)
 
-### Settings Placeholder
+### Weekly Close-Out
 
-![LifeOS Settings placeholder](docs/screenshots/05-settings-placeholder.png)
+![LifeOS Desktop v0.2 Weekly Close-Out](docs/screenshots/v0.2/04-lifeos-v02-weekly-close-out.png)
 
-### Local JSON Persistence
+### Money Pressure
 
-![LifeOS local JSON persistence proof](docs/screenshots/06-local-json-persistence.png)
+![LifeOS Desktop v0.2 Money Pressure](docs/screenshots/v0.2/05-lifeos-v02-money-pressure.png)
 
-### Build Passing
+### Follow-Ups
 
-![LifeOS build passing](docs/screenshots/07-build-passing.png)
+![LifeOS Desktop v0.2 Follow-Ups](docs/screenshots/v0.2/06-lifeos-v02-follow-ups.png)
 
 ## Current Features
 
 ### Command Centre
 
-The Command Centre reads local Money Pressure and Follow-Ups data and shows:
+The Command Centre combines saved LifeOS pressure data and shows:
 
 - overall pressure
 - safe-to-spend
@@ -65,6 +71,8 @@ The Command Centre reads local Money Pressure and Follow-Ups data and shows:
 - money-linked follow-ups
 - next safest action
 - combined pressure reasons
+
+v0.2 also lays the foundation for Agenda, Pay Later, and Weekly Close-Out data to become part of the weekly pressure loop.
 
 ### Money Pressure
 
@@ -84,6 +92,68 @@ The module calculates:
 - pressure label
 - pending income kept separate from safe money
 - reasons why the week has pressure
+
+### Agenda
+
+Agenda tracks what matters this week:
+
+- title
+- type
+- status
+- pressure level
+- due date
+- time text
+- fixed commitment flag
+- notes
+
+The module calculates:
+
+- open agenda items
+- due-today items
+- overdue items
+- items due this week
+- high-pressure items
+- pressure reasons
+
+### Pay Later
+
+Pay Later tracks deferred obligations before they become hidden pressure:
+
+- name
+- payee
+- amount
+- due date
+- status
+- pressure level
+- notes
+
+The module calculates:
+
+- open pay-later items
+- open amount
+- due-this-week amount
+- overdue amount
+- high-pressure item count
+- pressure reasons
+
+### Weekly Close-Out
+
+Weekly Close-Out captures the weekly reset loop:
+
+- week start
+- what got done
+- what moved
+- what is still waiting
+- next-week pressure
+- notes
+
+The module calculates:
+
+- total close-out entries
+- current-week entries
+- whether the current week has a close-out
+- waiting-on pressure count
+- pressure reasons
 
 ### Follow-Ups
 
@@ -123,9 +193,9 @@ Desktop is the daily-use power version and proving ground.
 
 Mobile will be the daily-use optimized version and pressure test.
 
-Both desktop and mobile share the same core LifeOS model.
+Both desktop and mobile should share the same core LifeOS model.
 
-Core features should reach both desktop and mobile.
+Core features should reach both desktop and mobile once the desktop/core model is stable enough.
 
 Experimental features start on desktop.
 
@@ -134,21 +204,24 @@ Platform-specific features stay platform-specific.
 ## Solution Structure
 
 ```text
-LifeOS.Core
+src/LifeOS.Core
 LifeOS.Shared
-LifeOS.Modules.Timer
-LifeOS.TimerAgent
+src/LifeOS.Modules.Timer
+src/LifeOS.TimerAgent
 LifeOS.Desktop
 ```
 
 ## Storage
 
-LifeOS Desktop v0.1 uses local JSON persistence.
+LifeOS Desktop v0.2 uses local JSON persistence.
 
 Current local files include:
 
 - `money-pressure-input.json`
 - `follow-ups.json`
+- `agenda-items.json`
+- `pay-later-items.json`
+- `weekly-close-out-entries.json`
 
 ## Not Built Yet
 
@@ -158,9 +231,10 @@ Current local files include:
 - bank sync
 - email/calendar import
 - TimerAgent CSV import into Command Centre
-- agenda module
-- pay-later tracker
-- weekly close-out
+- Work Sessions module
+- Proof Tracker module
+- backup/restore
+- data health checks
 - installer
 - public release packaging
 
@@ -173,13 +247,12 @@ dotnet build
 dotnet run --project .\LifeOS.Desktop\LifeOS.Desktop.csproj
 ```
 
-If your project layout uses `src`, run the matching `src\LifeOS.Desktop\LifeOS.Desktop.csproj` path instead.
-
 ## Documentation
 
-- [Release notes](docs/LIFEOS_DESKTOP_V0.1_RELEASE_NOTES.md)
-- [Test checklist](docs/LIFEOS_DESKTOP_V0.1_TEST_CHECKLIST.md)
-- [Screenshot list](docs/LIFEOS_DESKTOP_V0.1_SCREENSHOT_LIST.md)
+- [v0.2 release notes](docs/LIFEOS_DESKTOP_V0.2_RELEASE_NOTES.md)
+- [v0.2 test checklist](docs/LIFEOS_DESKTOP_V0.2_TEST_CHECKLIST.md)
+- [v0.2 screenshot list](docs/LIFEOS_DESKTOP_V0.2_SCREENSHOT_LIST.md)
+- [Roadmap](docs/LIFEOS_ROADMAP.md)
 - [Platform architecture](docs/PLATFORM_ARCHITECTURE.md)
 - [Mobile plan](docs/MOBILE_PLAN.md)
 - [Website plan](docs/WEBSITE_PLAN.md)

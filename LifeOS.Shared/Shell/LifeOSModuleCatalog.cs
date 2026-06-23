@@ -8,7 +8,7 @@ public static class LifeOSModuleCatalog
         {
             Kind = LifeOSModuleKind.CommandCentre,
             Title = "Command Centre",
-            Badge = "v0.2",
+            Badge = "v03",
             ShortDescription = "Weekly pressure command centre and desktop home screen.",
             DetailDescription = "The Command Centre brings money, agenda, pay-later, weekly close-out, follow-ups, work, proof, and pressure into one weekly view.",
             PlatformRole = "Desktop proves the full command-centre model. Mobile will later receive the optimized daily-use version.",
@@ -78,6 +78,33 @@ public static class LifeOSModuleCatalog
             DetailDescription = "Shared LifeOS module for people, organisations, client replies, waiting-on items, expected dates, and money-linked follow-ups.",
             PlatformRole = "Shared core module. Desktop can show richer client/work context; mobile should make follow-ups quick and obvious.",
             NextBuildFocus = "Track person/org, context, due date, status, money-linked flag, and next action.",
+            IsBuilt = true,
+            IsSharedCoreModule = true
+        },
+
+
+        new LifeOSModuleDefinition
+        {
+            Kind = LifeOSModuleKind.WorkSessions,
+            Title = "Work Sessions",
+            Badge = "v0.3 foundation",
+            ShortDescription = "Client/project work sessions, billable hours, rates, and paid/unpaid status.",
+            DetailDescription = "Work Sessions starts the contractor/business lane: client/project work, hours, rate, billable value, invoice/payment status, and income pressure.",
+            PlatformRole = "Shared contractor core. Desktop proves full detail first; mobile later gets quick capture.",
+            NextBuildFocus = "Track work sessions and summarize unpaid billable value.",
+            IsBuilt = true,
+            IsSharedCoreModule = true
+        },
+
+        new LifeOSModuleDefinition
+        {
+            Kind = LifeOSModuleKind.ProofTracker,
+            Title = "Proof Tracker",
+            Badge = "v0.3 foundation",
+            ShortDescription = "Project proof, screenshots, releases, client replies, invoices, and case-study evidence.",
+            DetailDescription = "Proof Tracker connects work to visible proof: releases, screenshots, demo videos, client replies, invoices, commits, documentation, and case-study material.",
+            PlatformRole = "Shared proof engine. Desktop captures richer proof metadata first; mobile can later quick-add proof notes.",
+            NextBuildFocus = "Track proof items and surface ready/shared/client-proof counts.",
             IsBuilt = true,
             IsSharedCoreModule = true
         },

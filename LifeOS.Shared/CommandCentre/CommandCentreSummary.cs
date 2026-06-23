@@ -3,6 +3,8 @@ using LifeOS.Core.FollowUps;
 using LifeOS.Core.Money;
 using LifeOS.Core.PayLater;
 using LifeOS.Core.WeeklyCloseOut;
+using LifeOS.Core.ProofTracker;
+using LifeOS.Core.WorkSessions;
 namespace LifeOS.Shared.CommandCentre;
 
 public sealed class CommandCentreSummary
@@ -16,6 +18,10 @@ public sealed class CommandCentreSummary
     public required PayLaterSummary PayLater { get; init; }
 
     public required WeeklyCloseOutSummary WeeklyCloseOut { get; init; }
+
+    public required WorkSessionSummary WorkSessions { get; init; }
+
+    public required ProofSummary ProofTracker { get; init; }
 
     public required string OverallPressureLabel { get; init; }
 

@@ -2,15 +2,15 @@
 
 LifeOS is a weekly pressure command centre.
 
-It shows what money, work, payments, deductions, agenda items, follow-ups, deferred obligations, and weekly review items are putting pressure on the week, then helps decide what is safe to do next.
+It shows what money, work, payments, deductions, agenda items, follow-ups, deferred obligations, weekly review items, work sessions, unpaid income, and proof items are putting pressure on the week, then helps decide what is safe to do next.
 
-LifeOS is not mainly a budget app, calendar app, task app, timer app, or banking app. Those are modules and inputs. LifeOS is the pressure layer that connects them.
+LifeOS is not mainly a budget app, calendar app, task app, timer app, CRM, or banking app. Those are modules and inputs. LifeOS is the pressure layer that connects them.
 
-## LifeOS Desktop v0.2
+## LifeOS Desktop v0.3
 
-LifeOS Desktop v0.2 is the second working proof of the LifeOS weekly pressure command centre.
+LifeOS Desktop v0.3 is the third working proof of the LifeOS weekly pressure command centre.
 
-v0.1 proved that LifeOS exists as a real desktop application. v0.2 upgrades the app so it understands more of the week: agenda pressure, pay-later/deferred obligations, and weekly close-out review.
+v0.1 proved that LifeOS exists as a real desktop application. v0.2 made LifeOS understand the week. v0.3 upgrades the app so it understands work, income, and proof.
 
 This version includes:
 
@@ -22,40 +22,50 @@ This version includes:
 - Agenda foundation with local JSON persistence
 - Pay Later foundation with local JSON persistence
 - Weekly Close-Out foundation with local JSON persistence
-- Command Centre summary reading local pressure data
+- Work Sessions foundation with local JSON persistence
+- Proof Tracker foundation with local JSON persistence
+- Command Centre summary reading local pressure, work, income, and proof data
 - TimerAgent framed as a desktop-only utility that can later feed work/time/income into LifeOS
 
 This is a private alpha/proof build, not a public commercial release.
 
 ## Current Screenshot
 
-![LifeOS Desktop v0.2 Command Centre](docs/screenshots/v0.2/01-lifeos-v02-command-centre.png)
+![LifeOS Desktop v0.3 Command Centre](docs/screenshots/v0.3/01-lifeos-v03-command-centre.png)
 
-## v0.2 Screenshots
+## v0.3 Screenshots
 
 ### Command Centre
 
-![LifeOS Desktop v0.2 Command Centre](docs/screenshots/v0.2/01-lifeos-v02-command-centre.png)
+![LifeOS Desktop v0.3 Command Centre](docs/screenshots/v0.3/01-lifeos-v03-command-centre.png)
+
+### Work Sessions
+
+![LifeOS Desktop v0.3 Work Sessions](docs/screenshots/v0.3/02-lifeos-v03-work-sessions.png)
+
+### Proof Tracker
+
+![LifeOS Desktop v0.3 Proof Tracker](docs/screenshots/v0.3/03-lifeos-v03-proof-tracker.png)
 
 ### Agenda
 
-![LifeOS Desktop v0.2 Agenda](docs/screenshots/v0.2/02-lifeos-v02-agenda.png)
+![LifeOS Desktop Agenda](docs/screenshots/v0.3/04-lifeos-v03-agenda.png)
 
 ### Pay Later
 
-![LifeOS Desktop v0.2 Pay Later](docs/screenshots/v0.2/03-lifeos-v02-pay-later.png)
+![LifeOS Desktop Pay Later](docs/screenshots/v0.3/05-lifeos-v03-pay-later.png)
 
 ### Weekly Close-Out
 
-![LifeOS Desktop v0.2 Weekly Close-Out](docs/screenshots/v0.2/04-lifeos-v02-weekly-close-out.png)
+![LifeOS Desktop Weekly Close-Out](docs/screenshots/v0.3/06-lifeos-v03-weekly-close-out.png)
 
 ### Money Pressure
 
-![LifeOS Desktop v0.2 Money Pressure](docs/screenshots/v0.2/05-lifeos-v02-money-pressure.png)
+![LifeOS Desktop Money Pressure](docs/screenshots/v0.3/07-lifeos-v03-money-pressure.png)
 
 ### Follow-Ups
 
-![LifeOS Desktop v0.2 Follow-Ups](docs/screenshots/v0.2/06-lifeos-v02-follow-ups.png)
+![LifeOS Desktop Follow-Ups](docs/screenshots/v0.3/08-lifeos-v03-follow-ups.png)
 
 ## Current Features
 
@@ -65,14 +75,63 @@ The Command Centre combines saved LifeOS pressure data and shows:
 
 - overall pressure
 - safe-to-spend
-- pending income
+- agenda pressure
+- pay-later/deferred obligation pressure
 - open follow-ups
-- needs-action follow-ups
-- money-linked follow-ups
+- billable value
+- unpaid work value
+- proof items
+- proof-ready status
 - next safest action
 - combined pressure reasons
 
-v0.2 also lays the foundation for Agenda, Pay Later, and Weekly Close-Out data to become part of the weekly pressure loop.
+v0.3 connects the work/income/proof loop to the same weekly pressure model as money, agenda, pay-later, follow-ups, and weekly close-out.
+
+### Work Sessions
+
+Work Sessions tracks client/project work:
+
+- client or project
+- work date
+- hours
+- hourly rate
+- billable flag
+- paid/unpaid status
+- description
+- notes
+
+The module calculates:
+
+- total sessions
+- total hours
+- billable hours
+- billable value
+- unpaid value
+- active clients/projects
+- work pressure reasons
+
+### Proof Tracker
+
+Proof Tracker tracks the evidence wall behind the work:
+
+- project
+- title
+- proof type
+- status
+- date
+- description
+- link or path
+- notes
+
+The module calculates:
+
+- total proof items
+- ready/shareable items
+- shared items
+- accepted/confirmed items
+- client/payment-related proof
+- recent proof items
+- proof pressure reasons
 
 ### Money Pressure
 
@@ -213,7 +272,7 @@ LifeOS.Desktop
 
 ## Storage
 
-LifeOS Desktop v0.2 uses local JSON persistence.
+LifeOS Desktop v0.3 uses local JSON persistence.
 
 Current local files include:
 
@@ -222,6 +281,8 @@ Current local files include:
 - `agenda-items.json`
 - `pay-later-items.json`
 - `weekly-close-out-entries.json`
+- `work-sessions.json`
+- `proof-items.json`
 
 ## Not Built Yet
 
@@ -231,28 +292,15 @@ Current local files include:
 - bank sync
 - email/calendar import
 - TimerAgent CSV import into Command Centre
-- Work Sessions module
-- Proof Tracker module
 - backup/restore
 - data health checks
 - installer
 - public release packaging
+- authentication/users
+- cloud sync
 
-## Run
+## Release Status
 
-From the solution root:
+LifeOS Desktop v0.3 is a local-first proof release.
 
-```powershell
-dotnet build
-dotnet run --project .\LifeOS.Desktop\LifeOS.Desktop.csproj
-```
-
-## Documentation
-
-- [v0.2 release notes](docs/LIFEOS_DESKTOP_V0.2_RELEASE_NOTES.md)
-- [v0.2 test checklist](docs/LIFEOS_DESKTOP_V0.2_TEST_CHECKLIST.md)
-- [v0.2 screenshot list](docs/LIFEOS_DESKTOP_V0.2_SCREENSHOT_LIST.md)
-- [Roadmap](docs/LIFEOS_ROADMAP.md)
-- [Platform architecture](docs/PLATFORM_ARCHITECTURE.md)
-- [Mobile plan](docs/MOBILE_PLAN.md)
-- [Website plan](docs/WEBSITE_PLAN.md)
+It proves the core pressure engine can combine personal pressure, weekly pressure, work value, unpaid income, and proof tracking inside one desktop command centre.

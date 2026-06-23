@@ -14,6 +14,10 @@ using LifeOS.Core.WeeklyCloseOut;
 using LifeOS.Shared.Agenda;
 using LifeOS.Shared.PayLater;
 using LifeOS.Shared.WeeklyCloseOut;
+using LifeOS.Core.WorkSessions;
+using LifeOS.Core.ProofTracker;
+using LifeOS.Shared.WorkSessions;
+using LifeOS.Shared.ProofTracker;
 namespace LifeOS.Desktop;
 
 public partial class MainWindow : Window
@@ -70,6 +74,28 @@ public partial class MainWindow : Window
     private TextBox? _closeOutNextWeekTextBox;
     private TextBox? _closeOutNotesTextBox;
 
+    private List<WorkSession> _workSessions = WorkSessionStorage.Load();
+
+    private TextBox? _workSessionClientTextBox;
+    private TextBox? _workSessionDateTextBox;
+    private TextBox? _workSessionHoursTextBox;
+    private TextBox? _workSessionRateTextBox;
+    private ComboBox? _workSessionStatusComboBox;
+    private CheckBox? _workSessionBillableCheckBox;
+    private TextBox? _workSessionDescriptionTextBox;
+    private TextBox? _workSessionNotesTextBox;
+
+    private List<ProofItem> _proofItems = ProofStorage.Load();
+
+    private TextBox? _proofProjectTextBox;
+    private TextBox? _proofTitleTextBox;
+    private ComboBox? _proofTypeComboBox;
+    private ComboBox? _proofStatusComboBox;
+    private TextBox? _proofDateTextBox;
+    private TextBox? _proofDescriptionTextBox;
+    private TextBox? _proofLinkOrPathTextBox;
+    private TextBox? _proofNotesTextBox;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -85,6 +111,10 @@ public partial class MainWindow : Window
     private void PayLaterNavButton_Click(object sender, RoutedEventArgs e) => ShowPayLaterPage();
 
     private void WeeklyCloseOutNavButton_Click(object sender, RoutedEventArgs e) => ShowWeeklyCloseOutPage();
+
+    private void WorkSessionsNavButton_Click(object sender, RoutedEventArgs e) => ShowWorkSessionsPage();
+
+    private void ProofTrackerNavButton_Click(object sender, RoutedEventArgs e) => ShowProofTrackerPage();
 
     private void FollowUpsNavButton_Click(object sender, RoutedEventArgs e) => ShowFollowUpsPage();
 
@@ -1121,6 +1151,500 @@ public partial class MainWindow : Window
         return string.Join(Environment.NewLine, reasonList.Select(reason => $"• {reason}"));
     }
 
+    private void AddWorkSessionButton_Click(object sender, RoutedEventArgs e)
+    {
+        var date = DateOnly.TryParse(_workSessionDateTextBox?.Text.Trim(), out var parsedDate)
+            ? parsedDate
+            : DateOnly.FromDateTime(DateTime.Today);
+
+        var status = _workSessionStatusComboBox?.SelectedItem is WorkSessionStatus selectedStatus
+            ? selectedStatus
+            : WorkSessionStatus.Completed;
+
+        _workSessions.Add(new WorkSession
+        {
+            ClientOrProject = ReadTextValue(_workSessionClientTextBox, "Unassigned work"),
+            Date = date,
+            Hours = ReadMoneyValue(_workSessionHoursTextBox, 0m),
+            HourlyRate = ReadMoneyValue(_workSessionRateTextBox, 0m),
+            IsBillable = _workSessionBillableCheckBox?.IsChecked == true,
+            Status = status,
+            Description = ReadTextValue(_workSessionDescriptionTextBox, "No description entered."),
+            Notes = _workSessionNotesTextBox?.Text.Trim() ?? string.Empty,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        });
+
+        WorkSessionStorage.Save(_workSessions);
+        ShowWorkSessionsPage();
+    }
+
+    private void ResetWorkSessionsButton_Click(object sender, RoutedEventArgs e)
+    {
+        WorkSessionStorage.Reset();
+        _workSessions = WorkSessionStorage.Load();
+        ShowWorkSessionsPage();
+    }
+
+    private void MarkWorkSessionPaidButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        var item = _workSessions.FirstOrDefault(session => session.Id == id);
+
+        if (item is null)
+        {
+            return;
+        }
+
+        item.Status = WorkSessionStatus.Paid;
+        item.UpdatedAt = DateTime.Now;
+
+        WorkSessionStorage.Save(_workSessions);
+        ShowWorkSessionsPage();
+    }
+
+    private void DeleteWorkSessionButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        _workSessions = _workSessions
+            .Where(session => session.Id != id)
+            .ToList();
+
+        WorkSessionStorage.Save(_workSessions);
+        ShowWorkSessionsPage();
+    }
+
+    private void ShowWorkSessionsPage()
+    {
+        var summary = WorkSessionCalculator.Calculate(_workSessions);
+
+        SetHeader("Work Sessions", "Work Sessions • v0.3 work and income foundation");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Work Sessions",
+            "Track client/project work, billable hours, expected income, unpaid value, and paid status."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Total sessions", summary.TotalSessions.ToString(), "Work"));
+        metricsPanel.Children.Add(CreateDashboardCard("Total hours", summary.TotalHours.ToString("0.##"), "Hours"));
+        metricsPanel.Children.Add(CreateDashboardCard("Billable hours", summary.BillableHours.ToString("0.##"), "Billable"));
+        metricsPanel.Children.Add(CreateDashboardCard("Billable value", FormatMoney(summary.BillableValue), "Income"));
+        metricsPanel.Children.Add(CreateDashboardCard("Unpaid value", FormatMoney(summary.UnpaidBillableValue), "Not paid yet"));
+        metricsPanel.Children.Add(CreateDashboardCard("Clients/projects", summary.ActiveClientOrProjectCount.ToString(), "Active"));
+
+        root.Children.Add(metricsPanel);
+
+        var reasonsPanel = CreateInfoPanel("Work pressure", FormatReasons(summary.Reasons));
+        reasonsPanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(reasonsPanel);
+
+        var inputPanel = CreateWorkSessionInputPanel();
+        inputPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(inputPanel);
+
+        var listPanel = CreateWorkSessionListPanel();
+        listPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(listPanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateWorkSessionInputPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Add work session",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "This is the first bridge from work done to income pressure and proof.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var grid = new Grid();
+
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+        for (var i = 0; i < 5; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        }
+
+        _workSessionClientTextBox = CreateStandardTextBox("AIE / JV / LifeOS");
+        _workSessionDateTextBox = CreateStandardTextBox(DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd"));
+        _workSessionHoursTextBox = CreateStandardTextBox("1.00");
+        _workSessionRateTextBox = CreateStandardTextBox("35.00");
+        _workSessionStatusComboBox = CreateEnumComboBox(WorkSessionStatus.Completed);
+        _workSessionDescriptionTextBox = CreateStandardTextBox("Describe the work completed");
+        _workSessionNotesTextBox = CreateStandardTextBox("Optional notes");
+
+        _workSessionBillableCheckBox = new CheckBox
+        {
+            Content = "Billable",
+            IsChecked = true,
+            Foreground = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
+            Margin = new Thickness(0, 8, 14, 14)
+        };
+
+        AddInputField(grid, "Client / project", _workSessionClientTextBox, 0, 0);
+        AddInputField(grid, "Date yyyy-mm-dd", _workSessionDateTextBox, 0, 1);
+        AddInputField(grid, "Hours", _workSessionHoursTextBox, 1, 0);
+        AddInputField(grid, "Hourly rate", _workSessionRateTextBox, 1, 1);
+        AddInputField(grid, "Status", _workSessionStatusComboBox, 2, 0);
+        AddInputField(grid, "Description", _workSessionDescriptionTextBox, 3, 0);
+        AddInputField(grid, "Notes", _workSessionNotesTextBox, 3, 1);
+
+        Grid.SetRow(_workSessionBillableCheckBox, 2);
+        Grid.SetColumn(_workSessionBillableCheckBox, 1);
+        grid.Children.Add(_workSessionBillableCheckBox);
+
+        root.Children.Add(grid);
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Margin = new Thickness(0, 18, 0, 0)
+        };
+
+        var addButton = CreateActionButton("Add Work Session", Color.FromRgb(56, 189, 248), Color.FromRgb(15, 23, 42));
+        addButton.Click += AddWorkSessionButton_Click;
+
+        var resetButton = CreateActionButton("Reset Defaults", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetWorkSessionsButton_Click;
+
+        buttonRow.Children.Add(addButton);
+        buttonRow.Children.Add(resetButton);
+
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateWorkSessionListPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Current work sessions",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        if (_workSessions.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No work sessions yet."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in _workSessions.OrderByDescending(item => item.Date))
+        {
+            var body = $"{item.ClientOrProject} • {item.Date:yyyy-MM-dd} • {item.Hours:0.##}h • {FormatMoney(item.HourlyRate)}/h • {(item.IsBillable ? "Billable" : "Non-billable")} • {item.Status} • Value: {FormatMoney(item.BillableValue)}";
+
+            var card = CreateSimpleItemCard(item.Description, body, item.Notes);
+
+            var buttonRow = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(0, 12, 0, 0)
+            };
+
+            var paidButton = CreateSmallActionButton("Mark Paid");
+            paidButton.Tag = item.Id;
+            paidButton.Click += MarkWorkSessionPaidButton_Click;
+
+            var deleteButton = CreateSmallActionButton("Delete");
+            deleteButton.Tag = item.Id;
+            deleteButton.Click += DeleteWorkSessionButton_Click;
+
+            buttonRow.Children.Add(paidButton);
+            buttonRow.Children.Add(deleteButton);
+
+            if (card.Child is StackPanel cardStack)
+            {
+                cardStack.Children.Add(buttonRow);
+            }
+
+            root.Children.Add(card);
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private void AddProofItemButton_Click(object sender, RoutedEventArgs e)
+    {
+        var date = DateOnly.TryParse(_proofDateTextBox?.Text.Trim(), out var parsedDate)
+            ? parsedDate
+            : DateOnly.FromDateTime(DateTime.Today);
+
+        var type = _proofTypeComboBox?.SelectedItem is ProofType selectedType
+            ? selectedType
+            : ProofType.Screenshot;
+
+        var status = _proofStatusComboBox?.SelectedItem is ProofStatus selectedStatus
+            ? selectedStatus
+            : ProofStatus.Draft;
+
+        _proofItems.Add(new ProofItem
+        {
+            Project = ReadTextValue(_proofProjectTextBox, "LifeOS"),
+            Title = ReadTextValue(_proofTitleTextBox, "Untitled proof item"),
+            Type = type,
+            Status = status,
+            Date = date,
+            Description = ReadTextValue(_proofDescriptionTextBox, "No description entered."),
+            LinkOrPath = _proofLinkOrPathTextBox?.Text.Trim() ?? string.Empty,
+            Notes = _proofNotesTextBox?.Text.Trim() ?? string.Empty,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        });
+
+        ProofStorage.Save(_proofItems);
+        ShowProofTrackerPage();
+    }
+
+    private void ResetProofTrackerButton_Click(object sender, RoutedEventArgs e)
+    {
+        ProofStorage.Reset();
+        _proofItems = ProofStorage.Load();
+        ShowProofTrackerPage();
+    }
+
+    private void MarkProofReadyButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        var item = _proofItems.FirstOrDefault(item => item.Id == id);
+
+        if (item is null)
+        {
+            return;
+        }
+
+        item.Status = ProofStatus.Ready;
+        item.UpdatedAt = DateTime.Now;
+
+        ProofStorage.Save(_proofItems);
+        ShowProofTrackerPage();
+    }
+
+    private void DeleteProofItemButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        _proofItems = _proofItems
+            .Where(item => item.Id != id)
+            .ToList();
+
+        ProofStorage.Save(_proofItems);
+        ShowProofTrackerPage();
+    }
+
+    private void ShowProofTrackerPage()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var summary = ProofCalculator.Calculate(_proofItems, today);
+
+        SetHeader("Proof Tracker", "Proof Tracker • v0.3 proof foundation");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Proof Tracker",
+            "Track screenshots, releases, client replies, invoices, case studies, commits, and other proof bricks."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Total proof", summary.TotalProofItems.ToString(), "Proof"));
+        metricsPanel.Children.Add(CreateDashboardCard("Ready", summary.ReadyCount.ToString(), "Shareable"));
+        metricsPanel.Children.Add(CreateDashboardCard("Shared", summary.SharedCount.ToString(), "Sent"));
+        metricsPanel.Children.Add(CreateDashboardCard("Accepted", summary.AcceptedCount.ToString(), "Confirmed"));
+        metricsPanel.Children.Add(CreateDashboardCard("Client proof", summary.ClientProofCount.ToString(), "Client/payment"));
+        metricsPanel.Children.Add(CreateDashboardCard("Recent", summary.RecentCount.ToString(), "14 days"));
+
+        root.Children.Add(metricsPanel);
+
+        var reasonsPanel = CreateInfoPanel("Proof pressure", FormatReasons(summary.Reasons));
+        reasonsPanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(reasonsPanel);
+
+        var inputPanel = CreateProofTrackerInputPanel();
+        inputPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(inputPanel);
+
+        var listPanel = CreateProofTrackerListPanel();
+        listPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(listPanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateProofTrackerInputPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Add proof item",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Proof is the wall. Track what was built, shown, paid, accepted, or made reusable.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var grid = new Grid();
+
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+        for (var i = 0; i < 5; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        }
+
+        _proofProjectTextBox = CreateStandardTextBox("LifeOS");
+        _proofTitleTextBox = CreateStandardTextBox("LifeOS v0.3 work/proof release");
+        _proofTypeComboBox = CreateEnumComboBox(ProofType.Release);
+        _proofStatusComboBox = CreateEnumComboBox(ProofStatus.Ready);
+        _proofDateTextBox = CreateStandardTextBox(DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd"));
+        _proofDescriptionTextBox = CreateStandardTextBox("Describe the proof");
+        _proofLinkOrPathTextBox = CreateStandardTextBox("README.md or docs path");
+        _proofNotesTextBox = CreateStandardTextBox("Optional notes");
+
+        AddInputField(grid, "Project", _proofProjectTextBox, 0, 0);
+        AddInputField(grid, "Title", _proofTitleTextBox, 0, 1);
+        AddInputField(grid, "Type", _proofTypeComboBox, 1, 0);
+        AddInputField(grid, "Status", _proofStatusComboBox, 1, 1);
+        AddInputField(grid, "Date yyyy-mm-dd", _proofDateTextBox, 2, 0);
+        AddInputField(grid, "Link/path", _proofLinkOrPathTextBox, 2, 1);
+        AddInputField(grid, "Description", _proofDescriptionTextBox, 3, 0);
+        AddInputField(grid, "Notes", _proofNotesTextBox, 3, 1);
+
+        root.Children.Add(grid);
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Margin = new Thickness(0, 18, 0, 0)
+        };
+
+        var addButton = CreateActionButton("Add Proof Item", Color.FromRgb(56, 189, 248), Color.FromRgb(15, 23, 42));
+        addButton.Click += AddProofItemButton_Click;
+
+        var resetButton = CreateActionButton("Reset Defaults", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetProofTrackerButton_Click;
+
+        buttonRow.Children.Add(addButton);
+        buttonRow.Children.Add(resetButton);
+
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateProofTrackerListPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Current proof items",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        if (_proofItems.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No proof items yet."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in _proofItems.OrderByDescending(item => item.Date))
+        {
+            var body = $"{item.Project} • {item.Type} • {item.Status} • {item.Date:yyyy-MM-dd} • {item.LinkOrPath}";
+            var card = CreateSimpleItemCard(item.Title, body, item.Description + Environment.NewLine + item.Notes);
+
+            var buttonRow = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(0, 12, 0, 0)
+            };
+
+            var readyButton = CreateSmallActionButton("Mark Ready");
+            readyButton.Tag = item.Id;
+            readyButton.Click += MarkProofReadyButton_Click;
+
+            var deleteButton = CreateSmallActionButton("Delete");
+            deleteButton.Tag = item.Id;
+            deleteButton.Click += DeleteProofItemButton_Click;
+
+            buttonRow.Children.Add(readyButton);
+            buttonRow.Children.Add(deleteButton);
+
+            if (card.Child is StackPanel cardStack)
+            {
+                cardStack.Children.Add(buttonRow);
+            }
+
+            root.Children.Add(card);
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
     private static string GetModuleStatusText(LifeOSModuleDefinition module)
     {
         if (module.IsDesktopOnly)
@@ -1140,13 +1664,13 @@ public partial class MainWindow : Window
     {
         var summary = CommandCentreSummaryService.Create();
 
-        SetHeader("Command Centre", $"Weekly pressure command centre • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Work, income, proof command centre • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "LifeOS Command Centre",
-            "This is now reading real local LifeOS data from Money Pressure and Follow-Ups. Desktop proves the full model; mobile will pressure-test the optimized daily-use version."));
+            "This is now reading real local LifeOS data across money, agenda, pay-later, weekly close-out, follow-ups, work sessions, and proof tracking. Desktop proves the engine before mobile becomes the quick-capture companion."));
 
         var metricsPanel = new WrapPanel
         {
@@ -1155,10 +1679,13 @@ public partial class MainWindow : Window
 
         metricsPanel.Children.Add(CreateDashboardCard("Overall pressure", summary.OverallPressureLabel, "This week"));
         metricsPanel.Children.Add(CreateDashboardCard("Safe to spend", FormatMoney(summary.MoneyPressure.SafeToSpend), summary.MoneyPressure.PressureLabel));
-        metricsPanel.Children.Add(CreateDashboardCard("Pending income", FormatMoney(summary.MoneyPressure.PendingIncome), "Not safe yet"));
+        metricsPanel.Children.Add(CreateDashboardCard("Agenda open", summary.Agenda.TotalOpen.ToString(), "Week"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pay later open", FormatMoney(summary.PayLater.TotalAmountOpen), "Deferred"));
         metricsPanel.Children.Add(CreateDashboardCard("Open follow-ups", summary.FollowUps.TotalOpen.ToString(), "Waiting-on"));
-        metricsPanel.Children.Add(CreateDashboardCard("Needs action", summary.FollowUps.NeedsActionCount.ToString(), "Action"));
-        metricsPanel.Children.Add(CreateDashboardCard("Money-linked", summary.FollowUps.MoneyLinkedCount.ToString(), "Work/money"));
+        metricsPanel.Children.Add(CreateDashboardCard("Billable value", FormatMoney(summary.WorkSessions.BillableValue), "Work"));
+        metricsPanel.Children.Add(CreateDashboardCard("Unpaid work", FormatMoney(summary.WorkSessions.UnpaidBillableValue), "Income"));
+        metricsPanel.Children.Add(CreateDashboardCard("Proof items", summary.ProofTracker.TotalProofItems.ToString(), "Proof"));
+        metricsPanel.Children.Add(CreateDashboardCard("Proof ready", summary.ProofTracker.ReadyCount.ToString(), "Shareable"));
 
         root.Children.Add(metricsPanel);
 
@@ -1169,25 +1696,23 @@ public partial class MainWindow : Window
         actionPanel.Margin = new Thickness(0, 8, 0, 0);
         root.Children.Add(actionPanel);
 
-        var reasonsText = string.Join(Environment.NewLine, summary.Reasons.Select(reason => $"• {reason}"));
-
         var reasonsPanel = CreateInfoPanel(
             "Why this week has pressure",
-            reasonsText);
+            FormatReasons(summary.Reasons));
 
         reasonsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(reasonsPanel);
 
-        var timerPanel = CreateInfoPanel(
-            "TimerAgent status",
-            "TimerAgent remains a desktop-only utility for focused work, billable sessions, earned income, tax set-aside, and CSV logs. A later phase can read TimerAgent work-session data into this Command Centre.");
+        var workPanel = CreateInfoPanel(
+            "v0.3 work/income/proof loop",
+            "Work Sessions tracks client/project time, billable value, paid/unpaid status, and income pressure. Proof Tracker connects releases, screenshots, commits, client replies, invoices, and case-study material to the proof wall.");
 
-        timerPanel.Margin = new Thickness(0, 16, 0, 0);
-        root.Children.Add(timerPanel);
+        workPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "Phase 12 scope",
-            "Command Centre now combines saved Money Pressure and Follow-Ups data. No agenda module, TimerAgent CSV import, database, bank sync, mobile app, or AI layer yet.");
+            "v0.3 scope",
+            "Command Centre now combines saved weekly, money, follow-up, work-session, and proof data. No mobile app, database, bank sync, invoice generation, client portal, or AI layer yet.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

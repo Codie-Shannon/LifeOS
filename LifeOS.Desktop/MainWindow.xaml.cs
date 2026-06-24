@@ -291,7 +291,7 @@ public partial class MainWindow : Window
 
         root.Children.Add(CreateHeroPanel(
             "Money Pressure",
-            "First editable Money Pressure foundation. Enter manual weekly values, then recalculate safe-to-spend. This still uses shared Core calculation logic."));
+            "Manual money-pressure foundation. Enter what matters, recalculate safe-to-spend, and keep pending invoice money separate from money that has actually landed."));
 
         var inputPanel = CreateMoneyPressureInputPanel();
         inputPanel.Margin = new Thickness(0, 22, 0, 0);
@@ -313,6 +313,13 @@ public partial class MainWindow : Window
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);
+
+        var realLifePanel = CreateInfoPanel(
+            "v0.4 real-life lesson",
+            "On chaotic days LifeOS should not demand constant logging. The most useful tools are fast: invoice templates, pay-later checks, money pressure, and follow-up reminders that can be used in short bursts.");
+
+        realLifePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(realLifePanel);
 
         MainContentControl.Content = root;
     }
@@ -516,7 +523,7 @@ public partial class MainWindow : Window
 
         root.Children.Add(new TextBlock
         {
-            Text = "Keep the week visible without turning LifeOS into a full calendar app yet.",
+            Text = "Keep the week visible without turning LifeOS into a full calendar app. Capture the few things that change pressure.",
             Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
             FontSize = 13,
             TextWrapping = TextWrapping.Wrap,
@@ -598,7 +605,7 @@ public partial class MainWindow : Window
 
         if (_agendaItems.Count == 0)
         {
-            root.Children.Add(CreateEmptyTextBlock("No agenda items yet."));
+            root.Children.Add(CreateEmptyTextBlock("No agenda items yet. Add the next real commitment, not every thought."));
             panel.Child = root;
             return panel;
         }
@@ -782,7 +789,7 @@ public partial class MainWindow : Window
 
         root.Children.Add(new TextBlock
         {
-            Text = "Deferred payments still create pressure. Keep them visible.",
+            Text = "Deferred payments still create pressure. Keep them visible before shopping, fuel runs, or invoice money lands.",
             Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
             FontSize = 13,
             TextWrapping = TextWrapping.Wrap,
@@ -853,7 +860,7 @@ public partial class MainWindow : Window
 
         if (_payLaterItems.Count == 0)
         {
-            root.Children.Add(CreateEmptyTextBlock("No pay-later items yet."));
+            root.Children.Add(CreateEmptyTextBlock("No pay-later items yet. Add Afterpay, bills, or deferred payments when they create future pressure."));
             panel.Child = root;
             return panel;
         }
@@ -1075,7 +1082,7 @@ public partial class MainWindow : Window
 
         if (_weeklyCloseOutEntries.Count == 0)
         {
-            root.Children.Add(CreateEmptyTextBlock("No weekly close-out entries yet."));
+            root.Children.Add(CreateEmptyTextBlock("No weekly close-out entries yet. Add one at the end of a real work/life block."));
             panel.Child = root;
             return panel;
         }
@@ -1328,7 +1335,7 @@ public partial class MainWindow : Window
 
         root.Children.Add(new TextBlock
         {
-            Text = "This is the first bridge from work done to income pressure and proof.",
+            Text = "Bridge real work to income pressure, invoices, proof, and paid/unpaid status.",
             Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
             FontSize = 13,
             TextWrapping = TextWrapping.Wrap,
@@ -1411,7 +1418,7 @@ public partial class MainWindow : Window
 
         if (_workSessions.Count == 0)
         {
-            root.Children.Add(CreateEmptyTextBlock("No work sessions yet."));
+            root.Children.Add(CreateEmptyTextBlock("No work sessions yet. Add client/project time when it may become income, proof, or follow-up pressure."));
             panel.Child = root;
             return panel;
         }
@@ -1666,7 +1673,7 @@ public partial class MainWindow : Window
 
         if (_proofItems.Count == 0)
         {
-            root.Children.Add(CreateEmptyTextBlock("No proof items yet."));
+            root.Children.Add(CreateEmptyTextBlock("No proof items yet. Add releases, screenshots, client replies, invoices, or case-study evidence."));
             panel.Child = root;
             return panel;
         }
@@ -2000,7 +2007,7 @@ public partial class MainWindow : Window
         {
             root.Children.Add(new TextBlock
             {
-                Text = "No follow-ups yet.",
+                Text = "No follow-ups yet. Add people, invoices, replies, or loose threads you need to track.",
                 Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
                 Margin = new Thickness(0, 12, 0, 0)
             });

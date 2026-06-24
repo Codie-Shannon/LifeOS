@@ -445,7 +445,7 @@ public partial class MainWindow : Window
         var today = DateOnly.FromDateTime(DateTime.Today);
         var summary = AgendaCalculator.Calculate(_agendaItems, today);
 
-        SetHeader("Agenda", "Agenda • v0.2 weekly pressure foundation");
+        SetHeader("Agenda", "Agenda • v0.4 weekly pressure foundation");
 
         var root = new StackPanel();
 
@@ -701,7 +701,7 @@ public partial class MainWindow : Window
         var today = DateOnly.FromDateTime(DateTime.Today);
         var summary = PayLaterCalculator.Calculate(_payLaterItems, today);
 
-        SetHeader("Pay Later", "Pay Later • v0.2 deferred pressure foundation");
+        SetHeader("Pay Later", "Pay Later • v0.4 deferred pressure foundation");
 
         var root = new StackPanel();
 
@@ -916,7 +916,7 @@ public partial class MainWindow : Window
         var today = DateOnly.FromDateTime(DateTime.Today);
         var summary = WeeklyCloseOutCalculator.Calculate(_weeklyCloseOutEntries, today);
 
-        SetHeader("Weekly Close-Out", "Weekly Close-Out • v0.2 weekly review foundation");
+        SetHeader("Weekly Close-Out", "Weekly Close-Out • v0.4 weekly review foundation");
 
         var root = new StackPanel();
 
@@ -1226,7 +1226,7 @@ public partial class MainWindow : Window
     {
         var summary = WorkSessionCalculator.Calculate(_workSessions);
 
-        SetHeader("Work Sessions", "Work Sessions • v0.3 work and income foundation");
+        SetHeader("Work Sessions", "Work Sessions • v0.4 work and income foundation");
 
         var root = new StackPanel();
 
@@ -1481,7 +1481,7 @@ public partial class MainWindow : Window
         var today = DateOnly.FromDateTime(DateTime.Today);
         var summary = ProofCalculator.Calculate(_proofItems, today);
 
-        SetHeader("Proof Tracker", "Proof Tracker • v0.3 proof foundation");
+        SetHeader("Proof Tracker", "Proof Tracker • v0.4 proof foundation");
 
         var root = new StackPanel();
 
@@ -1551,7 +1551,7 @@ public partial class MainWindow : Window
         }
 
         _proofProjectTextBox = CreateStandardTextBox("LifeOS");
-        _proofTitleTextBox = CreateStandardTextBox("LifeOS v0.3 work/proof release");
+        _proofTitleTextBox = CreateStandardTextBox("LifeOS v0.4 trust/polish release");
         _proofTypeComboBox = CreateEnumComboBox(ProofType.Release);
         _proofStatusComboBox = CreateEnumComboBox(ProofStatus.Ready);
         _proofDateTextBox = CreateStandardTextBox(DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd"));
@@ -1664,13 +1664,13 @@ public partial class MainWindow : Window
     {
         var summary = CommandCentreSummaryService.Create();
 
-        SetHeader("Command Centre", $"Work, income, proof command centre • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Work, income, proof command centre • v0.4 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "LifeOS Command Centre",
-            "This is now reading real local LifeOS data across money, agenda, pay-later, weekly close-out, follow-ups, work sessions, and proof tracking. Desktop proves the engine before mobile becomes the quick-capture companion."));
+            "This is now reading real local LifeOS data across money, agenda, pay-later, weekly close-out, follow-ups, work sessions, and proof tracking. v0.4 focuses on trust: clearer wording, safer actions, and better guidance before adding new modules."));
 
         var metricsPanel = new WrapPanel
         {
@@ -1704,15 +1704,15 @@ public partial class MainWindow : Window
         root.Children.Add(reasonsPanel);
 
         var workPanel = CreateInfoPanel(
-            "v0.3 work/income/proof loop",
+            "v0.4 work/income/proof loop",
             "Work Sessions tracks client/project time, billable value, paid/unpaid status, and income pressure. Proof Tracker connects releases, screenshots, commits, client replies, invoices, and case-study material to the proof wall.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v0.3 scope",
-            "Command Centre now combines saved weekly, money, follow-up, work-session, and proof data. No mobile app, database, bank sync, invoice generation, client portal, or AI layer yet.");
+            "v0.4 scope",
+            "Command Centre now combines saved weekly, money, follow-up, work-session, and proof data. v0.4 is a trust/polish pass: clearer wording, safer resets, and better empty states. No mobile app, database, bank sync, invoice generation, client portal, or AI layer yet.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

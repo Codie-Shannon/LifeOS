@@ -1,306 +1,223 @@
-# LifeOS
+# LifeOS Desktop
 
-LifeOS is a weekly pressure command centre.
+LifeOS Desktop is a local-first weekly pressure command centre for tracking money pressure, agenda items, deferred payments, weekly close-out, work sessions, proof items, follow-ups, projects, timers, and settings without turning the system into a heavy calendar, CRM, or accounting platform.
 
-It shows what money, work, payments, deductions, agenda items, follow-ups, deferred obligations, weekly review items, work sessions, unpaid income, and proof items are putting pressure on the week, then helps decide what is safe to do next.
+Current release: **LifeOS Desktop v0.4 — Trust Polish Release**
 
-LifeOS is not mainly a budget app, calendar app, task app, timer app, CRM, or banking app. Those are modules and inputs. LifeOS is the pressure layer that connects them.
+## Release position
 
-## LifeOS Desktop v0.3
+LifeOS v0.4 is not a major new-module release. It is a trust, wording, safety, and documentation polish release that builds on v0.2 and v0.3.
 
-LifeOS Desktop v0.3 is the third working proof of the LifeOS weekly pressure command centre.
+The goal of v0.4 is to make LifeOS feel safer and clearer during real use:
 
-v0.1 proved that LifeOS exists as a real desktop application. v0.2 made LifeOS understand the week. v0.3 upgrades the app so it understands work, income, and proof.
+- clearer Command Centre wording
+- safer reset/delete confirmation wording
+- better empty states
+- less misleading copy
+- clearer version labels
+- updated screenshots and documentation
+- preserved v0.2/v0.3 functionality
 
-This version includes:
+## What LifeOS currently covers
 
-- WPF desktop shell
-- MainWindow-only UI for fast iteration
-- shared Core / Shared architecture
-- Money Pressure manual inputs with local JSON persistence
-- Follow-Ups tracking with local JSON persistence
-- Agenda foundation with local JSON persistence
-- Pay Later foundation with local JSON persistence
-- Weekly Close-Out foundation with local JSON persistence
-- Work Sessions foundation with local JSON persistence
-- Proof Tracker foundation with local JSON persistence
-- Command Centre summary reading local pressure, work, income, and proof data
-- TimerAgent framed as a desktop-only utility that can later feed work/time/income into LifeOS
+### v0.1 — First usable desktop foundation
 
-This is a private alpha/proof build, not a public commercial release.
+LifeOS became a real desktop app with a reusable shell, local data direction, dark UI foundation, and early navigation structure.
 
-## Current Screenshot
+### v0.2 — Weekly pressure foundation
 
-![LifeOS Desktop v0.3 Command Centre](docs/screenshots/v0.3/01-lifeos-v03-command-centre.png)
+v0.2 added the first practical weekly-life systems:
 
-## v0.3 Screenshots
+- Agenda
+- Pay Later
+- Weekly Close-Out
+- early Command Centre metrics
+- clearer weekly pressure framing
+- first screenshot/documentation pass
 
-### Command Centre
+This made LifeOS useful for keeping the week visible without needing a full calendar app.
 
-![LifeOS Desktop v0.3 Command Centre](docs/screenshots/v0.3/01-lifeos-v03-command-centre.png)
+### v0.3 — Work, income, and proof foundation
 
-### Work Sessions
+v0.3 added the work/proof layer:
 
-![LifeOS Desktop v0.3 Work Sessions](docs/screenshots/v0.3/02-lifeos-v03-work-sessions.png)
+- Work Sessions
+- Proof Tracker
+- work and income metrics in the Command Centre
+- proof visibility
+- better MainWindow wiring
+- updated v0.3 docs and screenshots
 
-### Proof Tracker
+This made LifeOS start connecting time, billable work, invoices, proof items, and portfolio evidence.
 
-![LifeOS Desktop v0.3 Proof Tracker](docs/screenshots/v0.3/03-lifeos-v03-proof-tracker.png)
+### v0.4 — Trust polish release
 
-### Agenda
+v0.4 improves the reliability and user trust of the existing system:
 
-![LifeOS Desktop Agenda](docs/screenshots/v0.3/04-lifeos-v03-agenda.png)
+- version labels updated to v0.4
+- Command Centre wording clarified
+- empty states improved so screens explain what to do next
+- reset confirmations made safer and more explicit
+- side-panel wording updated
+- docs/screenshots refreshed into one full v0.4 set
 
-### Pay Later
-
-![LifeOS Desktop Pay Later](docs/screenshots/v0.3/05-lifeos-v03-pay-later.png)
-
-### Weekly Close-Out
-
-![LifeOS Desktop Weekly Close-Out](docs/screenshots/v0.3/06-lifeos-v03-weekly-close-out.png)
-
-### Money Pressure
-
-![LifeOS Desktop Money Pressure](docs/screenshots/v0.3/07-lifeos-v03-money-pressure.png)
-
-### Follow-Ups
-
-![LifeOS Desktop Follow-Ups](docs/screenshots/v0.3/08-lifeos-v03-follow-ups.png)
-
-## Current Features
+## Main modules
 
 ### Command Centre
 
-The Command Centre combines saved LifeOS pressure data and shows:
+The Command Centre reads local LifeOS data across money, agenda, pay-later, close-out, follow-ups, work sessions, and proof tracking.
+
+It gives a high-level view of:
 
 - overall pressure
-- safe-to-spend
-- agenda pressure
-- pay-later/deferred obligation pressure
+- safe-to-spend position
+- open agenda items
+- open pay-later/deferred payments
 - open follow-ups
 - billable value
-- unpaid work value
+- unpaid work
 - proof items
-- proof-ready status
-- next safest action
-- combined pressure reasons
-
-v0.3 connects the work/income/proof loop to the same weekly pressure model as money, agenda, pay-later, follow-ups, and weekly close-out.
-
-### Work Sessions
-
-Work Sessions tracks client/project work:
-
-- client or project
-- work date
-- hours
-- hourly rate
-- billable flag
-- paid/unpaid status
-- description
-- notes
-
-The module calculates:
-
-- total sessions
-- total hours
-- billable hours
-- billable value
-- unpaid value
-- active clients/projects
-- work pressure reasons
-
-### Proof Tracker
-
-Proof Tracker tracks the evidence wall behind the work:
-
-- project
-- title
-- proof type
-- status
-- date
-- description
-- link or path
-- notes
-
-The module calculates:
-
-- total proof items
-- ready/shareable items
-- shared items
-- accepted/confirmed items
-- client/payment-related proof
-- recent proof items
-- proof pressure reasons
+- proof readiness
 
 ### Money Pressure
 
-Money Pressure supports manual weekly values:
-
-- current balance
-- paid income
-- pending income
-- bills due
-- deductions
-- food/fuel buffer
-- emergency buffer
-
-The module calculates:
-
-- safe-to-spend
-- pressure label
-- pending income kept separate from safe money
-- reasons why the week has pressure
+Money Pressure is the financial pressure view. It is intended to show what money is actually safe, what obligations exist, and what work/invoices may affect the week.
 
 ### Agenda
 
-Agenda tracks what matters this week:
+Agenda is a light weekly pressure list, not a full calendar replacement.
+
+It tracks important commitments that can affect the week, including:
 
 - title
+- due date
+- time
 - type
 - status
 - pressure level
-- due date
-- time text
-- fixed commitment flag
 - notes
-
-The module calculates:
-
-- open agenda items
-- due-today items
-- overdue items
-- items due this week
-- high-pressure items
-- pressure reasons
+- fixed commitment flag
 
 ### Pay Later
 
-Pay Later tracks deferred obligations before they become hidden pressure:
+Pay Later tracks deferred payment pressure such as Afterpay, bills, obligations, or future payments that can distort available money.
 
-- name
+It tracks:
+
+- item name
 - payee
 - amount
 - due date
 - status
-- pressure level
+- pressure
 - notes
-
-The module calculates:
-
-- open pay-later items
-- open amount
-- due-this-week amount
-- overdue amount
-- high-pressure item count
-- pressure reasons
 
 ### Weekly Close-Out
 
-Weekly Close-Out captures the weekly reset loop:
+Weekly Close-Out exists to summarize what happened, what carried forward, what needs attention, and what should be made visible before the next week.
 
-- week start
-- what got done
-- what moved
-- what is still waiting
-- next-week pressure
+### Work Sessions
+
+Work Sessions connects real work to income, invoices, proof, and follow-up pressure.
+
+It tracks:
+
+- client/project
+- date
+- hours
+- hourly rate
+- status
+- billable flag
+- description
 - notes
 
-The module calculates:
+### Proof Tracker
 
-- total close-out entries
-- current-week entries
-- whether the current week has a close-out
-- waiting-on pressure count
-- pressure reasons
+Proof Tracker tracks what was built, shown, paid, accepted, or made reusable.
+
+It tracks:
+
+- project
+- title
+- type
+- status
+- date
+- link/path
+- description
+- notes
 
 ### Follow-Ups
 
-Follow-Ups supports basic waiting-on tracking:
+Follow-Ups tracks waiting-on items and reminders connected to work, clients, money, proof, or personal admin.
 
-- person / organisation
-- context
-- next action
-- follow-up date
-- status
-- priority
-- money-linked flag
-- notes
+### Projects
 
-The module calculates:
-
-- open follow-ups
-- waiting count
-- needs-action count
-- overdue count
-- due-today count
-- money-linked count
+Projects is the project visibility area for keeping important work streams findable.
 
 ### TimerAgent
 
-TimerAgent is the first desktop-only LifeOS utility.
+TimerAgent is the early timer/work-session direction for future work tracking.
 
-It tracks focused work, billable sessions, earned income, tax set-aside, safe money, and CSV logs.
+### Settings
 
-TimerAgent remains desktop-only because its core UX depends on desktop-specific behaviour such as tray icon, global shortcut, compact overlay, and local work-session flow.
+Settings contains local app settings and future configuration direction.
 
-Future LifeOS versions can read TimerAgent work-session data into the Command Centre.
+## v0.4 screenshot set
 
-## Platform Direction
-
-Desktop is the daily-use power version and proving ground.
-
-Mobile will be the daily-use optimized version and pressure test.
-
-Both desktop and mobile should share the same core LifeOS model.
-
-Core features should reach both desktop and mobile once the desktop/core model is stable enough.
-
-Experimental features start on desktop.
-
-Platform-specific features stay platform-specific.
-
-## Solution Structure
+The current full v0.4 screenshot set is stored in:
 
 ```text
-src/LifeOS.Core
-LifeOS.Shared
-src/LifeOS.Modules.Timer
-src/LifeOS.TimerAgent
-LifeOS.Desktop
+docs/screenshots/
 ```
 
-## Storage
+Recommended active screenshots:
 
-LifeOS Desktop v0.3 uses local JSON persistence.
+```text
+01-lifeos-v04-command-centre.png
+02-lifeos-v04-agenda-empty-state.png
+03-lifeos-v04-pay-later-empty-state.png
+04-lifeos-v04-work-sessions-empty-state.png
+05-lifeos-v04-proof-tracker-empty-state.png
+06-lifeos-v04-proof-tracker-reset-confirmation.png
+```
 
-Current local files include:
+These replace the old active v0.3 screenshot set. The v0.3 release history is now merged into the documentation rather than kept as separate active docs.
 
-- `money-pressure-input.json`
-- `follow-ups.json`
-- `agenda-items.json`
-- `pay-later-items.json`
-- `weekly-close-out-entries.json`
-- `work-sessions.json`
-- `proof-items.json`
+## Local-first direction
 
-## Not Built Yet
+LifeOS is intended to remain local-first while the core system is still being proven.
 
-- mobile app
-- website
-- database
-- bank sync
-- email/calendar import
-- TimerAgent CSV import into Command Centre
-- backup/restore
-- data health checks
-- installer
-- public release packaging
-- authentication/users
-- cloud sync
+Current principle:
 
-## Release Status
+```text
+MainWindow only. Core/Shared stay reusable. Local data stays safe.
+```
 
-LifeOS Desktop v0.3 is a local-first proof release.
+Future versions may introduce stronger data models, invoice generation, client proof packaging, and eventually mobile or sync support, but desktop/core remains the priority for now.
 
-It proves the core pressure engine can combine personal pressure, weekly pressure, work value, unpaid income, and proof tracking inside one desktop command centre.
+## What v0.4 proves
+
+v0.4 proves that LifeOS can be improved through a disciplined polish pass rather than only adding features.
+
+It now better supports real messy days where the user needs to quickly answer:
+
+- What is still open?
+- What pressure exists this week?
+- What work may become income?
+- What proof exists?
+- What is safe to reset?
+- What needs attention next?
+
+## Suggested release tag
+
+```bash
+git tag v0.4
+git push origin v0.4
+```
+
+## Suggested commit message
+
+```bash
+git add .
+git commit -m "Add LifeOS v0.4 merged docs and screenshots"
+```

@@ -1,96 +1,123 @@
 # LifeOS Roadmap
 
-LifeOS is being built as a local-first pressure command centre that starts with one person under pressure and can later expand into contractor, business, and team/enterprise operating systems.
+Current release: **LifeOS Desktop v0.4 — Trust Polish Release**
 
-## Version Progress
+## Product direction
+
+LifeOS is a local-first desktop command centre for managing weekly pressure, money pressure, work sessions, proof, follow-ups, and eventually client/invoice/admin workflows.
+
+Desktop/core remains the priority. Mobile comes later, after the desktop system is more proven.
+
+## Completed releases
+
+### v0.1 — First usable foundation
+
+- Desktop shell
+- Dark UI direction
+- Navigation foundation
+- Local-first direction
+
+### v0.2 — Weekly pressure foundation
+
+- Agenda
+- Pay Later
+- Weekly Close-Out
+- Command Centre weekly metrics
+- Initial docs/screenshots
+
+### v0.3 — Work, income, and proof foundation
+
+- Work Sessions
+- Proof Tracker
+- Work/income/proof Command Centre metrics
+- MainWindow wiring
+- v0.3 docs/screenshots
+
+### v0.4 — Trust polish release
+
+- v0.4 wording and labels
+- clearer Command Centre copy
+- safer reset confirmation wording
+- improved empty states
+- full merged v0.4 docs/screenshots
+
+## Near-term priorities
+
+### v0.5 — Invoice Generator / Work-to-Invoice Bridge
+
+Likely next major feature.
+
+Possible scope:
+
+- client details storage
+- invoice number/reference
+- work session import
+- invoice PDF generation
+- invoice + work summary template
+- sent/paid status
+- follow-up reminder creation
+- proof link to invoice
+
+This feature is high-value because real client admin already created friction during a busy day.
+
+### v0.6 — Money Pressure / Pay Later strengthening
+
+Possible scope:
+
+- better safe-to-spend calculation
+- Afterpay/deferred payment schedule tracking
+- expected income/invoice tracking
+- weekly obligation view
+- grocery/fuel pressure quick check
+
+### v0.7 — Follow-up and client admin strengthening
+
+Possible scope:
+
+- scheduled follow-up reminders
+- client/job cards
+- waiting-on status
+- email/message notes
+- invoice/payment follow-up support
+
+## Medium-term direction
+
+### Contractor Command Centre
+
+LifeOS should eventually support:
+
+- client work
+- timers
+- billable hours
+- follow-ups
+- proof/case-study tracking
+- invoices/summaries
+- portfolio support
+- broader business operations
+
+### Proof and portfolio pipeline
+
+LifeOS should help convert real work into reusable proof:
+
+- screenshots
+- client replies
+- invoices
+- release notes
+- case-study notes
+- GitHub/release links
+
+### Mobile later
+
+Mobile should come after desktop/core is proven.
+
+Likely later target:
 
 ```text
-v0.1 = LifeOS exists                     DONE
-v0.2 = LifeOS understands the week        DONE
-v0.3 = LifeOS understands work/proof      DONE
-v0.4 = LifeOS becomes trustworthy         NEXT
-v0.5 = LifeOS imports outside data safely
-v0.6 = LifeOS helps make decisions
-v0.7 = LifeOS manages client/work loop
-v0.8 = LifeOS manages business operations
-v0.9 = release-candidate serious
-v1.0 = stable local-first desktop milestone
-v2.0 = serious multi-platform proof
+v1.6 to v2.0 or after the core is stable enough to justify mobile
 ```
 
-## v0.1 - LifeOS Exists
+## v2.0 principle
 
-Completed.
+Before declaring LifeOS v2.0 complete, do a dedicated polish block at the end of the push.
 
-v0.1 proved:
-
-- desktop shell
-- Command Centre
-- Money Pressure
-- Follow-Ups
-- TimerAgent framing
-- Settings placeholder
-- local JSON persistence foundation
-- public proof milestone
-
-## v0.2 - LifeOS Understands the Week
-
-Completed.
-
-v0.2 added:
-
-- Agenda foundation
-- Pay Later foundation
-- Weekly Close-Out foundation
-- Command Centre reading wider weekly pressure
-- local JSON storage for weekly modules
-- v0.2 docs and screenshots
-
-## v0.3 - LifeOS Understands Work, Income, and Proof
-
-Completed.
-
-v0.3 added:
-
-- Work Sessions foundation
-- Work Session income summary
-- Proof Tracker foundation
-- proof summary/pressure logic
-- Command Centre work/income/proof metrics
-- MainWindow-only wiring for Work Sessions and Proof Tracker
-- v0.3 docs and screenshots
-
-## v0.4 - LifeOS Becomes Trustworthy
-
-Next.
-
-Focus:
-
-- fix wording that no longer matches behaviour
-- improve empty states
-- improve validation and reset behaviour
-- reduce placeholder drift
-- make storage/read/write behaviour clearer
-- add safer defaults
-- make Command Centre reasons more useful
-- prepare the desktop/core model for longer-term growth
-
-v0.4 should not become a new-module sprint unless required.
-
-## Platform Strategy
-
-Desktop proves the engine quickly.
-
-Mobile comes later as a daily glance and quick-capture companion once the core data model is stable.
-
-Web/Blazor comes later for admin, dashboard, and business/team use cases.
-
-## Product Direction
-
-```text
-Personal LifeOS -> Contractor LifeOS -> Business LifeOS -> Enterprise LifeOS
-```
-
-The current product is still Personal/Contractor proof territory.
-
-Do not jump to enterprise, mobile, full integrations, or redesign before the core desktop engine is stable.
+That polish block should happen right before v2.0 is declared done, not too early, because features and structure will continue changing.

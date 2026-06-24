@@ -193,6 +193,11 @@ public partial class MainWindow : Window
 
     private void ResetFollowUpsButton_Click(object sender, RoutedEventArgs e)
     {
+        if (!ConfirmRiskyAction("Reset follow-up defaults?", "This will replace your saved follow-ups with the default local sample set."))
+        {
+            return;
+        }
+
         FollowUpStorage.Reset();
         _followUps = FollowUpStorage.Load();
         ShowFollowUpsPage();
@@ -222,6 +227,11 @@ public partial class MainWindow : Window
     private void DeleteFollowUpButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        if (!ConfirmRiskyAction("Delete follow-up?", "This removes the selected follow-up from local storage."))
         {
             return;
         }
@@ -399,6 +409,11 @@ public partial class MainWindow : Window
 
     private void ResetAgendaButton_Click(object sender, RoutedEventArgs e)
     {
+        if (!ConfirmRiskyAction("Reset agenda defaults?", "This will replace your saved agenda items with the default local sample set."))
+        {
+            return;
+        }
+
         AgendaStorage.Reset();
         _agendaItems = AgendaStorage.Load();
         ShowAgendaPage();
@@ -428,6 +443,11 @@ public partial class MainWindow : Window
     private void DeleteAgendaButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        if (!ConfirmRiskyAction("Delete agenda item?", "This removes the selected agenda item from local storage."))
         {
             return;
         }
@@ -655,6 +675,11 @@ public partial class MainWindow : Window
 
     private void ResetPayLaterButton_Click(object sender, RoutedEventArgs e)
     {
+        if (!ConfirmRiskyAction("Reset pay-later defaults?", "This will replace your saved pay-later items with the default local sample set."))
+        {
+            return;
+        }
+
         PayLaterStorage.Reset();
         _payLaterItems = PayLaterStorage.Load();
         ShowPayLaterPage();
@@ -684,6 +709,11 @@ public partial class MainWindow : Window
     private void DeletePayLaterButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        if (!ConfirmRiskyAction("Delete pay-later item?", "This removes the selected deferred-payment item from local storage."))
         {
             return;
         }
@@ -891,6 +921,11 @@ public partial class MainWindow : Window
 
     private void ResetWeeklyCloseOutButton_Click(object sender, RoutedEventArgs e)
     {
+        if (!ConfirmRiskyAction("Reset weekly close-out defaults?", "This will replace your saved close-out entries with the default local sample set."))
+        {
+            return;
+        }
+
         WeeklyCloseOutStorage.Reset();
         _weeklyCloseOutEntries = WeeklyCloseOutStorage.Load();
         ShowWeeklyCloseOutPage();
@@ -899,6 +934,11 @@ public partial class MainWindow : Window
     private void DeleteWeeklyCloseOutButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        if (!ConfirmRiskyAction("Delete weekly close-out entry?", "This removes the selected weekly review entry from local storage."))
         {
             return;
         }
@@ -1181,6 +1221,11 @@ public partial class MainWindow : Window
 
     private void ResetWorkSessionsButton_Click(object sender, RoutedEventArgs e)
     {
+        if (!ConfirmRiskyAction("Reset work-session defaults?", "This will replace your saved work sessions with the default local sample set."))
+        {
+            return;
+        }
+
         WorkSessionStorage.Reset();
         _workSessions = WorkSessionStorage.Load();
         ShowWorkSessionsPage();
@@ -1210,6 +1255,11 @@ public partial class MainWindow : Window
     private void DeleteWorkSessionButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        if (!ConfirmRiskyAction("Delete work session?", "This removes the selected work session from local storage."))
         {
             return;
         }
@@ -1435,6 +1485,11 @@ public partial class MainWindow : Window
 
     private void ResetProofTrackerButton_Click(object sender, RoutedEventArgs e)
     {
+        if (!ConfirmRiskyAction("Reset proof-tracker defaults?", "This will replace your saved proof items with the default local sample set."))
+        {
+            return;
+        }
+
         ProofStorage.Reset();
         _proofItems = ProofStorage.Load();
         ShowProofTrackerPage();
@@ -1464,6 +1519,11 @@ public partial class MainWindow : Window
     private void DeleteProofItemButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        if (!ConfirmRiskyAction("Delete proof item?", "This removes the selected proof item from local storage."))
         {
             return;
         }
@@ -2137,6 +2197,11 @@ public partial class MainWindow : Window
 
     private void ResetMoneyPressureButton_Click(object sender, RoutedEventArgs e)
     {
+        if (!ConfirmRiskyAction("Reset money-pressure inputs?", "This will clear your saved manual money-pressure inputs and reload defaults."))
+        {
+            return;
+        }
+
         MoneyPressureStorage.Reset();
         _moneyPressureInput = new MoneyPressureManualInput();
         ShowMoneyPressurePage();
@@ -2239,6 +2304,18 @@ public partial class MainWindow : Window
         PageTitleTextBlock.Text = title;
         PageSubtitleTextBlock.Text = subtitle;
         CurrentSectionTextBlock.Text = $"Current section: {title}";
+    }
+
+
+    private static bool ConfirmRiskyAction(string title, string message)
+    {
+        var result = MessageBox.Show(
+            message,
+            title,
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
+
+        return result == MessageBoxResult.Yes;
     }
 
     private Border CreateHeroPanel(string title, string body)

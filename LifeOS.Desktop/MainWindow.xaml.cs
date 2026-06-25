@@ -1733,7 +1733,6 @@ public partial class MainWindow : Window
 
 
 
-
     private static string BuildInvoiceReadySummary(IReadOnlyCollection<WorkSession> invoiceReadySessions)
     {
         if (invoiceReadySessions.Count == 0)
@@ -1867,29 +1866,69 @@ public partial class MainWindow : Window
     }
 
 
+
     private void ShowMoneyTimelinePage()
     {
-        SetHeader("Money Timeline", "Money Timeline • v0.5 shell");
+        var targetDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
+        var currentBalance = _moneyPressureInput.CurrentBalance;
+        var expectedIncome = _moneyPressureInput.PaidIncome + _moneyPressureInput.PendingIncome + _workSessions
+            .Where(session => session.IsBillable && session.Status is WorkSessionStatus.Completed or WorkSessionStatus.Invoiced)
+            .Sum(session => session.BillableValue);
+        var outgoing = _moneyPressureInput.BillsDue + _moneyPressureInput.DeductionsDue + _moneyPressureInput.FoodFuelBuffer + _moneyPressureInput.EmergencyBuffer;
+        var projectedBalance = currentBalance + expectedIncome - outgoing;
+        var lowestPoint = Math.Min(currentBalance, projectedBalance);
+        var safeToSpend = Math.Max(0m, projectedBalance);
+        var pressureLabel = projectedBalance switch
+        {
+            < 0 => "Danger",
+            < 50 => "High",
+            < 150 => "Medium",
+            _ => "Calm"
+        };
+
+        SetHeader("Money Timeline", "Money Timeline • v0.5 paper-bills workflow");
 
         var root = new StackPanel();
         root.Children.Add(CreateHeroPanel(
             "Money Timeline",
-            "v0.5 starts the paper-bills workflow: money coming in, payments going out, projected balance, lowest point, pressure label, and safe-to-spend estimate."));
+            "A first date-based cashflow view based on the paper-bills workflow: money coming in, bills going out, projected balance, lowest point, pressure label, and safe-to-spend estimate."));
 
-        var panel = CreateInfoPanel(
-            "Stage 1 shell",
-            "This shell proves the navigation and wording before adding the first projected-balance calculation. Next commit: calculate a simple money timeline from existing LifeOS money and work-session data.");
-        panel.Margin = new Thickness(0, 16, 0, 0);
-        root.Children.Add(panel);
+        var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
+        metricsPanel.Children.Add(CreateDashboardCard("Current balance", FormatMoney(currentBalance), "Starting point"));
+        metricsPanel.Children.Add(CreateDashboardCard("Incoming by target", FormatMoney(expectedIncome), targetDate.ToString("yyyy-MM-dd")));
+        metricsPanel.Children.Add(CreateDashboardCard("Outgoing/buffers", FormatMoney(outgoing), "Known pressure"));
+        metricsPanel.Children.Add(CreateDashboardCard("Projected balance", FormatMoney(projectedBalance), pressureLabel));
+        metricsPanel.Children.Add(CreateDashboardCard("Lowest point", FormatMoney(lowestPoint), "Watch"));
+        metricsPanel.Children.Add(CreateDashboardCard("Safe to spend", FormatMoney(safeToSpend), "Conservative"));
+        root.Children.Add(metricsPanel);
+
+        var timelinePanel = CreateInfoPanel(
+            "Timeline reading",
+            $"By {targetDate:yyyy-MM-dd}, LifeOS currently estimates {FormatMoney(expectedIncome)} coming in and {FormatMoney(outgoing)} going out/buffered. Projected balance is {FormatMoney(projectedBalance)}. Lowest visible point is {FormatMoney(lowestPoint)}. Pressure: {pressureLabel}.");
+        timelinePanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(timelinePanel);
+
+        var sourcePanel = CreateInfoPanel(
+            "What this is using in v0.5",
+            "Incoming includes manual paid/pending income plus completed/invoiced billable work sessions. Outgoing includes manual bills, deductions, food/fuel buffer, and emergency buffer. Later versions can add dated income/outgoing rows, recurring bills, reminders, and direct links from invoices.");
+        sourcePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(sourcePanel);
 
         var motherPanel = CreateInfoPanel(
             "Why this exists",
-            "This is the digital version of the paper-bills idea: line up dates, incoming money, bills, and the lowest point so spending decisions are based on timing, not guesswork.");
+            "This module is the digital version of the paper-bills idea: do not just track categories; line up dates, incoming money, bills, and the lowest point so you know what is actually safe before spending.");
         motherPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(motherPanel);
 
+        var stagePanel = CreateInfoPanel(
+            "v0.5 boundary",
+            "This is a first pressure/timeline view, not bank sync or formal budgeting software. It is intentionally simple: local data, clear assumptions, conservative safe-to-spend, and no automatic financial decisions.");
+        stagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(stagePanel);
+
         MainContentControl.Content = root;
     }
+
 
     private void ShowCommandCentre()
     {

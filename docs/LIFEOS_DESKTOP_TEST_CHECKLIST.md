@@ -1,111 +1,95 @@
-# LifeOS Desktop v0.4 Test Checklist
+# LifeOS Desktop v0.5 Test Checklist
 
-This checklist merges the v0.3 functionality checks with the v0.4 trust-polish checks.
+Use this checklist before tagging or publishing the v0.5 release.
 
 ## Build
 
 - [ ] Run `dotnet build`
-- [ ] Confirm build succeeds
-- [ ] Launch LifeOS Desktop
-- [ ] Confirm no startup crash
+- [ ] Confirm `LifeOS.Core` succeeds
+- [ ] Confirm `LifeOS.Shared` succeeds
+- [ ] Confirm `LifeOS.Modules.Timer` succeeds
+- [ ] Confirm `LifeOS.TimerAgent` succeeds
+- [ ] Confirm `LifeOS.Desktop` succeeds
 
-## Shell / navigation
+## Navigation
 
-- [ ] Sidebar loads
-- [ ] Desktop label shows v0.4
+- [ ] App opens without crashing
 - [ ] Command Centre opens
 - [ ] Money Pressure opens
+- [ ] Money Timeline opens
 - [ ] Agenda opens
 - [ ] Pay Later opens
 - [ ] Weekly Close-Out opens
 - [ ] Work Sessions opens
+- [ ] Paid Work Centre opens
 - [ ] Proof Tracker opens
 - [ ] Follow-Ups opens
 - [ ] Projects opens
 - [ ] TimerAgent opens
 - [ ] Settings opens
 
-## Command Centre
+## v0.5 Paid Work Centre
 
-- [ ] Command Centre title displays correctly
-- [ ] v0.4 trust wording appears
-- [ ] Overall pressure metric appears
-- [ ] Safe to spend metric appears
-- [ ] Agenda metric appears
-- [ ] Pay Later metric appears
-- [ ] Follow-ups metric appears
-- [ ] Billable value metric appears
-- [ ] Unpaid work metric appears
-- [ ] Proof items metric appears
-- [ ] Footer/status copy is readable
+- [ ] Work Sessions can create a completed billable session
+- [ ] Work Sessions source data displays client/project, date, hours, rate, billable status, and value
+- [ ] Paid Work Centre opens after source work session exists
+- [ ] Invoice-ready session count updates
+- [ ] Invoice-ready value updates
+- [ ] Unpaid billable value updates
+- [ ] Billable hours updates
+- [ ] Client/project spread updates
+- [ ] Invoice-ready item list shows the session
+- [ ] Copy-ready work summary is generated
+- [ ] Empty state is clear when no invoice-ready sessions exist
 
-## Agenda
+## v0.5 Money Timeline
 
-- [ ] Agenda page opens
-- [ ] Add agenda item form appears
-- [ ] Empty state is clear
-- [ ] Reset Defaults button exists
-- [ ] Reset confirmation appears if configured
-- [ ] Adding an item still works
+- [ ] Money Timeline opens
+- [ ] Current balance displays
+- [ ] Incoming by target date displays
+- [ ] Outgoing/buffers displays
+- [ ] Projected balance displays
+- [ ] Lowest point displays
+- [ ] Safe-to-spend displays
+- [ ] Pressure label displays
+- [ ] Timeline wording clearly states it is a projected/local planning view, not bank sync
 
-## Pay Later
+## v0.5 Command Centre
 
-- [ ] Pay Later page opens
-- [ ] Add pay-later item form appears
-- [ ] Empty state is clear
-- [ ] Reset Defaults button exists
-- [ ] Reset confirmation appears if configured
-- [ ] Adding an item still works
+- [ ] Command Centre heading/subtitle references v0.5
+- [ ] Side panel references Desktop v0.5
+- [ ] Paid Work Centre and Money Timeline appear in navigation
+- [ ] Command Centre shows billable value
+- [ ] Command Centre shows unpaid work
+- [ ] Command Centre safe-to-spend value still displays
+- [ ] Command Centre still handles existing v0.2/v0.3/v0.4 data without crashing
 
-## Weekly Close-Out
+## Documentation
 
-- [ ] Weekly Close-Out page opens
-- [ ] Existing fields still render
-- [ ] No v0.3-only broken labels remain
+- [ ] README updated to v0.5
+- [ ] README embeds six v0.5 screenshots
+- [ ] Release notes updated
+- [ ] Screenshot list updated
+- [ ] Test checklist updated
+- [ ] v0.5 release summary present
+- [ ] v0.5 stages document present
 
-## Work Sessions
+## Screenshot files
 
-- [ ] Work Sessions page opens
-- [ ] Add work session form appears
-- [ ] Empty state is clear
-- [ ] Billable checkbox appears
-- [ ] Reset Defaults button exists
-- [ ] Adding a work session still works
+- [ ] `docs/screenshots/01-lifeos-v05-command-centre-overview.png`
+- [ ] `docs/screenshots/02-lifeos-v05-work-sessions-source-data.png`
+- [ ] `docs/screenshots/03-lifeos-v05-paid-work-centre-metrics.png`
+- [ ] `docs/screenshots/04-lifeos-v05-paid-work-centre-invoice-summary.png`
+- [ ] `docs/screenshots/05-lifeos-v05-money-timeline-projected-balance.png`
+- [ ] `docs/screenshots/06-lifeos-v05-command-centre-with-v05-data.png`
 
-## Proof Tracker
+## Release commands
 
-- [ ] Proof Tracker page opens
-- [ ] Add proof item form appears
-- [ ] Empty state is clear
-- [ ] Reset Defaults button exists
-- [ ] Reset confirmation appears
-- [ ] Confirmation copy warns that saved proof items may be replaced
-- [ ] Adding a proof item still works
-
-## v0.4 trust-polish checks
-
-- [ ] No page describes itself as v0.3 in active UI
-- [ ] Empty states give useful next-action guidance
-- [ ] Reset/delete actions are not silent
-- [ ] Copy does not imply the app does more than it currently does
-- [ ] Command Centre wording feels accurate for local data
-- [ ] Docs and screenshots match the current UI
-
-## Screenshots
-
-- [ ] Command Centre screenshot captured
-- [ ] Agenda empty-state screenshot captured
-- [ ] Pay Later empty-state screenshot captured
-- [ ] Work Sessions empty-state screenshot captured
-- [ ] Proof Tracker empty-state screenshot captured
-- [ ] Reset confirmation screenshot captured
-
-## Release gate
-
-Release v0.4 only when:
-
-- [ ] build passes
-- [ ] main navigation works
-- [ ] screenshots are current
-- [ ] docs say v0.4
-- [ ] release tag is ready
+```bash
+git status
+git add .
+git commit -m "Document LifeOS v0.5 paid work and money timeline release"
+git push
+git tag v0.5
+git push origin v0.5
+```

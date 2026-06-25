@@ -1,24 +1,83 @@
 # LifeOS Desktop
 
-LifeOS Desktop is a local-first weekly pressure command centre for tracking money pressure, agenda items, deferred payments, weekly close-out, work sessions, proof items, follow-ups, projects, timers, and settings without turning the system into a heavy calendar, CRM, or accounting platform.
+LifeOS Desktop is a local-first weekly pressure command centre for tracking money pressure, agenda items, deferred payments, weekly close-out, work sessions, paid work, proof items, follow-ups, projects, timers, and settings without turning the system into a heavy calendar, CRM, accounting platform, or bank-sync product.
 
-Current release: **LifeOS Desktop v0.4 — Trust Polish Release**
+Current release: **LifeOS Desktop v0.5 — Paid Work Centre + Money Timeline**
 
 ## Release position
 
-LifeOS v0.4 is not a major new-module release. It is a trust, wording, safety, and documentation polish release that builds on v0.2 and v0.3.
+LifeOS v0.5 adds the first paid-work admin and date-based money timeline layer.
 
-The goal of v0.4 is to make LifeOS feel safer and clearer during real use:
+The release connects two real workflows:
 
-- clearer Command Centre wording
-- safer reset/delete confirmation wording
-- better empty states
-- less misleading copy
-- clearer version labels
-- updated screenshots and documentation
-- preserved v0.2/v0.3 functionality
+1. **Paid Work Centre** — turns work sessions into invoice-ready summaries.
+2. **Money Timeline** — turns current balance, expected income, bills, buffers, and unpaid work into a projected-balance / safe-to-spend view inspired by the paper-bills workflow.
 
-## What LifeOS currently covers
+The v0.5 spine is:
+
+```text
+do work -> log work session -> review invoice-ready items -> generate work summary -> expected payment -> money timeline -> safe-to-spend pressure view
+```
+
+## What v0.5 proves
+
+v0.5 proves that LifeOS can connect work, money, and proof into a practical local-first desktop flow:
+
+- work sessions can become invoice-ready items
+- invoice-ready work can produce copy-ready summaries
+- unpaid work can be visible in the Command Centre
+- a paper-bills style money timeline can estimate projected balance and safe-to-spend
+- paid-work pressure and money pressure can sit in the same command centre
+
+## v0.5 boundaries
+
+v0.5 is intentionally not a full accounting system.
+
+It is:
+
+- local-first WPF/JSON desktop workflow
+- copy-ready invoice/work summaries, not final accounting
+- projected-balance planning, not bank sync
+- safe-to-spend guidance, not financial advice
+- paid-work visibility, not tax filing
+- desktop/core only, not mobile
+
+Not included yet:
+
+- final PDF invoice generation
+- payment gateway integration
+- bank feed/sync
+- GST/tax filing logic
+- client portal
+- mobile app
+
+## v0.5 screenshots
+
+### Command Centre overview
+
+![LifeOS v0.5 Command Centre overview](docs/screenshots/01-lifeos-v05-command-centre-overview.png)
+
+### Work Sessions source data
+
+![LifeOS v0.5 Work Sessions source data](docs/screenshots/02-lifeos-v05-work-sessions-source-data.png)
+
+### Paid Work Centre metrics
+
+![LifeOS v0.5 Paid Work Centre metrics](docs/screenshots/03-lifeos-v05-paid-work-centre-metrics.png)
+
+### Paid Work Centre invoice-ready summary
+
+![LifeOS v0.5 Paid Work Centre invoice-ready summary](docs/screenshots/04-lifeos-v05-paid-work-centre-invoice-summary.png)
+
+### Money Timeline projected balance
+
+![LifeOS v0.5 Money Timeline projected balance](docs/screenshots/05-lifeos-v05-money-timeline-projected-balance.png)
+
+### Command Centre with v0.5 data
+
+![LifeOS v0.5 Command Centre with v0.5 data](docs/screenshots/06-lifeos-v05-command-centre-with-v05-data.png)
+
+## Release history
 
 ### v0.1 — First usable desktop foundation
 
@@ -35,8 +94,6 @@ v0.2 added the first practical weekly-life systems:
 - clearer weekly pressure framing
 - first screenshot/documentation pass
 
-This made LifeOS useful for keeping the week visible without needing a full calendar app.
-
 ### v0.3 — Work, income, and proof foundation
 
 v0.3 added the work/proof layer:
@@ -48,24 +105,28 @@ v0.3 added the work/proof layer:
 - better MainWindow wiring
 - updated v0.3 docs and screenshots
 
-This made LifeOS start connecting time, billable work, invoices, proof items, and portfolio evidence.
-
 ### v0.4 — Trust polish release
 
-v0.4 improves the reliability and user trust of the existing system:
+v0.4 improved reliability, wording, safety, reset confirmations, empty states, and documentation.
 
-- version labels updated to v0.4
-- Command Centre wording clarified
-- empty states improved so screens explain what to do next
-- reset confirmations made safer and more explicit
-- side-panel wording updated
-- docs/screenshots refreshed into one full v0.4 set
+### v0.5 — Paid Work Centre + Money Timeline
+
+v0.5 adds:
+
+- Paid Work Centre navigation
+- invoice-ready session metrics
+- copy-ready work summary generation
+- Money Timeline navigation
+- current balance / incoming / outgoing / projected balance view
+- lowest point and safe-to-spend metrics
+- Command Centre integration for unpaid work and billable value
+- updated v0.5 docs and screenshots
 
 ## Main modules
 
 ### Command Centre
 
-The Command Centre reads local LifeOS data across money, agenda, pay-later, close-out, follow-ups, work sessions, and proof tracking.
+The Command Centre reads local LifeOS data across money, agenda, pay-later, weekly close-out, follow-ups, work sessions, paid work, and proof tracking.
 
 It gives a high-level view of:
 
@@ -81,40 +142,39 @@ It gives a high-level view of:
 
 ### Money Pressure
 
-Money Pressure is the financial pressure view. It is intended to show what money is actually safe, what obligations exist, and what work/invoices may affect the week.
+Money Pressure is the financial pressure view. It shows available money, known commitments, and pressure signals.
+
+### Money Timeline
+
+Money Timeline is the v0.5 date-based cashflow view.
+
+It is based on the paper-bills workflow:
+
+```text
+current balance + incoming by target date - outgoing/buffers by target date = projected balance
+```
+
+It shows:
+
+- current balance
+- incoming by target date
+- outgoing/buffers
+- projected balance
+- lowest point
+- safe-to-spend
+- pressure label
 
 ### Agenda
 
 Agenda is a light weekly pressure list, not a full calendar replacement.
 
-It tracks important commitments that can affect the week, including:
-
-- title
-- due date
-- time
-- type
-- status
-- pressure level
-- notes
-- fixed commitment flag
-
 ### Pay Later
 
-Pay Later tracks deferred payment pressure such as Afterpay, bills, obligations, or future payments that can distort available money.
-
-It tracks:
-
-- item name
-- payee
-- amount
-- due date
-- status
-- pressure
-- notes
+Pay Later tracks deferred payment pressure such as Afterpay, bills, obligations, and future payments.
 
 ### Weekly Close-Out
 
-Weekly Close-Out exists to summarize what happened, what carried forward, what needs attention, and what should be made visible before the next week.
+Weekly Close-Out summarizes what happened, what carried forward, what needs attention, and what should be visible before the next week.
 
 ### Work Sessions
 
@@ -131,20 +191,24 @@ It tracks:
 - description
 - notes
 
+### Paid Work Centre
+
+Paid Work Centre is the v0.5 invoice-ready admin layer.
+
+It reviews completed billable work sessions and shows:
+
+- invoice-ready sessions
+- invoice-ready value
+- unpaid billable value
+- paid value
+- billable hours
+- clients/projects
+- copy-ready invoice/work summary
+- invoice-ready item list
+
 ### Proof Tracker
 
 Proof Tracker tracks what was built, shown, paid, accepted, or made reusable.
-
-It tracks:
-
-- project
-- title
-- type
-- status
-- date
-- link/path
-- description
-- notes
 
 ### Follow-Ups
 
@@ -152,7 +216,7 @@ Follow-Ups tracks waiting-on items and reminders connected to work, clients, mon
 
 ### Projects
 
-Projects is the project visibility area for keeping important work streams findable.
+Projects keeps important work streams visible and findable.
 
 ### TimerAgent
 
@@ -162,62 +226,28 @@ TimerAgent is the early timer/work-session direction for future work tracking.
 
 Settings contains local app settings and future configuration direction.
 
-## v0.4 screenshot set
-
-The current full v0.4 screenshot set is stored in:
-
-```text
-docs/screenshots/
-```
-
-Recommended active screenshots:
-
-```text
-01-lifeos-v04-command-centre.png
-02-lifeos-v04-agenda-empty-state.png
-03-lifeos-v04-pay-later-empty-state.png
-04-lifeos-v04-work-sessions-empty-state.png
-05-lifeos-v04-proof-tracker-empty-state.png
-06-lifeos-v04-proof-tracker-reset-confirmation.png
-```
-
-These replace the old active v0.3 screenshot set. The v0.3 release history is now merged into the documentation rather than kept as separate active docs.
-
 ## Local-first direction
 
-LifeOS is intended to remain local-first while the core system is still being proven.
+LifeOS remains local-first while the core system is still being proven.
 
 Current principle:
 
 ```text
-MainWindow only. Core/Shared stay reusable. Local data stays safe.
+Desktop/core first. MainWindow-only while moving fast. Core/Shared stay reusable. Local data stays safe.
 ```
 
-Future versions may introduce stronger data models, invoice generation, client proof packaging, and eventually mobile or sync support, but desktop/core remains the priority for now.
-
-## What v0.4 proves
-
-v0.4 proves that LifeOS can be improved through a disciplined polish pass rather than only adding features.
-
-It now better supports real messy days where the user needs to quickly answer:
-
-- What is still open?
-- What pressure exists this week?
-- What work may become income?
-- What proof exists?
-- What is safe to reset?
-- What needs attention next?
+Future versions may introduce stronger invoice generation, client proof packaging, sync, and eventually mobile support, but desktop/core remains the priority.
 
 ## Suggested release tag
 
 ```bash
-git tag v0.4
-git push origin v0.4
+git tag v0.5
+git push origin v0.5
 ```
 
-## Suggested commit message
+## Suggested final release commit message
 
 ```bash
 git add .
-git commit -m "Add LifeOS v0.4 merged docs and screenshots"
+git commit -m "Document LifeOS v0.5 paid work and money timeline release"
 ```

@@ -1732,29 +1732,140 @@ public partial class MainWindow : Window
     }
 
 
+
+
+    private static string BuildInvoiceReadySummary(IReadOnlyCollection<WorkSession> invoiceReadySessions)
+    {
+        if (invoiceReadySessions.Count == 0)
+        {
+            return "No invoice-ready billable sessions yet. Add completed billable work sessions, then use this centre to generate a copy-ready invoice/work summary.";
+        }
+
+        var groupedSessions = invoiceReadySessions
+            .OrderBy(session => session.ClientOrProject)
+            .ThenBy(session => session.Date)
+            .GroupBy(session => session.ClientOrProject);
+
+        var lines = new List<string>
+        {
+            "Invoice-ready work summary",
+            $"Generated: {DateTime.Now:yyyy-MM-dd HH:mm}",
+            string.Empty
+        };
+
+        foreach (var group in groupedSessions)
+        {
+            var groupSessions = group.ToList();
+            var totalHours = groupSessions.Sum(session => session.Hours);
+            var totalValue = groupSessions.Sum(session => session.BillableValue);
+
+            lines.Add(group.Key);
+            lines.Add($"Total: {totalHours:0.##}h / {FormatMoney(totalValue)}");
+
+            foreach (var session in groupSessions)
+            {
+                lines.Add($"- {session.Date:yyyy-MM-dd}: {session.Hours:0.##}h x {FormatMoney(session.HourlyRate)} = {FormatMoney(session.BillableValue)} — {session.Description}");
+
+                if (!string.IsNullOrWhiteSpace(session.Notes))
+                {
+                    lines.Add($"  Notes: {session.Notes}");
+                }
+            }
+
+            lines.Add(string.Empty);
+        }
+
+        lines.Add($"Grand total: {invoiceReadySessions.Sum(session => session.Hours):0.##}h / {FormatMoney(invoiceReadySessions.Sum(session => session.BillableValue))}");
+        lines.Add(string.Empty);
+        lines.Add("Status note: copy this into an invoice/work-summary email, then mark sessions as invoiced or paid once confirmed.");
+
+        return string.Join(Environment.NewLine, lines);
+    }
+
     private void ShowPaidWorkCentrePage()
     {
-        SetHeader("Paid Work Centre", "Paid Work Centre • v0.5 shell");
+        var summary = WorkSessionCalculator.Calculate(_workSessions);
+        var invoiceReady = _workSessions
+            .Where(session => session.IsBillable && session.Status is WorkSessionStatus.Completed or WorkSessionStatus.Invoiced)
+            .OrderBy(session => session.ClientOrProject)
+            .ThenBy(session => session.Date)
+            .ToList();
+
+        SetHeader("Paid Work Centre", "Paid Work Centre • v0.5 invoice-ready admin");
 
         var root = new StackPanel();
+
         root.Children.Add(CreateHeroPanel(
             "Paid Work Centre",
-            "v0.5 starts the paid-work admin layer: work sessions become invoice-ready summaries, payment tracking, and expected income for the Money Timeline."));
+            "Turn real work sessions into invoice-ready summaries. This is the bridge from doing the work, to logging time, to knowing what is owed, what is paid, and what should feed the Money Timeline."));
 
-        var panel = CreateInfoPanel(
-            "Stage 1 shell",
-            "This shell proves the navigation and release shape before adding invoice summary logic. Next commit: calculate invoice-ready work from saved Work Sessions.");
-        panel.Margin = new Thickness(0, 16, 0, 0);
-        root.Children.Add(panel);
+        var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
+        metricsPanel.Children.Add(CreateDashboardCard("Invoice-ready sessions", invoiceReady.Count.ToString(), "Ready"));
+        metricsPanel.Children.Add(CreateDashboardCard("Invoice-ready value", FormatMoney(invoiceReady.Sum(session => session.BillableValue)), "Owed"));
+        metricsPanel.Children.Add(CreateDashboardCard("Unpaid billable", FormatMoney(summary.UnpaidBillableValue), "Pressure"));
+        metricsPanel.Children.Add(CreateDashboardCard("Paid value", FormatMoney(summary.PaidValue), "Landed"));
+        metricsPanel.Children.Add(CreateDashboardCard("Billable hours", summary.BillableHours.ToString("0.##"), "Tracked"));
+        metricsPanel.Children.Add(CreateDashboardCard("Clients/projects", summary.ActiveClientOrProjectCount.ToString(), "Spread"));
+        root.Children.Add(metricsPanel);
 
-        var boundaryPanel = CreateInfoPanel(
-            "Boundary",
-            "This is not final accounting software. It is a local-first admin layer for seeing work done, money owed, and what should feed the pressure view.");
-        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
-        root.Children.Add(boundaryPanel);
+        var spinePanel = CreateInfoPanel(
+            "v0.5 spine",
+            "Do work → log work session → review invoice-ready items → generate work summary → send invoice/email → mark paid → feed expected income into Money Timeline.");
+        spinePanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(spinePanel);
+
+        var summaryText = BuildInvoiceReadySummary(invoiceReady);
+        var summaryPanel = CreatePanel();
+        var summaryStack = new StackPanel();
+        summaryStack.Children.Add(new TextBlock
+        {
+            Text = "Copy-ready work summary",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+        summaryStack.Children.Add(new TextBlock
+        {
+            Text = "Use this as the base for a client work summary or invoice note. PDF generation comes later; v0.5 keeps it copy-ready and safe.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 12)
+        });
+        summaryStack.Children.Add(new TextBox
+        {
+            Text = summaryText,
+            AcceptsReturn = true,
+            TextWrapping = TextWrapping.Wrap,
+            MinHeight = 220,
+            IsReadOnly = true,
+            Background = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(51, 65, 85)),
+            Padding = new Thickness(12),
+            FontFamily = new FontFamily("Consolas")
+        });
+        summaryPanel.Child = summaryStack;
+        summaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(summaryPanel);
+
+        var listPanel = CreateInfoPanel(
+            "Invoice-ready items",
+            invoiceReady.Count == 0
+                ? "No completed/invoiced billable sessions are ready yet. Add work in Work Sessions first."
+                : string.Join(Environment.NewLine, invoiceReady.Select(session => $"• {session.Date:yyyy-MM-dd} | {session.ClientOrProject} | {session.Hours:0.##}h × {FormatMoney(session.HourlyRate)} = {FormatMoney(session.BillableValue)} | {session.Description}")));
+        listPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(listPanel);
+
+        var scopePanel = CreateInfoPanel(
+            "v0.5 boundary",
+            "This is an invoice-ready/admin layer, not final accounting software. It does not send invoices, collect payments, calculate tax, or replace client approval. It helps prepare clear work summaries and track what is owed/paid.");
+        scopePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(scopePanel);
 
         MainContentControl.Content = root;
     }
+
 
     private void ShowMoneyTimelinePage()
     {

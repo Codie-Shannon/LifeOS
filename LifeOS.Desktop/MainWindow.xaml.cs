@@ -1934,13 +1934,13 @@ public partial class MainWindow : Window
     {
         var summary = CommandCentreSummaryService.Create();
 
-        SetHeader("Command Centre", $"Work, income, proof command centre • v0.4 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Paid work, income, proof, and money timeline • v0.5 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "LifeOS Command Centre",
-            "This is now reading real local LifeOS data across money, agenda, pay-later, weekly close-out, follow-ups, work sessions, and proof tracking. v0.4 focuses on trust: clearer wording, safer actions, and better guidance before adding new modules."));
+            "This is now reading real local LifeOS data across money, agenda, pay-later, weekly close-out, follow-ups, work sessions, and proof tracking. v0.5 adds the first paid-work admin layer and a date-based money timeline inspired by the paper-bills workflow."));
 
         var metricsPanel = new WrapPanel
         {
@@ -1974,15 +1974,15 @@ public partial class MainWindow : Window
         root.Children.Add(reasonsPanel);
 
         var workPanel = CreateInfoPanel(
-            "v0.4 work/income/proof loop",
-            "Work Sessions tracks client/project time, billable value, paid/unpaid status, and income pressure. Proof Tracker connects releases, screenshots, commits, client replies, invoices, and case-study material to the proof wall.");
+            "v0.5 paid-work and money loop",
+            "Paid Work Centre turns saved work sessions into invoice-ready summaries. Money Timeline turns incoming and outgoing dated items into a simple pressure view: what is owed, what is coming, what must go out, and what is safe to spend.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v0.4 scope",
-            "Command Centre now combines saved weekly, money, follow-up, work-session, and proof data. v0.4 is a trust/polish pass: clearer wording, safer resets, and better empty states. No mobile app, database, bank sync, invoice generation, client portal, or AI layer yet.");
+            "v0.5 scope",
+            "Command Centre now includes paid-work admin and a first Money Timeline. It remains local-first JSON/WPF. No bank sync, tax filing, payment gateway, client portal, or final accounting system yet.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

@@ -121,10 +121,10 @@
                         Padding="14"
                         Margin="0,18,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v0.4"
+                        <TextBlock Text="Desktop v0.5"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="Trust polish. Safer wording. MainWindow only. Core/Shared stay reusable."
+                        <TextBlock Text="Paid Work Centre + Money Timeline. Work done → money owed → pressure by date."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -154,7 +154,7 @@
                                    FontSize="28"
                                    FontWeight="Bold"/>
                         <TextBlock x:Name="PageSubtitleTextBlock"
-                                   Text="Work, income, proof command centre • Desktop v0.4"
+                                   Text="Work, income, proof command centre • Desktop v0.5"
                                    Foreground="#94A3B8"
                                    FontSize="14"
                                    Margin="0,4,0,0"/>
@@ -185,7 +185,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v0.4 focuses on safer wording, clearer empty states, and fewer accidental destructive actions."
+                <TextBlock Text="LifeOS Desktop v0.5 focuses on safer wording, clearer empty states, and fewer accidental destructive actions."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

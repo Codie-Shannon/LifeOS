@@ -57,6 +57,11 @@
                             Style="{StaticResource NavButtonStyle}"
                             Click="MoneyPressureNavButton_Click"/>
 
+                    <Button x:Name="MoneyTimelineNavButton"
+                            Content="Money Timeline"
+                            Style="{StaticResource NavButtonStyle}"
+                            Click="MoneyTimelineNavButton_Click"/>
+
                     <Button x:Name="AgendaNavButton"
                             Content="Agenda"
                             Style="{StaticResource NavButtonStyle}"
@@ -76,6 +81,11 @@
                             Content="Work Sessions"
                             Style="{StaticResource NavButtonStyle}"
                             Click="WorkSessionsNavButton_Click"/>
+
+                    <Button x:Name="PaidWorkCentreNavButton"
+                            Content="Paid Work Centre"
+                            Style="{StaticResource NavButtonStyle}"
+                            Click="PaidWorkCentreNavButton_Click"/>
 
                     <Button x:Name="ProofTrackerNavButton"
                             Content="Proof Tracker"

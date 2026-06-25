@@ -106,6 +106,8 @@ public partial class MainWindow : Window
 
     private void MoneyPressureNavButton_Click(object sender, RoutedEventArgs e) => ShowMoneyPressurePage();
 
+    private void MoneyTimelineNavButton_Click(object sender, RoutedEventArgs e) => ShowMoneyTimelinePage();
+
     private void AgendaNavButton_Click(object sender, RoutedEventArgs e) => ShowAgendaPage();
 
     private void PayLaterNavButton_Click(object sender, RoutedEventArgs e) => ShowPayLaterPage();
@@ -113,6 +115,8 @@ public partial class MainWindow : Window
     private void WeeklyCloseOutNavButton_Click(object sender, RoutedEventArgs e) => ShowWeeklyCloseOutPage();
 
     private void WorkSessionsNavButton_Click(object sender, RoutedEventArgs e) => ShowWorkSessionsPage();
+
+    private void PaidWorkCentreNavButton_Click(object sender, RoutedEventArgs e) => ShowPaidWorkCentrePage();
 
     private void ProofTrackerNavButton_Click(object sender, RoutedEventArgs e) => ShowProofTrackerPage();
 
@@ -1725,6 +1729,55 @@ public partial class MainWindow : Window
         }
 
         return "This module is part of the LifeOS shell direction.";
+    }
+
+
+    private void ShowPaidWorkCentrePage()
+    {
+        SetHeader("Paid Work Centre", "Paid Work Centre • v0.5 shell");
+
+        var root = new StackPanel();
+        root.Children.Add(CreateHeroPanel(
+            "Paid Work Centre",
+            "v0.5 starts the paid-work admin layer: work sessions become invoice-ready summaries, payment tracking, and expected income for the Money Timeline."));
+
+        var panel = CreateInfoPanel(
+            "Stage 1 shell",
+            "This shell proves the navigation and release shape before adding invoice summary logic. Next commit: calculate invoice-ready work from saved Work Sessions.");
+        panel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(panel);
+
+        var boundaryPanel = CreateInfoPanel(
+            "Boundary",
+            "This is not final accounting software. It is a local-first admin layer for seeing work done, money owed, and what should feed the pressure view.");
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private void ShowMoneyTimelinePage()
+    {
+        SetHeader("Money Timeline", "Money Timeline • v0.5 shell");
+
+        var root = new StackPanel();
+        root.Children.Add(CreateHeroPanel(
+            "Money Timeline",
+            "v0.5 starts the paper-bills workflow: money coming in, payments going out, projected balance, lowest point, pressure label, and safe-to-spend estimate."));
+
+        var panel = CreateInfoPanel(
+            "Stage 1 shell",
+            "This shell proves the navigation and wording before adding the first projected-balance calculation. Next commit: calculate a simple money timeline from existing LifeOS money and work-session data.");
+        panel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(panel);
+
+        var motherPanel = CreateInfoPanel(
+            "Why this exists",
+            "This is the digital version of the paper-bills idea: line up dates, incoming money, bills, and the lowest point so spending decisions are based on timing, not guesswork.");
+        motherPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(motherPanel);
+
+        MainContentControl.Content = root;
     }
 
     private void ShowCommandCentre()

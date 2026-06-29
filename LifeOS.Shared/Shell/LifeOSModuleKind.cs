@@ -8,6 +8,7 @@ public enum LifeOSModuleKind
     PayLater,
     WeeklyCloseOut,
     FollowUps,
+    WorkPipeline,
     WorkSessions,
     ProofTracker,
     Projects,

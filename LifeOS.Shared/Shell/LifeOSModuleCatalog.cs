@@ -82,6 +82,19 @@ public static class LifeOSModuleCatalog
             IsSharedCoreModule = true
         },
 
+        new LifeOSModuleDefinition
+        {
+            Kind = LifeOSModuleKind.WorkPipeline,
+            Title = "Work Pipeline",
+            Badge = "v0.6 foundation",
+            ShortDescription = "Active work, warm leads, blocked work, proof projects, payment states, and parked ideas.",
+            DetailDescription = "Work Pipeline tracks paid work, warm leads, proof projects, client follow-ups, blocked work, payment states, and parked ideas without turning LifeOS into a bloated CRM.",
+            PlatformRole = "Shared contractor/business foundation. Desktop proves the full work pipeline before later mobile quick views.",
+            NextBuildFocus = "Track stage, status, next action, follow-up date, billable flags, timesheet/invoice/payment pressure, and parked work.",
+            IsBuilt = true,
+            IsSharedCoreModule = true
+        },
+
 
         new LifeOSModuleDefinition
         {

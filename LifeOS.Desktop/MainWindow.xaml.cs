@@ -7,6 +7,8 @@ using System.Windows.Media;
 using LifeOS.Core.FollowUps;
 using LifeOS.Shared.FollowUps;
 using LifeOS.Shared.CommandCentre;
+using LifeOS.Core.WorkPipeline;
+using LifeOS.Shared.WorkPipeline;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -87,6 +89,28 @@ public partial class MainWindow : Window
 
     private List<ProofItem> _proofItems = ProofStorage.Load();
 
+    private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
+    private string _workPipelineFilter = "Active";
+
+    private TextBox? _workPipelineTitleTextBox;
+    private TextBox? _workPipelineContactTextBox;
+    private TextBox? _workPipelineCompanyTextBox;
+    private TextBox? _workPipelineCategoryTextBox;
+    private TextBox? _workPipelineOpportunityTypeTextBox;
+    private TextBox? _workPipelineWaitingOnTextBox;
+    private ComboBox? _workPipelineStageComboBox;
+    private ComboBox? _workPipelineStatusComboBox;
+    private ComboBox? _workPipelinePriorityComboBox;
+    private TextBox? _workPipelineNextActionTextBox;
+    private TextBox? _workPipelineFollowUpDateTextBox;
+    private TextBox? _workPipelineExpectedValueTextBox;
+    private TextBox? _workPipelineExpectedValueNoteTextBox;
+    private CheckBox? _workPipelineBillableCheckBox;
+    private CheckBox? _workPipelineTimesheetCheckBox;
+    private CheckBox? _workPipelineInvoiceCheckBox;
+    private CheckBox? _workPipelinePaymentExpectedCheckBox;
+    private TextBox? _workPipelineNotesTextBox;
+
     private TextBox? _proofProjectTextBox;
     private TextBox? _proofTitleTextBox;
     private ComboBox? _proofTypeComboBox;
@@ -121,6 +145,8 @@ public partial class MainWindow : Window
     private void ProofTrackerNavButton_Click(object sender, RoutedEventArgs e) => ShowProofTrackerPage();
 
     private void FollowUpsNavButton_Click(object sender, RoutedEventArgs e) => ShowFollowUpsPage();
+
+    private void WorkPipelineNavButton_Click(object sender, RoutedEventArgs e) => ShowWorkPipelinePage();
 
     private void ProjectsNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.Projects);
 
@@ -1202,6 +1228,486 @@ public partial class MainWindow : Window
         return string.Join(Environment.NewLine, reasonList.Select(reason => $"• {reason}"));
     }
 
+
+    private void AddWorkPipelineItemButton_Click(object sender, RoutedEventArgs e)
+    {
+        var title = ReadTextValue(_workPipelineTitleTextBox, "Untitled pipeline item");
+
+        var stage = _workPipelineStageComboBox?.SelectedItem is WorkPipelineStage selectedStage
+            ? selectedStage
+            : WorkPipelineStage.LeadIdea;
+
+        var status = _workPipelineStatusComboBox?.SelectedItem is WorkPipelineStatus selectedStatus
+            ? selectedStatus
+            : WorkPipelineStatus.Active;
+
+        var priority = _workPipelinePriorityComboBox?.SelectedItem is WorkPipelinePriority selectedPriority
+            ? selectedPriority
+            : WorkPipelinePriority.Normal;
+
+        var followUpDate = DateOnly.TryParse(_workPipelineFollowUpDateTextBox?.Text.Trim(), out var parsedFollowUpDate)
+            ? parsedFollowUpDate
+            : (DateOnly?)null;
+
+        var expectedValue = decimal.TryParse(_workPipelineExpectedValueTextBox?.Text.Trim(), out var parsedExpectedValue)
+            ? parsedExpectedValue
+            : (decimal?)null;
+
+        _workPipelineItems.Add(new WorkPipelineItem
+        {
+            Title = title,
+            ContactName = _workPipelineContactTextBox?.Text.Trim() ?? string.Empty,
+            ClientOrCompany = _workPipelineCompanyTextBox?.Text.Trim() ?? string.Empty,
+            Category = _workPipelineCategoryTextBox?.Text.Trim() ?? string.Empty,
+            OpportunityType = _workPipelineOpportunityTypeTextBox?.Text.Trim() ?? string.Empty,
+            WaitingOn = _workPipelineWaitingOnTextBox?.Text.Trim() ?? string.Empty,
+            Stage = stage,
+            Status = status,
+            Priority = priority,
+            NextAction = ReadTextValue(_workPipelineNextActionTextBox, "No next action entered."),
+            FollowUpDate = followUpDate,
+            ExpectedValue = expectedValue,
+            ExpectedValueNote = _workPipelineExpectedValueNoteTextBox?.Text.Trim() ?? string.Empty,
+            IsBillable = _workPipelineBillableCheckBox?.IsChecked == true,
+            NeedsTimesheet = _workPipelineTimesheetCheckBox?.IsChecked == true,
+            NeedsInvoice = _workPipelineInvoiceCheckBox?.IsChecked == true,
+            PaymentExpected = _workPipelinePaymentExpectedCheckBox?.IsChecked == true,
+            Notes = _workPipelineNotesTextBox?.Text.Trim() ?? string.Empty,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        });
+
+        WorkPipelineStorage.Save(_workPipelineItems);
+        ShowWorkPipelinePage();
+    }
+
+    private void ResetWorkPipelineButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset Work Pipeline defaults?", "This will replace your saved Work Pipeline items with the default local sample set."))
+        {
+            return;
+        }
+
+        WorkPipelineStorage.Reset();
+        _workPipelineItems = WorkPipelineStorage.Load();
+        ShowWorkPipelinePage();
+    }
+
+    private void ArchiveWorkPipelineItemButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        var item = _workPipelineItems.FirstOrDefault(item => item.Id == id);
+
+        if (item is null)
+        {
+            return;
+        }
+
+        item.Archive();
+        WorkPipelineStorage.Save(_workPipelineItems);
+        ShowWorkPipelinePage();
+    }
+
+    private void DeleteWorkPipelineItemButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        if (!ConfirmRiskyAction("Delete Work Pipeline item?", "This permanently removes the selected pipeline item from local storage."))
+        {
+            return;
+        }
+
+        _workPipelineItems = _workPipelineItems
+            .Where(item => item.Id != id)
+            .ToList();
+
+        WorkPipelineStorage.Save(_workPipelineItems);
+        ShowWorkPipelinePage();
+    }
+
+    private void WorkPipelineFilterButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.Tag is string filter)
+        {
+            _workPipelineFilter = filter;
+            ShowWorkPipelinePage();
+        }
+    }
+
+    private void ShowWorkPipelinePage()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var summary = WorkPipelineCalculator.Calculate(_workPipelineItems, today);
+
+        SetHeader("Work Pipeline", $"Work Pipeline • v0.6 foundation • {summary.OpenItems} open");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Work Pipeline",
+            "Track paid work, warm leads, proof projects, blocked work, follow-ups, timesheets, invoices, expected payments, and parked ideas without turning LifeOS into a bloated CRM."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Open", summary.OpenItems.ToString(), "Pipeline"));
+        metricsPanel.Children.Add(CreateDashboardCard("Active", summary.ActiveItems.ToString(), "Moving"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting", summary.WaitingItems.ToString(), "Waiting-on"));
+        metricsPanel.Children.Add(CreateDashboardCard("Blocked", summary.BlockedItems.ToString(), "Blocked"));
+        metricsPanel.Children.Add(CreateDashboardCard("Follow-ups", (summary.FollowUpsOverdue + summary.FollowUpsDueToday + summary.FollowUpsDueSoon).ToString(), "Next 7 days"));
+        metricsPanel.Children.Add(CreateDashboardCard("Expected value", FormatMoney(summary.ExpectedValueTotal), "Not safe money"));
+        metricsPanel.Children.Add(CreateDashboardCard("Timesheets", summary.TimesheetsNeeded.ToString(), "Needed"));
+        metricsPanel.Children.Add(CreateDashboardCard("Invoices", summary.InvoicesNeeded.ToString(), "Needed"));
+        metricsPanel.Children.Add(CreateDashboardCard("Payments", summary.PaymentsExpected.ToString(), "Expected"));
+
+        root.Children.Add(metricsPanel);
+
+        var reasonsPanel = CreateInfoPanel("Pipeline pressure", FormatReasons(summary.Reasons));
+        reasonsPanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(reasonsPanel);
+
+        var focusPanel = CreateWorkPipelineFocusPanel(summary);
+        focusPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(focusPanel);
+
+        var filterPanel = CreateWorkPipelineFilterPanel();
+        filterPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(filterPanel);
+
+        var inputPanel = CreateWorkPipelineInputPanel();
+        inputPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(inputPanel);
+
+        var listPanel = CreateWorkPipelineListPanel();
+        listPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(listPanel);
+
+        var guardrailPanel = CreateInfoPanel(
+            "v0.6 scope",
+            $"Local Work Pipeline tracking with JSON persistence. Saved file: {WorkPipelineStorage.FilePath}. This is not a CRM, accounting system, reminder daemon, or client portal.");
+
+        guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(guardrailPanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateWorkPipelineFocusPanel(WorkPipelineSummary summary)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Today focus",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var focusItems = summary.PriorityItems.Take(5).ToList();
+
+        if (focusItems.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No urgent pipeline focus. Pick the next active item or keep parked work parked."));
+        }
+        else
+        {
+            foreach (var item in focusItems)
+            {
+                root.Children.Add(CreateSimpleItemCard(
+                    item.Title,
+                    $"{item.Priority} • {FormatWorkPipelineStage(item.Stage)} • {FormatWorkPipelineStatus(item.Status)} • {FormatDate(item.FollowUpDate)}",
+                    item.NextAction));
+            }
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateWorkPipelineFilterPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Pipeline filter",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var row = new WrapPanel
+        {
+            Margin = new Thickness(0, 14, 0, 0)
+        };
+
+        foreach (var filter in new[] { "Active", "Waiting", "Blocked", "Money", "FollowUp", "Parked", "Archived", "All" })
+        {
+            var button = CreateSmallActionButton(filter == "FollowUp" ? "Follow-up" : filter);
+            button.Tag = filter;
+            button.Click += WorkPipelineFilterButton_Click;
+            row.Children.Add(button);
+        }
+
+        root.Children.Add(row);
+        root.Children.Add(new TextBlock
+        {
+            Text = $"Current filter: {_workPipelineFilter}",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            Margin = new Thickness(0, 10, 0, 0)
+        });
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateWorkPipelineInputPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Add pipeline item",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Keep it practical: title, stage, next action, waiting-on, follow-up date, and money/admin flags.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var grid = new Grid();
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+        for (var i = 0; i < 9; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        }
+
+        _workPipelineTitleTextBox = CreateStandardTextBox("Client / project / opportunity title");
+        _workPipelineContactTextBox = CreateStandardTextBox("Contact person");
+        _workPipelineCompanyTextBox = CreateStandardTextBox("Client or company");
+        _workPipelineCategoryTextBox = CreateStandardTextBox("Paid work / proof / warm lead / portfolio");
+        _workPipelineOpportunityTypeTextBox = CreateStandardTextBox("Active paid work / warm lead / parked idea");
+        _workPipelineWaitingOnTextBox = CreateStandardTextBox("Who or what is blocking it?");
+        _workPipelineStageComboBox = CreateEnumComboBox(WorkPipelineStage.LeadIdea);
+        _workPipelineStatusComboBox = CreateEnumComboBox(WorkPipelineStatus.Active);
+        _workPipelinePriorityComboBox = CreateEnumComboBox(WorkPipelinePriority.Normal);
+        _workPipelineNextActionTextBox = CreateStandardTextBox("Next practical action");
+        _workPipelineFollowUpDateTextBox = CreateStandardTextBox(DateOnly.FromDateTime(DateTime.Today).AddDays(3).ToString("yyyy-MM-dd"));
+        _workPipelineExpectedValueTextBox = CreateStandardTextBox("0.00");
+        _workPipelineExpectedValueNoteTextBox = CreateStandardTextBox("Expected money is not safe money until paid.");
+        _workPipelineNotesTextBox = CreateStandardTextBox("Optional notes");
+        _workPipelineBillableCheckBox = new CheckBox { Content = "Billable", Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)), Margin = new Thickness(0, 8, 14, 0) };
+        _workPipelineTimesheetCheckBox = new CheckBox { Content = "Timesheet needed", Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)), Margin = new Thickness(0, 8, 14, 0) };
+        _workPipelineInvoiceCheckBox = new CheckBox { Content = "Invoice needed", Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)), Margin = new Thickness(0, 8, 14, 0) };
+        _workPipelinePaymentExpectedCheckBox = new CheckBox { Content = "Payment expected", Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)), Margin = new Thickness(0, 8, 14, 0) };
+
+        AddInputField(grid, "Title", _workPipelineTitleTextBox, 0, 0);
+        AddInputField(grid, "Contact", _workPipelineContactTextBox, 0, 1);
+        AddInputField(grid, "Client/company", _workPipelineCompanyTextBox, 1, 0);
+        AddInputField(grid, "Category", _workPipelineCategoryTextBox, 1, 1);
+        AddInputField(grid, "Opportunity type", _workPipelineOpportunityTypeTextBox, 2, 0);
+        AddInputField(grid, "Waiting on", _workPipelineWaitingOnTextBox, 2, 1);
+        AddInputField(grid, "Stage", _workPipelineStageComboBox, 3, 0);
+        AddInputField(grid, "Status", _workPipelineStatusComboBox, 3, 1);
+        AddInputField(grid, "Priority", _workPipelinePriorityComboBox, 4, 0);
+        AddInputField(grid, "Follow-up date yyyy-mm-dd", _workPipelineFollowUpDateTextBox, 4, 1);
+        AddInputField(grid, "Expected value", _workPipelineExpectedValueTextBox, 5, 0);
+        AddInputField(grid, "Expected value note", _workPipelineExpectedValueNoteTextBox, 5, 1);
+        AddInputField(grid, "Next action", _workPipelineNextActionTextBox, 6, 0);
+        AddInputField(grid, "Notes", _workPipelineNotesTextBox, 6, 1);
+
+        var checkRow = new WrapPanel();
+        checkRow.Children.Add(_workPipelineBillableCheckBox);
+        checkRow.Children.Add(_workPipelineTimesheetCheckBox);
+        checkRow.Children.Add(_workPipelineInvoiceCheckBox);
+        checkRow.Children.Add(_workPipelinePaymentExpectedCheckBox);
+        Grid.SetRow(checkRow, 7);
+        Grid.SetColumn(checkRow, 0);
+        Grid.SetColumnSpan(checkRow, 2);
+        grid.Children.Add(checkRow);
+
+        root.Children.Add(grid);
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Margin = new Thickness(0, 18, 0, 0)
+        };
+
+        var addButton = CreateActionButton("Add Pipeline Item", Color.FromRgb(56, 189, 248), Color.FromRgb(15, 23, 42));
+        addButton.Click += AddWorkPipelineItemButton_Click;
+
+        var resetButton = CreateActionButton("Reset Defaults", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetWorkPipelineButton_Click;
+
+        buttonRow.Children.Add(addButton);
+        buttonRow.Children.Add(resetButton);
+
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateWorkPipelineListPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Pipeline items",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var items = GetFilteredWorkPipelineItems().ToList();
+
+        if (items.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No pipeline items match this filter."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in items)
+        {
+            var body = $"{FormatWorkPipelineStage(item.Stage)} • {FormatWorkPipelineStatus(item.Status)} • {item.Priority} • Follow-up: {FormatDate(item.FollowUpDate)} • Expected: {(item.ExpectedValue.HasValue ? FormatMoney(item.ExpectedValue.Value) : "None")}";
+            var notes = $"Next: {item.NextAction}";
+
+            if (!string.IsNullOrWhiteSpace(item.WaitingOn))
+            {
+                notes += Environment.NewLine + $"Waiting on: {item.WaitingOn}";
+            }
+
+            if (!string.IsNullOrWhiteSpace(item.ExpectedValueNote))
+            {
+                notes += Environment.NewLine + item.ExpectedValueNote;
+            }
+
+            if (!string.IsNullOrWhiteSpace(item.Notes))
+            {
+                notes += Environment.NewLine + item.Notes;
+            }
+
+            var card = CreateSimpleItemCard(item.Title, body, notes);
+
+            var buttonRow = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(0, 12, 0, 0)
+            };
+
+            if (!item.IsArchived)
+            {
+                var archiveButton = CreateSmallActionButton("Archive");
+                archiveButton.Tag = item.Id;
+                archiveButton.Click += ArchiveWorkPipelineItemButton_Click;
+                buttonRow.Children.Add(archiveButton);
+            }
+
+            var deleteButton = CreateSmallActionButton("Delete");
+            deleteButton.Tag = item.Id;
+            deleteButton.Click += DeleteWorkPipelineItemButton_Click;
+            buttonRow.Children.Add(deleteButton);
+
+            if (card.Child is StackPanel cardStack)
+            {
+                cardStack.Children.Add(buttonRow);
+            }
+
+            root.Children.Add(card);
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private IEnumerable<WorkPipelineItem> GetFilteredWorkPipelineItems()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var dueSoonLimit = today.AddDays(7);
+
+        return _workPipelineFilter switch
+        {
+            "Active" => _workPipelineItems.Where(item => item.IsOpen && item.Status == WorkPipelineStatus.Active),
+            "Waiting" => _workPipelineItems.Where(item => item.IsOpen && item.IsWaiting),
+            "Blocked" => _workPipelineItems.Where(item => item.IsOpen && item.IsBlocked),
+            "Money" => _workPipelineItems.Where(item => item.IsOpen && item.IsMoneyRelated),
+            "FollowUp" => _workPipelineItems.Where(item => item.IsOpen && item.FollowUpDate.HasValue && item.FollowUpDate.Value <= dueSoonLimit),
+            "Parked" => _workPipelineItems.Where(item => item.IsOpen && item.Status == WorkPipelineStatus.Parked),
+            "Archived" => WorkPipelineCalculator.GetArchivedItems(_workPipelineItems),
+            "All" => _workPipelineItems,
+            _ => WorkPipelineCalculator.GetVisibleItems(_workPipelineItems)
+        };
+    }
+
+    private static string FormatDate(DateOnly? date)
+    {
+        return date.HasValue ? date.Value.ToString("yyyy-MM-dd") : "No date";
+    }
+
+    private static string FormatWorkPipelineStage(WorkPipelineStage stage)
+    {
+        return stage switch
+        {
+            WorkPipelineStage.LeadIdea => "Lead / Idea",
+            WorkPipelineStage.WaitingOnReply => "Waiting on Reply",
+            WorkPipelineStage.MeetingBooked => "Meeting Booked",
+            WorkPipelineStage.MaterialsReceived => "Materials Received",
+            WorkPipelineStage.ProofInProgress => "Proof In Progress",
+            WorkPipelineStage.SentForReview => "Sent for Review",
+            WorkPipelineStage.ApprovedHappy => "Approved / Happy",
+            WorkPipelineStage.PaidWorkActive => "Paid Work Active",
+            WorkPipelineStage.TimesheetNeeded => "Timesheet Needed",
+            WorkPipelineStage.InvoiceNeeded => "Invoice Needed",
+            WorkPipelineStage.PaymentExpected => "Payment Expected",
+            WorkPipelineStage.KeepWarm => "Keep Warm",
+            WorkPipelineStage.ClosedArchived => "Closed / Archived",
+            _ => stage.ToString()
+        };
+    }
+
+    private static string FormatWorkPipelineStatus(WorkPipelineStatus status)
+    {
+        return status switch
+        {
+            WorkPipelineStatus.Active => "Active",
+            WorkPipelineStatus.Waiting => "Waiting",
+            WorkPipelineStatus.Blocked => "Blocked",
+            WorkPipelineStatus.Warm => "Warm",
+            WorkPipelineStatus.Parked => "Parked",
+            WorkPipelineStatus.Completed => "Completed",
+            WorkPipelineStatus.Archived => "Archived",
+            _ => status.ToString()
+        };
+    }
+
+
     private void AddWorkSessionButton_Click(object sender, RoutedEventArgs e)
     {
         var date = DateOnly.TryParse(_workSessionDateTextBox?.Text.Trim(), out var parsedDate)
@@ -1952,6 +2458,12 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Agenda open", summary.Agenda.TotalOpen.ToString(), "Week"));
         metricsPanel.Children.Add(CreateDashboardCard("Pay later open", FormatMoney(summary.PayLater.TotalAmountOpen), "Deferred"));
         metricsPanel.Children.Add(CreateDashboardCard("Open follow-ups", summary.FollowUps.TotalOpen.ToString(), "Waiting-on"));
+
+        var workPipelineSummary = WorkPipelineCalculator.Calculate(_workPipelineItems, DateOnly.FromDateTime(DateTime.Today));
+        metricsPanel.Children.Add(CreateDashboardCard("Pipeline open", workPipelineSummary.OpenItems.ToString(), "Work Pipeline"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pipeline blocked", workPipelineSummary.BlockedItems.ToString(), "Blocked"));
+        metricsPanel.Children.Add(CreateDashboardCard("Expected pipeline", FormatMoney(workPipelineSummary.ExpectedValueTotal), "Not safe money"));
+
         metricsPanel.Children.Add(CreateDashboardCard("Billable value", FormatMoney(summary.WorkSessions.BillableValue), "Work"));
         metricsPanel.Children.Add(CreateDashboardCard("Unpaid work", FormatMoney(summary.WorkSessions.UnpaidBillableValue), "Income"));
         metricsPanel.Children.Add(CreateDashboardCard("Proof items", summary.ProofTracker.TotalProofItems.ToString(), "Proof"));
@@ -1973,16 +2485,23 @@ public partial class MainWindow : Window
         reasonsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(reasonsPanel);
 
+        var workPipelinePanel = CreateInfoPanel(
+            "Work Pipeline pressure",
+            FormatReasons(workPipelineSummary.Reasons));
+
+        workPipelinePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(workPipelinePanel);
+
         var workPanel = CreateInfoPanel(
-            "v0.5 paid-work and money loop",
-            "Paid Work Centre turns saved work sessions into invoice-ready summaries. Money Timeline turns incoming and outgoing dated items into a simple pressure view: what is owed, what is coming, what must go out, and what is safe to spend.");
+            "v0.6 work pipeline loop",
+            "Work Pipeline keeps active work, blocked work, warm leads, follow-ups, timesheets, invoices, and expected payments visible. Expected money is not safe money until paid.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v0.5 scope",
-            "Command Centre now includes paid-work admin and a first Money Timeline. It remains local-first JSON/WPF. No bank sync, tax filing, payment gateway, client portal, or final accounting system yet.");
+            "v0.6 scope",
+            "Command Centre now includes Work Pipeline pressure signals while remaining local-first JSON/WPF. No CRM, bank sync, payment gateway, client portal, or final accounting system yet.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);
@@ -2651,4 +3170,3 @@ public partial class MainWindow : Window
         return value.ToString("C");
     }
 }
-

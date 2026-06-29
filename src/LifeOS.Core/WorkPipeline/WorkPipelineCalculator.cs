@@ -1,0 +1,144 @@
+namespace LifeOS.Core.WorkPipeline;
+
+public static class WorkPipelineCalculator
+{
+    public static WorkPipelineSummary Calculate(IEnumerable<WorkPipelineItem> items, DateOnly today)
+    {
+        ArgumentNullException.ThrowIfNull(items);
+
+        var itemList = items.ToList();
+        var openItems = itemList.Where(item => item.IsOpen).ToList();
+
+        var dueSoonLimit = today.AddDays(7);
+
+        var dueFollowUps = openItems
+            .Where(item => item.FollowUpDate.HasValue && item.FollowUpDate.Value <= dueSoonLimit)
+            .OrderBy(item => item.FollowUpDate)
+            .ThenByDescending(item => item.Priority)
+            .ThenBy(item => item.Title)
+            .ToList();
+
+        var blockedWork = openItems
+            .Where(item => item.IsBlocked)
+            .OrderByDescending(item => item.Priority)
+            .ThenBy(item => item.Title)
+            .ToList();
+
+        var waitingWork = openItems
+            .Where(item => item.IsWaiting)
+            .OrderBy(item => item.FollowUpDate ?? DateOnly.MaxValue)
+            .ThenByDescending(item => item.Priority)
+            .ThenBy(item => item.Title)
+            .ToList();
+
+        var moneyWork = openItems
+            .Where(item => item.IsMoneyRelated)
+            .OrderByDescending(item => item.PaymentExpected)
+            .ThenByDescending(item => item.NeedsInvoice)
+            .ThenByDescending(item => item.NeedsTimesheet)
+            .ThenByDescending(item => item.Priority)
+            .ThenBy(item => item.Title)
+            .ToList();
+
+        var priorityItems = openItems
+            .Where(item =>
+                item.Priority is WorkPipelinePriority.High or WorkPipelinePriority.Critical ||
+                item.IsBlocked ||
+                item.NeedsTimesheet ||
+                item.NeedsInvoice ||
+                item.PaymentExpected ||
+                (item.FollowUpDate.HasValue && item.FollowUpDate.Value <= dueSoonLimit))
+            .OrderByDescending(item => item.Priority)
+            .ThenBy(item => item.FollowUpDate ?? DateOnly.MaxValue)
+            .ThenBy(item => item.Title)
+            .ToList();
+
+        var overdueCount = openItems.Count(item => item.FollowUpDate.HasValue && item.FollowUpDate.Value < today);
+        var dueTodayCount = openItems.Count(item => item.FollowUpDate.HasValue && item.FollowUpDate.Value == today);
+        var dueSoonCount = openItems.Count(item => item.FollowUpDate.HasValue && item.FollowUpDate.Value > today && item.FollowUpDate.Value <= dueSoonLimit);
+
+        var reasons = BuildReasons(openItems, overdueCount, dueTodayCount, dueSoonCount, blockedWork.Count, waitingWork.Count, moneyWork.Count);
+
+        return new WorkPipelineSummary
+        {
+            TotalItems = itemList.Count,
+            OpenItems = openItems.Count,
+            ActiveItems = openItems.Count(item => item.Status == WorkPipelineStatus.Active),
+            WaitingItems = waitingWork.Count,
+            BlockedItems = blockedWork.Count,
+            WarmItems = openItems.Count(item => item.Status == WorkPipelineStatus.Warm),
+            ParkedItems = openItems.Count(item => item.Status == WorkPipelineStatus.Parked),
+            ArchivedItems = itemList.Count(item => item.IsArchived || item.Status == WorkPipelineStatus.Archived),
+            FollowUpsOverdue = overdueCount,
+            FollowUpsDueToday = dueTodayCount,
+            FollowUpsDueSoon = dueSoonCount,
+            BillableItems = openItems.Count(item => item.IsBillable),
+            TimesheetsNeeded = openItems.Count(item => item.NeedsTimesheet),
+            InvoicesNeeded = openItems.Count(item => item.NeedsInvoice),
+            PaymentsExpected = openItems.Count(item => item.PaymentExpected),
+            ExpectedValueTotal = openItems.Where(item => item.ExpectedValue.HasValue).Sum(item => item.ExpectedValue!.Value),
+            PriorityItems = priorityItems,
+            DueFollowUps = dueFollowUps,
+            BlockedWork = blockedWork,
+            WaitingWork = waitingWork,
+            MoneyWork = moneyWork,
+            Reasons = reasons
+        };
+    }
+
+    public static IReadOnlyList<WorkPipelineItem> GetVisibleItems(IEnumerable<WorkPipelineItem> items)
+    {
+        ArgumentNullException.ThrowIfNull(items);
+
+        return items
+            .Where(item => item.IsOpen)
+            .OrderByDescending(item => item.Priority)
+            .ThenBy(item => item.Stage)
+            .ThenBy(item => item.FollowUpDate ?? DateOnly.MaxValue)
+            .ThenBy(item => item.Title)
+            .ToList();
+    }
+
+    public static IReadOnlyList<WorkPipelineItem> GetArchivedItems(IEnumerable<WorkPipelineItem> items)
+    {
+        ArgumentNullException.ThrowIfNull(items);
+
+        return items
+            .Where(item => item.IsArchived || item.Status == WorkPipelineStatus.Archived)
+            .OrderByDescending(item => item.UpdatedAt)
+            .ThenBy(item => item.Title)
+            .ToList();
+    }
+
+    private static List<string> BuildReasons(
+        IReadOnlyCollection<WorkPipelineItem> openItems,
+        int overdueCount,
+        int dueTodayCount,
+        int dueSoonCount,
+        int blockedCount,
+        int waitingCount,
+        int moneyCount)
+    {
+        var reasons = new List<string>();
+
+        if (openItems.Count == 0)
+        {
+            reasons.Add("No open pipeline items. Add active work, warm leads, or parked ideas when they matter.");
+            return reasons;
+        }
+
+        if (overdueCount > 0) reasons.Add($"{overdueCount} pipeline follow-up item(s) are overdue.");
+        if (dueTodayCount > 0) reasons.Add($"{dueTodayCount} pipeline follow-up item(s) are due today.");
+        if (dueSoonCount > 0) reasons.Add($"{dueSoonCount} pipeline follow-up item(s) are due in the next 7 days.");
+        if (blockedCount > 0) reasons.Add($"{blockedCount} pipeline item(s) are blocked.");
+        if (waitingCount > 0) reasons.Add($"{waitingCount} pipeline item(s) are waiting on someone or something.");
+        if (moneyCount > 0) reasons.Add($"{moneyCount} pipeline item(s) are linked to billable work, invoices, timesheets, payment, or expected value.");
+
+        if (reasons.Count == 0)
+        {
+            reasons.Add("No urgent pipeline pressure detected. Keep active work moving and parked work out of today's way.");
+        }
+
+        return reasons;
+    }
+}

@@ -2500,16 +2500,23 @@ public partial class MainWindow : Window
         workPipelinePanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPipelinePanel);
 
+        var pipelineSignalsPanel = CreateInfoPanel(
+            "Pipeline command signals",
+            FormatReasons(summary.WorkPipeline.CommandCentreSignals.Select(signal => $"{signal.Label}: {signal.Value} — {signal.Detail}")));
+
+        pipelineSignalsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pipelineSignalsPanel);
+
         var workPanel = CreateInfoPanel(
-            "v0.6 work pipeline loop",
+            "v0.8 work pipeline loop",
             "Work Pipeline keeps active work, blocked work, warm leads, follow-ups, timesheets, invoices, and expected payments visible. Expected money is not safe money until paid.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v0.6 scope",
-            "Command Centre now includes Work Pipeline pressure signals while remaining local-first JSON/WPF. No CRM, bank sync, payment gateway, client portal, or final accounting system yet.");
+            "v0.8 scope",
+            "Command Centre now uses Work Pipeline pressure directly: blocked work, due follow-ups, timesheet/invoice/payment states, and expected value. Still local-first JSON/WPF. No CRM, bank sync, payment gateway, or client portal.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

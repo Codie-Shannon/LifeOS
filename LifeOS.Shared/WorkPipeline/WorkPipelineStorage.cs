@@ -85,6 +85,16 @@ public static class WorkPipelineStorage
 
         item.LikelihoodPercent = Math.Clamp(item.LikelihoodPercent, 0, 100);
 
+        if (item.Status == WorkPipelineStatus.Parked && item.OpportunityTemperature == WorkPipelineOpportunityTemperature.Active)
+        {
+            item.OpportunityTemperature = WorkPipelineOpportunityTemperature.Warm;
+        }
+
+        if (item.PaymentExpected && !item.ExpectedValue.HasValue && string.IsNullOrWhiteSpace(item.ExpectedValueNote))
+        {
+            item.ExpectedValueNote = "Payment expected, but amount has not been entered. Expected money is not safe money until paid.";
+        }
+
         return item;
     }
 

@@ -1346,7 +1346,7 @@ public partial class MainWindow : Window
         var today = DateOnly.FromDateTime(DateTime.Today);
         var summary = WorkPipelineCalculator.Calculate(_workPipelineItems, today);
 
-        SetHeader("Work Pipeline", $"Work Pipeline • v0.6 foundation • {summary.OpenItems} open");
+        SetHeader("Work Pipeline", $"Work Pipeline • v0.7 follow-up/opportunity workflow • {summary.OpenItems} open");
 
         var root = new StackPanel();
 
@@ -1379,6 +1379,11 @@ public partial class MainWindow : Window
         focusPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(focusPanel);
 
+        var bridgeCount = WorkPipelineFollowUpBridge.CreateFollowUps(_workPipelineItems).Count;
+        var bridgePanel = CreateInfoPanel("Follow-up bridge", $"{bridgeCount} pipeline item(s) can be mirrored into Follow-Ups when that workflow is enabled. This stage only prepares the bridge; it does not auto-create duplicate follow-ups.");
+        bridgePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(bridgePanel);
+
         var filterPanel = CreateWorkPipelineFilterPanel();
         filterPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(filterPanel);
@@ -1392,8 +1397,8 @@ public partial class MainWindow : Window
         root.Children.Add(listPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v0.6 scope",
-            $"Local Work Pipeline tracking with JSON persistence. Saved file: {WorkPipelineStorage.FilePath}. This is not a CRM, accounting system, reminder daemon, or client portal.");
+            "v0.7 scope",
+            $"Work Pipeline now separates follow-up states, waiting-on views, opportunity heat, and a safe Follow-Ups bridge. Saved file: {WorkPipelineStorage.FilePath}. No auto-messaging, CRM, or accounting automation.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

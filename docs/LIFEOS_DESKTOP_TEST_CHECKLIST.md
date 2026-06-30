@@ -1,14 +1,14 @@
-# LifeOS Desktop v0.5 Test Checklist
+# LifeOS Desktop v0.9 Test Checklist
 
-Use this checklist before tagging or publishing the v0.5 release.
+Use this checklist before treating v0.9 as the release-candidate baseline before v1.0.
 
 ## Build
 
 - [ ] Run `dotnet build`
 - [ ] Confirm `LifeOS.Core` succeeds
 - [ ] Confirm `LifeOS.Shared` succeeds
-- [ ] Confirm `LifeOS.Modules.Timer` succeeds
-- [ ] Confirm `LifeOS.TimerAgent` succeeds
+- [ ] Confirm `LifeOS.Modules.Timer` succeeds if present in the solution
+- [ ] Confirm `LifeOS.TimerAgent` succeeds if present in the solution
 - [ ] Confirm `LifeOS.Desktop` succeeds
 
 ## Navigation
@@ -24,25 +24,53 @@ Use this checklist before tagging or publishing the v0.5 release.
 - [ ] Paid Work Centre opens
 - [ ] Proof Tracker opens
 - [ ] Follow-Ups opens
+- [ ] Work Pipeline opens
 - [ ] Projects opens
 - [ ] TimerAgent opens
 - [ ] Settings opens
 
-## v0.5 Paid Work Centre
+## v0.9 Work Pipeline
 
-- [ ] Work Sessions can create a completed billable session
-- [ ] Work Sessions source data displays client/project, date, hours, rate, billable status, and value
-- [ ] Paid Work Centre opens after source work session exists
-- [ ] Invoice-ready session count updates
-- [ ] Invoice-ready value updates
-- [ ] Unpaid billable value updates
-- [ ] Billable hours updates
-- [ ] Client/project spread updates
-- [ ] Invoice-ready item list shows the session
-- [ ] Copy-ready work summary is generated
-- [ ] Empty state is clear when no invoice-ready sessions exist
+- [ ] Work Pipeline page opens
+- [ ] Header shows v0.9/release-candidate wording
+- [ ] Open pipeline count displays
+- [ ] Active pipeline count displays
+- [ ] Waiting count displays
+- [ ] Blocked count displays
+- [ ] Follow-up count displays
+- [ ] Expected value displays as not-safe money
+- [ ] Timesheet-needed count displays
+- [ ] Invoice-needed count displays
+- [ ] Payment expected count displays if visible
+- [ ] Stage breakdown displays
+- [ ] Today focus displays useful items
+- [ ] Waiting/blocking state is visible
+- [ ] Parked/keep-warm work does not dominate the today view
 
-## v0.5 Money Timeline
+## v0.9 Command Centre
+
+- [ ] Command Centre opens
+- [ ] Command Centre subtitle references v0.9/release-candidate direction
+- [ ] Pipeline open count displays
+- [ ] Pipeline blocked count displays
+- [ ] Pipeline follow-up count displays
+- [ ] Expected pipeline money displays as not-safe money
+- [ ] Billable value displays
+- [ ] Unpaid work displays
+- [ ] Safe-to-spend still displays
+- [ ] Command Centre remains readable and does not become a CRM dashboard
+
+## v0.9 Follow-Ups
+
+- [ ] Follow-Ups opens
+- [ ] Open follow-ups count displays
+- [ ] Waiting count displays
+- [ ] Needs action count displays
+- [ ] Overdue count displays
+- [ ] Due today count displays
+- [ ] Money-linked count displays
+
+## v0.9 Money Timeline
 
 - [ ] Money Timeline opens
 - [ ] Current balance displays
@@ -52,44 +80,37 @@ Use this checklist before tagging or publishing the v0.5 release.
 - [ ] Lowest point displays
 - [ ] Safe-to-spend displays
 - [ ] Pressure label displays
-- [ ] Timeline wording clearly states it is a projected/local planning view, not bank sync
+- [ ] Timeline wording remains clear that this is local planning, not bank sync
 
-## v0.5 Command Centre
+## v0.9 Local storage
 
-- [ ] Command Centre heading/subtitle references v0.5
-- [ ] Side panel references Desktop v0.5
-- [ ] Paid Work Centre and Money Timeline appear in navigation
-- [ ] Command Centre shows billable value
-- [ ] Command Centre shows unpaid work
-- [ ] Command Centre safe-to-spend value still displays
-- [ ] Command Centre still handles existing v0.2/v0.3/v0.4 data without crashing
+- [ ] Local LifeOS data folder exists
+- [ ] `work-pipeline.json` exists
+- [ ] `work-pipeline.backup.json` exists
+- [ ] Follow-up JSON exists
+- [ ] Agenda JSON exists
+- [ ] Money pressure JSON exists
+- [ ] Pay Later JSON exists
+- [ ] Proof JSON exists
+- [ ] Work Sessions JSON exists
+- [ ] App can restart and still load Work Pipeline data
 
 ## Documentation
 
-- [ ] README updated to v0.5
-- [ ] README embeds six v0.5 screenshots
-- [ ] Release notes updated
-- [ ] Screenshot list updated
-- [ ] Test checklist updated
-- [ ] v0.5 release summary present
-- [ ] v0.5 stages document present
+- [ ] README updated to v0.9
+- [ ] README embeds six v0.9 screenshots
+- [ ] Release notes updated to v0.9
+- [ ] Screenshot list updated to v0.9
+- [ ] Test checklist updated to v0.9
+- [ ] Roadmap updated to show v1.0 as the next major target
+- [ ] v0.9 release summary present
+- [ ] v0.9 documents/screenshots summary present
 
 ## Screenshot files
 
-- [ ] `docs/screenshots/01-lifeos-v05-command-centre-overview.png`
-- [ ] `docs/screenshots/02-lifeos-v05-work-sessions-source-data.png`
-- [ ] `docs/screenshots/03-lifeos-v05-paid-work-centre-metrics.png`
-- [ ] `docs/screenshots/04-lifeos-v05-paid-work-centre-invoice-summary.png`
-- [ ] `docs/screenshots/05-lifeos-v05-money-timeline-projected-balance.png`
-- [ ] `docs/screenshots/06-lifeos-v05-command-centre-with-v05-data.png`
-
-## Release commands
-
-```bash
-git status
-git add .
-git commit -m "Document LifeOS v0.5 paid work and money timeline release"
-git push
-git tag v0.5
-git push origin v0.5
-```
+- [ ] `docs/screenshots/01-lifeos-v09-command-centre.png`
+- [ ] `docs/screenshots/02-lifeos-v09-work-pipeline-summary.png`
+- [ ] `docs/screenshots/03-lifeos-v09-work-pipeline-stage-breakdown.png`
+- [ ] `docs/screenshots/04-lifeos-v09-money-timeline.png`
+- [ ] `docs/screenshots/05-lifeos-v09-follow-ups.png`
+- [ ] `docs/screenshots/06-lifeos-v09-local-storage-proof.png`

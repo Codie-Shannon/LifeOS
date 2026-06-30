@@ -1,56 +1,56 @@
-# LifeOS Desktop v0.5 Screenshot List
+# LifeOS Desktop v0.9 Screenshot List
 
-This is the active screenshot list for the LifeOS Desktop v0.5 release.
+This is the active screenshot list for the LifeOS Desktop v0.9 release-candidate baseline.
 
-v0.5 should use six primary screenshots. They show the full release story:
+v0.9 should use six primary screenshots. They show the release story:
 
 ```text
-Work Sessions -> Paid Work Centre -> invoice-ready summary -> Money Timeline -> Command Centre
+Command Centre -> Work Pipeline -> stage/today focus -> money timeline -> follow-ups -> local storage proof
 ```
 
-## Required v0.5 screenshots
+## Required v0.9 screenshots
 
 | # | File | Screen | What it proves |
 |---|---|---|---|
-| 1 | `docs/screenshots/01-lifeos-v05-command-centre-overview.png` | Command Centre | v0.5 wording, new modules, and overall command centre state. |
-| 2 | `docs/screenshots/02-lifeos-v05-work-sessions-source-data.png` | Work Sessions | A completed billable work session exists as source data. |
-| 3 | `docs/screenshots/03-lifeos-v05-paid-work-centre-metrics.png` | Paid Work Centre | Paid Work Centre reads billable work and produces paid-work metrics. |
-| 4 | `docs/screenshots/04-lifeos-v05-paid-work-centre-invoice-summary.png` | Paid Work Centre | Copy-ready invoice/work summary output exists. |
-| 5 | `docs/screenshots/05-lifeos-v05-money-timeline-projected-balance.png` | Money Timeline | Paper-bills workflow: projected balance, lowest point, safe-to-spend, pressure label. |
-| 6 | `docs/screenshots/06-lifeos-v05-command-centre-with-v05-data.png` | Command Centre | v0.5 data feeds back into the command centre. |
+| 1 | `docs/screenshots/01-lifeos-v09-command-centre.png` | Command Centre | v0.9 Command Centre reads work pipeline, money, follow-up, and proof pressure. |
+| 2 | `docs/screenshots/02-lifeos-v09-work-pipeline-summary.png` | Work Pipeline | Pipeline summary cards exist for open, active, waiting, blocked, follow-ups, expected value, timesheets, and invoices. |
+| 3 | `docs/screenshots/03-lifeos-v09-work-pipeline-stage-breakdown.png` | Work Pipeline | Stage breakdown and today focus prove pipeline work is grouped and actionable. |
+| 4 | `docs/screenshots/04-lifeos-v09-money-timeline.png` | Money Timeline | Safe-to-spend, projected balance, incoming, outgoing, and lowest point remain visible. |
+| 5 | `docs/screenshots/05-lifeos-v09-follow-ups.png` | Follow-Ups | Local follow-up foundation exists and can track waiting-on/money-linked pressure. |
+| 6 | `docs/screenshots/06-lifeos-v09-local-storage-proof.png` | File Explorer / local app data | LifeOS persists module data locally with JSON files and Work Pipeline backup storage. |
 
 ## Embedded README screenshots
 
-The README embeds the same six screenshots so the GitHub project page immediately shows the v0.5 proof.
+The README embeds the same six screenshots so the GitHub/project page shows the current v0.9 proof first.
 
 ## Screenshot story
 
-### 1. Command Centre overview
+### 1. Command Centre
 
-Shows the app has moved to v0.5 and has the Paid Work Centre and Money Timeline visible in the side navigation.
+Shows LifeOS has moved beyond separate modules and is already surfacing pipeline pressure from the top-level command centre.
 
-### 2. Work Sessions source data
+### 2. Work Pipeline summary
 
-Shows the source work session that later appears in Paid Work Centre.
+Shows LifeOS can track practical work pressure: open work, active work, waiting work, blocked work, follow-ups, expected value, timesheets, and invoices.
 
-### 3. Paid Work Centre metrics
+### 3. Stage breakdown and today focus
 
-Shows invoice-ready sessions, invoice-ready value, unpaid billable value, paid value, billable hours, and client/project spread.
+Shows the pipeline is not just a static list. It groups work by stage and highlights current focus items.
 
-### 4. Invoice-ready summary
+### 4. Money Timeline
 
-Shows the copy-ready summary that can be used in a client invoice/work summary email.
+Shows the money timeline still carries the original paper-bills workflow: projected balance, lowest point, and safe-to-spend.
 
-### 5. Money Timeline
+### 5. Follow-Ups
 
-Shows current balance, incoming, outgoing/buffers, projected balance, lowest point, safe-to-spend, and pressure label.
+Shows the follow-up foundation still exists separately and can support waiting-on and money-linked follow-up pressure.
 
-### 6. Command Centre with data
+### 6. Local storage proof
 
-Shows the release loop: work and money data feeding back into the top-level LifeOS view.
+Shows LifeOS stores real local data files, including Work Pipeline JSON and backup JSON.
 
 ## Screenshot rule going forward
 
-For each release, keep one active screenshot set matching the current release.
+v0.9 is a baseline before v1.0.
 
-Historical screenshots may remain in `docs/screenshots/`, but README should only embed the current active release screenshots unless there is a strong reason to show older release history.
+After v1.0, take a new screenshot set focused on the Unified Command Centre.

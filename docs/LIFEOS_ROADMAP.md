@@ -1,12 +1,24 @@
 # LifeOS Roadmap
 
-Current release: **LifeOS Desktop v0.4 — Trust Polish Release**
+Current release: **LifeOS Desktop v0.9 — Work Pipeline + Command Centre Release Candidate**
 
 ## Product direction
 
-LifeOS is a local-first desktop command centre for managing weekly pressure, money pressure, work sessions, proof, follow-ups, and eventually client/invoice/admin workflows.
+LifeOS is a local-first desktop command centre for managing personal pressure, money pressure, work sessions, proof, follow-ups, Work Pipeline, paid work, and weekly operating flow.
 
-Desktop/core remains the priority. Mobile comes later, after the desktop system is more proven.
+Desktop/core remains the priority. Mobile, cloud, enterprise, and client-portal features come later after the core command-centre workflow is proven.
+
+Core philosophy:
+
+```text
+Build systems that reduce chaos and increase control.
+```
+
+LifeOS starts personal and can evolve later:
+
+```text
+Personal -> Contractor -> Business -> Enterprise
+```
 
 ## Completed releases
 
@@ -41,46 +53,85 @@ Desktop/core remains the priority. Mobile comes later, after the desktop system 
 - improved empty states
 - full merged v0.4 docs/screenshots
 
-## Near-term priorities
+### v0.5 — Paid Work Centre + Money Timeline
 
-### v0.5 — Invoice Generator / Work-to-Invoice Bridge
+- Paid Work Centre
+- invoice-ready work-session metrics
+- copy-ready work summary
+- Money Timeline
+- projected balance
+- lowest point
+- safe-to-spend
+- Command Centre paid-work visibility
 
-Likely next major feature.
+### v0.6 — Work Pipeline foundation
 
-Possible scope:
+- Work Pipeline models
+- stage/status/priority tracking
+- summary calculator
+- local JSON storage
+- desktop foundation
 
-- client details storage
-- invoice number/reference
-- work session import
-- invoice PDF generation
-- invoice + work summary template
-- sent/paid status
-- follow-up reminder creation
-- proof link to invoice
+### v0.7 — Follow-up and opportunity behaviour
 
-This feature is high-value because real client admin already created friction during a busy day.
+- follow-up states
+- waiting-on pressure
+- opportunity scoring direction
+- follow-up bridge behaviour
+- next-action visibility
 
-### v0.6 — Money Pressure / Pay Later strengthening
+### v0.8 — Command Centre Work Pipeline integration
 
-Possible scope:
+- Command Centre pipeline signals
+- open/blocked/follow-up pipeline counts
+- expected pipeline money visibility
+- work and money pressure signals
 
-- better safe-to-spend calculation
-- Afterpay/deferred payment schedule tracking
-- expected income/invoice tracking
-- weekly obligation view
-- grocery/fuel pressure quick check
+### v0.9 — Release candidate polish
 
-### v0.7 — Follow-up and client admin strengthening
+- desktop version text polish
+- Work Pipeline storage backup safety
+- stage breakdown counts
+- desktop stage display polish
+- final release-candidate code polish
 
-Possible scope:
+## Next major target
 
-- scheduled follow-up reminders
-- client/job cards
-- waiting-on status
-- email/message notes
-- invoice/payment follow-up support
+### v1.0 — Unified Command Centre Foundation
 
-## Medium-term direction
+v1.0 should make LifeOS feel like one operating system instead of a collection of useful pages.
+
+The goal is for Command Centre to answer:
+
+```text
+What matters now?
+```
+
+Likely v1.0 scope:
+
+- Command Centre becomes the main daily screen
+- Work Pipeline, Follow-Ups, Money Timeline, Money Pressure, Work Sessions, Paid Work, and Proof signals become more connected
+- safe money and expected money are clearly separated
+- blocked work and waiting-on pressure are visible without hunting through pages
+- today focus becomes clearer
+- next-action flow becomes more obvious
+- parked work stays out of the way
+- proof/evidence reminders become more practical
+
+## v1.0 boundaries
+
+v1.0 should not become:
+
+- a CRM
+- a full accounting system
+- a mobile app
+- a cloud SaaS product
+- an enterprise platform
+- a client portal
+- a hardware control surface
+- a design overhaul
+
+## Medium-term direction after v1.0
 
 ### Contractor Command Centre
 
@@ -116,7 +167,7 @@ Likely later target:
 v1.6 to v2.0 or after the core is stable enough to justify mobile
 ```
 
-## v2.0 principle
+## Long-term principle
 
 Before declaring LifeOS v2.0 complete, do a dedicated polish block at the end of the push.
 

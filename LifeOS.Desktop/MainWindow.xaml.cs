@@ -2448,13 +2448,13 @@ public partial class MainWindow : Window
     {
         var summary = CommandCentreSummaryService.Create();
 
-        SetHeader("Command Centre", $"Paid work, income, proof, and money timeline • v0.5 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Paid work, pipeline, income, proof, and money timeline • v0.8 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "LifeOS Command Centre",
-            "This is now reading real local LifeOS data across money, agenda, pay-later, weekly close-out, follow-ups, work sessions, and proof tracking. v0.5 adds the first paid-work admin layer and a date-based money timeline inspired by the paper-bills workflow."));
+            "This is now reading real local LifeOS data across money, agenda, pay-later, weekly close-out, follow-ups, work sessions, proof tracking, and the Work Pipeline. v0.8 makes blocked work, payment pressure, and follow-up pressure visible from the Command Centre."));
 
         var metricsPanel = new WrapPanel
         {
@@ -2467,10 +2467,10 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Pay later open", FormatMoney(summary.PayLater.TotalAmountOpen), "Deferred"));
         metricsPanel.Children.Add(CreateDashboardCard("Open follow-ups", summary.FollowUps.TotalOpen.ToString(), "Waiting-on"));
 
-        var workPipelineSummary = WorkPipelineCalculator.Calculate(_workPipelineItems, DateOnly.FromDateTime(DateTime.Today));
-        metricsPanel.Children.Add(CreateDashboardCard("Pipeline open", workPipelineSummary.OpenItems.ToString(), "Work Pipeline"));
-        metricsPanel.Children.Add(CreateDashboardCard("Pipeline blocked", workPipelineSummary.BlockedItems.ToString(), "Blocked"));
-        metricsPanel.Children.Add(CreateDashboardCard("Expected pipeline", FormatMoney(workPipelineSummary.ExpectedValueTotal), "Not safe money"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pipeline open", summary.WorkPipeline.OpenItems.ToString(), "Work Pipeline"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pipeline blocked", summary.WorkPipeline.BlockedItems.ToString(), "Blocked"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pipeline follow-ups", (summary.WorkPipeline.FollowUpsOverdue + summary.WorkPipeline.FollowUpsDueToday).ToString(), "Now"));
+        metricsPanel.Children.Add(CreateDashboardCard("Expected pipeline", FormatMoney(summary.WorkPipeline.ExpectedValueTotal), "Not safe money"));
 
         metricsPanel.Children.Add(CreateDashboardCard("Billable value", FormatMoney(summary.WorkSessions.BillableValue), "Work"));
         metricsPanel.Children.Add(CreateDashboardCard("Unpaid work", FormatMoney(summary.WorkSessions.UnpaidBillableValue), "Income"));
@@ -2495,7 +2495,7 @@ public partial class MainWindow : Window
 
         var workPipelinePanel = CreateInfoPanel(
             "Work Pipeline pressure",
-            FormatReasons(workPipelineSummary.Reasons));
+            FormatReasons(summary.WorkPipeline.Reasons));
 
         workPipelinePanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPipelinePanel);

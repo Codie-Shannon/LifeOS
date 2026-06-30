@@ -1375,6 +1375,14 @@ public partial class MainWindow : Window
         reasonsPanel.Margin = new Thickness(0, 8, 0, 0);
         root.Children.Add(reasonsPanel);
 
+        var stageBreakdown = summary.StageCounts.Count == 0
+            ? "No open pipeline stages."
+            : string.Join(Environment.NewLine, summary.StageCounts.Select(stage => $"• {FormatWorkPipelineStage(stage.Stage)}: {stage.Count}"));
+
+        var stagePanel = CreateInfoPanel("Stage breakdown", stageBreakdown);
+        stagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(stagePanel);
+
         var focusPanel = CreateWorkPipelineFocusPanel(summary);
         focusPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(focusPanel);
@@ -1397,8 +1405,8 @@ public partial class MainWindow : Window
         root.Children.Add(listPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v0.7 scope",
-            $"Work Pipeline now separates follow-up states, waiting-on views, opportunity heat, and a safe Follow-Ups bridge. Saved file: {WorkPipelineStorage.FilePath}. No auto-messaging, CRM, or accounting automation.");
+            "v0.9 scope",
+            $"Work Pipeline now includes follow-up states, waiting-on views, opportunity heat, stage counts, storage backup safety, and Command Centre pressure signals. Saved file: {WorkPipelineStorage.FilePath}. No auto-messaging, CRM, or accounting automation.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

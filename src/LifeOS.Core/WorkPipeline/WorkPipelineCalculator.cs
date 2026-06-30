@@ -115,6 +115,31 @@ public static class WorkPipelineCalculator
         };
     }
 
+    public static WorkPipelineWaitingView BuildWaitingView(IEnumerable<WorkPipelineItem> items)
+    {
+        ArgumentNullException.ThrowIfNull(items);
+
+        var waitingItems = items
+            .Where(item => item.IsOpen && item.IsWaiting)
+            .OrderBy(item => item.FollowUpDate ?? DateOnly.MaxValue)
+            .ThenByDescending(item => item.Priority)
+            .ThenBy(item => item.Title)
+            .ToList();
+
+        return new WorkPipelineWaitingView
+        {
+            WaitingOnMe = waitingItems
+                .Where(item => item.WaitingOn.Contains("me", StringComparison.OrdinalIgnoreCase) || item.WaitingOn.Contains("Codie", StringComparison.OrdinalIgnoreCase))
+                .ToList(),
+            WaitingOnOthers = waitingItems
+                .Where(item => !string.IsNullOrWhiteSpace(item.WaitingOn) && !item.WaitingOn.Contains("me", StringComparison.OrdinalIgnoreCase) && !item.WaitingOn.Contains("Codie", StringComparison.OrdinalIgnoreCase))
+                .ToList(),
+            WaitingWithoutOwner = waitingItems
+                .Where(item => string.IsNullOrWhiteSpace(item.WaitingOn))
+                .ToList()
+        };
+    }
+
     public static IReadOnlyList<WorkPipelineItem> GetVisibleItems(IEnumerable<WorkPipelineItem> items)
     {
         ArgumentNullException.ThrowIfNull(items);

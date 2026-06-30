@@ -1453,7 +1453,7 @@ public partial class MainWindow : Window
             Margin = new Thickness(0, 14, 0, 0)
         };
 
-        foreach (var filter in new[] { "Active", "Waiting", "Blocked", "Money", "FollowUp", "Parked", "Archived", "All" })
+        foreach (var filter in new[] { "Active", "Waiting", "WaitingOnMe", "WaitingOnOthers", "Blocked", "Money", "Opportunity", "FollowUp", "Parked", "Archived", "All" })
         {
             var button = CreateSmallActionButton(filter == "FollowUp" ? "Follow-up" : filter);
             button.Tag = filter;
@@ -1656,8 +1656,11 @@ public partial class MainWindow : Window
         {
             "Active" => _workPipelineItems.Where(item => item.IsOpen && item.Status == WorkPipelineStatus.Active),
             "Waiting" => _workPipelineItems.Where(item => item.IsOpen && item.IsWaiting),
+            "WaitingOnMe" => WorkPipelineCalculator.BuildWaitingView(_workPipelineItems).WaitingOnMe,
+            "WaitingOnOthers" => WorkPipelineCalculator.BuildWaitingView(_workPipelineItems).WaitingOnOthers,
             "Blocked" => _workPipelineItems.Where(item => item.IsOpen && item.IsBlocked),
             "Money" => _workPipelineItems.Where(item => item.IsOpen && item.IsMoneyRelated),
+            "Opportunity" => _workPipelineItems.Where(item => item.IsOpen && item.IsOpportunity),
             "FollowUp" => _workPipelineItems.Where(item => item.IsOpen && item.FollowUpDate.HasValue && item.FollowUpDate.Value <= dueSoonLimit),
             "Parked" => _workPipelineItems.Where(item => item.IsOpen && item.Status == WorkPipelineStatus.Parked),
             "Archived" => WorkPipelineCalculator.GetArchivedItems(_workPipelineItems),

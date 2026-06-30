@@ -60,6 +60,30 @@ public sealed class WorkPipelineItem
 
     public bool HasFollowUpDate => FollowUpDate.HasValue;
 
+    public WorkPipelineFollowUpState GetFollowUpState(DateOnly today)
+    {
+        if (IsArchived || Status == WorkPipelineStatus.Archived || Status == WorkPipelineStatus.Completed)
+        {
+            return WorkPipelineFollowUpState.None;
+        }
+
+        if (FollowUpDate.HasValue)
+        {
+            if (FollowUpDate.Value < today) return WorkPipelineFollowUpState.Overdue;
+            if (FollowUpDate.Value == today) return WorkPipelineFollowUpState.DueToday;
+            if (FollowUpDate.Value <= today.AddDays(7)) return WorkPipelineFollowUpState.DueSoon;
+            return WorkPipelineFollowUpState.Scheduled;
+        }
+
+        if (KeepWarmDate.HasValue)
+        {
+            if (KeepWarmDate.Value <= today.AddDays(14)) return WorkPipelineFollowUpState.KeepWarm;
+            return WorkPipelineFollowUpState.Scheduled;
+        }
+
+        return WorkPipelineFollowUpState.None;
+    }
+
     public bool IsMoneyRelated =>
         IsBillable ||
         NeedsTimesheet ||

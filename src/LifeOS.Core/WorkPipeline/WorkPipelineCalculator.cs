@@ -11,6 +11,8 @@ public static class WorkPipelineCalculator
 
         var dueSoonLimit = today.AddDays(7);
 
+        var followUpStates = openItems.ToDictionary(item => item.Id, item => item.GetFollowUpState(today));
+
         var dueFollowUps = openItems
             .Where(item => item.FollowUpDate.HasValue && item.FollowUpDate.Value <= dueSoonLimit)
             .OrderBy(item => item.FollowUpDate)
@@ -53,11 +55,24 @@ public static class WorkPipelineCalculator
             .ThenBy(item => item.Title)
             .ToList();
 
-        var overdueCount = openItems.Count(item => item.FollowUpDate.HasValue && item.FollowUpDate.Value < today);
-        var dueTodayCount = openItems.Count(item => item.FollowUpDate.HasValue && item.FollowUpDate.Value == today);
-        var dueSoonCount = openItems.Count(item => item.FollowUpDate.HasValue && item.FollowUpDate.Value > today && item.FollowUpDate.Value <= dueSoonLimit);
+        var overdueCount = followUpStates.Count(pair => pair.Value == WorkPipelineFollowUpState.Overdue);
+        var dueTodayCount = followUpStates.Count(pair => pair.Value == WorkPipelineFollowUpState.DueToday);
+        var dueSoonCount = followUpStates.Count(pair => pair.Value == WorkPipelineFollowUpState.DueSoon);
+        var scheduledCount = followUpStates.Count(pair => pair.Value == WorkPipelineFollowUpState.Scheduled);
+        var keepWarmDueCount = followUpStates.Count(pair => pair.Value == WorkPipelineFollowUpState.KeepWarm);
+        var missingDateCount = openItems.Count(item => item.Status is WorkPipelineStatus.Active or WorkPipelineStatus.Waiting && !item.FollowUpDate.HasValue && !item.KeepWarmDate.HasValue);
 
         var reasons = BuildReasons(openItems, overdueCount, dueTodayCount, dueSoonCount, blockedWork.Count, waitingWork.Count, moneyWork.Count);
+
+        if (keepWarmDueCount > 0)
+        {
+            reasons.Add($"{keepWarmDueCount} parked/warm pipeline item(s) are close enough to review.");
+        }
+
+        if (missingDateCount > 0)
+        {
+            reasons.Add($"{missingDateCount} active/waiting pipeline item(s) have no follow-up or keep-warm date.");
+        }
 
         return new WorkPipelineSummary
         {
@@ -72,6 +87,9 @@ public static class WorkPipelineCalculator
             FollowUpsOverdue = overdueCount,
             FollowUpsDueToday = dueTodayCount,
             FollowUpsDueSoon = dueSoonCount,
+            FollowUpsScheduled = scheduledCount,
+            FollowUpsMissingDate = missingDateCount,
+            KeepWarmDue = keepWarmDueCount,
             BillableItems = openItems.Count(item => item.IsBillable),
             TimesheetsNeeded = openItems.Count(item => item.NeedsTimesheet),
             InvoicesNeeded = openItems.Count(item => item.NeedsInvoice),

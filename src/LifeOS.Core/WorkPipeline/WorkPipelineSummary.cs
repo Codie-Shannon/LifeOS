@@ -24,6 +24,12 @@ public sealed class WorkPipelineSummary
 
     public int FollowUpsDueSoon { get; init; }
 
+    public int FollowUpsScheduled { get; init; }
+
+    public int FollowUpsMissingDate { get; init; }
+
+    public int KeepWarmDue { get; init; }
+
     public int BillableItems { get; init; }
 
     public int TimesheetsNeeded { get; init; }

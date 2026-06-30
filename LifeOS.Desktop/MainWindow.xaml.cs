@@ -1346,7 +1346,7 @@ public partial class MainWindow : Window
         var today = DateOnly.FromDateTime(DateTime.Today);
         var summary = WorkPipelineCalculator.Calculate(_workPipelineItems, today);
 
-        SetHeader("Work Pipeline", $"Work Pipeline • v0.7 follow-up/opportunity workflow • {summary.OpenItems} open");
+        SetHeader("Work Pipeline", $"Work Pipeline • v0.9 release candidate • {summary.OpenItems} open");
 
         var root = new StackPanel();
 
@@ -2456,7 +2456,7 @@ public partial class MainWindow : Window
     {
         var summary = CommandCentreSummaryService.Create();
 
-        SetHeader("Command Centre", $"Paid work, pipeline, income, proof, and money timeline • v0.8 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Paid work, pipeline, income, proof, and money timeline • v0.9 RC • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 

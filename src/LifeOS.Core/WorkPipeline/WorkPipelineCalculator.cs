@@ -70,6 +70,8 @@ public static class WorkPipelineCalculator
         var keepWarmDueCount = followUpStates.Count(pair => pair.Value == WorkPipelineFollowUpState.KeepWarm);
         var missingDateCount = openItems.Count(item => item.Status is WorkPipelineStatus.Active or WorkPipelineStatus.Waiting && !item.FollowUpDate.HasValue && !item.KeepWarmDate.HasValue);
 
+        var commandCentreSignals = BuildCommandCentreSignals(overdueCount, dueTodayCount, blockedWork.Count, waitingWork.Count, moneyWork.Count, openItems.Count, moneyWork.Sum(item => item.ExpectedValue ?? 0m));
+
         var reasons = BuildReasons(openItems, overdueCount, dueTodayCount, dueSoonCount, blockedWork.Count, waitingWork.Count, moneyWork.Count);
 
         if (keepWarmDueCount > 0)
@@ -111,6 +113,7 @@ public static class WorkPipelineCalculator
             WaitingWork = waitingWork,
             MoneyWork = moneyWork,
             OpportunityWork = opportunityWork,
+            CommandCentreSignals = commandCentreSignals,
             Reasons = reasons
         };
     }
@@ -162,6 +165,72 @@ public static class WorkPipelineCalculator
             .OrderByDescending(item => item.UpdatedAt)
             .ThenBy(item => item.Title)
             .ToList();
+    }
+
+    private static IReadOnlyList<WorkPipelineCommandCentreSignal> BuildCommandCentreSignals(
+        int overdueCount,
+        int dueTodayCount,
+        int blockedCount,
+        int waitingCount,
+        int moneyCount,
+        int openCount,
+        decimal expectedValue)
+    {
+        var signals = new List<WorkPipelineCommandCentreSignal>();
+
+        signals.Add(new WorkPipelineCommandCentreSignal
+        {
+            Label = "Pipeline open",
+            Value = openCount.ToString(),
+            Detail = "Open work, warm leads, proof work, or parked items.",
+            Priority = openCount > 0 ? WorkPipelinePriority.Normal : WorkPipelinePriority.Low
+        });
+
+        if (blockedCount > 0)
+        {
+            signals.Add(new WorkPipelineCommandCentreSignal
+            {
+                Label = "Blocked work",
+                Value = blockedCount.ToString(),
+                Detail = "Work exists but cannot move until something changes.",
+                Priority = WorkPipelinePriority.High
+            });
+        }
+
+        if (overdueCount + dueTodayCount > 0)
+        {
+            signals.Add(new WorkPipelineCommandCentreSignal
+            {
+                Label = "Follow-ups now",
+                Value = (overdueCount + dueTodayCount).ToString(),
+                Detail = "Pipeline follow-ups are overdue or due today.",
+                Priority = WorkPipelinePriority.Critical
+            });
+        }
+
+        if (waitingCount > 0)
+        {
+            signals.Add(new WorkPipelineCommandCentreSignal
+            {
+                Label = "Waiting-on",
+                Value = waitingCount.ToString(),
+                Detail = "Client/person/access/payment waiting states are visible.",
+                Priority = WorkPipelinePriority.Normal
+            });
+        }
+
+        if (moneyCount > 0 || expectedValue > 0m)
+        {
+            signals.Add(new WorkPipelineCommandCentreSignal
+            {
+                Label = "Expected work value",
+                Value = expectedValue.ToString("C0"),
+                Detail = "Expected money is visible but is not safe money until paid.",
+                Priority = WorkPipelinePriority.High
+            });
+        }
+
+        return signals;
     }
 
     private static List<string> BuildReasons(

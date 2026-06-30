@@ -38,6 +38,12 @@ public sealed class WorkPipelineItem
 
     public int LikelihoodPercent { get; set; }
 
+    public WorkPipelineOpportunityTemperature OpportunityTemperature { get; set; } = WorkPipelineOpportunityTemperature.Warm;
+
+    public string LastOutcome { get; set; } = string.Empty;
+
+    public string RiskNote { get; set; } = string.Empty;
+
     public bool IsBillable { get; set; }
 
     public bool NeedsTimesheet { get; set; }
@@ -98,6 +104,11 @@ public sealed class WorkPipelineItem
         Stage is WorkPipelineStage.WaitingOnReply or WorkPipelineStage.PaymentExpected;
 
     public bool IsOpen => Status is not WorkPipelineStatus.Completed and not WorkPipelineStatus.Archived && !IsArchived;
+
+    public bool IsOpportunity =>
+        !string.IsNullOrWhiteSpace(OpportunityType) ||
+        Status is WorkPipelineStatus.Warm or WorkPipelineStatus.Parked ||
+        Stage is WorkPipelineStage.LeadIdea or WorkPipelineStage.Contacted or WorkPipelineStage.KeepWarm;
 
     public void Touch()
     {

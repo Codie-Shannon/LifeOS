@@ -71,6 +71,8 @@ public static class WorkPipelineStorage
         item.OpportunityType = item.OpportunityType.Trim();
         item.Source = item.Source.Trim();
         item.WaitingOn = item.WaitingOn.Trim();
+        item.LastOutcome = item.LastOutcome.Trim();
+        item.RiskNote = item.RiskNote.Trim();
         item.NextAction = item.NextAction.Trim();
         item.ExpectedValueNote = item.ExpectedValueNote.Trim();
         item.LinkedProofNotes = item.LinkedProofNotes.Trim();
@@ -109,6 +111,9 @@ public static class WorkPipelineStorage
                 ExpectedValue = 140m,
                 ExpectedValueNote = "4.0h / $140 once completed properly. Expected money is not safe money until paid.",
                 LikelihoodPercent = 90,
+                OpportunityTemperature = WorkPipelineOpportunityTemperature.Active,
+                LastOutcome = "Materials/context known; build work remains.",
+                RiskNote = "Must stay conservative and review-based.",
                 IsBillable = true,
                 NeedsTimesheet = true,
                 PaymentExpected = false,
@@ -130,6 +135,9 @@ public static class WorkPipelineStorage
                 NextAction = "Wait for Jeff re DevExpress licence/trial.",
                 FollowUpDate = today.AddDays(3),
                 LikelihoodPercent = 60,
+                OpportunityTemperature = WorkPipelineOpportunityTemperature.Warm,
+                LastOutcome = "Waiting on access/licence path.",
+                RiskNote = "Do not sink unpaid time while blocked.",
                 Notes = "Blocked until licence/access path is clear. Do not prioritise above paying/clearer work while unpaid."
             },
             new WorkPipelineItem
@@ -147,6 +155,9 @@ public static class WorkPipelineStorage
                 NextAction = "Wait/follow up later.",
                 FollowUpDate = today.AddDays(5),
                 LikelihoodPercent = 70,
+                OpportunityTemperature = WorkPipelineOpportunityTemperature.Warm,
+                LastOutcome = "Staged OCR proof approach accepted earlier.",
+                RiskNote = "Payment/reply still pending; not safe money.",
                 PaymentExpected = true,
                 Notes = "Warm/waiting. Keep separate from safe money until paid."
             },

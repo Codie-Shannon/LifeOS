@@ -42,6 +42,14 @@ public static class WorkPipelineCalculator
             .ThenBy(item => item.Title)
             .ToList();
 
+        var opportunityWork = openItems
+            .Where(item => item.IsOpportunity)
+            .OrderByDescending(item => item.OpportunityTemperature)
+            .ThenByDescending(item => item.LikelihoodPercent)
+            .ThenByDescending(item => item.Priority)
+            .ThenBy(item => item.Title)
+            .ToList();
+
         var priorityItems = openItems
             .Where(item =>
                 item.Priority is WorkPipelinePriority.High or WorkPipelinePriority.Critical ||
@@ -83,6 +91,8 @@ public static class WorkPipelineCalculator
             BlockedItems = blockedWork.Count,
             WarmItems = openItems.Count(item => item.Status == WorkPipelineStatus.Warm),
             ParkedItems = openItems.Count(item => item.Status == WorkPipelineStatus.Parked),
+            OpportunityItems = opportunityWork.Count,
+            HotOpportunityItems = opportunityWork.Count(item => item.OpportunityTemperature is WorkPipelineOpportunityTemperature.Hot or WorkPipelineOpportunityTemperature.Active),
             ArchivedItems = itemList.Count(item => item.IsArchived || item.Status == WorkPipelineStatus.Archived),
             FollowUpsOverdue = overdueCount,
             FollowUpsDueToday = dueTodayCount,
@@ -100,6 +110,7 @@ public static class WorkPipelineCalculator
             BlockedWork = blockedWork,
             WaitingWork = waitingWork,
             MoneyWork = moneyWork,
+            OpportunityWork = opportunityWork,
             Reasons = reasons
         };
     }

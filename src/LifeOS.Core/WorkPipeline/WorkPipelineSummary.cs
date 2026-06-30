@@ -16,6 +16,10 @@ public sealed class WorkPipelineSummary
 
     public int ParkedItems { get; init; }
 
+    public int OpportunityItems { get; init; }
+
+    public int HotOpportunityItems { get; init; }
+
     public int ArchivedItems { get; init; }
 
     public int FollowUpsOverdue { get; init; }
@@ -49,6 +53,8 @@ public sealed class WorkPipelineSummary
     public IReadOnlyList<WorkPipelineItem> WaitingWork { get; init; } = [];
 
     public IReadOnlyList<WorkPipelineItem> MoneyWork { get; init; } = [];
+
+    public IReadOnlyList<WorkPipelineItem> OpportunityWork { get; init; } = [];
 
     public IReadOnlyList<string> Reasons { get; init; } = [];
 }

@@ -56,6 +56,8 @@ public sealed class WorkPipelineSummary
 
     public IReadOnlyList<WorkPipelineItem> OpportunityWork { get; init; } = [];
 
+    public IReadOnlyList<WorkPipelineStageCount> StageCounts { get; init; } = [];
+
     public IReadOnlyList<WorkPipelineCommandCentreSignal> CommandCentreSignals { get; init; } = [];
 
     public IReadOnlyList<string> Reasons { get; init; } = [];

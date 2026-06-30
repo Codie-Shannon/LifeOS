@@ -70,6 +70,12 @@ public static class WorkPipelineCalculator
         var keepWarmDueCount = followUpStates.Count(pair => pair.Value == WorkPipelineFollowUpState.KeepWarm);
         var missingDateCount = openItems.Count(item => item.Status is WorkPipelineStatus.Active or WorkPipelineStatus.Waiting && !item.FollowUpDate.HasValue && !item.KeepWarmDate.HasValue);
 
+        var stageCounts = openItems
+            .GroupBy(item => item.Stage)
+            .OrderBy(group => group.Key)
+            .Select(group => new WorkPipelineStageCount { Stage = group.Key, Count = group.Count() })
+            .ToList();
+
         var commandCentreSignals = BuildCommandCentreSignals(overdueCount, dueTodayCount, blockedWork.Count, waitingWork.Count, moneyWork.Count, openItems.Count, moneyWork.Sum(item => item.ExpectedValue ?? 0m));
 
         var reasons = BuildReasons(openItems, overdueCount, dueTodayCount, dueSoonCount, blockedWork.Count, waitingWork.Count, moneyWork.Count);
@@ -113,6 +119,7 @@ public static class WorkPipelineCalculator
             WaitingWork = waitingWork,
             MoneyWork = moneyWork,
             OpportunityWork = opportunityWork,
+            StageCounts = stageCounts,
             CommandCentreSignals = commandCentreSignals,
             Reasons = reasons
         };

@@ -7,6 +7,7 @@ namespace LifeOS.Shared.WorkPipeline;
 public static class WorkPipelineStorage
 {
     private const string FileName = "work-pipeline.json";
+    private const string BackupFileName = "work-pipeline.backup.json";
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -14,6 +15,8 @@ public static class WorkPipelineStorage
     };
 
     public static string FilePath => LocalAppDataPath.GetFilePath(FileName);
+
+    public static string BackupFilePath => LocalAppDataPath.GetFilePath(BackupFileName);
 
     public static List<WorkPipelineItem> Load()
     {
@@ -36,6 +39,20 @@ public static class WorkPipelineStorage
         }
         catch
         {
+            if (File.Exists(BackupFilePath))
+            {
+                try
+                {
+                    var backupJson = File.ReadAllText(BackupFilePath);
+                    return JsonSerializer.Deserialize<List<WorkPipelineItem>>(backupJson, JsonOptions)
+                        ?? CreateDefaultItems();
+                }
+                catch
+                {
+                    return CreateDefaultItems();
+                }
+            }
+
             return CreateDefaultItems();
         }
     }
@@ -50,8 +67,21 @@ public static class WorkPipelineStorage
             .ThenBy(item => item.Title)
             .ToList();
 
+        if (File.Exists(FilePath))
+        {
+            File.Copy(FilePath, BackupFilePath, overwrite: true);
+        }
+
         var json = JsonSerializer.Serialize(cleanItems, JsonOptions);
-        File.WriteAllText(FilePath, json);
+        var tempPath = FilePath + ".tmp";
+        File.WriteAllText(tempPath, json);
+
+        if (File.Exists(FilePath))
+        {
+            File.Delete(FilePath);
+        }
+
+        File.Move(tempPath, FilePath);
     }
 
     public static void Reset()

@@ -4,6 +4,7 @@ using LifeOS.Core.PayLater;
 using LifeOS.Core.ProofTracker;
 using LifeOS.Core.WeeklyCloseOut;
 using LifeOS.Core.WorkSessions;
+using LifeOS.Core.WorkPipeline;
 using LifeOS.Shared.Agenda;
 using LifeOS.Shared.FollowUps;
 using LifeOS.Shared.Money;
@@ -11,6 +12,7 @@ using LifeOS.Shared.PayLater;
 using LifeOS.Shared.ProofTracker;
 using LifeOS.Shared.WeeklyCloseOut;
 using LifeOS.Shared.WorkSessions;
+using LifeOS.Shared.WorkPipeline;
 
 namespace LifeOS.Shared.CommandCentre;
 
@@ -27,6 +29,7 @@ public static class CommandCentreSummaryService
         var weeklyCloseOutSummary = WeeklyCloseOutCalculator.Calculate(WeeklyCloseOutStorage.Load(), today);
         var workSessionSummary = WorkSessionCalculator.Calculate(WorkSessionStorage.Load());
         var proofSummary = ProofCalculator.Calculate(ProofStorage.Load(), today);
+        var workPipelineSummary = WorkPipelineCalculator.Calculate(WorkPipelineStorage.Load(), today);
 
         var reasons = new List<string>();
         reasons.AddRange(moneySummary.Reasons);
@@ -36,6 +39,7 @@ public static class CommandCentreSummaryService
         reasons.AddRange(followUpSummary.Reasons);
         reasons.AddRange(workSessionSummary.Reasons);
         reasons.AddRange(proofSummary.Reasons);
+        reasons.AddRange(workPipelineSummary.Reasons);
 
         return new CommandCentreSummary
         {
@@ -46,6 +50,7 @@ public static class CommandCentreSummaryService
             WeeklyCloseOut = weeklyCloseOutSummary,
             WorkSessions = workSessionSummary,
             ProofTracker = proofSummary,
+            WorkPipeline = workPipelineSummary,
             OverallPressureLabel = GetOverallPressureLabel(moneySummary.PressureLabel, agendaSummary, payLaterSummary, followUpSummary, weeklyCloseOutSummary, workSessionSummary, proofSummary),
             NextSafestAction = GetNextSafestAction(moneySummary, agendaSummary, payLaterSummary, followUpSummary, weeklyCloseOutSummary, workSessionSummary, proofSummary),
             Reasons = reasons

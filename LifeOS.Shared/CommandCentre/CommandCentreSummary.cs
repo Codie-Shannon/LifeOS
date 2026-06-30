@@ -5,6 +5,7 @@ using LifeOS.Core.PayLater;
 using LifeOS.Core.WeeklyCloseOut;
 using LifeOS.Core.ProofTracker;
 using LifeOS.Core.WorkSessions;
+using LifeOS.Core.WorkPipeline;
 namespace LifeOS.Shared.CommandCentre;
 
 public sealed class CommandCentreSummary
@@ -22,6 +23,8 @@ public sealed class CommandCentreSummary
     public required WorkSessionSummary WorkSessions { get; init; }
 
     public required ProofSummary ProofTracker { get; init; }
+
+    public required WorkPipelineSummary WorkPipeline { get; init; }
 
     public required string OverallPressureLabel { get; init; }
 

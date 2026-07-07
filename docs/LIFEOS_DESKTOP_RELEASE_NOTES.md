@@ -1,5 +1,15 @@
 # LifeOS Desktop Release Notes
 
+## v1.3 — Unified Command Centre + Evidence Vault Foundation
+
+LifeOS Desktop v1.3 adds the first unified Command Centre signal spine, manual daily/passive waiting state, scheduled communication metadata, timesheet evidence helper rules, and a metadata-only Evidence Vault foundation.
+
+Expected money remains separate from safe money until paid.
+
+No mobile, cloud sync, receipt OCR, email integration, CRM, accounting automation, or AI automation has been added.
+
+# LifeOS Desktop Release Notes
+
 ## v0.9 — Work Pipeline + Command Centre Release Candidate
 
 LifeOS Desktop v0.9 is the release-candidate baseline before v1.0.

@@ -2,11 +2,11 @@
 
 LifeOS Desktop is a local-first weekly pressure command centre for tracking personal pressure, safe money, expected money, agenda items, deferred payments, weekly close-out, work sessions, paid work, proof items, follow-ups, projects, timers, and work pipeline pressure without turning the system into a heavy CRM, accounting platform, calendar replacement, or cloud product.
 
-Current release: **LifeOS Desktop v0.9 — Work Pipeline + Command Centre Release Candidate**
+Current release: **LifeOS Desktop v1.3 — Unified Command Centre + Evidence Vault Foundation**
 
 ## Release position
 
-LifeOS Desktop v0.9 is the release-candidate baseline before the v1.0 Unified Command Centre push.
+LifeOS Desktop v1.3 is the release-candidate baseline before the v1.0 Unified Command Centre push.
 
 v0.6 to v0.9 added the Work Pipeline foundation, follow-up/opportunity behaviour, Command Centre signals, stage counts, storage backup safety, and workflow polish.
 
@@ -53,7 +53,21 @@ Not included yet:
 - enterprise multi-user workflows
 - live hardware control
 
-## v0.9 screenshots
+
+## v1.3 release focus
+
+LifeOS Desktop v1.3 moves the app from separate useful modules toward a unified operating loop:
+
+- **v1.0** — Unified Command Centre signal model and “what matters now” view.
+- **v1.1** — manual daily state, passive waiting, do-not-chase logic, and scheduled communication signals.
+- **v1.2** — timesheet evidence helper rules and proof-linked work signals.
+- **v1.3** — metadata-only Evidence Vault foundation for screenshots, messages, work notes, timesheet descriptions, and commits.
+
+The core rule remains: **expected money is not safe money until paid**.
+
+v1.3 deliberately does **not** add mobile, cloud sync, email integration, receipt OCR, accounting automation, or provider authentication. Those remain parked until the manual workflow is proven.
+
+## v0.9 baseline screenshots
 
 ### Command Centre
 

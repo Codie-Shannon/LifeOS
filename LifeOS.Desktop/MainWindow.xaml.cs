@@ -2456,13 +2456,13 @@ public partial class MainWindow : Window
     {
         var summary = CommandCentreSummaryService.Create();
 
-        SetHeader("Command Centre", $"Paid work, pipeline, income, proof, and money timeline • v0.9 RC • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v1.0 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "LifeOS Command Centre",
-            "This is now reading real local LifeOS data across money, agenda, pay-later, weekly close-out, follow-ups, work sessions, proof tracking, and the Work Pipeline. v0.8 makes blocked work, payment pressure, and follow-up pressure visible from the Command Centre."));
+            "LifeOS now turns local module data into a unified signal list: paid work that can move today, follow-ups due, blocked/waiting client work, timesheet/invoice/payment warnings, and safe-money pressure."));
 
         var metricsPanel = new WrapPanel
         {
@@ -2494,6 +2494,23 @@ public partial class MainWindow : Window
         actionPanel.Margin = new Thickness(0, 8, 0, 0);
         root.Children.Add(actionPanel);
 
+
+        var unifiedPanel = CreateInfoPanel(
+            "What matters now",
+            FormatReasons(summary.Snapshot.TodayActions.Select(action => $"{action.Priority} • {action.Title}: {action.Action}")));
+
+        unifiedPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(unifiedPanel);
+
+        var hiddenPanel = CreateInfoPanel(
+            "Hidden from Today",
+            summary.Snapshot.HiddenSignals.Count == 0
+                ? "No parked/passive signals hidden right now."
+                : FormatReasons(summary.Snapshot.HiddenSignals.Select(signal => $"{signal.Title}: {signal.NextAction}")));
+
+        hiddenPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(hiddenPanel);
+
         var reasonsPanel = CreateInfoPanel(
             "Why this week has pressure",
             FormatReasons(summary.Reasons));
@@ -2516,15 +2533,15 @@ public partial class MainWindow : Window
         root.Children.Add(pipelineSignalsPanel);
 
         var workPanel = CreateInfoPanel(
-            "v0.8 work pipeline loop",
-            "Work Pipeline keeps active work, blocked work, warm leads, follow-ups, timesheets, invoices, and expected payments visible. Expected money is not safe money until paid.");
+            "v1.0 command-centre rule",
+            "Command Centre now leads with paid work that can move today, due follow-ups, blocked/waiting client work, timesheet/invoice/payment warnings, and safe-money pressure.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v0.8 scope",
-            "Command Centre now uses Work Pipeline pressure directly: blocked work, due follow-ups, timesheet/invoice/payment states, and expected value. Still local-first JSON/WPF. No CRM, bank sync, payment gateway, or client portal.");
+            "v1.0 scope",
+            "Unified Command Centre foundation only. No mobile, cloud sync, email integration, CRM, accounting automation, or AI automation monster.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

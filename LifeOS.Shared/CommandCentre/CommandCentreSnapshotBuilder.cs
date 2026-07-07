@@ -1,5 +1,6 @@
 using LifeOS.Core.Agenda;
 using LifeOS.Core.CommandCentre;
+using LifeOS.Core.DailyState;
 using LifeOS.Core.FollowUps;
 using LifeOS.Core.Money;
 using LifeOS.Core.PayLater;
@@ -7,6 +8,8 @@ using LifeOS.Core.ProofTracker;
 using LifeOS.Core.WeeklyCloseOut;
 using LifeOS.Core.WorkPipeline;
 using LifeOS.Core.WorkSessions;
+
+using LifeOS.Shared.DailyState;
 
 namespace LifeOS.Shared.CommandCentre;
 
@@ -33,6 +36,7 @@ public static class CommandCentreSnapshotBuilder
         AddAdminMoneySignals(signals, pipeline, workSessions, money, payLater);
         AddProofSignals(signals, proof);
         AddAgendaCloseOutSignals(signals, agenda, weeklyCloseOut);
+                AddDailyStateSignals(signals, today);
 
         var todaySignals = CommandCentreSignalSorter.SortForToday(signals);
                 var todayActions = CommandCentreTodayFlow.Build(todaySignals);
@@ -289,6 +293,98 @@ public static class CommandCentreSnapshotBuilder
                 NextAction = "Add a close-out when you reach the end of the current work block.",
                 Source = "Weekly Close-Out",
                 SortWeight = 90
+            });
+        }
+    }
+
+
+    private static void AddDailyStateSignals(List<CommandCentreSignal> signals, DateOnly today)
+    {
+        var dailySummary = DailyStateCalculator.Calculate(DailyStateStorage.Load(), today);
+        var communicationSummary = ScheduledCommunicationCalculator.Calculate(ScheduledCommunicationStorage.Load(), today);
+
+        foreach (var item in dailySummary.TodayItems.Take(5))
+        {
+            signals.Add(new CommandCentreSignal
+            {
+                Type = item.Type == DailyStateType.ScheduledMessage
+                    ? CommandCentreSignalType.ScheduledCommunication
+                    : CommandCentreSignalType.General,
+                Priority = item.Type == DailyStateType.Blocker
+                    ? CommandCentreSignalPriority.High
+                    : CommandCentreSignalPriority.Normal,
+                Title = item.Title,
+                Detail = string.IsNullOrWhiteSpace(item.Detail) ? item.RelatedProject : item.Detail,
+                NextAction = SafeText(item.NextAction, "Review this daily state item and decide the next action."),
+                Source = "Daily State",
+                RelatedItemId = item.Id.ToString(),
+                IsWaitingState = item.Status is DailyStateStatus.Waiting or DailyStateStatus.PassiveWaiting or DailyStateStatus.DoNotChaseYet,
+                IsTodayVisible = item.ShowInToday && item.Status is not DailyStateStatus.PassiveWaiting and not DailyStateStatus.DoNotChaseYet,
+                DueDate = item.Date,
+                RequiresAction = item.Type is DailyStateType.NextAction or DailyStateType.Blocker,
+                SortWeight = item.Type switch
+                {
+                    DailyStateType.Blocker => 25,
+                    DailyStateType.ScheduledMessage => 35,
+                    DailyStateType.NextAction => 60,
+                    DailyStateType.LowEnergyOption => 95,
+                    DailyStateType.StopPoint => 96,
+                    DailyStateType.Win => 110,
+                    _ => 85
+                }
+            });
+        }
+
+        if (dailySummary.PassiveWaitingCount > 0 || dailySummary.DoNotChaseCount > 0)
+        {
+            signals.Add(new CommandCentreSignal
+            {
+                Type = CommandCentreSignalType.PassiveWaiting,
+                Priority = CommandCentreSignalPriority.Low,
+                Title = "Passive waiting items parked",
+                Detail = $"{dailySummary.PassiveWaitingCount} passive waiting • {dailySummary.DoNotChaseCount} do-not-chase.",
+                NextAction = "Leave these out of Today unless the follow-up date or context changes.",
+                Source = "Daily State",
+                IsWaitingState = true,
+                IsTodayVisible = false,
+                SortWeight = 120
+            });
+        }
+
+        foreach (var item in communicationSummary.PlannedToday.Take(5))
+        {
+            signals.Add(new CommandCentreSignal
+            {
+                Type = CommandCentreSignalType.ScheduledCommunication,
+                Priority = CommandCentreSignalPriority.Normal,
+                Title = $"Scheduled: {item.Recipient}",
+                Detail = $"{item.Channel} • {item.ScheduledAt:HH:mm} • {item.Purpose}",
+                NextAction = "Send it when scheduled, then move to waiting-after-send if no immediate response is expected.",
+                Source = "Scheduled Communication",
+                RelatedItemId = item.Id.ToString(),
+                DueDate = DateOnly.FromDateTime(item.ScheduledAt),
+                RequiresAction = true,
+                SortWeight = 24
+            });
+        }
+
+        foreach (var item in communicationSummary.WaitingAfterSend.Take(5))
+        {
+            signals.Add(new CommandCentreSignal
+            {
+                Type = CommandCentreSignalType.PassiveWaiting,
+                Priority = CommandCentreSignalPriority.Low,
+                Title = $"Wait after send: {item.Recipient}",
+                Detail = item.Purpose,
+                NextAction = item.FollowUpDate.HasValue
+                    ? $"Wait until {item.FollowUpDate:yyyy-MM-dd} before chasing."
+                    : "Wait. Do not chase yet unless the subject matter changes.",
+                Source = "Scheduled Communication",
+                RelatedItemId = item.Id.ToString(),
+                IsWaitingState = true,
+                IsTodayVisible = item.FollowUpDate.HasValue && item.FollowUpDate.Value <= today,
+                DueDate = item.FollowUpDate,
+                SortWeight = 36
             });
         }
     }

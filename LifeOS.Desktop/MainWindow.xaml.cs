@@ -9,6 +9,12 @@ using LifeOS.Shared.FollowUps;
 using LifeOS.Shared.CommandCentre;
 using LifeOS.Core.WorkPipeline;
 using LifeOS.Shared.WorkPipeline;
+using LifeOS.Core.DailyState;
+using LifeOS.Shared.DailyState;
+using LifeOS.Core.TimesheetEvidence;
+using LifeOS.Shared.TimesheetEvidence;
+using LifeOS.Core.EvidenceVault;
+using LifeOS.Shared.EvidenceVault;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -147,6 +153,12 @@ public partial class MainWindow : Window
     private void FollowUpsNavButton_Click(object sender, RoutedEventArgs e) => ShowFollowUpsPage();
 
     private void WorkPipelineNavButton_Click(object sender, RoutedEventArgs e) => ShowWorkPipelinePage();
+
+    private void DailyStateNavButton_Click(object sender, RoutedEventArgs e) => ShowDailyStatePage();
+
+    private void TimesheetEvidenceNavButton_Click(object sender, RoutedEventArgs e) => ShowTimesheetEvidencePage();
+
+    private void EvidenceVaultNavButton_Click(object sender, RoutedEventArgs e) => ShowEvidenceVaultPage();
 
     private void ProjectsNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.Projects);
 
@@ -2451,6 +2463,180 @@ public partial class MainWindow : Window
         MainContentControl.Content = root;
     }
 
+
+
+    private void ShowDailyStatePage()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var dailyItems = DailyStateStorage.Load();
+        var dailySummary = DailyStateCalculator.Calculate(dailyItems, today);
+        var scheduledItems = ScheduledCommunicationStorage.Load();
+        var scheduledSummary = ScheduledCommunicationCalculator.Calculate(scheduledItems, today);
+
+        SetHeader("Daily State", "Daily State • v1.3 passive waiting / scheduled communication");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Daily State",
+            "Track today’s operational state without turning everything into a task. Passive waiting, do-not-chase, scheduled communication, low-energy options, and stop points stay visible without creating noise."));
+
+        var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
+        metricsPanel.Children.Add(CreateDashboardCard("Today visible", dailySummary.TodayOpenCount.ToString(), "Daily State"));
+        metricsPanel.Children.Add(CreateDashboardCard("Done today", dailySummary.DoneTodayCount.ToString(), "Wins"));
+        metricsPanel.Children.Add(CreateDashboardCard("Passive waiting", dailySummary.PassiveWaitingCount.ToString(), "Do not force"));
+        metricsPanel.Children.Add(CreateDashboardCard("Do not chase", dailySummary.DoNotChaseCount.ToString(), "Protected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Scheduled", scheduledSummary.PlannedTodayCount.ToString(), "Communication"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting after send", scheduledSummary.WaitingAfterSendCount.ToString(), "Passive"));
+        root.Children.Add(metricsPanel);
+
+        var todayPanel = CreateInfoPanel(
+            "Today state",
+            dailySummary.TodayItems.Count == 0
+                ? "No daily state items are visible for today."
+                : FormatReasons(dailySummary.TodayItems.Select(item => $"{item.Type} • {item.Title}: {item.NextAction}")));
+        todayPanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(todayPanel);
+
+        var hiddenPanel = CreateInfoPanel(
+            "Passive / hidden from Today",
+            dailySummary.HiddenItems.Count == 0
+                ? "No passive waiting or do-not-chase items are currently parked."
+                : FormatReasons(dailySummary.HiddenItems.Take(8).Select(item => $"{item.Status} • {item.Title}: {item.NextAction}")));
+        hiddenPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(hiddenPanel);
+
+        var scheduledPanel = CreateInfoPanel(
+            "Scheduled communication",
+            scheduledSummary.PlannedToday.Count == 0 && scheduledSummary.WaitingAfterSend.Count == 0
+                ? "No scheduled communication pressure today."
+                : FormatReasons(
+                    scheduledSummary.PlannedToday.Select(item => $"Planned • {item.Recipient} • {item.ScheduledAt:g}: {item.Purpose}")
+                    .Concat(scheduledSummary.WaitingAfterSend.Select(item => $"Waiting after send • {item.Recipient}: {item.Purpose}"))));
+        scheduledPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(scheduledPanel);
+
+        var reasonsPanel = CreateInfoPanel("Daily state pressure", FormatReasons(dailySummary.Reasons.Concat(scheduledSummary.Reasons)));
+        reasonsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reasonsPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local storage",
+            $"Daily state: {DailyStateStorage.FilePath}{Environment.NewLine}Scheduled communication: {ScheduledCommunicationStorage.FilePath}");
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private void ShowTimesheetEvidencePage()
+    {
+        var entries = TimesheetEvidenceStorage.Load();
+        var summary = TimesheetEvidenceCalculator.Calculate(entries);
+
+        SetHeader("Timesheet Evidence", "Timesheet Evidence • v1.3 proof-linked billing support");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Timesheet Evidence",
+            "Turn work activity into client-safe timesheet descriptions before the detail fades. This is manual/local-first support for billable work, proof links, and invoice readiness."));
+
+        var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
+        metricsPanel.Children.Add(CreateDashboardCard("Total entries", summary.TotalEntries.ToString(), "Evidence"));
+        metricsPanel.Children.Add(CreateDashboardCard("Ready", summary.ReadyForTimesheetCount.ToString(), "Timesheet"));
+        metricsPanel.Children.Add(CreateDashboardCard("Drafts", summary.DraftCount.ToString(), "Needs cleanup"));
+        metricsPanel.Children.Add(CreateDashboardCard("Suggested hours", summary.SuggestedHoursTotal.ToString("0.##"), "Ready value"));
+        root.Children.Add(metricsPanel);
+
+        var readyPanel = CreateInfoPanel(
+            "Ready for timesheet",
+            summary.ReadyEntries.Count == 0
+                ? "No entries are ready for timesheet yet."
+                : FormatReasons(summary.ReadyEntries.Take(8).Select(entry => $"{entry.Date:yyyy-MM-dd} • {entry.ClientOrProject} • {entry.SuggestedHours:0.##}h: {entry.Description}")));
+        readyPanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(readyPanel);
+
+        var recentPanel = CreateInfoPanel(
+            "Recent evidence entries",
+            entries.Count == 0
+                ? "No timesheet evidence entries have been captured yet."
+                : FormatReasons(entries.OrderByDescending(entry => entry.Date).Take(8).Select(entry => $"{entry.Status} • {entry.Type} • {entry.ClientOrProject}: {entry.Description}")));
+        recentPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(recentPanel);
+
+        var rulesPanel = CreateInfoPanel(
+            "Time bucket rules",
+            "0.25h = light admin / quick check / short reply.\n0.5h = real investigation / review / setup check / structured follow-up.\n1.0h+ = implementation / testing / proof build / debugging / documentation.");
+        rulesPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(rulesPanel);
+
+        var reasonsPanel = CreateInfoPanel("Timesheet evidence pressure", FormatReasons(summary.Reasons));
+        reasonsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reasonsPanel);
+
+        var storagePanel = CreateInfoPanel("Local storage", TimesheetEvidenceStorage.FilePath);
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private void ShowEvidenceVaultPage()
+    {
+        var items = EvidenceVaultStorage.Load();
+        var summary = EvidenceVaultCalculator.Calculate(items);
+
+        SetHeader("Evidence Vault", "Evidence Vault • v1.3 metadata foundation");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Evidence Vault",
+            "Metadata-only evidence tracking for screenshots, email/message proof, work notes, timesheet descriptions, code commits, documents, and other local proof. No OCR, mobile capture, cloud sync, or provider integration yet."));
+
+        var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
+        metricsPanel.Children.Add(CreateDashboardCard("Total evidence", summary.TotalItems.ToString(), "Vault"));
+        metricsPanel.Children.Add(CreateDashboardCard("Open", summary.OpenItems.ToString(), "Active"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.NeedsReviewCount.ToString(), "Pressure"));
+        metricsPanel.Children.Add(CreateDashboardCard("Screenshots", summary.ScreenshotCount.ToString(), "Proof"));
+        metricsPanel.Children.Add(CreateDashboardCard("Emails/messages", summary.EmailProofCount.ToString(), "Communication"));
+        metricsPanel.Children.Add(CreateDashboardCard("Timesheet proof", summary.TimesheetProofCount.ToString(), "Admin"));
+        metricsPanel.Children.Add(CreateDashboardCard("Commits", summary.CommitProofCount.ToString(), "Repo"));
+        root.Children.Add(metricsPanel);
+
+        var reviewPanel = CreateInfoPanel(
+            "Evidence needing review",
+            summary.NeedsReviewItems.Count == 0
+                ? "No evidence items currently need review."
+                : FormatReasons(summary.NeedsReviewItems.Take(8).Select(item => $"{item.Type} • {item.Title} • {item.ProjectOrClient}: {item.Summary}")));
+        reviewPanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(reviewPanel);
+
+        var recentPanel = CreateInfoPanel(
+            "Recent evidence records",
+            items.Count == 0
+                ? "No Evidence Vault records have been captured yet."
+                : FormatReasons(items.OrderByDescending(item => item.EvidenceDate).Take(8).Select(item => $"{item.Status} • {item.Type} • {item.Title}: {item.SourcePathOrReference}")));
+        recentPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(recentPanel);
+
+        var reasonsPanel = CreateInfoPanel("Evidence Vault pressure", FormatReasons(summary.Reasons));
+        reasonsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reasonsPanel);
+
+        var scopePanel = CreateInfoPanel(
+            "v1.3 scope",
+            "Evidence Vault is metadata-first. It tracks what evidence exists, where it came from, what it links to, and whether it needs review. File copying, receipt OCR, mobile capture, and provider sync belong later.");
+        scopePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(scopePanel);
+
+        var storagePanel = CreateInfoPanel("Local storage", EvidenceVaultStorage.FilePath);
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
 
     private void ShowCommandCentre()
     {

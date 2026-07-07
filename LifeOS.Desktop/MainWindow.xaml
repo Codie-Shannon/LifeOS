@@ -102,6 +102,21 @@
                             Style="{StaticResource NavButtonStyle}"
                             Click="WorkPipelineNavButton_Click"/>
 
+                    <Button x:Name="DailyStateNavButton"
+                            Content="Daily State"
+                            Style="{StaticResource NavButtonStyle}"
+                            Click="DailyStateNavButton_Click"/>
+
+                    <Button x:Name="TimesheetEvidenceNavButton"
+                            Content="Timesheet Evidence"
+                            Style="{StaticResource NavButtonStyle}"
+                            Click="TimesheetEvidenceNavButton_Click"/>
+
+                    <Button x:Name="EvidenceVaultNavButton"
+                            Content="Evidence Vault"
+                            Style="{StaticResource NavButtonStyle}"
+                            Click="EvidenceVaultNavButton_Click"/>
+
                     <Button x:Name="ProjectsNavButton"
                             Content="Projects"
                             Style="{StaticResource NavButtonStyle}"

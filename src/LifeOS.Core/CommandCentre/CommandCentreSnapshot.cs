@@ -20,6 +20,8 @@ public sealed class CommandCentreSnapshot
 
     public IReadOnlyList<CommandCentreSignal> HiddenSignals { get; init; } = [];
 
+    public IReadOnlyList<CommandCentreTodayAction> TodayActions { get; init; } = [];
+
     public int CriticalCount => Signals.Count(signal => signal.Priority == CommandCentreSignalPriority.Critical && signal.IsTodayVisible);
 
     public int HighCount => Signals.Count(signal => signal.Priority == CommandCentreSignalPriority.High && signal.IsTodayVisible);

@@ -35,6 +35,7 @@ public static class CommandCentreSnapshotBuilder
         AddAgendaCloseOutSignals(signals, agenda, weeklyCloseOut);
 
         var todaySignals = CommandCentreSignalSorter.SortForToday(signals);
+                var todayActions = CommandCentreTodayFlow.Build(todaySignals);
 
         return new CommandCentreSnapshot
         {
@@ -46,7 +47,8 @@ public static class CommandCentreSnapshotBuilder
             MoneySignals = todaySignals.Where(signal => signal.IsMoneyRelated).ToList(),
             WaitingSignals = todaySignals.Where(signal => signal.IsWaitingState).ToList(),
             ProofSignals = todaySignals.Where(signal => signal.IsProofRelated).ToList(),
-            HiddenSignals = signals.Where(signal => !signal.IsTodayVisible).ToList()
+            HiddenSignals = signals.Where(signal => !signal.IsTodayVisible).ToList(),
+            TodayActions = todayActions
         };
     }
 

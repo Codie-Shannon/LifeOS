@@ -1,34 +1,64 @@
-# LifeOS Desktop v1.3 Release Summary
+# LifeOS Desktop v1.3.5 Release Notes
 
-LifeOS Desktop v1.3 is the **Unified Command Centre + Evidence Vault Foundation** release.
+LifeOS Desktop v1.3.5 completes the v1.3 visibility pass.
 
-## What changed from v0.9
+## Release theme
 
-- Added a unified Command Centre signal model.
-- Added a Command Centre snapshot builder that turns module summaries into practical signals.
-- Added Today actions so the app can answer “what matters now?” instead of only showing module totals.
-- Added manual Daily State and passive waiting concepts.
-- Added scheduled communication metadata so “wait / do not chase yet” can be treated as a real state.
-- Added Timesheet Evidence models and helper rules using the accepted time buckets:
-  - 0.25h = light admin / quick check / short reply.
-  - 0.5h = real investigation / review / setup check / structured follow-up.
-  - 1.0h+ = implementation / testing / proof build / debugging / documentation.
-- Added metadata-only Evidence Vault foundation.
-- Added Command Centre signals for evidence review.
+**Unified Command Centre + Evidence Vault Foundation**
 
-## What v1.3 is not
+LifeOS now has visible desktop pages for the new v1.1–v1.3 foundations:
 
-v1.3 is not a CRM, accounting system, mobile app, cloud app, email integration, receipt OCR workflow, or AI automation layer.
+- Daily State
+- Timesheet Evidence
+- Evidence Vault
 
-## Evidence types prioritised first
+## Added since v0.9
 
-1. Screenshots
-2. Email/message proof
-3. Work session notes
-4. Timesheet descriptions
-5. Code commits / repo history
+### v1.0 — Unified Command Centre
 
-## Current rule
+- Command Centre signal model
+- Command Centre snapshot building
+- Today / next action direction
+- stronger “what matters now” structure
 
-If it helps Command Centre answer **what matters now**, it belongs in the v1 spine.
-If it is a cool side feature, it stays parked.
+### v1.1 — Daily State
+
+- passive waiting rules
+- do-not-chase state
+- scheduled communication model
+- daily state Command Centre integration
+
+### v1.2 — Timesheet Evidence
+
+- timesheet evidence model
+- accepted time bucket rules
+- proof-linked work signals
+- timesheet/proof pressure in Command Centre
+
+### v1.3 — Evidence Vault
+
+- metadata-first evidence model
+- local Evidence Vault storage
+- evidence linking fields
+- evidence pressure signals
+
+### v1.3.5 — Visible pages
+
+- Daily State page exposed in sidebar
+- Timesheet Evidence page exposed in sidebar
+- Evidence Vault page exposed in sidebar
+- v1.3 screenshots and README updated
+
+## Boundaries
+
+Not included in v1.3.5:
+
+- Receipt OCR
+- Relationship Radar
+- Outlook/Gmail integration
+- mobile app
+- cloud sync
+- automatic sending
+- accounting/bank integration
+
+These remain roadmap items for future versions.

@@ -1,127 +1,64 @@
-# LifeOS Desktop Release Notes
+# LifeOS Desktop v1.3.5 Release Notes
 
-## v1.3 — Unified Command Centre + Evidence Vault Foundation
+LifeOS Desktop v1.3.5 completes the v1.3 visibility pass.
 
-LifeOS Desktop v1.3 adds the first unified Command Centre signal spine, manual daily/passive waiting state, scheduled communication metadata, timesheet evidence helper rules, and a metadata-only Evidence Vault foundation.
+## Release theme
 
-Expected money remains separate from safe money until paid.
+**Unified Command Centre + Evidence Vault Foundation**
 
-No mobile, cloud sync, receipt OCR, email integration, CRM, accounting automation, or AI automation has been added.
+LifeOS now has visible desktop pages for the new v1.1–v1.3 foundations:
 
-# LifeOS Desktop Release Notes
+- Daily State
+- Timesheet Evidence
+- Evidence Vault
 
-## v0.9 — Work Pipeline + Command Centre Release Candidate
+## Added since v0.9
 
-LifeOS Desktop v0.9 is the release-candidate baseline before v1.0.
+### v1.0 — Unified Command Centre
 
-The v0.6 to v0.9 push adds the Work Pipeline foundation, follow-up/opportunity behaviour, Command Centre work pipeline signals, conservative expected-money visibility, stage counts, local storage backup safety, and final workflow polish.
+- Command Centre signal model
+- Command Centre snapshot building
+- Today / next action direction
+- stronger “what matters now” structure
 
-## Main additions since v0.5
+### v1.1 — Daily State
 
-### Work Pipeline foundation
+- passive waiting rules
+- do-not-chase state
+- scheduled communication model
+- daily state Command Centre integration
 
-Work Pipeline tracks practical work and opportunity pressure without becoming a full CRM.
+### v1.2 — Timesheet Evidence
 
-It supports:
+- timesheet evidence model
+- accepted time bucket rules
+- proof-linked work signals
+- timesheet/proof pressure in Command Centre
 
-- active paid work
-- warm leads
-- proof projects
-- blocked work
-- follow-up pressure
-- timesheet needs
-- invoice needs
-- expected payment states
-- parked ideas
-- stage/status/priority tracking
+### v1.3 — Evidence Vault
 
-### Follow-up and opportunity behaviour
+- metadata-first evidence model
+- local Evidence Vault storage
+- evidence linking fields
+- evidence pressure signals
 
-The Work Pipeline now has enough structure to separate moving work from waiting work.
+### v1.3.5 — Visible pages
 
-It makes visible:
+- Daily State page exposed in sidebar
+- Timesheet Evidence page exposed in sidebar
+- Evidence Vault page exposed in sidebar
+- v1.3 screenshots and README updated
 
-- follow-ups due
-- waiting-on work
-- blocked work
-- opportunity pressure
-- today focus
-- next actions
+## Boundaries
 
-### Command Centre integration
+Not included in v1.3.5:
 
-Command Centre now reads Work Pipeline pressure and surfaces it beside money, agenda, follow-up, proof, and work-session signals.
+- Receipt OCR
+- Relationship Radar
+- Outlook/Gmail integration
+- mobile app
+- cloud sync
+- automatic sending
+- accounting/bank integration
 
-It shows:
-
-- pipeline open count
-- pipeline blocked count
-- pipeline follow-ups
-- expected pipeline value
-- billable work value
-- expected money warning language
-
-### Storage safety
-
-Work Pipeline data is persisted locally with JSON storage and a backup file.
-
-The local storage proof shows the LifeOS data folder containing module JSON files such as:
-
-- `agenda-items.json`
-- `follow-ups.json`
-- `money-pressure-input.json`
-- `pay-later-items.json`
-- `proof-items.json`
-- `work-pipeline.json`
-- `work-pipeline.backup.json`
-- `work-sessions.json`
-
-## Release screenshots
-
-| Screenshot | Purpose |
-|---|---|
-| `docs/screenshots/01-lifeos-v09-command-centre.png` | Shows v0.9 Command Centre with pipeline, money, follow-up, and proof pressure. |
-| `docs/screenshots/02-lifeos-v09-work-pipeline-summary.png` | Shows Work Pipeline summary cards for open, active, waiting, blocked, follow-up, expected value, timesheets, and invoices. |
-| `docs/screenshots/03-lifeos-v09-work-pipeline-stage-breakdown.png` | Shows stage breakdown and today focus items. |
-| `docs/screenshots/04-lifeos-v09-money-timeline.png` | Shows safe-to-spend, incoming/outgoing, and projected balance. |
-| `docs/screenshots/05-lifeos-v09-follow-ups.png` | Shows local follow-up foundation and money-linked follow-up pressure. |
-| `docs/screenshots/06-lifeos-v09-local-storage-proof.png` | Shows local JSON module data and Work Pipeline backup file. |
-
-## What v0.9 intentionally avoids
-
-- no cloud sync
-- no mobile app
-- no client portal
-- no bank sync
-- no tax filing
-- no full accounting ledger
-- no final invoice/PDF generator
-- no enterprise multi-user workflow
-- no live hardware control
-
-## Test status
-
-Confirmed release checks for v0.9 should include:
-
-- app builds successfully
-- Command Centre opens
-- Work Pipeline opens
-- Work Pipeline summary cards display
-- Work Pipeline stage breakdown displays
-- today focus items display
-- Follow-Ups opens
-- Money Timeline opens
-- expected pipeline value is clearly not safe money
-- local `work-pipeline.json` exists
-- local `work-pipeline.backup.json` exists
-- app can be restarted without losing Work Pipeline data
-
-## v1.0 direction
-
-v1.0 should be the Unified Command Centre Foundation.
-
-The next goal is not adding more modules. The next goal is making the existing modules work together so LifeOS can answer:
-
-```text
-What matters now?
-```
+These remain roadmap items for future versions.

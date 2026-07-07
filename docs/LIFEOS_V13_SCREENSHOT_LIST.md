@@ -1,11 +1,34 @@
 # LifeOS Desktop v1.3 Screenshot List
 
-Capture these after applying v1.3 and confirming the build runs.
+Save screenshots in:
 
-1. `01-lifeos-v13-command-centre.png` — Command Centre with v1.3 header and “What matters now”.
-2. `02-lifeos-v13-today-actions.png` — Today actions / signal list.
-3. `03-lifeos-v13-hidden-passive-waiting.png` — hidden/passive waiting state if visible.
-4. `04-lifeos-v13-work-pipeline.png` — Work Pipeline still loading v0.9+ data.
-5. `05-lifeos-v13-local-storage.png` — local JSON storage showing new files when created.
+```text
+C:\Projects\LifeOS\docs\screenshots\
+```
 
-Keep v0.9 screenshots as the baseline before Unified Command Centre work.
+## Included screenshots
+
+| File | Page | Purpose |
+|---|---|---|
+| `01-lifeos-v13-command-centre-summary.png` | Command Centre | Shows the unified summary cards and v1.3 navigation. |
+| `02-lifeos-v13-today-next-action.png` | Command Centre / Today section | Shows next safest action, what matters now, hidden/passive waiting, and weekly pressure. |
+| `03-lifeos-v13-daily-state-passive-waiting.png` | Daily State | Shows passive waiting, do-not-chase, scheduled communication, and daily state cards. |
+| `04-lifeos-v13-timesheet-evidence.png` | Timesheet Evidence | Shows time bucket rules, evidence entries, pressure, and local storage path. |
+| `05-lifeos-v13-evidence-vault.png` | Evidence Vault | Shows Evidence Vault metadata foundation, review state, pressure, scope, and local storage path. |
+| `06-lifeos-v13-work-pipeline-connected.png` | Work Pipeline | Shows Work Pipeline still connected to the v1.3 operating flow. |
+
+## Optional screenshot still useful later
+
+A local storage proof screenshot can still be added later if needed:
+
+```text
+07-lifeos-v13-local-storage-proof.png
+```
+
+Suggested path to capture:
+
+```text
+C:\Users\Codie\AppData\Local\LifeOS\
+```
+
+or whichever LifeOS data folder contains the v1.3 JSON files.

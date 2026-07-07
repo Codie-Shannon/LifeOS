@@ -1,174 +1,68 @@
 # LifeOS Roadmap
 
-Current release: **LifeOS Desktop v0.9 — Work Pipeline + Command Centre Release Candidate**
+## Current release
 
-## Product direction
+**LifeOS Desktop v1.3.5 — Unified Command Centre + Evidence Vault Foundation**
 
-LifeOS is a local-first desktop command centre for managing personal pressure, money pressure, work sessions, proof, follow-ups, Work Pipeline, paid work, and weekly operating flow.
+## Product identity
 
-Desktop/core remains the priority. Mobile, cloud, enterprise, and client-portal features come later after the core command-centre workflow is proven.
+LifeOS is a people-first command centre for reducing chaos and increasing control across work, money pressure, follow-ups, proof, evidence, and daily execution.
 
-Core philosophy:
-
-```text
-Build systems that reduce chaos and increase control.
-```
-
-LifeOS starts personal and can evolve later:
+## Version meaning
 
 ```text
-Personal -> Contractor -> Business -> Enterprise
+v1.0–v1.3 = Command Centre / daily state / proof / evidence foundation
+v1.4–v1.9 = finish the missing core feature modules and product workflow
+v2.0      = full paid desktop roadmap version
+v2.x      = deepen/polish/export/backup/product hardening
+v3.0      = mobile companion / data portability era
+v4.0      = realistic automation/integration layer begins
+v5.0      = business/team/enterprise scale
 ```
 
-## Completed releases
+## v2.0 rule
 
-### v0.1 — First usable foundation
+v2.0 means the full paid LifeOS Desktop roadmap version.
 
-- Desktop shell
-- Dark UI direction
-- Navigation foundation
-- Local-first direction
+By v2.0, the major desktop features should exist in manual/local-first form and feed the Command Centre.
 
-### v0.2 — Weekly pressure foundation
+## Features expected by v2.0
 
+- Command Centre
+- Work Pipeline
+- Money Pressure
+- Money Timeline
+- Follow-Ups
 - Agenda
 - Pay Later
 - Weekly Close-Out
-- Command Centre weekly metrics
-- Initial docs/screenshots
-
-### v0.3 — Work, income, and proof foundation
-
 - Work Sessions
 - Proof Tracker
-- Work/income/proof Command Centre metrics
-- MainWindow wiring
-- v0.3 docs/screenshots
-
-### v0.4 — Trust polish release
-
-- v0.4 wording and labels
-- clearer Command Centre copy
-- safer reset confirmation wording
-- improved empty states
-- full merged v0.4 docs/screenshots
-
-### v0.5 — Paid Work Centre + Money Timeline
-
 - Paid Work Centre
-- invoice-ready work-session metrics
-- copy-ready work summary
-- Money Timeline
-- projected balance
-- lowest point
-- safe-to-spend
-- Command Centre paid-work visibility
+- Daily State
+- Scheduled Communication
+- Passive Waiting / Do Not Chase
+- Timesheet Evidence Helper
+- Evidence Vault
+- Relationship Radar manual foundation
+- Data safety / backup / export
 
-### v0.6 — Work Pipeline foundation
+## Automation timing
 
-- Work Pipeline models
-- stage/status/priority tracking
-- summary calculator
-- local JSON storage
-- desktop foundation
+Automation becomes realistic around **v4.0**, after LifeOS has stable manual state and predictable rules.
 
-### v0.7 — Follow-up and opportunity behaviour
+Before v4.0, the safe automation layer is limited to local calculations such as due dates, warning signals, ranking, backups, and missing-next-action detection.
 
-- follow-up states
-- waiting-on pressure
-- opportunity scoring direction
-- follow-up bridge behaviour
-- next-action visibility
+## Later heavy features
 
-### v0.8 — Command Centre Work Pipeline integration
+After v2.0 / v3.0 / v4.0:
 
-- Command Centre pipeline signals
-- open/blocked/follow-up pipeline counts
-- expected pipeline money visibility
-- work and money pressure signals
-
-### v0.9 — Release candidate polish
-
-- desktop version text polish
-- Work Pipeline storage backup safety
-- stage breakdown counts
-- desktop stage display polish
-- final release-candidate code polish
-
-## Next major target
-
-### v1.0 — Unified Command Centre Foundation
-
-v1.0 should make LifeOS feel like one operating system instead of a collection of useful pages.
-
-The goal is for Command Centre to answer:
-
-```text
-What matters now?
-```
-
-Likely v1.0 scope:
-
-- Command Centre becomes the main daily screen
-- Work Pipeline, Follow-Ups, Money Timeline, Money Pressure, Work Sessions, Paid Work, and Proof signals become more connected
-- safe money and expected money are clearly separated
-- blocked work and waiting-on pressure are visible without hunting through pages
-- today focus becomes clearer
-- next-action flow becomes more obvious
-- parked work stays out of the way
-- proof/evidence reminders become more practical
-
-## v1.0 boundaries
-
-v1.0 should not become:
-
-- a CRM
-- a full accounting system
-- a mobile app
-- a cloud SaaS product
-- an enterprise platform
-- a client portal
-- a hardware control surface
-- a design overhaul
-
-## Medium-term direction after v1.0
-
-### Contractor Command Centre
-
-LifeOS should eventually support:
-
-- client work
-- timers
-- billable hours
-- follow-ups
-- proof/case-study tracking
-- invoices/summaries
-- portfolio support
-- broader business operations
-
-### Proof and portfolio pipeline
-
-LifeOS should help convert real work into reusable proof:
-
-- screenshots
-- client replies
-- invoices
-- release notes
-- case-study notes
-- GitHub/release links
-
-### Mobile later
-
-Mobile should come after desktop/core is proven.
-
-Likely later target:
-
-```text
-v1.6 to v2.0 or after the core is stable enough to justify mobile
-```
-
-## Long-term principle
-
-Before declaring LifeOS v2.0 complete, do a dedicated polish block at the end of the push.
-
-That polish block should happen right before v2.0 is declared done, not too early, because features and structure will continue changing.
+- mobile companion
+- paid full mobile app
+- cloud/sync readiness
+- Outlook/Gmail integration
+- receipt OCR
+- provider integrations
+- relationship/email radar automation
+- accounting/bank integrations
+- enterprise/team workflows

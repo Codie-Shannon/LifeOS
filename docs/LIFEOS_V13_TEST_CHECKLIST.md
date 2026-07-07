@@ -2,39 +2,97 @@
 
 ## Build
 
-- [ ] Run `dotnet build` from the solution root.
-- [ ] Confirm LifeOS.Desktop launches.
+```powershell
+cd C:\Projects\LifeOS
+dotnet build
+```
+
+Expected:
+
+```text
+Build succeeded.
+```
+
+## Navigation
+
+Confirm these pages open from the sidebar:
+
+- Command Centre
+- Work Pipeline
+- Daily State
+- Timesheet Evidence
+- Evidence Vault
 
 ## Command Centre
 
-- [ ] Command Centre opens as the main screen.
-- [ ] Header shows v1.3 wording.
-- [ ] “What matters now” panel appears.
-- [ ] Today actions show useful signal wording.
-- [ ] Hidden/passive waiting signals do not overwhelm Today.
-- [ ] Expected money remains described as not safe money until paid.
+Confirm the Command Centre shows:
 
-## Work Pipeline
+- current release/version text
+- next safest action
+- what matters now
+- hidden/passive waiting items
+- weekly pressure summary
 
-- [ ] Existing Work Pipeline items still load.
-- [ ] Active paid work can still be shown.
-- [ ] Waiting/blocked/follow-up states still display.
-- [ ] Timesheet/invoice/payment flags still save.
+## Daily State
 
-## Daily State / Scheduled Communication
+Confirm Daily State shows:
 
-- [ ] Daily state storage file can be created when used.
-- [ ] Scheduled communication storage file can be created when used.
-- [ ] Passive waiting wording is conservative and does not encourage over-chasing.
+- Today visible
+- Done today
+- Passive waiting
+- Do not chase
+- Scheduled
+- Waiting after send
 
 ## Timesheet Evidence
 
-- [ ] Timesheet evidence storage file can be created when used.
-- [ ] Suggested time bucket rules are present.
-- [ ] Ready evidence can create Command Centre pressure.
+Confirm Timesheet Evidence shows:
+
+- ready for timesheet section
+- recent evidence entries section
+- time bucket rules
+- local storage path
+
+Accepted time buckets:
+
+```text
+0.25h = light admin / quick check / short reply
+0.5h  = real investigation / review / setup check / structured follow-up
+1.0h+ = implementation / testing / proof build / debugging / documentation
+```
 
 ## Evidence Vault
 
-- [ ] Evidence Vault metadata storage file can be created when used.
-- [ ] Needs-review evidence can create Command Centre pressure.
-- [ ] No receipt OCR, email sync, mobile capture, or cloud sync has been added.
+Confirm Evidence Vault shows:
+
+- evidence needing review
+- recent evidence records
+- evidence pressure
+- v1.3 scope
+- local storage path
+
+## Local-first behaviour
+
+Confirm the app references local LifeOS storage and does not require:
+
+- cloud sync
+- login/account
+- Outlook/Gmail integration
+- mobile app
+- provider authentication
+
+## Release check
+
+Before tagging or pushing:
+
+```powershell
+git status
+dotnet build
+```
+
+Expected:
+
+```text
+working tree clean
+Build succeeded
+```

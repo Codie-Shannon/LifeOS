@@ -1,6 +1,7 @@
 using LifeOS.Core.Agenda;
 using LifeOS.Core.CommandCentre;
 using LifeOS.Core.DailyState;
+using LifeOS.Core.EvidenceVault;
 using LifeOS.Core.FollowUps;
 using LifeOS.Core.Money;
 using LifeOS.Core.PayLater;
@@ -11,6 +12,7 @@ using LifeOS.Core.WorkPipeline;
 using LifeOS.Core.WorkSessions;
 
 using LifeOS.Shared.DailyState;
+using LifeOS.Shared.EvidenceVault;
 using LifeOS.Shared.TimesheetEvidence;
 
 namespace LifeOS.Shared.CommandCentre;
@@ -38,6 +40,7 @@ public static class CommandCentreSnapshotBuilder
         AddAdminMoneySignals(signals, pipeline, workSessions, money, payLater);
         AddProofSignals(signals, proof);
                 AddTimesheetEvidenceSignals(signals);
+                AddEvidenceVaultSignals(signals);
         AddAgendaCloseOutSignals(signals, agenda, weeklyCloseOut);
                 AddDailyStateSignals(signals, today);
 
@@ -426,6 +429,44 @@ public static class CommandCentreSnapshotBuilder
                 Source = "Timesheet Evidence",
                 IsProofRelated = true,
                 SortWeight = 72
+            });
+        }
+    }
+
+
+    private static void AddEvidenceVaultSignals(List<CommandCentreSignal> signals)
+    {
+        var summary = EvidenceVaultCalculator.Calculate(EvidenceVaultStorage.Load());
+
+        if (summary.NeedsReviewCount > 0)
+        {
+            signals.Add(new CommandCentreSignal
+            {
+                Type = CommandCentreSignalType.EvidenceReview,
+                Priority = CommandCentreSignalPriority.Normal,
+                Title = "Evidence needs review",
+                Detail = $"{summary.NeedsReviewCount} Evidence Vault item(s) need review.",
+                NextAction = "Review captured evidence, link it to work/client/project state, then mark reviewed.",
+                Source = "Evidence Vault",
+                IsProofRelated = true,
+                RequiresAction = true,
+                SortWeight = 68
+            });
+        }
+
+        if (summary.OpenItems > 0 && summary.NeedsReviewCount == 0)
+        {
+            signals.Add(new CommandCentreSignal
+            {
+                Type = CommandCentreSignalType.EvidenceReview,
+                Priority = CommandCentreSignalPriority.Low,
+                Title = "Evidence Vault active",
+                Detail = $"{summary.OpenItems} metadata evidence item(s) stored.",
+                NextAction = "Keep linking evidence to pipeline work, timesheets, proof notes, and repo history.",
+                Source = "Evidence Vault",
+                IsProofRelated = true,
+                IsTodayVisible = false,
+                SortWeight = 125
             });
         }
     }

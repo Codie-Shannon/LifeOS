@@ -2456,7 +2456,7 @@ public partial class MainWindow : Window
     {
         var summary = CommandCentreSummaryService.Create();
 
-        SetHeader("Command Centre", $"Unified Command Centre • v1.2 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v1.3 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -2533,15 +2533,15 @@ public partial class MainWindow : Window
         root.Children.Add(pipelineSignalsPanel);
 
         var workPanel = CreateInfoPanel(
-            "v1.2 timesheet/proof rule",
-            "Command Centre now treats timesheet evidence and proof capture as part of the work-to-money trail. Work should become evidence before it becomes invoice pressure.");
+            "v1.3 evidence rule",
+            "Command Centre now has a metadata-only Evidence Vault foundation. Evidence can be tracked and reviewed without building receipt OCR or provider sync yet.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v1.2 scope",
-            "Timesheet evidence helper only. No accounting system, invoice sending, payroll, bank sync, or automatic billing.");
+            "v1.3 scope",
+            "Evidence Vault metadata only. No receipt OCR, email sync, mobile scanner, cloud storage, provider auth, or automatic evidence classification.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

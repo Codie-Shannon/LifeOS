@@ -2456,7 +2456,7 @@ public partial class MainWindow : Window
     {
         var summary = CommandCentreSummaryService.Create();
 
-        SetHeader("Command Centre", $"Unified Command Centre • v1.1 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v1.2 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -2533,15 +2533,15 @@ public partial class MainWindow : Window
         root.Children.Add(pipelineSignalsPanel);
 
         var workPanel = CreateInfoPanel(
-            "v1.1 daily-state rule",
-            "Command Centre now understands passive waiting, scheduled communication, and do-not-chase states. Waiting can be a valid next action.");
+            "v1.2 timesheet/proof rule",
+            "Command Centre now treats timesheet evidence and proof capture as part of the work-to-money trail. Work should become evidence before it becomes invoice pressure.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v1.1 scope",
-            "Manual daily state and scheduled communication only. No inbox sync, auto-send, CRM, provider auth, mobile, or automation monster.");
+            "v1.2 scope",
+            "Timesheet evidence helper only. No accounting system, invoice sending, payroll, bank sync, or automatic billing.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

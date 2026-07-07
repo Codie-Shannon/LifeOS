@@ -5,11 +5,13 @@ using LifeOS.Core.FollowUps;
 using LifeOS.Core.Money;
 using LifeOS.Core.PayLater;
 using LifeOS.Core.ProofTracker;
+using LifeOS.Core.TimesheetEvidence;
 using LifeOS.Core.WeeklyCloseOut;
 using LifeOS.Core.WorkPipeline;
 using LifeOS.Core.WorkSessions;
 
 using LifeOS.Shared.DailyState;
+using LifeOS.Shared.TimesheetEvidence;
 
 namespace LifeOS.Shared.CommandCentre;
 
@@ -35,6 +37,7 @@ public static class CommandCentreSnapshotBuilder
         AddBlockedWaitingSignals(signals, pipeline);
         AddAdminMoneySignals(signals, pipeline, workSessions, money, payLater);
         AddProofSignals(signals, proof);
+                AddTimesheetEvidenceSignals(signals);
         AddAgendaCloseOutSignals(signals, agenda, weeklyCloseOut);
                 AddDailyStateSignals(signals, today);
 
@@ -385,6 +388,44 @@ public static class CommandCentreSnapshotBuilder
                 IsTodayVisible = item.FollowUpDate.HasValue && item.FollowUpDate.Value <= today,
                 DueDate = item.FollowUpDate,
                 SortWeight = 36
+            });
+        }
+    }
+
+
+    private static void AddTimesheetEvidenceSignals(List<CommandCentreSignal> signals)
+    {
+        var summary = TimesheetEvidenceCalculator.Calculate(TimesheetEvidenceStorage.Load());
+
+        if (summary.ReadyForTimesheetCount > 0)
+        {
+            signals.Add(new CommandCentreSignal
+            {
+                Type = CommandCentreSignalType.TimesheetNeeded,
+                Priority = CommandCentreSignalPriority.High,
+                Title = "Timesheet evidence ready",
+                Detail = $"{summary.ReadyForTimesheetCount} item(s) ready • suggested {summary.SuggestedHoursTotal:0.##}h.",
+                NextAction = "Turn ready evidence into a client-safe timesheet entry before detail fades.",
+                Source = "Timesheet Evidence",
+                IsMoneyRelated = true,
+                IsProofRelated = true,
+                RequiresAction = true,
+                SortWeight = 39
+            });
+        }
+
+        if (summary.DraftCount > 0)
+        {
+            signals.Add(new CommandCentreSignal
+            {
+                Type = CommandCentreSignalType.ProofNeeded,
+                Priority = CommandCentreSignalPriority.Normal,
+                Title = "Draft timesheet evidence exists",
+                Detail = $"{summary.DraftCount} draft item(s) may need cleanup.",
+                NextAction = "Review draft evidence and mark ready only when it is client-safe and accurate.",
+                Source = "Timesheet Evidence",
+                IsProofRelated = true,
+                SortWeight = 72
             });
         }
     }

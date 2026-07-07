@@ -2456,7 +2456,7 @@ public partial class MainWindow : Window
     {
         var summary = CommandCentreSummaryService.Create();
 
-        SetHeader("Command Centre", $"Unified Command Centre • v1.0 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v1.1 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -2533,15 +2533,15 @@ public partial class MainWindow : Window
         root.Children.Add(pipelineSignalsPanel);
 
         var workPanel = CreateInfoPanel(
-            "v1.0 command-centre rule",
-            "Command Centre now leads with paid work that can move today, due follow-ups, blocked/waiting client work, timesheet/invoice/payment warnings, and safe-money pressure.");
+            "v1.1 daily-state rule",
+            "Command Centre now understands passive waiting, scheduled communication, and do-not-chase states. Waiting can be a valid next action.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v1.0 scope",
-            "Unified Command Centre foundation only. No mobile, cloud sync, email integration, CRM, accounting automation, or AI automation monster.");
+            "v1.1 scope",
+            "Manual daily state and scheduled communication only. No inbox sync, auto-send, CRM, provider auth, mobile, or automation monster.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

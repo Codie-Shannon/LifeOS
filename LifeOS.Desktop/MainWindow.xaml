@@ -126,10 +126,10 @@
                         Padding="14"
                         Margin="0,18,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v1.0"
+                        <TextBlock Text="Desktop v1.1"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="Unified Command Centre foundation. Paid work → follow-ups → blocked work → money/admin pressure → proof signals."
+                        <TextBlock Text="Unified Command Centre with daily state, passive waiting, and scheduled communication signals."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -159,7 +159,7 @@
                                    FontSize="28"
                                    FontWeight="Bold"/>
                         <TextBlock x:Name="PageSubtitleTextBlock"
-                                   Text="Work, income, proof command centre • Desktop v1.0"
+                                   Text="Work, income, proof command centre • Desktop v1.1"
                                    Foreground="#94A3B8"
                                    FontSize="14"
                                    Margin="0,4,0,0"/>
@@ -190,7 +190,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v1.0 keeps the workflow local-first, pressure-aware, and conservative about expected money."
+                <TextBlock Text="LifeOS Desktop v1.1 keeps the workflow local-first, pressure-aware, and conservative about expected money."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

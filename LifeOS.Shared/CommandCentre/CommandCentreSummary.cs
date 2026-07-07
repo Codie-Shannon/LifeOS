@@ -1,4 +1,5 @@
 using LifeOS.Core.Agenda;
+using LifeOS.Core.CommandCentre;
 using LifeOS.Core.FollowUps;
 using LifeOS.Core.Money;
 using LifeOS.Core.PayLater;
@@ -25,6 +26,8 @@ public sealed class CommandCentreSummary
     public required ProofSummary ProofTracker { get; init; }
 
     public required WorkPipelineSummary WorkPipeline { get; init; }
+
+    public required CommandCentreSnapshot Snapshot { get; init; }
 
     public required string OverallPressureLabel { get; init; }
 

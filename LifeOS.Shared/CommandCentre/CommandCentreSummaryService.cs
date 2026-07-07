@@ -41,6 +41,10 @@ public static class CommandCentreSummaryService
         reasons.AddRange(proofSummary.Reasons);
         reasons.AddRange(workPipelineSummary.Reasons);
 
+        var overallPressureLabel = GetOverallPressureLabel(moneySummary.PressureLabel, agendaSummary, payLaterSummary, followUpSummary, weeklyCloseOutSummary, workSessionSummary, proofSummary, workPipelineSummary);
+        var nextSafestAction = GetNextSafestAction(moneySummary, agendaSummary, payLaterSummary, followUpSummary, weeklyCloseOutSummary, workSessionSummary, proofSummary, workPipelineSummary);
+        var snapshot = CommandCentreSnapshotBuilder.Build(today, moneySummary, followUpSummary, agendaSummary, payLaterSummary, weeklyCloseOutSummary, workSessionSummary, proofSummary, workPipelineSummary, overallPressureLabel, nextSafestAction);
+
         return new CommandCentreSummary
         {
             MoneyPressure = moneySummary,
@@ -51,8 +55,9 @@ public static class CommandCentreSummaryService
             WorkSessions = workSessionSummary,
             ProofTracker = proofSummary,
             WorkPipeline = workPipelineSummary,
-            OverallPressureLabel = GetOverallPressureLabel(moneySummary.PressureLabel, agendaSummary, payLaterSummary, followUpSummary, weeklyCloseOutSummary, workSessionSummary, proofSummary, workPipelineSummary),
-            NextSafestAction = GetNextSafestAction(moneySummary, agendaSummary, payLaterSummary, followUpSummary, weeklyCloseOutSummary, workSessionSummary, proofSummary, workPipelineSummary),
+            OverallPressureLabel = overallPressureLabel,
+            NextSafestAction = nextSafestAction,
+            Snapshot = snapshot,
             Reasons = reasons
         };
     }

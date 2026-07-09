@@ -3,32 +3,32 @@
 <!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
 ## Current screenshots
 
-### Command Centre â€” v1.8
+### Command Centre â€” v2.0
 
-![LifeOS v1.8 Command Centre](docs/screenshot-groups/group-04-settings-safety-theme/screenshots/lifeos_v1_8_group04_01_command-centre.png)
+![LifeOS v2.0 Command Centre](docs/screenshot-groups/group-05-v2-paid-desktop-release/screenshots/lifeos_v2_0_group05_01_command-centre.png)
 
-### Settings / Safety / Theme â€” v1.8
+### Desktop Release Centre â€” v2.0
 
-![LifeOS v1.8 Settings Safety Theme](docs/screenshot-groups/group-04-settings-safety-theme/screenshots/lifeos_v1_8_group04_02_settings-safety-theme-top-sidebar-visible.png)
+![LifeOS v2.0 Desktop Release Centre](docs/screenshot-groups/group-05-v2-paid-desktop-release/screenshots/lifeos_v2_0_group05_02_desktop-release-centre-top.png)
 
-### Settings controls and guardrails â€” v1.8
+### Release readiness checks â€” v2.0
 
-![LifeOS v1.8 Settings Controls Guardrails](docs/screenshot-groups/group-04-settings-safety-theme/screenshots/lifeos_v1_8_group04_03_settings-safety-theme-controls-guardrails.png)
+![LifeOS v2.0 Release Readiness Checks](docs/screenshot-groups/group-05-v2-paid-desktop-release/screenshots/lifeos_v2_0_group05_03_release-readiness-review-checks.png)
 
-Full screenshot group: [`docs/screenshot-groups/group-04-settings-safety-theme`](docs/screenshot-groups/group-04-settings-safety-theme)
+Full screenshot group: [`docs/screenshot-groups/group-05-v2-paid-desktop-release`](docs/screenshot-groups/group-05-v2-paid-desktop-release)
 <!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
 
 <!-- LIFEOS_CURRENT_BUILD_START -->
 ## Current build
 
-**Current completed version:** v1.8  
-**Current completed screenshot group:** Group 04 â€” Settings / Safety / Theme  
-**Build lane:** Local-first WPF desktop foundation  
-**Next planned group:** Group 05 â€” v2 Paid Desktop Release
+**Current completed version:** v2.0  
+**Current completed screenshot group:** Group 05 â€” v2 Paid Desktop Release  
+**Build lane:** Local-first paid desktop release candidate  
+**Next planned group:** Group 06 â€” Universal Spine
 
-LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, paid work / money / proof control, and settings/safety guardrails.
+LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, paid work / money / proof control, settings/safety guardrails, and desktop release readiness.
 
-v1.8 adds local-only safety settings, manual review gates, expected-money protection, screenshot privacy, demo-safe controls, and theme preference foundation. Full dynamic theming remains future work.
+v2.0 is the paid desktop release checkpoint for the offline app. It confirms release readiness, screenshot safety, local-only boundaries, documentation flow, and manual-review guardrails before later integrations and AI layers.
 <!-- LIFEOS_CURRENT_BUILD_END -->
 
 LifeOS Desktop is a local-first command centre for reducing chaos across work, money pressure, follow-ups, proof, evidence, and daily execution.
@@ -295,6 +295,8 @@ v2.0 should include the core desktop feature set in manual/local-first form. Aut
 LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
+
+
 
 
 

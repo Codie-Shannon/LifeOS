@@ -240,7 +240,7 @@
                                    FontSize="28"
                                    FontWeight="Bold"/>
                         <TextBlock x:Name="PageSubtitleTextBlock"
-                                   Text="Work, income, proof command centre • Desktop v1.4"
+                                   Text="Work, income, proof command centre â€¢ Desktop v1.4"
                                    Foreground="#94A3B8"
                                    FontSize="14"
                                    Margin="0,4,0,0"/>
@@ -271,7 +271,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v4.3 strengthens hidden deductions, reserves, and safe-to-spend confidence before v5 integrations."
+                <TextBlock Text="LifeOS Desktop v4.4 adds Agenda + Payment Calendar: due dates, bill/payment dates, BNPL instalments, expected-money dates, fixed commitments, and review windows in one time-aware lane."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

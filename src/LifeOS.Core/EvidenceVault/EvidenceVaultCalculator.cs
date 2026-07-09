@@ -9,13 +9,15 @@ public static class EvidenceVaultCalculator
         var itemList = items.ToList();
         var openItems = itemList.Where(item => item.IsOpen).ToList();
         var needsReview = openItems
-            .Where(item => item.NeedsReview || item.Status == EvidenceVaultStatus.NeedsReview)
+            .Where(EvidenceVaultReviewRules.IsReviewRequired)
             .OrderByDescending(item => item.EvidenceDate)
             .ThenBy(item => item.Title)
             .ToList();
 
         var reasons = new List<string>();
         if (needsReview.Count > 0) reasons.Add($"{needsReview.Count} evidence item(s) need review.");
+        if (openItems.Any(item => string.IsNullOrWhiteSpace(item.SourcePathOrReference))) reasons.Add("Some evidence records are missing source references.");
+        if (openItems.Any(item => string.IsNullOrWhiteSpace(item.ProjectOrClient))) reasons.Add("Some evidence records are missing linked project/client context.");
         if (openItems.Count > 0) reasons.Add($"{openItems.Count} evidence item(s) are open in the vault.");
         if (reasons.Count == 0) reasons.Add("Evidence Vault is ready for metadata records. No evidence pressure detected.");
 

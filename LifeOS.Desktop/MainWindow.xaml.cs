@@ -31,6 +31,8 @@ using LifeOS.Core.OsNavigation;
 using LifeOS.Shared.OsNavigation;
 using LifeOS.Core.SearchKnowledge;
 using LifeOS.Shared.SearchKnowledge;
+using LifeOS.Core.FinalOfflineOs;
+using LifeOS.Shared.FinalOfflineOs;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -149,6 +151,8 @@ public partial class MainWindow : Window
 
     private SearchKnowledgeProfile _searchKnowledgeProfile = SearchKnowledgeStorage.Load();
 
+    private FinalOfflineOsProfile _finalOfflineOsProfile = FinalOfflineOsStorage.Load();
+
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
 
@@ -222,6 +226,8 @@ public partial class MainWindow : Window
 
     private void TimerAgentNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.TimerAgent);
 
+    private void FinalOfflineOsNavButton_Click(object sender, RoutedEventArgs e) => ShowFinalOfflineOsPage();
+
     private void SearchKnowledgeNavButton_Click(object sender, RoutedEventArgs e) => ShowSearchKnowledgePage();
 
     private void OsNavigationNavButton_Click(object sender, RoutedEventArgs e) => ShowOsNavigationPage();
@@ -242,6 +248,202 @@ public partial class MainWindow : Window
 
 
 
+
+
+
+    private void ResetFinalOfflineOsButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset final offline OS demo data?", "This will replace the local Final Offline OS profile with fictional checkpoint and integration landing-zone data."))
+        {
+            return;
+        }
+
+        FinalOfflineOsStorage.ResetToDemoData();
+        _finalOfflineOsProfile = FinalOfflineOsStorage.Load();
+        ShowFinalOfflineOsPage();
+    }
+
+    private void ShowFinalOfflineOsPage()
+    {
+        _finalOfflineOsProfile = FinalOfflineOsStorage.Load();
+        var summary = FinalOfflineOsCalculator.Calculate(_finalOfflineOsProfile);
+
+        SetHeader("Final Offline OS", $"Final Offline OS • v3.9 • {summary.ReadyCheckpoints}/{summary.TotalCheckpoints} checkpoints ready • {summary.LandingZones} v4 landing zones");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Final Offline OS",
+            "Close the local-first foundation before v4 integrations. Confirm that modules, local storage, safety rules, proof boundaries, docs/screenshots, and integration landing zones are strong enough to accept real external data without ripping the app apart."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Offline OS", summary.LocalFirstComplete ? "Complete" : "Review", "v3.9"));
+        metricsPanel.Children.Add(CreateDashboardCard("v4 ready", summary.ReadyForV4Integrations ? "Yes" : "No", "Integrations"));
+        metricsPanel.Children.Add(CreateDashboardCard("Checkpoints", summary.TotalCheckpoints.ToString(), "Total"));
+        metricsPanel.Children.Add(CreateDashboardCard("Ready", summary.ReadyCheckpoints.ToString(), "Local"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.ReviewNeededCheckpoints.ToString(), "Before tag"));
+        metricsPanel.Children.Add(CreateDashboardCard("Required for v4", summary.RequiredForV4.ToString(), "Gate"));
+        metricsPanel.Children.Add(CreateDashboardCard("Areas", summary.AreaCount.ToString(), "Covered"));
+        metricsPanel.Children.Add(CreateDashboardCard("Landing zones", summary.LandingZones.ToString(), "v4 map"));
+        metricsPanel.Children.Add(CreateDashboardCard("Planned v4", summary.PlannedForV4.ToString(), "Not active"));
+        metricsPanel.Children.Add(CreateDashboardCard("External sync", summary.ExternalIntegrationsEnabled ? "On" : "Off", "v4+"));
+        metricsPanel.Children.Add(CreateDashboardCard("AI assistant", summary.AiAssistantEnabled ? "On" : "Off", "v7+"));
+        metricsPanel.Children.Add(CreateDashboardCard("UI reshape", summary.MajorUiReshapeDeferred ? "Deferred" : "Now", "After proof"));
+
+        root.Children.Add(metricsPanel);
+
+        var rulePanel = CreateInfoPanel("Final offline OS rule", FormatReasons(summary.Reasons));
+        rulePanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(rulePanel);
+
+        var controlsPanel = CreateFinalOfflineOsControlsPanel();
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        var requiredPanel = CreateOfflineOsCheckpointPanel("Required offline checkpoints", summary.RequiredCheckpoints);
+        requiredPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(requiredPanel);
+
+        var reviewPanel = CreateOfflineOsCheckpointPanel("Final review before v3.9 tag", summary.ReviewItems);
+        reviewPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reviewPanel);
+
+        var landingPanel = CreateIntegrationLandingZonePanel("v4 integration landing zones", summary.IntegrationLandingZones);
+        landingPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(landingPanel);
+
+        var boundaryPanel = CreateInfoPanel(
+            "v3.9 boundary",
+            "v3.9 is the final offline/local-first OS foundation. It is not real Outlook/Gmail, calendar, SharePoint/Drive, accounting, AI assistant, automatic messaging, cloud sync, team/business scaling, or the major workspace redesign. Those begin after this checkpoint.");
+
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var nextPanel = CreateInfoPanel(
+            "After v3.9",
+            "Next lane: v4.x integrations. Start by wiring one integration source into its landing module and the Universal Spine, keep manual review gates on, and do not bypass money/proof/safety boundaries.");
+
+        nextPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(nextPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local final OS file",
+            $"Final Offline OS file: {FinalOfflineOsStorage.FilePath}");
+
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateFinalOfflineOsControlsPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Final OS controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Use reset only for fictional/demo final OS data. v3.9 closes the offline foundation and prepares integration landing zones; it does not turn integrations or AI on.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal
+        };
+
+        var resetButton = CreateActionButton("Reset Demo Final OS", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetFinalOfflineOsButton_Click;
+
+        buttonRow.Children.Add(resetButton);
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateOfflineOsCheckpointPanel(string title, IEnumerable<OfflineOsCheckpoint> checkpoints)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = checkpoints.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No checkpoints in this section."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var checkpoint in list)
+        {
+            root.Children.Add(CreateSimpleItemCard(
+                checkpoint.Title,
+                $"{FinalOfflineOsCalculator.FormatArea(checkpoint.Area)} • {FinalOfflineOsCalculator.FormatStatus(checkpoint.Status)} • Priority {checkpoint.Priority} • {(checkpoint.RequiredForV4 ? "Required for v4" : "Optional")}",
+                $"Evidence: {checkpoint.Evidence}\nNext: {checkpoint.NextAction}\nBoundary: {checkpoint.Boundary}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateIntegrationLandingZonePanel(string title, IEnumerable<IntegrationLandingZone> zones)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = zones.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No integration landing zones mapped yet."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var zone in list)
+        {
+            root.Children.Add(CreateSimpleItemCard(
+                zone.SourceName,
+                $"{FinalOfflineOsCalculator.FormatLandingZoneType(zone.ZoneType)} • {FinalOfflineOsCalculator.FormatStatus(zone.Status)} • {zone.TargetModule}",
+                $"Spine: {zone.SpineConnection}\nSafety: {zone.SafetyRule}\n{zone.Notes}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
 
 
     private void ResetSearchKnowledgeButton_Click(object sender, RoutedEventArgs e)
@@ -4588,8 +4790,9 @@ public partial class MainWindow : Window
         var universalSpineSummary = UniversalSpineCalculator.Calculate(UniversalSpineStorage.Load());
         var osNavigationSummary = OsNavigationCalculator.Calculate(OsNavigationStorage.Load());
         var searchKnowledgeSummary = SearchKnowledgeCalculator.Calculate(SearchKnowledgeStorage.Load());
+        var finalOfflineOsSummary = FinalOfflineOsCalculator.Calculate(FinalOfflineOsStorage.Load());
 
-        SetHeader("Command Centre", $"Unified Command Centre • v3.5 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v3.9 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -4634,6 +4837,9 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Knowledge items", searchKnowledgeSummary.TotalItems.ToString(), "v3.5"));
         metricsPanel.Children.Add(CreateDashboardCard("Search profiles", searchKnowledgeSummary.ProfileCount.ToString(), "Scoped"));
         metricsPanel.Children.Add(CreateDashboardCard("Knowledge review", searchKnowledgeSummary.ReviewNeededItems.ToString(), "Manual"));
+        metricsPanel.Children.Add(CreateDashboardCard("Offline OS", finalOfflineOsSummary.LocalFirstComplete ? "Complete" : "Review", "v3.9"));
+        metricsPanel.Children.Add(CreateDashboardCard("v4 landing zones", finalOfflineOsSummary.LandingZones.ToString(), "Ready map"));
+        metricsPanel.Children.Add(CreateDashboardCard("v4 ready", finalOfflineOsSummary.ReadyForV4Integrations ? "Yes" : "No", "Gate"));
 
         root.Children.Add(metricsPanel);
 
@@ -4731,16 +4937,23 @@ public partial class MainWindow : Window
         knowledgePanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(knowledgePanel);
 
+        var finalOsPanel = CreateInfoPanel(
+            "Final Offline OS",
+            FormatReasons(finalOfflineOsSummary.Reasons));
+
+        finalOsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(finalOsPanel);
+
         var workPanel = CreateInfoPanel(
-            "v3.5 operating rule",
-            "LifeOS now has local Search / Knowledge foundations. Search profiles and knowledge items define what future integrations and AI can use, without turning external search or AI reasoning on yet.");
+            "v3.9 operating rule",
+            "LifeOS now closes the offline/local-first OS foundation. The next road is v4 integrations, using defined landing zones and Universal Spine links without bypassing safety, proof, money, or review gates.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v3.5 scope",
-            "v3.5 is local search/knowledge structure. It is not external search, full-text indexing, cloud sync, connector search, inbox scanning, AI reasoning, automatic summarisation, or final knowledge automation.");
+            "v3.9 scope",
+            "v3.9 is the final offline OS checkpoint. It is not real integrations, AI assistant execution, automatic messaging, cloud sync, team/business scaling, or the major workspace redesign yet.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

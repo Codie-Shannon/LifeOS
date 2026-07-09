@@ -5,6 +5,7 @@
 
 | Version | Screenshot group | Summary | Status |
 |---|---|---|---|
+| v4.2 | Group 12 - Bills / Upcoming Payments / Pay Later | Adds Bills / Payments engine for bills, subscriptions, upcoming payments, Pay Later / Zip / Afterpay, hidden deductions, due pressure, safe-to-spend drag, and payment evidence gates. | Complete |
 | v4.1 | Group 11 - Item Type / State Engine | Adds local stateful item model, review queue, trusted/untrusted state, pressure items, money-impact items, work/people/proof items, and guarded transition rules. | Complete |
 | v4.0 | Group 10 - LifeOS Spine Recovery Map | Restores the original LifeOS operating spine, item/state rule model, pressure source map, corrected v4 road, and v5 integration boundary. | Complete |
 | v3.9 | Group 09 - Final Offline OS | Final offline/local-first OS checkpoint, required offline readiness checks, v4 integration landing zones, final boundary, and v4 integration lane. | Complete |
@@ -18,6 +19,7 @@
 | v1.5 | Group 01 - Evidence + Relationships | Relationship Radar and local relationship-state tracking. | Complete |
 | v1.4 | Group 01 - Evidence + Relationships | Evidence Vault local proof workspace. | Complete |
 <!-- LIFEOS_VERSION_HISTORY_END -->
+
 
 
 

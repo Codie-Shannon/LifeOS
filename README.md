@@ -3,50 +3,50 @@
 <!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
 ## Current screenshots
 
-### Command Centre - v4.1
+### Command Centre - v4.2
 
-![LifeOS v4.1 Command Centre](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_02_command-centre-item-state-signals.png)
+![LifeOS v4.2 Command Centre](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_02_command-centre-money-obligation-signals.png)
 
-### Item State Engine - v4.1
+### Bills / Payments - v4.2
 
-![LifeOS v4.1 Item State Engine](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_03_item-state-engine-top.png)
+![LifeOS v4.2 Bills Payments](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_03_bills-payments-top.png)
 
-### Review queue - v4.1
+### Due pressure and safe-to-spend - v4.2
 
-![LifeOS v4.1 Review Queue](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_06_review-queue-integration-ocr.png)
+![LifeOS v4.2 Due Pressure](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_05_due-pressure-safe-to-spend-impact.png)
 
-### Money-impact items - v4.1
+### Pay Later / Zip / Afterpay - v4.2
 
-![LifeOS v4.1 Money Impact Items](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_11_money-impact-items-top.png)
+![LifeOS v4.2 Pay Later](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_08_pay-later-zip-afterpay.png)
 
-### State transition rules - v4.1
+### Hidden deductions - v4.2
 
-![LifeOS v4.1 State Transition Rules](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_15_state-transition-rules-top.png)
+![LifeOS v4.2 Hidden Deductions](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_09_money-profile-hidden-deductions.png)
 
-### v4.1 boundary and next lane
+### v4.2 boundary and next lane
 
-![LifeOS v4.1 Boundary](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_17_v4-1-boundary-next-local-file.png)
+![LifeOS v4.2 Boundary](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_12_v4-2-boundary-next-local-file.png)
 
-Full screenshot group: [`docs/screenshot-groups/group-11-item-type-state-engine`](docs/screenshot-groups/group-11-item-type-state-engine)
+Full screenshot group: [`docs/screenshot-groups/group-12-bills-upcoming-payments-paylater`](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater)
 <!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
 
 <!-- LIFEOS_CURRENT_BUILD_START -->
 ## Current build
 
-**Current completed version:** v4.1  
-**Current completed screenshot group:** Group 11 - Item Type / State Engine  
+**Current completed version:** v4.2  
+**Current completed screenshot group:** Group 12 - Bills / Upcoming Payments / Pay Later  
 **Build lane:** LifeOS spine completion  
-**Next planned version:** v4.2 Bills / Upcoming Payments / Pay Later
+**Next planned version:** v4.3 Money Profile / Hidden Deductions / Safe-to-Spend
 
-LifeOS v4.1 turns the v4.0 spine map into a working local item/state engine.
+LifeOS v4.2 adds the local Bills / Payments engine.
 
-Master rule:
+Money rule:
 
 ```text
-Everything important becomes an item.
-Every item has state.
-Every state affects pressure.
-Every pressure feeds the Command Centre.
+Expected money is not safe money.
+Bills and Pay Later reduce safe-to-spend until paid/cleared with evidence.
+Hidden deductions must be visible before spending.
+Paid state requires evidence or a trusted source note.
 ```
 
 Current roadmap:
@@ -327,6 +327,8 @@ v2.0 should include the core desktop feature set in manual/local-first form. Aut
 LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
+
+
 
 
 

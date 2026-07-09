@@ -3,15 +3,15 @@
 <!-- LIFEOS_DOCS_INDEX_START -->
 ## Current docs index
 
-**Current completed version:** v4.1  
-**Current screenshot group:** Group 11 - Item Type / State Engine  
-**Next version:** v4.2 Bills / Upcoming Payments / Pay Later
+**Current completed version:** v4.2  
+**Current screenshot group:** Group 12 - Bills / Upcoming Payments / Pay Later  
+**Next version:** v4.3 Money Profile / Hidden Deductions / Safe-to-Spend
 
 ### Key docs
 
 - [Current status](current-status.md)
-- [v4.1 release notes](release-notes/v4.1.md)
-- [Group 11 screenshots](screenshot-groups/group-11-item-type-state-engine/README.md)
+- [v4.2 release notes](release-notes/v4.2.md)
+- [Group 12 screenshots](screenshot-groups/group-12-bills-upcoming-payments-paylater/README.md)
 - [Version history](version-history.md)
 
 ### Completed screenshot groups
@@ -27,7 +27,9 @@
 - Group 09 - Final Offline OS
 - Group 10 - LifeOS Spine Recovery Map
 - Group 11 - Item Type / State Engine
+- Group 12 - Bills / Upcoming Payments / Pay Later
 <!-- LIFEOS_DOCS_INDEX_END -->
+
 
 
 

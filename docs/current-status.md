@@ -2,10 +2,10 @@
 
 ## Current completed version
 
-**Current completed version:** v4.1  
-**Current completed screenshot group:** Group 11 - Item Type / State Engine  
+**Current completed version:** v4.2  
+**Current completed screenshot group:** Group 12 - Bills / Upcoming Payments / Pay Later  
 **Build lane:** LifeOS spine completion  
-**Next planned lane:** v4.2 Bills / Upcoming Payments / Pay Later
+**Next planned lane:** v4.3 Money Profile / Hidden Deductions / Safe-to-Spend
 
 ## Completed screenshot groups
 
@@ -22,24 +22,26 @@
 | Group 09 | Final Offline OS | v3.9 | Complete |
 | Group 10 | LifeOS Spine Recovery Map | v4.0 | Complete |
 | Group 11 | Item Type / State Engine | v4.1 | Complete |
+| Group 12 | Bills / Upcoming Payments / Pay Later | v4.2 | Complete |
 
 ## Current app capability
 
-LifeOS v4.1 now has a local Item State Engine workspace.
+LifeOS v4.2 now has a local Bills / Payments engine.
 
-The Item State Engine models:
+The Bills / Payments engine models:
 
-- stateful items
-- source kind
-- risk level
-- impact areas
-- trusted/untrusted state
-- review queue
-- pressure items
-- money-impact items
-- work/people/proof items
-- transition rules
-- local item-state storage
+- bills
+- subscriptions
+- upcoming payments
+- manual cashflow items
+- Pay Later / Zip / Afterpay instalments
+- Pay Later remaining balances
+- hidden deductions
+- due pressure
+- safe-to-spend drag
+- review/evidence gates
+- paid/closed evidence state
+- local money-obligations JSON storage
 
 ## Current roadmap truth
 
@@ -70,4 +72,4 @@ v4.9 Integration Inbox + v5 readiness
 
 ## Boundary
 
-v4.1 models item state and transition rules. It does not connect real APIs, request OAuth permissions, sync live email/calendar/accounting/bank data, run AI actions, automatically change real-world systems, build the companion app, or perform the major workspace redesign.
+v4.2 models bills, upcoming payments, Pay Later / BNPL, hidden deductions, safe-to-spend drag, and payment evidence gates locally. It does not connect bank feeds, Pay Later providers, accounting systems, email, OCR automation, OAuth, or AI actions.

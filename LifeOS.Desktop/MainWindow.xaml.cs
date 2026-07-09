@@ -41,6 +41,8 @@ using LifeOS.Core.MoneyObligations;
 using LifeOS.Shared.MoneyObligations;
 using LifeOS.Core.MoneyProfile;
 using LifeOS.Shared.MoneyProfile;
+using LifeOS.Core.PaymentCalendar;
+using LifeOS.Shared.PaymentCalendar;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -168,6 +170,8 @@ public partial class MainWindow : Window
 
     private MoneyProfilePlan _moneyProfilePlan = MoneyProfileStorage.Load();
 
+    private PaymentCalendarPlan _paymentCalendarPlan = PaymentCalendarStorage.Load();
+
 
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
@@ -217,6 +221,8 @@ public partial class MainWindow : Window
     private void MoneyProfileNavButton_Click(object sender, RoutedEventArgs e) => ShowMoneyProfilePage();
 
     private void AgendaNavButton_Click(object sender, RoutedEventArgs e) => ShowAgendaPage();
+
+    private void PaymentCalendarNavButton_Click(object sender, RoutedEventArgs e) => ShowPaymentCalendarPage();
 
     private void PayLaterNavButton_Click(object sender, RoutedEventArgs e) => ShowPayLaterPage();
 
@@ -290,6 +296,334 @@ public partial class MainWindow : Window
         _moneyProfilePlan = MoneyProfileStorage.Load();
         ShowMoneyProfilePage();
     }
+
+
+    private void ResetPaymentCalendarButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset payment calendar demo data?", "This will replace the local Payment Calendar with fictional/demo agenda, bill, BNPL, expected income, and review-window dates."))
+        {
+            return;
+        }
+
+        PaymentCalendarStorage.ResetToDemoData();
+        _paymentCalendarPlan = PaymentCalendarStorage.Load();
+        ShowPaymentCalendarPage();
+    }
+
+    private void ShowPaymentCalendarPage()
+    {
+        _paymentCalendarPlan = PaymentCalendarStorage.Load();
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var summary = PaymentCalendarCalculator.Calculate(_paymentCalendarPlan, today);
+
+        SetHeader("Payment Calendar", $"Payment Calendar • v4.4 • {summary.TotalItems} date items • {summary.ThisWeekItems} this week • {summary.ReviewQueueItems} review");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Agenda + Payment Calendar",
+            "v4.4 puts agenda commitments, bills, subscriptions, BNPL instalments, expected-money dates, review windows, and weekly close-out points into one time-aware lane before v5 integrations."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v4.4"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pressure", summary.PressureLabel, "Time/money"));
+        metricsPanel.Children.Add(CreateDashboardCard("Date items", summary.TotalItems.ToString(), "Tracked"));
+        metricsPanel.Children.Add(CreateDashboardCard("This week", summary.ThisWeekItems.ToString(), "Window"));
+        metricsPanel.Children.Add(CreateDashboardCard("Today", summary.TodayItems.ToString(), FormatMoney(summary.AmountDueToday)));
+        metricsPanel.Children.Add(CreateDashboardCard("Due soon", summary.DueSoonItems.ToString(), "7 days"));
+        metricsPanel.Children.Add(CreateDashboardCard("Overdue", summary.OverdueItems.ToString(), "Risk"));
+        metricsPanel.Children.Add(CreateDashboardCard("Payment dates", summary.PaymentDateItems.ToString(), FormatMoney(summary.AmountDueThisWeek)));
+        metricsPanel.Children.Add(CreateDashboardCard("Agenda dates", summary.AgendaCommitments.ToString(), "Time"));
+        metricsPanel.Children.Add(CreateDashboardCard("Fixed", summary.FixedCommitments.ToString(), "Protected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pay later dates", summary.PayLaterDates.ToString(), FormatMoney(summary.PayLaterDueThisWeek)));
+        metricsPanel.Children.Add(CreateDashboardCard("Expected income", summary.ExpectedMoneyDates.ToString(), FormatMoney(summary.ExpectedMoneyExcluded)));
+        metricsPanel.Children.Add(CreateDashboardCard("Review windows", summary.ReviewQueueItems.ToString(), "Manual"));
+        metricsPanel.Children.Add(CreateDashboardCard("Untrusted", summary.UntrustedItems.ToString(), "Dates"));
+        metricsPanel.Children.Add(CreateDashboardCard("Safe alerts", summary.SafeToSpendAlerts.ToString(), "Money"));
+        metricsPanel.Children.Add(CreateDashboardCard("Calendar sync", summary.RealCalendarSyncEnabled ? "On" : "Off", "v5+"));
+
+        root.Children.Add(metricsPanel);
+
+        var rulePanel = CreateInfoPanel("Agenda/payment calendar rule", FormatReasons(summary.Reasons));
+        rulePanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(rulePanel);
+
+        var controlsPanel = CreatePaymentCalendarControlsPanel();
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        var dateRulesPanel = CreateInfoPanel("Date trust / sync gates", FormatReasons(summary.DateRules));
+        dateRulesPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(dateRulesPanel);
+
+        var timelinePanel = CreatePaymentCalendarTimelinePanel(summary);
+        timelinePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(timelinePanel);
+
+        var todayPanel = CreatePaymentCalendarItemPanel("Today / next two days", summary.TodayAndNextActions);
+        todayPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(todayPanel);
+
+        var paymentPanel = CreatePaymentCalendarItemPanel("Payment dates / safe-to-spend lane", summary.PaymentItems);
+        paymentPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(paymentPanel);
+
+        var agendaPanel = CreatePaymentCalendarItemPanel("Agenda commitments / time lane", summary.AgendaItems);
+        agendaPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(agendaPanel);
+
+        var payLaterPanel = CreatePaymentCalendarItemPanel("Pay Later / Zip / Afterpay schedule", summary.PayLaterItems);
+        payLaterPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(payLaterPanel);
+
+        var expectedPanel = CreatePaymentCalendarItemPanel("Expected money dates excluded from safe money", summary.ExpectedMoneyItems);
+        expectedPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(expectedPanel);
+
+        var reviewPanel = CreatePaymentCalendarItemPanel("Review windows / untrusted date items", summary.ReviewQueue);
+        reviewPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reviewPanel);
+
+        var safePanel = CreatePaymentCalendarItemPanel("Safe-to-spend alerts by date", summary.SafeToSpendItems);
+        safePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(safePanel);
+
+        var boundaryPanel = CreateInfoPanel(
+            "v4.4 boundary",
+            "v4.4 models agenda/payment dates locally. It does not connect Google Calendar, Outlook Calendar, Gmail/Outlook email, bank feeds, BNPL providers, accounting systems, open banking, OCR automation, OAuth, or AI actions.");
+
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var nextPanel = CreateInfoPanel(
+            "After v4.4",
+            "Next lane: v4.5 Work Pipeline. v4.4 makes dates visible; v4.5 should push active work, leads, blocked projects, follow-ups, invoice readiness, and payment states through the same item/state spine.");
+
+        nextPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(nextPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local payment calendar file",
+            $"Payment Calendar file: {PaymentCalendarStorage.FilePath}");
+
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreatePaymentCalendarControlsPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Payment calendar controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Use reset only for fictional/demo date items. v4.4 is local/manual date-state modelling; no real calendar, email, bank, BNPL, accounting, OCR, OAuth, or AI connector is active.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal
+        };
+
+        var resetButton = CreateActionButton("Reset Payment Calendar Demo", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetPaymentCalendarButton_Click;
+
+        buttonRow.Children.Add(resetButton);
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreatePaymentCalendarTimelinePanel(PaymentCalendarSummary summary)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Time-aware lane",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Bills, BNPL instalments, agenda commitments, expected-money dates, and review windows are grouped by date. This is the bridge between the old paper bills workflow and future calendar integrations.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        if (summary.TimelineGroups.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No dated payment/agenda items."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var group in summary.TimelineGroups)
+        {
+            var groupCard = CreatePanel();
+            groupCard.Margin = new Thickness(0, 8, 0, 0);
+
+            var groupRoot = new StackPanel();
+
+            groupRoot.Children.Add(new TextBlock
+            {
+                Text = $"{group.Label} • {group.Date:dd MMM yyyy} • {group.ItemCount} item(s) • {FormatMoney(group.AmountDue)} due",
+                Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+                FontSize = 18,
+                FontWeight = FontWeights.Bold
+            });
+
+            groupRoot.Children.Add(new TextBlock
+            {
+                Text = $"{group.PaymentCount} payment date(s) • {group.AgendaCount} agenda/time item(s) • Review gate: {(group.HasReviewGate ? "Yes" : "No")}",
+                Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+                FontSize = 12,
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 4, 0, 8)
+            });
+
+            foreach (var item in group.Items)
+            {
+                groupRoot.Children.Add(CreatePaymentCalendarCompactLine(item));
+            }
+
+            groupCard.Child = groupRoot;
+            root.Children.Add(groupCard);
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreatePaymentCalendarItemPanel(string title, IEnumerable<PaymentCalendarItem> items)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = items.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No date items in this section."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in list)
+        {
+            var itemCard = CreatePanel();
+            itemCard.Margin = new Thickness(0, 10, 0, 0);
+
+            var itemRoot = new StackPanel();
+
+            var amountText = item.Amount > 0 ? $" • {FormatMoney(item.Amount)}" : string.Empty;
+            var balanceText = item.Balance > 0 ? $" • Balance {FormatMoney(item.Balance)}" : string.Empty;
+            var dueText = item.DueDate.HasValue ? $" • Due {item.DueDate.Value:dd MMM yyyy}" : string.Empty;
+            var timeText = string.IsNullOrWhiteSpace(item.TimeText) ? string.Empty : $" • {item.TimeText}";
+
+            itemRoot.Children.Add(new TextBlock
+            {
+                Text = item.Title,
+                Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+                FontSize = 18,
+                FontWeight = FontWeights.Bold,
+                TextWrapping = TextWrapping.Wrap
+            });
+
+            itemRoot.Children.Add(new TextBlock
+            {
+                Text = $"{PaymentCalendarCalculator.FormatKind(item.Kind)} • {PaymentCalendarCalculator.FormatState(item.State)} • {PaymentCalendarCalculator.FormatPressure(item.Pressure)} • {PaymentCalendarCalculator.FormatTrust(item.TrustState)}{amountText}{balanceText}{dueText}{timeText}",
+                Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+                FontSize = 12,
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 6, 0, 0)
+            });
+
+            var details = new List<string>
+            {
+                $"Source: {item.Source}",
+                $"Module: {item.OriginalModule}",
+                $"Category: {item.Category}",
+                $"Evidence: {item.EvidenceSummary}",
+                $"Review: {item.ReviewRule}",
+                $"Pressure: {item.PressureImpact}",
+                $"Next: {item.NextAction}"
+            };
+
+            if (item.ExpectedMoneyExcludedFromSafe)
+            {
+                details.Add("Safe money rule: Expected money is visible by date but excluded from safe-to-spend.");
+            }
+
+            if (item.IsFixedCommitment)
+            {
+                details.Add("Time rule: Fixed commitment protects time before work is scheduled around it.");
+            }
+
+            itemRoot.Children.Add(new TextBlock
+            {
+                Text = string.Join(Environment.NewLine, details.Where(detail => !string.IsNullOrWhiteSpace(detail))),
+                Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+                FontSize = 12,
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 8, 0, 0)
+            });
+
+            itemCard.Child = itemRoot;
+            root.Children.Add(itemCard);
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private TextBlock CreatePaymentCalendarCompactLine(PaymentCalendarItem item)
+    {
+        var amountText = item.Amount > 0 ? $" • {FormatMoney(item.Amount)}" : string.Empty;
+        var timeText = string.IsNullOrWhiteSpace(item.TimeText) ? string.Empty : $" • {item.TimeText}";
+
+        return new TextBlock
+        {
+            Text = $"• {item.Title} — {PaymentCalendarCalculator.FormatKind(item.Kind)} • {PaymentCalendarCalculator.FormatState(item.State)} • {PaymentCalendarCalculator.FormatPressure(item.Pressure)}{amountText}{timeText} — {item.NextAction}",
+            Foreground = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
+            FontSize = 12,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 3, 0, 0)
+        };
+    }
+
 
     private void ShowMoneyProfilePage()
     {
@@ -2691,13 +3025,13 @@ public partial class MainWindow : Window
         var today = DateOnly.FromDateTime(DateTime.Today);
         var summary = AgendaCalculator.Calculate(_agendaItems, today);
 
-        SetHeader("Agenda", "Agenda • v0.4 weekly pressure foundation");
+        SetHeader("Agenda", "Agenda • v4.4 • connected to Payment Calendar");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "Agenda",
-            "Track what matters this week: tasks, appointments, due dates, fixed commitments, and pressure."));
+            "Track what matters this week: tasks, appointments, due dates, fixed commitments, and pressure. v4.4 links this agenda lane to the new Payment Calendar without turning LifeOS into a live calendar clone yet."));
 
         var metricsPanel = new WrapPanel
         {
@@ -5753,8 +6087,9 @@ public partial class MainWindow : Window
         var itemStateSummary = LifeOsItemStateCalculator.Calculate(LifeOsItemStateStorage.Load());
         var moneyObligationSummary = MoneyObligationCalculator.Calculate(MoneyObligationStorage.Load());
         var moneyProfileSummary = MoneyProfileCalculator.Calculate(MoneyProfileStorage.Load());
+        var paymentCalendarSummary = PaymentCalendarCalculator.Calculate(PaymentCalendarStorage.Load(), DateOnly.FromDateTime(DateTime.Today));
 
-        SetHeader("Command Centre", $"Unified Command Centre • v4.3 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v4.4 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -5817,6 +6152,12 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Final safe", FormatMoney(moneyProfileSummary.SafeToSpendFinal), "v4.3"));
         metricsPanel.Children.Add(CreateDashboardCard("Expected excluded", FormatMoney(moneyProfileSummary.ExpectedExcludedFromSafe), "Not safe"));
         metricsPanel.Children.Add(CreateDashboardCard("Hidden weekly", FormatMoney(moneyProfileSummary.HiddenDeductionWeeklyReserve), "Reserve"));
+        metricsPanel.Children.Add(CreateDashboardCard("Calendar lane", paymentCalendarSummary.PressureLabel, "v4.4"));
+        metricsPanel.Children.Add(CreateDashboardCard("Calendar items", paymentCalendarSummary.TotalItems.ToString(), "Dates"));
+        metricsPanel.Children.Add(CreateDashboardCard("Payment dates", paymentCalendarSummary.PaymentDateItems.ToString(), FormatMoney(paymentCalendarSummary.AmountDueThisWeek)));
+        metricsPanel.Children.Add(CreateDashboardCard("Agenda dates", paymentCalendarSummary.AgendaCommitments.ToString(), "Time"));
+        metricsPanel.Children.Add(CreateDashboardCard("Review windows", paymentCalendarSummary.ReviewQueueItems.ToString(), "Manual"));
+        metricsPanel.Children.Add(CreateDashboardCard("Expected dates", FormatMoney(paymentCalendarSummary.ExpectedMoneyExcluded), "Not safe"));
 
         root.Children.Add(metricsPanel);
 
@@ -5949,16 +6290,23 @@ public partial class MainWindow : Window
         moneyProfilePanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(moneyProfilePanel);
 
+        var paymentCalendarPanel = CreateInfoPanel(
+            "Agenda + Payment Calendar",
+            FormatReasons(paymentCalendarSummary.Reasons));
+
+        paymentCalendarPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(paymentCalendarPanel);
+
         var workPanel = CreateInfoPanel(
-            "v4.3 operating rule",
-            "LifeOS now separates confirmed cash, expected money, visible obligations, hidden deductions, minimum buffers, and emergency holds so safe-to-spend is not inflated by money that is not actually safe.");
+            "v4.4 operating rule",
+            "LifeOS now puts due dates, payment dates, BNPL instalments, agenda commitments, expected-money dates, and review windows into one time-aware lane. Dates create visibility; evidence still decides trusted money state.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v4.3 scope",
-            "v4.3 models local hidden deductions, reserves, buffers, expected-money exclusion, and safe-to-spend confidence. It is not real bank sync, tax/payslip sync, accounting sync, OAuth, AI action, the companion app, or the major workspace redesign.");
+            "v4.4 scope",
+            "v4.4 models local agenda/payment dates only. It is not Google Calendar sync, Outlook Calendar sync, real bank sync, BNPL provider sync, email sync, accounting sync, OCR automation, OAuth, AI action, the companion app, or the major workspace redesign.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

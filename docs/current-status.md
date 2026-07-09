@@ -1,23 +1,26 @@
 # LifeOS Current Status
 
-## Current release
+## Desktop v4.5 — Work Pipeline
 
-LifeOS Desktop v4.4 is the current tagged release target after Group 14 screenshots/docs.
+v4.5 is applied, built, committed, and pushed.
 
-## Current state
+The Work Pipeline now acts as the local operating lane for active work, warm leads, blocked work, follow-ups, invoice readiness, payment expected state, and proof gaps.
 
-v4.4 adds Agenda + Payment Calendar. It puts due dates, bill/payment dates, BNPL instalments, expected-money dates, fixed commitments, and review windows into one time-aware lane before v5 integrations.
+## What v4.5 proves
 
-## Completed screenshot group
+- Active work is separated from blocked and parked work.
+- Waiting-on-me and waiting-on-others are visible separately.
+- Follow-up pressure is visible without auto-sending messages.
+- Invoice/timesheet readiness is visible before expected money is trusted.
+- Expected pipeline value remains excluded from safe money until paid/cleared.
+- Proof gaps are surfaced before handoff, invoice, or portfolio use.
+- Work Pipeline feeds Command Centre pressure.
+- v4.5 bridges Work Pipeline with Payment Calendar, Paid Work Centre, Proof Tracker, Follow-Ups, and Weekly Close-Out.
 
-Group 14 - Agenda + Payment Calendar.
+## Boundary
 
-## Important boundary
-
-v4.4 is still local/manual. It does not connect Google Calendar, Outlook Calendar, Gmail/Outlook email, bank feeds, BNPL providers, accounting systems, open banking, OCR automation, OAuth, or AI actions.
+v4.5 is local/manual. It does not sync email, calendar, accounting, bank data, or CRM data. It does not create invoices, send messages, create calendar events, run AI actions, or change external systems.
 
 ## Next lane
 
-v4.5 Work Pipeline.
-
-v4.5 should push active work, leads, blocked projects, follow-ups, invoice readiness, and payment states through the same item/state/date-aware spine.
+v4.6 Receipt OCR / Evidence-to-Item. Work Pipeline is now ready to receive reviewed evidence and OCR-derived items later without trusting raw imports automatically.

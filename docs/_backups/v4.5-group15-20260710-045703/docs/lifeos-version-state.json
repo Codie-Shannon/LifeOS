@@ -1,0 +1,22 @@
+{
+  "currentVersion": "v4.5-code",
+  "releaseVersion": "v4.5",
+  "stage": "079",
+  "lane": "Work Pipeline",
+  "status": "code checkpoint complete - screenshots pending",
+  "tagAfterScreenshots": "v4.5",
+  "nextVersion": "v4.6",
+  "nextLane": "Receipt OCR / Evidence-to-Item",
+  "notes": "v4.5 upgrades existing Work Pipeline; it does not add a duplicate pipeline model.",
+  "boundary": [
+    "local/manual only",
+    "no auto-messaging",
+    "no CRM sync",
+    "no email sync",
+    "no calendar sync",
+    "no accounting sync",
+    "no invoice creation",
+    "no AI actions"
+  ],
+  "generatedAt": "2026-07-09T14:58:13.560437+00:00"
+}

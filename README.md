@@ -1,12 +1,43 @@
-# LifeOS Desktop
+﻿# LifeOS Desktop
+
+<!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
+## Current screenshots
+
+### Command Centre â€” v1.7
+
+![LifeOS v1.7 Command Centre](docs/screenshot-groups/group-03-paid-work-money-proof/screenshots/lifeos_v1_7_group03_01_command-centre.png)
+
+### Paid Work / Money / Proof â€” v1.7
+
+![LifeOS v1.7 Paid Work Money Proof](docs/screenshot-groups/group-03-paid-work-money-proof/screenshots/lifeos_v1_7_group03_02_paid-work-money-proof-top.png)
+
+### Copy-ready client/admin update â€” v1.7
+
+![LifeOS v1.7 Copy Ready Client Admin Update](docs/screenshot-groups/group-03-paid-work-money-proof/screenshots/lifeos_v1_7_group03_04_copy-ready-client-admin-update.png)
+
+Full screenshot group: [`docs/screenshot-groups/group-03-paid-work-money-proof`](docs/screenshot-groups/group-03-paid-work-money-proof)
+<!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
+
+<!-- LIFEOS_CURRENT_BUILD_START -->
+## Current build
+
+**Current completed version:** v1.7  
+**Current completed screenshot group:** Group 03 â€” Paid Work / Money / Proof  
+**Build lane:** Local-first WPF desktop foundation  
+**Next planned group:** Group 04 â€” Settings / Safety / Theme
+
+LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, and paid work / money / proof control.
+
+v1.7 keeps expected money separate from safe money and prepares manual, copy-ready client/admin updates without sending anything automatically.
+<!-- LIFEOS_CURRENT_BUILD_END -->
 
 LifeOS Desktop is a local-first command centre for reducing chaos across work, money pressure, follow-ups, proof, evidence, and daily execution.
 
-Current release: **LifeOS Desktop v1.3.5 — Unified Command Centre + Evidence Vault Foundation**
+Current release: **LifeOS Desktop v1.3.5 â€” Unified Command Centre + Evidence Vault Foundation**
 
 ## Release position
 
-LifeOS v1.3.5 is the visible-page completion pass for the v1.3 release. It exposes the v1.1–v1.3 modules in the desktop sidebar and gives the release a clearer proof trail.
+LifeOS v1.3.5 is the visible-page completion pass for the v1.3 release. It exposes the v1.1â€“v1.3 modules in the desktop sidebar and gives the release a clearer proof trail.
 
 The v1.x direction is:
 
@@ -22,9 +53,9 @@ Expected money is not safe money until paid.
 
 ## What v1.3 adds
 
-### v1.0 — Unified Command Centre foundation
+### v1.0 â€” Unified Command Centre foundation
 
-v1.0 introduced the Command Centre signal model and a stronger “what matters now” view.
+v1.0 introduced the Command Centre signal model and a stronger â€œwhat matters nowâ€ view.
 
 It focuses on:
 
@@ -34,9 +65,9 @@ It focuses on:
 - timesheet, invoice, and payment warnings
 - money pressure and safe-money awareness
 
-### v1.1 — Daily state, passive waiting, and scheduled communication
+### v1.1 â€” Daily state, passive waiting, and scheduled communication
 
-v1.1 added manual daily state concepts so LifeOS can represent “wait” as a real status instead of turning everything into noise.
+v1.1 added manual daily state concepts so LifeOS can represent â€œwaitâ€ as a real status instead of turning everything into noise.
 
 It supports:
 
@@ -47,7 +78,7 @@ It supports:
 - low-energy options
 - stop points
 
-### v1.2 — Timesheet evidence and proof-linked work
+### v1.2 â€” Timesheet evidence and proof-linked work
 
 v1.2 added the timesheet evidence layer.
 
@@ -66,7 +97,7 @@ Accepted time buckets:
 1.0h+ = implementation / testing / proof build / debugging / documentation
 ```
 
-### v1.3 — Evidence Vault metadata foundation
+### v1.3 â€” Evidence Vault metadata foundation
 
 v1.3 added the metadata-first Evidence Vault foundation.
 
@@ -175,59 +206,59 @@ Expected income is visible, but does not reduce pressure until paid.
 
 ## Version history
 
-### v0.1 — First usable desktop foundation
+### v0.1 â€” First usable desktop foundation
 
 Reusable shell, local data direction, dark UI foundation, and early navigation.
 
-### v0.2 — Weekly pressure foundation
+### v0.2 â€” Weekly pressure foundation
 
 Added Agenda, Pay Later, Weekly Close-Out, and early weekly pressure framing.
 
-### v0.3 — Work, income, and proof foundation
+### v0.3 â€” Work, income, and proof foundation
 
 Added Work Sessions, Proof Tracker, work/income metrics, and proof visibility.
 
-### v0.4 — Trust polish release
+### v0.4 â€” Trust polish release
 
 Improved reliability, wording, safety, confirmations, empty states, and docs.
 
-### v0.5 — Paid Work Centre + Money Timeline
+### v0.5 â€” Paid Work Centre + Money Timeline
 
 Added Paid Work Centre and date-based Money Timeline.
 
-### v0.6 — Work Pipeline foundation
+### v0.6 â€” Work Pipeline foundation
 
 Added Work Pipeline models, stage/status/priority tracking, summary calculation, storage, and desktop visibility.
 
-### v0.7 — Follow-up and opportunity behaviour
+### v0.7 â€” Follow-up and opportunity behaviour
 
 Strengthened follow-up states, waiting-on pressure, opportunity scoring, and follow-up bridging.
 
-### v0.8 — Command Centre Work Pipeline integration
+### v0.8 â€” Command Centre Work Pipeline integration
 
 Connected Work Pipeline signals into Command Centre.
 
-### v0.9 — Work Pipeline release candidate polish
+### v0.9 â€” Work Pipeline release candidate polish
 
 Added backup safety, stage counts, desktop stage display polish, and v0.9 documentation/screenshots.
 
-### v1.0 — Unified Command Centre foundation
+### v1.0 â€” Unified Command Centre foundation
 
 Added signal model, snapshot builder, today actions, and a stronger Command Centre foundation.
 
-### v1.1 — Daily State foundation
+### v1.1 â€” Daily State foundation
 
 Added daily state, passive waiting rules, scheduled communication, and Command Centre integration.
 
-### v1.2 — Timesheet Evidence foundation
+### v1.2 â€” Timesheet Evidence foundation
 
 Added timesheet evidence model, helper rules, proof links, and Command Centre pressure signals.
 
-### v1.3 — Evidence Vault foundation
+### v1.3 â€” Evidence Vault foundation
 
 Added metadata-first Evidence Vault records, storage, linking, and Command Centre evidence signals.
 
-### v1.3.5 — Visible v1.3 pages
+### v1.3.5 â€” Visible v1.3 pages
 
 Exposed Daily State, Timesheet Evidence, and Evidence Vault as visible desktop pages.
 
@@ -264,3 +295,5 @@ v2.0 should include the core desktop feature set in manual/local-first form. Aut
 LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
+
+

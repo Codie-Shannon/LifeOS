@@ -3,14 +3,15 @@
 <!-- LIFEOS_DOCS_INDEX_START -->
 ## Current docs index
 
-**Current completed version:** v3.5  
-**Current screenshot group:** Group 08 â€” Advanced Modules / Search / Knowledge
+**Current completed version:** v3.9  
+**Current screenshot group:** Group 09 â€” Final Offline OS  
+**Next lane:** v4.x integrations
 
 ### Key docs
 
 - [Current status](current-status.md)
-- [v3.5 release notes](release-notes/v3.5.md)
-- [Group 08 screenshots](screenshot-groups/group-08-advanced-modules-search-knowledge/README.md)
+- [v3.9 release notes](release-notes/v3.9.md)
+- [Group 09 screenshots](screenshot-groups/group-09-final-offline-os/README.md)
 - [Version history](version-history.md)
 
 ### Completed screenshot groups
@@ -23,7 +24,9 @@
 - Group 06 â€” Universal Spine
 - Group 07 â€” OS Navigation / Core Modules
 - Group 08 â€” Advanced Modules / Search / Knowledge
+- Group 09 â€” Final Offline OS
 <!-- LIFEOS_DOCS_INDEX_END -->
+
 
 
 

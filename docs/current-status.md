@@ -2,10 +2,10 @@
 
 ## Current completed version
 
-**Current completed version:** v3.5  
-**Current completed screenshot group:** Group 08 — Advanced Modules / Search / Knowledge  
+**Current completed version:** v3.9  
+**Current completed screenshot group:** Group 09 — Final Offline OS  
 **Build lane:** Local-first offline OS foundation  
-**Next planned group:** Group 09 — Final Offline OS
+**Next planned lane:** v4.x integrations
 
 ## Completed screenshot groups
 
@@ -19,6 +19,7 @@
 | Group 06 | Universal Spine | v2.1 | Complete |
 | Group 07 | OS Navigation / Core Modules | v3.0 | Complete |
 | Group 08 | Advanced Modules / Search / Knowledge | v3.5 | Complete |
+| Group 09 | Final Offline OS | v3.9 | Complete |
 
 ## Current app capability
 
@@ -50,7 +51,28 @@ LifeOS now has local-first foundations for:
 - knowledge source boundaries
 - review/planned knowledge item separation
 - future integration landing-zone notes
+- Final Offline OS checkpoint
+- v4 integration landing zones
+- final offline boundary
+- after-v3.9 integration lane
+
+## v4 integration landing zones
+
+Future integrations should land in the existing LifeOS structure:
+
+| External source | Landing module(s) |
+|---|---|
+| Outlook / Gmail | Relationship Radar / Follow-Ups |
+| Calendar | Daily Operating Flow / Agenda |
+| SharePoint / Drive / local files | Evidence Vault / Proof Tracker |
+| Xero / accounting exports | Paid Work Centre / Money Pressure |
+| TimerAgent / work logs | Work Sessions / Timesheet Evidence |
+| Docs / notes / knowledge sources | Search / Knowledge Centre |
+| Manual imports | Universal Spine / Evidence Vault |
+| Future APIs | OS Navigation / Universal Spine |
 
 ## Boundary
 
-LifeOS remains offline/local-first in this build lane. v3.5 is not external search, full-text indexing, connector search, inbox scanning, cloud sync, external integrations, accounting automation, AI assistant execution, AI reasoning, automatic summarisation, mobile capture, automatic messaging, production installer/signing, final knowledge automation, or the major workspace redesign.
+LifeOS remains offline/local-first at v3.9. This checkpoint is not real Outlook/Gmail integration, real calendar integration, real SharePoint/Drive sync, real accounting/Xero integration, cloud sync, AI assistant execution, automatic messaging, team/business scaling, automatic decision-making, or the major workspace redesign.
+
+v3.9 closes the offline foundation. v4.x starts integrations.

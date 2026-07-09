@@ -3,36 +3,36 @@
 <!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
 ## Current screenshots
 
-### Command Centre â€” v3.5
+### Command Centre â€” v3.9
 
-![LifeOS v3.5 Command Centre](docs/screenshot-groups/group-08-advanced-modules-search-knowledge/screenshots/lifeos_v3_5_group08_01_command-centre.png)
+![LifeOS v3.9 Command Centre](docs/screenshot-groups/group-09-final-offline-os/screenshots/lifeos_v3_9_group09_01_command-centre.png)
 
-### Search / Knowledge Centre â€” v3.5
+### Final Offline OS â€” v3.9
 
-![LifeOS v3.5 Search / Knowledge Centre](docs/screenshot-groups/group-08-advanced-modules-search-knowledge/screenshots/lifeos_v3_5_group08_02_search-knowledge-top.png)
+![LifeOS v3.9 Final Offline OS](docs/screenshot-groups/group-09-final-offline-os/screenshots/lifeos_v3_9_group09_02_final-offline-os-top.png)
 
-### Pinned/local search profiles â€” v3.5
+### v4 integration landing zones â€” v3.9
 
-![LifeOS v3.5 Search Profiles](docs/screenshot-groups/group-08-advanced-modules-search-knowledge/screenshots/lifeos_v3_5_group08_04_pinned-local-search-profiles.png)
+![LifeOS v3.9 Integration Landing Zones](docs/screenshot-groups/group-09-final-offline-os/screenshots/lifeos_v3_9_group09_06a_v4-integration-landing-zones-upper.png)
 
-### Boundary and local knowledge file â€” v3.5
+### Boundary and after v3.9 â€” v3.9
 
-![LifeOS v3.5 Boundary](docs/screenshot-groups/group-08-advanced-modules-search-knowledge/screenshots/lifeos_v3_5_group08_07_boundary-local-knowledge-file.png)
+![LifeOS v3.9 Boundary](docs/screenshot-groups/group-09-final-offline-os/screenshots/lifeos_v3_9_group09_07_boundary-after-v3-9-local-file.png)
 
-Full screenshot group: [`docs/screenshot-groups/group-08-advanced-modules-search-knowledge`](docs/screenshot-groups/group-08-advanced-modules-search-knowledge)
+Full screenshot group: [`docs/screenshot-groups/group-09-final-offline-os`](docs/screenshot-groups/group-09-final-offline-os)
 <!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
 
 <!-- LIFEOS_CURRENT_BUILD_START -->
 ## Current build
 
-**Current completed version:** v3.5  
-**Current completed screenshot group:** Group 08 â€” Advanced Modules / Search / Knowledge  
+**Current completed version:** v3.9  
+**Current completed screenshot group:** Group 09 â€” Final Offline OS  
 **Build lane:** Local-first offline OS foundation  
-**Next planned group:** Group 09 â€” Final Offline OS
+**Next planned lane:** v4.x integrations
 
-LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, paid work / money / proof control, settings/safety guardrails, desktop release readiness, Universal Spine, OS Navigation, and Search / Knowledge.
+LifeOS v3.9 closes the offline/local-first OS foundation. The app now has command, money, work, proof, relationship, daily flow, safety, Universal Spine, OS Navigation, Search / Knowledge, Desktop Release, and Final Offline OS checkpoint structure.
 
-v3.5 adds local Advanced Search / Knowledge foundations: knowledge items, source boundaries, search profiles, manual review state, planned/future knowledge separation, and future integration landing-zone notes. External search, connector search, integrations, cloud sync, inbox scanning, AI reasoning, and automatic summarisation remain off.
+v3.9 is the integration-ready checkpoint. It defines landing zones for Outlook/Gmail, Calendar, SharePoint/Drive/local files, Xero/accounting exports, TimerAgent/work logs, docs/knowledge sources, manual imports, and future APIs. Real integrations, AI assistant execution, cloud sync, automatic messaging, team/business scaling, and the major workspace redesign are still deliberately outside v3.9.
 <!-- LIFEOS_CURRENT_BUILD_END -->
 
 LifeOS Desktop is a local-first command centre for reducing chaos across work, money pressure, follow-ups, proof, evidence, and daily execution.
@@ -299,6 +299,8 @@ v2.0 should include the core desktop feature set in manual/local-first form. Aut
 LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
+
+
 
 
 

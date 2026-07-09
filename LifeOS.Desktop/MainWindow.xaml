@@ -56,10 +56,10 @@
                         Padding="14"
                         Margin="0,12,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v2.0"
+                        <TextBlock Text="Desktop v2.1"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="v2.0 turns the offline foundation into a paid desktop release candidate with local-only safety, proof-backed money control, screenshots, docs, and manual review gates."
+                        <TextBlock Text="v2.1 adds the Universal Spine: local cross-module links between work, money, proof, relationships, daily flow, release state, and safety guardrails."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -161,6 +161,11 @@
                                 Style="{StaticResource NavButtonStyle}"
                                 Click="TimerAgentNavButton_Click"/>
 
+                        <Button x:Name="UniversalSpineNavButton"
+                                Content="Universal Spine"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="UniversalSpineNavButton_Click"/>
+
                         <Button x:Name="DesktopReleaseNavButton"
                                 Content="Desktop Release"
                                 Style="{StaticResource NavButtonStyle}"
@@ -226,7 +231,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v2.0 is a local-first paid desktop release candidate: pressure-aware, proof-backed, conservative about expected money, and protected by safety guardrails."
+                <TextBlock Text="LifeOS Desktop v2.1 adds a local Universal Spine for cross-module context, links, proof, money safety, and manual review before integrations."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

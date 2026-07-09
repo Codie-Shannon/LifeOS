@@ -25,6 +25,8 @@ using LifeOS.Core.SettingsSafety;
 using LifeOS.Shared.SettingsSafety;
 using LifeOS.Core.DesktopRelease;
 using LifeOS.Shared.DesktopRelease;
+using LifeOS.Core.UniversalSpine;
+using LifeOS.Shared.UniversalSpine;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -137,6 +139,8 @@ public partial class MainWindow : Window
 
     private DesktopReleaseReadinessProfile _desktopReleaseProfile = DesktopReleaseStorage.Load();
 
+    private UniversalSpineProfile _universalSpineProfile = UniversalSpineStorage.Load();
+
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
 
@@ -210,6 +214,8 @@ public partial class MainWindow : Window
 
     private void TimerAgentNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.TimerAgent);
 
+    private void UniversalSpineNavButton_Click(object sender, RoutedEventArgs e) => ShowUniversalSpinePage();
+
     private void DesktopReleaseNavButton_Click(object sender, RoutedEventArgs e) => ShowDesktopReleasePage();
 
     private void SettingsNavButton_Click(object sender, RoutedEventArgs e) => ShowSettingsSafetyThemePage();
@@ -221,6 +227,198 @@ public partial class MainWindow : Window
     }
 
 
+
+
+
+    private void ResetUniversalSpineButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset universal spine demo data?", "This will replace the local Universal Spine profile with fictional demo links and items."))
+        {
+            return;
+        }
+
+        UniversalSpineStorage.ResetToDemoData();
+        _universalSpineProfile = UniversalSpineStorage.Load();
+        ShowUniversalSpinePage();
+    }
+
+    private void ShowUniversalSpinePage()
+    {
+        _universalSpineProfile = UniversalSpineStorage.Load();
+        var summary = UniversalSpineCalculator.Calculate(_universalSpineProfile);
+        var itemLookup = _universalSpineProfile.Items.ToDictionary(item => item.Id);
+
+        SetHeader("Universal Spine", $"Universal Spine • v2.1 • {summary.TotalItems} local items • {summary.LinkCount} links");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Universal Spine",
+            "Connect the offline modules without pretending LifeOS has integrations yet. The spine records local links between work, money, proof, relationships, daily flow, evidence, release state, safety, and knowledge."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Spine items", summary.TotalItems.ToString(), "Local"));
+        metricsPanel.Children.Add(CreateDashboardCard("Active", summary.ActiveItems.ToString(), "Signals"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.ReviewNeededItems.ToString(), "Manual"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting", summary.WaitingItems.ToString(), "State"));
+        metricsPanel.Children.Add(CreateDashboardCard("Blocked", summary.BlockedItems.ToString(), "Stop"));
+        metricsPanel.Children.Add(CreateDashboardCard("Links", summary.LinkCount.ToString(), "Cross-module"));
+        metricsPanel.Children.Add(CreateDashboardCard("Proof links", summary.NeedsProofLinks.ToString(), "Evidence"));
+        metricsPanel.Children.Add(CreateDashboardCard("Money links", summary.MoneyLinks.ToString(), "Not safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Follow-up links", summary.FollowUpLinks.ToString(), "Relationship"));
+        metricsPanel.Children.Add(CreateDashboardCard("Modules", summary.ModuleCount.ToString(), "Connected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Sync", summary.ExternalSyncEnabled ? "On" : "Off", "Local-first"));
+
+        root.Children.Add(metricsPanel);
+
+        var spinePanel = CreateInfoPanel("Spine rule", FormatReasons(summary.Reasons));
+        spinePanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(spinePanel);
+
+        var controlsPanel = CreateUniversalSpineControlsPanel();
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        var priorityPanel = CreateUniversalSpineItemPanel("Priority spine signals", summary.PriorityItems);
+        priorityPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(priorityPanel);
+
+        var linkPanel = CreateUniversalSpineLinkPanel("Cross-module links", summary.Links, itemLookup);
+        linkPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(linkPanel);
+
+        var recentPanel = CreateUniversalSpineItemPanel("Recent local spine items", summary.RecentItems);
+        recentPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(recentPanel);
+
+        var boundaryPanel = CreateInfoPanel(
+            "v2.1 boundary",
+            "Universal Spine is local context and link state only. It is not universal search, AI reasoning, inbox scanning, cloud sync, automatic decisions, or integrations. Those layers come later after the offline spine is stable.");
+
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local spine file",
+            $"Universal spine file: {UniversalSpineStorage.FilePath}");
+
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateUniversalSpineControlsPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Spine controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Use reset only for fictional/demo spine data. v2.1 proves the local cross-module link model before universal search, integrations, or AI assistant layers.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal
+        };
+
+        var resetButton = CreateActionButton("Reset Demo Spine", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetUniversalSpineButton_Click;
+
+        buttonRow.Children.Add(resetButton);
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateUniversalSpineItemPanel(string title, IEnumerable<UniversalSpineItem> items)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = items.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No spine items in this section."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in list)
+        {
+            root.Children.Add(CreateSimpleItemCard(
+                item.Title,
+                $"{UniversalSpineCalculator.FormatKind(item.Kind)} • {UniversalSpineCalculator.FormatStatus(item.Status)} • {item.SourceModule} • Priority {item.Priority}",
+                $"{item.NextAction}\n{item.Notes}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateUniversalSpineLinkPanel(string title, IEnumerable<UniversalSpineLink> links, IReadOnlyDictionary<Guid, UniversalSpineItem> itemLookup)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = links.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No cross-module links captured yet."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var link in list)
+        {
+            var fromTitle = itemLookup.TryGetValue(link.FromItemId, out var fromItem) ? fromItem.Title : "Unknown source";
+            var toTitle = itemLookup.TryGetValue(link.ToItemId, out var toItem) ? toItem.Title : "Unknown target";
+
+            root.Children.Add(CreateSimpleItemCard(
+                link.Label,
+                UniversalSpineCalculator.FormatLinkType(link.LinkType),
+                $"{fromTitle} → {toTitle}\n{link.Notes}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
 
 
     private void ResetDesktopReleaseReadinessButton_Click(object sender, RoutedEventArgs e)
@@ -3989,8 +4187,9 @@ public partial class MainWindow : Window
         var paidWorkProofSummary = PaidWorkMoneyProofSnapshotService.Create();
         var settingsSafetySummary = SettingsSafetyThemeCalculator.Calculate(SettingsSafetyThemeStorage.Load());
         var desktopReleaseSummary = DesktopReleaseReadinessCalculator.Calculate(DesktopReleaseStorage.Load());
+        var universalSpineSummary = UniversalSpineCalculator.Calculate(UniversalSpineStorage.Load());
 
-        SetHeader("Command Centre", $"Unified Command Centre • v2.0 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v2.1 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -4026,6 +4225,9 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Guardrails", settingsSafetySummary.EnabledGuardrails.ToString(), "Safety"));
         metricsPanel.Children.Add(CreateDashboardCard("Release state", desktopReleaseSummary.ReleaseStateLabel, "v2.0"));
         metricsPanel.Children.Add(CreateDashboardCard("Release readiness", $"{desktopReleaseSummary.ScorePercent}%", "Desktop"));
+        metricsPanel.Children.Add(CreateDashboardCard("Spine items", universalSpineSummary.TotalItems.ToString(), "v2.1"));
+        metricsPanel.Children.Add(CreateDashboardCard("Spine links", universalSpineSummary.LinkCount.ToString(), "Cross-module"));
+        metricsPanel.Children.Add(CreateDashboardCard("Spine review", universalSpineSummary.ReviewNeededItems.ToString(), "Manual"));
 
         root.Children.Add(metricsPanel);
 
@@ -4102,16 +4304,23 @@ public partial class MainWindow : Window
         releasePanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(releasePanel);
 
+        var spinePanel = CreateInfoPanel(
+            "Universal Spine",
+            FormatReasons(universalSpineSummary.Reasons));
+
+        spinePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(spinePanel);
+
         var workPanel = CreateInfoPanel(
-            "v2.0 operating rule",
-            "LifeOS is now treated as a paid desktop release candidate for the offline/local-first foundation. Expected money is not safe money, private details stay out of screenshots, and integrations wait until the manual workflows are proven.");
+            "v2.1 operating rule",
+            "LifeOS now has a local Universal Spine for connecting module context. The spine links work, money, proof, relationships, daily flow, release state, safety, and knowledge without pretending integrations or AI are active yet.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v2.0 scope",
-            "v2.0 confirms the local desktop foundation and release-readiness workflow. It is not cloud sync, external integrations, AI assistant execution, automatic messaging, mobile capture, accounting automation, or a full installer/signing system yet.");
+            "v2.1 scope",
+            "v2.1 confirms local cross-module context and links. It is not universal search, cloud sync, external integrations, AI assistant execution, automatic inbox scanning, or automatic decision-making yet.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

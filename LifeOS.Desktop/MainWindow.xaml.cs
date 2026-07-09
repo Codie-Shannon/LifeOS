@@ -4201,52 +4201,98 @@ public partial class MainWindow : Window
     {
         var today = DateOnly.FromDateTime(DateTime.Today);
         var summary = WorkPipelineCalculator.Calculate(_workPipelineItems, today);
+        var operatingSummary = WorkPipelineOperatingCalculator.Calculate(_workPipelineItems, today);
+        var bridgeSnapshot = WorkPipelineSpineBridgeService.Create(today);
 
-        SetHeader("Work Pipeline", $"Work Pipeline • v0.9 release candidate • {summary.OpenItems} open");
+        SetHeader("Work Pipeline", $"Work Pipeline • v4.5 • {operatingSummary.OpenItems} open • {operatingSummary.ReviewNeededItems} review");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "Work Pipeline",
-            "Track paid work, warm leads, proof projects, blocked work, follow-ups, timesheets, invoices, expected payments, and parked ideas without turning LifeOS into a bloated CRM."));
+            "v4.5 turns active work, warm leads, blocked projects, follow-ups, invoice readiness, payment expected state, and proof gaps into one operating lane. This is still local/manual; it is not a CRM, accounting system, or auto-messaging layer."));
 
         var metricsPanel = new WrapPanel
         {
             Margin = new Thickness(0, 22, 0, 0)
         };
 
-        metricsPanel.Children.Add(CreateDashboardCard("Open", summary.OpenItems.ToString(), "Pipeline"));
-        metricsPanel.Children.Add(CreateDashboardCard("Active", summary.ActiveItems.ToString(), "Moving"));
-        metricsPanel.Children.Add(CreateDashboardCard("Waiting", summary.WaitingItems.ToString(), "Waiting-on"));
-        metricsPanel.Children.Add(CreateDashboardCard("Blocked", summary.BlockedItems.ToString(), "Blocked"));
-        metricsPanel.Children.Add(CreateDashboardCard("Follow-ups", (summary.FollowUpsOverdue + summary.FollowUpsDueToday + summary.FollowUpsDueSoon).ToString(), "Next 7 days"));
-        metricsPanel.Children.Add(CreateDashboardCard("Expected value", FormatMoney(summary.ExpectedValueTotal), "Not safe money"));
-        metricsPanel.Children.Add(CreateDashboardCard("Timesheets", summary.TimesheetsNeeded.ToString(), "Needed"));
-        metricsPanel.Children.Add(CreateDashboardCard("Invoices", summary.InvoicesNeeded.ToString(), "Needed"));
-        metricsPanel.Children.Add(CreateDashboardCard("Payments", summary.PaymentsExpected.ToString(), "Expected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Mode", "v4.5", "Work lane"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pressure", operatingSummary.PressureLabel, "Pipeline"));
+        metricsPanel.Children.Add(CreateDashboardCard("Open", operatingSummary.OpenItems.ToString(), "Pipeline"));
+        metricsPanel.Children.Add(CreateDashboardCard("Active", operatingSummary.ActiveItems.ToString(), "Moving"));
+        metricsPanel.Children.Add(CreateDashboardCard("Today", operatingSummary.TodayActionItems.ToString(), "Triage"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting me", operatingSummary.WaitingOnMeItems.ToString(), "Owner"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting others", operatingSummary.WaitingOnOthersItems.ToString(), "External"));
+        metricsPanel.Children.Add(CreateDashboardCard("Blocked", operatingSummary.BlockedItems.ToString(), "Stop"));
+        metricsPanel.Children.Add(CreateDashboardCard("Follow-ups now", operatingSummary.FollowUpsNow.ToString(), "Due"));
+        metricsPanel.Children.Add(CreateDashboardCard("Follow-ups soon", operatingSummary.FollowUpsDueSoon.ToString(), "7 days"));
+        metricsPanel.Children.Add(CreateDashboardCard("Timesheets", operatingSummary.TimesheetReadyItems.ToString(), "Needed"));
+        metricsPanel.Children.Add(CreateDashboardCard("Invoices", operatingSummary.InvoiceReadyItems.ToString(), "Needed"));
+        metricsPanel.Children.Add(CreateDashboardCard("Payments", operatingSummary.PaymentExpectedItems.ToString(), "Expected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Proof gaps", operatingSummary.ProofNeededItems.ToString(), "Evidence"));
+        metricsPanel.Children.Add(CreateDashboardCard("Warm/parked", operatingSummary.WarmOrParkedItems.ToString(), "Review"));
+        metricsPanel.Children.Add(CreateDashboardCard("Expected value", FormatMoney(operatingSummary.ExpectedValueVisible), "Visible"));
+        metricsPanel.Children.Add(CreateDashboardCard("Excluded", FormatMoney(operatingSummary.ExpectedValueExcludedFromSafe), "Not safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Review", operatingSummary.ReviewNeededItems.ToString(), "State"));
 
         root.Children.Add(metricsPanel);
 
-        var reasonsPanel = CreateInfoPanel("Pipeline pressure", FormatReasons(summary.Reasons));
+        var reasonsPanel = CreateInfoPanel("v4.5 Work Pipeline rule", FormatReasons(operatingSummary.Reasons));
         reasonsPanel.Margin = new Thickness(0, 8, 0, 0);
         root.Children.Add(reasonsPanel);
 
-        var stageBreakdown = summary.StageCounts.Count == 0
+        var operatingPanel = CreateWorkPipelineV45OperatingPanel(operatingSummary);
+        operatingPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(operatingPanel);
+
+        var todayPanel = CreateWorkPipelineV45LanePanel("Today triage", operatingSummary.TodayTriage, "The items that can create pressure now: blocked work, due follow-ups, invoice/timesheet actions, expected payments, or critical items.");
+        todayPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(todayPanel);
+
+        var activePanel = CreateWorkPipelineV45LanePanel("Active work lane", operatingSummary.ActiveWork, "Work that can actually move. This lane should stay small enough to act on.");
+        activePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(activePanel);
+
+        var waitingMePanel = CreateWorkPipelineV45LanePanel("Waiting on me", operatingSummary.WaitingOnMe, "Work where I owe the next move. These are priority because nobody else can unblock them.");
+        waitingMePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(waitingMePanel);
+
+        var waitingOthersPanel = CreateWorkPipelineV45LanePanel("Waiting on others", operatingSummary.WaitingOnOthers, "Work where someone else, access, payment, files, or a reply is needed before the next move.");
+        waitingOthersPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(waitingOthersPanel);
+
+        var blockedPanel = CreateWorkPipelineV45LanePanel("Blocked work", operatingSummary.BlockedWork, "Blocked work stays visible, but it should not consume deep sprint time until the blocker clears.");
+        blockedPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(blockedPanel);
+
+        var invoicePanel = CreateWorkPipelineV45LanePanel("Invoice / timesheet readiness", operatingSummary.InvoiceReadiness, "Items that may need timesheet, invoice, client-safe summary, or proof before money can move.");
+        invoicePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(invoicePanel);
+
+        var paymentPanel = CreateWorkPipelineV45LanePanel("Payment expected / not safe money", operatingSummary.PaymentExpected, "Expected pipeline money is visible for planning but remains excluded from safe money until paid/cleared.");
+        paymentPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(paymentPanel);
+
+        var proofPanel = CreateWorkPipelineV45LanePanel("Proof / evidence gaps", operatingSummary.ProofNeeded, "Items that need proof/evidence notes before they become clean handoff, invoice, or portfolio material.");
+        proofPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(proofPanel);
+
+        var warmPanel = CreateWorkPipelineV45LanePanel("Warm / parked opportunities", operatingSummary.WarmOrParked, "Warm leads and parked ideas stay contained so they do not hijack paid active work.");
+        warmPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(warmPanel);
+
+        var bridgePanel = CreateWorkPipelineV45BridgePanel(bridgeSnapshot);
+        bridgePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(bridgePanel);
+
+        var legacyStageBreakdown = summary.StageCounts.Count == 0
             ? "No open pipeline stages."
             : string.Join(Environment.NewLine, summary.StageCounts.Select(stage => $"• {FormatWorkPipelineStage(stage.Stage)}: {stage.Count}"));
 
-        var stagePanel = CreateInfoPanel("Stage breakdown", stageBreakdown);
+        var stagePanel = CreateInfoPanel("Stage breakdown", legacyStageBreakdown);
         stagePanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(stagePanel);
-
-        var focusPanel = CreateWorkPipelineFocusPanel(summary);
-        focusPanel.Margin = new Thickness(0, 16, 0, 0);
-        root.Children.Add(focusPanel);
-
-        var bridgeCount = WorkPipelineFollowUpBridge.CreateFollowUps(_workPipelineItems).Count;
-        var bridgePanel = CreateInfoPanel("Follow-up bridge", $"{bridgeCount} pipeline item(s) can be mirrored into Follow-Ups when that workflow is enabled. This stage only prepares the bridge; it does not auto-create duplicate follow-ups.");
-        bridgePanel.Margin = new Thickness(0, 16, 0, 0);
-        root.Children.Add(bridgePanel);
 
         var filterPanel = CreateWorkPipelineFilterPanel();
         filterPanel.Margin = new Thickness(0, 16, 0, 0);
@@ -4261,13 +4307,158 @@ public partial class MainWindow : Window
         root.Children.Add(listPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v0.9 scope",
-            $"Work Pipeline now includes follow-up states, waiting-on views, opportunity heat, stage counts, storage backup safety, and Command Centre pressure signals. Saved file: {WorkPipelineStorage.FilePath}. No auto-messaging, CRM, or accounting automation.");
+            "v4.5 boundary",
+            $"v4.5 strengthens the local Work Pipeline operating lane. It does not send messages, sync email/calendar/accounting/bank data, create invoices, create calendar events, run AI actions, or replace a CRM. Saved file: {WorkPipelineStorage.FilePath}.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);
 
+        var nextPanel = CreateInfoPanel(
+            "After v4.5",
+            "Next lane: v4.6 Receipt OCR / Evidence-to-Item. Work Pipeline is now ready to receive reviewed evidence and OCR-derived items later without trusting raw imports automatically.");
+
+        nextPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(nextPanel);
+
         MainContentControl.Content = root;
+    }
+
+    private Border CreateWorkPipelineV45OperatingPanel(WorkPipelineOperatingSummary summary)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "v4.5 operating signals",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        if (summary.CommandCentreSignals.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No pipeline operating signals right now."));
+        }
+        else
+        {
+            foreach (var signal in summary.CommandCentreSignals)
+            {
+                root.Children.Add(CreateSimpleItemCard(
+                    signal.Label,
+                    $"{signal.Value} • {signal.Priority} • {WorkPipelineOperatingCalculator.FormatReviewBucket(signal.Bucket)}",
+                    signal.Detail));
+            }
+        }
+
+        if (summary.IntegrityWarnings.Count > 0)
+        {
+            var warningText = FormatReasons(summary.IntegrityWarnings);
+            var warningPanel = CreateInfoPanel("Pipeline integrity warnings", warningText);
+            warningPanel.Margin = new Thickness(0, 12, 0, 0);
+            root.Children.Add(warningPanel);
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateWorkPipelineV45LanePanel(string title, IEnumerable<WorkPipelineItem> items, string description)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = description,
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 12)
+        });
+
+        var list = items.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No pipeline items in this lane."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in list.Take(8))
+        {
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            var bucket = WorkPipelineOperatingCalculator.GetReviewBucket(item, today);
+            var moneyState = WorkPipelineOperatingCalculator.GetMoneyState(item);
+            var expectedText = item.ExpectedValue.HasValue ? FormatMoney(item.ExpectedValue.Value) : "No expected value";
+
+            var body = $"{FormatWorkPipelineStage(item.Stage)} • {FormatWorkPipelineStatus(item.Status)} • {item.Priority} • {WorkPipelineOperatingCalculator.FormatReviewBucket(bucket)} • {WorkPipelineOperatingCalculator.FormatMoneyState(moneyState)} • Follow-up: {FormatDate(item.FollowUpDate)} • Expected: {expectedText}";
+
+            var notes = new List<string>
+            {
+                $"Next: {item.NextAction}",
+                string.IsNullOrWhiteSpace(item.WaitingOn) ? string.Empty : $"Waiting on: {item.WaitingOn}",
+                string.IsNullOrWhiteSpace(item.ClientOrCompany) ? string.Empty : $"Client/company: {item.ClientOrCompany}",
+                string.IsNullOrWhiteSpace(item.ExpectedValueNote) ? "Expected money is not safe money until paid." : item.ExpectedValueNote,
+                string.IsNullOrWhiteSpace(item.LinkedProofNotes) ? "Proof/evidence: not linked yet." : $"Proof/evidence: {item.LinkedProofNotes}",
+                string.IsNullOrWhiteSpace(item.RiskNote) ? string.Empty : $"Risk: {item.RiskNote}"
+            };
+
+            root.Children.Add(CreateSimpleItemCard(
+                item.Title,
+                body,
+                string.Join(Environment.NewLine, notes.Where(note => !string.IsNullOrWhiteSpace(note)))));
+        }
+
+        if (list.Count > 8)
+        {
+            root.Children.Add(CreateEmptyTextBlock($"{list.Count - 8} additional item(s) are hidden from this panel. Use the filters below for the full list."));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateWorkPipelineV45BridgePanel(WorkPipelineOperatingSnapshot snapshot)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Work Pipeline spine bridge",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var spinePanel = CreateInfoPanel("Item/state spine bridge", FormatReasons(snapshot.SpineBridgeNotes));
+        spinePanel.Margin = new Thickness(0, 10, 0, 0);
+        root.Children.Add(spinePanel);
+
+        var calendarPanel = CreateInfoPanel("Payment Calendar bridge", FormatReasons(snapshot.PaymentCalendarBridgeNotes));
+        calendarPanel.Margin = new Thickness(0, 10, 0, 0);
+        root.Children.Add(calendarPanel);
+
+        var proofPanel = CreateInfoPanel("Proof / paid-work bridge", FormatReasons(snapshot.ProofBridgeNotes));
+        proofPanel.Margin = new Thickness(0, 10, 0, 0);
+        root.Children.Add(proofPanel);
+
+        var storagePanel = CreateInfoPanel("Local Work Pipeline file", snapshot.StorageFilePath);
+        storagePanel.Margin = new Thickness(0, 10, 0, 0);
+        root.Children.Add(storagePanel);
+
+        panel.Child = root;
+        return panel;
     }
 
     private Border CreateWorkPipelineFocusPanel(WorkPipelineSummary summary)

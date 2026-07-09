@@ -35,6 +35,8 @@ using LifeOS.Core.FinalOfflineOs;
 using LifeOS.Shared.FinalOfflineOs;
 using LifeOS.Core.LifeOsSpine;
 using LifeOS.Shared.LifeOsSpine;
+using LifeOS.Core.ItemState;
+using LifeOS.Shared.ItemState;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -156,6 +158,8 @@ public partial class MainWindow : Window
     private FinalOfflineOsProfile _finalOfflineOsProfile = FinalOfflineOsStorage.Load();
     private LifeOsSpineProfile _lifeOsSpineProfile = LifeOsSpineStorage.Load();
 
+    private LifeOsItemStateProfile _lifeOsItemStateProfile = LifeOsItemStateStorage.Load();
+
 
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
@@ -230,6 +234,8 @@ public partial class MainWindow : Window
 
     private void TimerAgentNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.TimerAgent);
 
+        private void ItemStateEngineNavButton_Click(object sender, RoutedEventArgs e) => ShowItemStateEnginePage();
+
     private void LifeOsSpineNavButton_Click(object sender, RoutedEventArgs e) => ShowLifeOsSpinePage();
 
     private void FinalOfflineOsNavButton_Click(object sender, RoutedEventArgs e) => ShowFinalOfflineOsPage();
@@ -258,6 +264,233 @@ public partial class MainWindow : Window
 
 
     
+
+    private void ResetItemStateEngineButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset item/state demo data?", "This will replace the local Item State Engine profile with fictional/demo stateful items and transition rules."))
+        {
+            return;
+        }
+
+        LifeOsItemStateStorage.ResetToDemoData();
+        _lifeOsItemStateProfile = LifeOsItemStateStorage.Load();
+        ShowItemStateEnginePage();
+    }
+
+    private void ShowItemStateEnginePage()
+    {
+        _lifeOsItemStateProfile = LifeOsItemStateStorage.Load();
+        var summary = LifeOsItemStateCalculator.Calculate(_lifeOsItemStateProfile);
+
+        SetHeader("Item State Engine", $"Item State Engine • v4.1 • {summary.TotalItems} items • {summary.NeedsReviewItems} review • {summary.TransitionRules} transition rules");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Item Type / State Engine",
+            "v4.1 turns the LifeOS spine map into a working item/state layer. Bills, payments, receipts, invoices, work, follow-ups, agenda items, proof, and future integrations all become reviewed items with state, evidence, pressure impact, and safe next action."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Engine", summary.ItemStateEngineActive ? "Active" : "Off", "v4.1"));
+        metricsPanel.Children.Add(CreateDashboardCard("Items", summary.TotalItems.ToString(), "Demo"));
+        metricsPanel.Children.Add(CreateDashboardCard("Open", summary.OpenItems.ToString(), "State"));
+        metricsPanel.Children.Add(CreateDashboardCard("Review", summary.NeedsReviewItems.ToString(), "Gate"));
+        metricsPanel.Children.Add(CreateDashboardCard("Due", summary.DueSoonOrTodayItems.ToString(), "Soon/today"));
+        metricsPanel.Children.Add(CreateDashboardCard("Overdue", summary.OverdueItems.ToString(), "Risk"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting", summary.WaitingItems.ToString(), "Do not chase"));
+        metricsPanel.Children.Add(CreateDashboardCard("Untrusted", summary.UntrustedItems.ToString(), "Needs source"));
+        metricsPanel.Children.Add(CreateDashboardCard("Money", summary.MoneyImpactItems.ToString(), "Impact"));
+        metricsPanel.Children.Add(CreateDashboardCard("Safe spend", summary.SafeToSpendImpactItems.ToString(), "Affected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Agenda", summary.AgendaImpactItems.ToString(), "Affected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Rules", summary.TransitionRules.ToString(), "Transitions"));
+
+        root.Children.Add(metricsPanel);
+
+        var rulePanel = CreateInfoPanel("Item/state rule", FormatReasons(summary.Reasons));
+        rulePanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(rulePanel);
+
+        var controlsPanel = CreateItemStateEngineControlsPanel();
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        var reviewPanel = CreateLifeOsItemPanel("Review queue / untrusted items", summary.ReviewQueue);
+        reviewPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reviewPanel);
+
+        var pressurePanel = CreateLifeOsItemPanel("Command Centre pressure items", summary.PressureItems);
+        pressurePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pressurePanel);
+
+        var moneyPanel = CreateLifeOsItemPanel("Money-impact items", summary.MoneyItems);
+        moneyPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(moneyPanel);
+
+        var workPanel = CreateLifeOsItemPanel("Work / people / proof items", summary.WorkItems);
+        workPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(workPanel);
+
+        var transitionPanel = CreateLifeOsTransitionRulePanel("State transition rules", summary.Rules);
+        transitionPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(transitionPanel);
+
+        var boundaryPanel = CreateInfoPanel(
+            "v4.1 boundary",
+            "v4.1 models item state and transition rules. It does not connect real APIs, request OAuth permissions, sync live email/calendar/accounting/bank data, run AI actions, or automatically change real-world systems.");
+
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var nextPanel = CreateInfoPanel(
+            "After v4.1",
+            "Next lane: v4.2 Bills / Upcoming Payments / Pay Later. The item engine created here becomes the base for bill items, upcoming payment items, BNPL items, safe-to-spend impact, agenda impact, and weekly close-out pressure.");
+
+        nextPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(nextPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local item state file",
+            $"Item State Engine file: {LifeOsItemStateStorage.FilePath}");
+
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateItemStateEngineControlsPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Item engine controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Use reset only for fictional/demo item-state data. v4.1 is local state modelling; no real integrations or automatic actions are active.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal
+        };
+
+        var resetButton = CreateActionButton("Reset Item State Demo", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetItemStateEngineButton_Click;
+
+        buttonRow.Children.Add(resetButton);
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateLifeOsItemPanel(string title, IEnumerable<LifeOsStatefulItem> items)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = items.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No items in this section."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in list)
+        {
+            var dueText = item.DueDate.HasValue ? $" • Due {item.DueDate.Value:dd MMM yyyy}" : string.Empty;
+            var amountText = item.Amount.HasValue ? $" • {item.Amount.Value:C}" : string.Empty;
+            var trustedText = item.Trusted ? "Trusted" : "Untrusted";
+
+            root.Children.Add(CreateSimpleItemCard(
+                item.Title,
+                $"{LifeOsItemStateCalculator.FormatType(item.Type)} • {LifeOsItemStateCalculator.FormatState(item.State)} • {LifeOsItemStateCalculator.FormatRisk(item.RiskLevel)} • {trustedText}{amountText}{dueText}",
+                $"Source: {LifeOsItemStateCalculator.FormatSource(item.SourceKind)}\nImpacts: {LifeOsItemStateCalculator.FormatImpactAreas(item.ImpactAreas)}\nEvidence: {item.EvidenceSummary}\nReview: {item.ReviewGate}\nPressure: {item.PressureSignal}\nNext: {item.SafeNextAction}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateLifeOsTransitionRulePanel(string title, IEnumerable<LifeOsStateTransitionRule> rules)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = rules.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No transition rules mapped yet."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var rule in list)
+        {
+            var flags = new List<string>();
+
+            if (rule.RequiresEvidence)
+            {
+                flags.Add("evidence required");
+            }
+
+            if (rule.RequiresManualReview)
+            {
+                flags.Add("manual review");
+            }
+
+            if (rule.IsDestructive)
+            {
+                flags.Add("destructive");
+            }
+
+            var flagText = flags.Count == 0 ? "no special flags" : string.Join(", ", flags);
+
+            root.Children.Add(CreateSimpleItemCard(
+                rule.Label,
+                $"{LifeOsItemStateCalculator.FormatType(rule.Type)} • {LifeOsItemStateCalculator.FormatState(rule.FromState)} → {LifeOsItemStateCalculator.FormatState(rule.ToState)} • {flagText}",
+                $"Requirement: {rule.Requirement}\nPressure result: {rule.ResultingPressure}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+
     private void ResetLifeOsSpineButton_Click(object sender, RoutedEventArgs e)
     {
         if (!ConfirmRiskyAction("Reset LifeOS spine demo data?", "This will replace the local LifeOS Spine Map with fictional/canon roadmap demo data."))
@@ -5028,8 +5261,9 @@ public partial class MainWindow : Window
         var searchKnowledgeSummary = SearchKnowledgeCalculator.Calculate(SearchKnowledgeStorage.Load());
         var finalOfflineOsSummary = FinalOfflineOsCalculator.Calculate(FinalOfflineOsStorage.Load());
         var lifeOsSpineSummary = LifeOsSpineCalculator.Calculate(LifeOsSpineStorage.Load());
+        var itemStateSummary = LifeOsItemStateCalculator.Calculate(LifeOsItemStateStorage.Load());
 
-        SetHeader("Command Centre", $"Unified Command Centre • v4.0 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v4.1 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -5080,6 +5314,9 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Spine modules", lifeOsSpineSummary.ModuleCount.ToString(), "v4 map"));
         metricsPanel.Children.Add(CreateDashboardCard("Item rules", lifeOsSpineSummary.ItemRuleCount.ToString(), "Stateful"));
         metricsPanel.Children.Add(CreateDashboardCard("Pressure sources", lifeOsSpineSummary.PressureSourceCount.ToString(), "Weekly"));
+        metricsPanel.Children.Add(CreateDashboardCard("State items", itemStateSummary.TotalItems.ToString(), "v4.1"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs review", itemStateSummary.NeedsReviewItems.ToString(), "Items"));
+        metricsPanel.Children.Add(CreateDashboardCard("Untrusted", itemStateSummary.UntrustedItems.ToString(), "Items"));
 
         root.Children.Add(metricsPanel);
 
@@ -5191,16 +5428,23 @@ public partial class MainWindow : Window
         lifeOsSpineMapPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(lifeOsSpineMapPanel);
 
+        var itemStatePanel = CreateInfoPanel(
+            "Item State Engine",
+            FormatReasons(itemStateSummary.Reasons));
+
+        itemStatePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(itemStatePanel);
+
         var workPanel = CreateInfoPanel(
-            "v4.0 operating rule",
-            "LifeOS now starts the spine completion road. v4 finishes item/state rules, bills, upcoming payments, Pay Later, hidden deductions, Agenda/payment calendar, Work Pipeline, Receipt OCR, Weekly Close-Out, and the Command Centre Pressure Engine before v5 integrations.");
+            "v4.1 operating rule",
+            "LifeOS now turns the spine map into item/state behaviour. Bills, payments, receipts, invoices, work, follow-ups, agenda, proof, and future imported data all become reviewed items with state, evidence, pressure impact, and safe next action.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v4.0 scope",
-            "v4.0 maps the LifeOS spine. It is not real OAuth, live email/calendar/accounting/bank sync, automatic AI action, the companion app, or the major workspace redesign.");
+            "v4.1 scope",
+            "v4.1 models item state and transition rules. It is not real OAuth, live email/calendar/accounting/bank sync, automatic AI action, the companion app, or the major workspace redesign.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

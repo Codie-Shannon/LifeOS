@@ -27,6 +27,8 @@ using LifeOS.Core.DesktopRelease;
 using LifeOS.Shared.DesktopRelease;
 using LifeOS.Core.UniversalSpine;
 using LifeOS.Shared.UniversalSpine;
+using LifeOS.Core.OsNavigation;
+using LifeOS.Shared.OsNavigation;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -141,6 +143,8 @@ public partial class MainWindow : Window
 
     private UniversalSpineProfile _universalSpineProfile = UniversalSpineStorage.Load();
 
+    private OsNavigationProfile _osNavigationProfile = OsNavigationStorage.Load();
+
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
 
@@ -214,6 +218,8 @@ public partial class MainWindow : Window
 
     private void TimerAgentNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.TimerAgent);
 
+    private void OsNavigationNavButton_Click(object sender, RoutedEventArgs e) => ShowOsNavigationPage();
+
     private void UniversalSpineNavButton_Click(object sender, RoutedEventArgs e) => ShowUniversalSpinePage();
 
     private void DesktopReleaseNavButton_Click(object sender, RoutedEventArgs e) => ShowDesktopReleasePage();
@@ -228,6 +234,203 @@ public partial class MainWindow : Window
 
 
 
+
+
+
+    private void ResetOsNavigationButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset OS navigation demo data?", "This will replace the local OS navigation profile with fictional demo modules and groups."))
+        {
+            return;
+        }
+
+        OsNavigationStorage.ResetToDemoData();
+        _osNavigationProfile = OsNavigationStorage.Load();
+        ShowOsNavigationPage();
+    }
+
+    private void ShowOsNavigationPage()
+    {
+        _osNavigationProfile = OsNavigationStorage.Load();
+        var summary = OsNavigationCalculator.Calculate(_osNavigationProfile);
+        var moduleLookup = _osNavigationProfile.Modules.ToDictionary(module => module.Id);
+
+        SetHeader("OS Navigation Centre", $"OS Navigation Centre • v3.0 • {summary.VisibleModules} visible modules • {summary.GroupCount} groups");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "OS Navigation Centre",
+            "Strengthen the offline OS shell without doing the later full workspace redesign yet. Keep the current WPF page model, protect core modules, group the growing navigation, and make the next operating areas obvious."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Visible modules", summary.VisibleModules.ToString(), "Navigation"));
+        metricsPanel.Children.Add(CreateDashboardCard("Core modules", summary.CoreModules.ToString(), "Protected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pinned", summary.PinnedModules.ToString(), "Fast access"));
+        metricsPanel.Children.Add(CreateDashboardCard("Groups", summary.GroupCount.ToString(), "Workspaces"));
+        metricsPanel.Children.Add(CreateDashboardCard("Primary groups", summary.PrimaryWorkspaceCount.ToString(), "Operating"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.ReviewNeededModules.ToString(), "Modules"));
+        metricsPanel.Children.Add(CreateDashboardCard("Planned", summary.PlannedModules.ToString(), "Future"));
+        metricsPanel.Children.Add(CreateDashboardCard("Hidden", summary.HiddenModules.ToString(), "Not shown"));
+        metricsPanel.Children.Add(CreateDashboardCard("Sidebar scroll", summary.SidebarScrollEnabled ? "On" : "Off", "Reachable"));
+        metricsPanel.Children.Add(CreateDashboardCard("UI reshape", summary.MajorUiReshapeDeferred ? "Deferred" : "Now", "Roadmap"));
+        metricsPanel.Children.Add(CreateDashboardCard("Sync", summary.ExternalIntegrationsEnabled ? "On" : "Off", "Local-first"));
+
+        root.Children.Add(metricsPanel);
+
+        var rulePanel = CreateInfoPanel("OS navigation rule", FormatReasons(summary.Reasons));
+        rulePanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(rulePanel);
+
+        var controlsPanel = CreateOsNavigationControlsPanel();
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        var pinnedPanel = CreateOsNavigationModulePanel("Pinned/core operating modules", summary.Pinned);
+        pinnedPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pinnedPanel);
+
+        var groupPanel = CreateOsNavigationGroupPanel("Workspace group map", summary.Groups, moduleLookup);
+        groupPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(groupPanel);
+
+        var reviewPanel = CreateOsNavigationModulePanel("Modules needing v3 review", summary.ReviewNeeded);
+        reviewPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reviewPanel);
+
+        var plannedPanel = CreateOsNavigationModulePanel("Planned/future modules", summary.Planned);
+        plannedPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(plannedPanel);
+
+        var boundaryPanel = CreateInfoPanel(
+            "v3.0 boundary",
+            "v3.0 strengthens OS navigation and core modules. It is not the major workspace redesign, universal search, advanced knowledge layer, integrations, cloud sync, AI assistant execution, or automatic decision-making.");
+
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local navigation file",
+            $"OS navigation file: {OsNavigationStorage.FilePath}");
+
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateOsNavigationControlsPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Navigation controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Use reset only for fictional/demo navigation data. v3.0 keeps the existing page model and improves module organisation before later integrations and UI reshape.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal
+        };
+
+        var resetButton = CreateActionButton("Reset Demo Navigation", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetOsNavigationButton_Click;
+
+        buttonRow.Children.Add(resetButton);
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateOsNavigationModulePanel(string title, IEnumerable<OsNavigationModule> modules)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = modules.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No modules in this section."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var module in list)
+        {
+            root.Children.Add(CreateSimpleItemCard(
+                module.Title,
+                $"{OsNavigationCalculator.FormatCategory(module.Category)} • {OsNavigationCalculator.FormatStatus(module.Status)} • Sort {module.SortOrder}",
+                $"{module.Purpose}\nNext: {module.NextAction}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateOsNavigationGroupPanel(string title, IEnumerable<OsNavigationGroup> groups, IReadOnlyDictionary<Guid, OsNavigationModule> moduleLookup)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = groups.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No workspace groups captured yet."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var group in list)
+        {
+            var moduleNames = group.ModuleIds
+                .Select(moduleId => moduleLookup.TryGetValue(moduleId, out var module) ? module.Title : "Unknown module")
+                .ToList();
+
+            root.Children.Add(CreateSimpleItemCard(
+                group.Title,
+                $"{OsNavigationCalculator.FormatCategory(group.Category)} • {(group.IsPrimaryWorkspace ? "Primary" : "Planned")} • {moduleNames.Count} module(s)",
+                $"{group.Purpose}\nModules: {string.Join(", ", moduleNames)}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
 
 
     private void ResetUniversalSpineButton_Click(object sender, RoutedEventArgs e)
@@ -4188,8 +4391,9 @@ public partial class MainWindow : Window
         var settingsSafetySummary = SettingsSafetyThemeCalculator.Calculate(SettingsSafetyThemeStorage.Load());
         var desktopReleaseSummary = DesktopReleaseReadinessCalculator.Calculate(DesktopReleaseStorage.Load());
         var universalSpineSummary = UniversalSpineCalculator.Calculate(UniversalSpineStorage.Load());
+        var osNavigationSummary = OsNavigationCalculator.Calculate(OsNavigationStorage.Load());
 
-        SetHeader("Command Centre", $"Unified Command Centre • v2.1 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v3.0 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -4228,6 +4432,9 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Spine items", universalSpineSummary.TotalItems.ToString(), "v2.1"));
         metricsPanel.Children.Add(CreateDashboardCard("Spine links", universalSpineSummary.LinkCount.ToString(), "Cross-module"));
         metricsPanel.Children.Add(CreateDashboardCard("Spine review", universalSpineSummary.ReviewNeededItems.ToString(), "Manual"));
+        metricsPanel.Children.Add(CreateDashboardCard("Visible modules", osNavigationSummary.VisibleModules.ToString(), "v3.0"));
+        metricsPanel.Children.Add(CreateDashboardCard("Workspace groups", osNavigationSummary.GroupCount.ToString(), "OS map"));
+        metricsPanel.Children.Add(CreateDashboardCard("Core modules", osNavigationSummary.CoreModules.ToString(), "Protected"));
 
         root.Children.Add(metricsPanel);
 
@@ -4311,16 +4518,23 @@ public partial class MainWindow : Window
         spinePanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(spinePanel);
 
+        var navigationPanel = CreateInfoPanel(
+            "OS Navigation Centre",
+            FormatReasons(osNavigationSummary.Reasons));
+
+        navigationPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(navigationPanel);
+
         var workPanel = CreateInfoPanel(
-            "v2.1 operating rule",
-            "LifeOS now has a local Universal Spine for connecting module context. The spine links work, money, proof, relationships, daily flow, release state, safety, and knowledge without pretending integrations or AI are active yet.");
+            "v3.0 operating rule",
+            "LifeOS now has a stronger offline OS navigation layer. The current page model stays intact, core modules stay protected, and workspace groups make the growing app easier to operate before the later major UI reshape.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v2.1 scope",
-            "v2.1 confirms local cross-module context and links. It is not universal search, cloud sync, external integrations, AI assistant execution, automatic inbox scanning, or automatic decision-making yet.");
+            "v3.0 scope",
+            "v3.0 is OS navigation and core module structure. It is not the major workspace redesign, universal search, advanced knowledge layer, cloud sync, external integrations, AI assistant execution, or automatic decision-making yet.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

@@ -3,36 +3,64 @@
 <!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
 ## Current screenshots
 
-### Command Centre â€” v3.9
+### Command Centre - v4.0
 
-![LifeOS v3.9 Command Centre](docs/screenshot-groups/group-09-final-offline-os/screenshots/lifeos_v3_9_group09_01_command-centre.png)
+![LifeOS v4.0 Command Centre](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_01_command-centre.png)
 
-### Final Offline OS â€” v3.9
+### LifeOS Spine Map - v4.0
 
-![LifeOS v3.9 Final Offline OS](docs/screenshot-groups/group-09-final-offline-os/screenshots/lifeos_v3_9_group09_02_final-offline-os-top.png)
+![LifeOS v4.0 LifeOS Spine Map](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_02_lifeos-spine-map-top.png)
 
-### v4 integration landing zones â€” v3.9
+### Money spine - v4.0
 
-![LifeOS v3.9 Integration Landing Zones](docs/screenshot-groups/group-09-final-offline-os/screenshots/lifeos_v3_9_group09_06a_v4-integration-landing-zones-upper.png)
+![LifeOS v4.0 Money Spine](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_05_operating-spine-money-timeline-paylater-hidden-deductions.png)
 
-### Boundary and after v3.9 â€” v3.9
+### Item/state model - v4.0
 
-![LifeOS v3.9 Boundary](docs/screenshot-groups/group-09-final-offline-os/screenshots/lifeos_v3_9_group09_07_boundary-after-v3-9-local-file.png)
+![LifeOS v4.0 Item State Model](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_11_item-state-model-money-top.png)
 
-Full screenshot group: [`docs/screenshot-groups/group-09-final-offline-os`](docs/screenshot-groups/group-09-final-offline-os)
+### Weekly pressure sources - v4.0
+
+![LifeOS v4.0 Weekly Pressure Sources](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_17_weekly-pressure-source-work-stuck-invoice-ready.png)
+
+### v4 boundary and road - v4.0
+
+![LifeOS v4.0 Boundary and Road](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_18_boundary-road-local-file.png)
+
+Full screenshot group: [`docs/screenshot-groups/group-10-lifeos-spine-recovery-map`](docs/screenshot-groups/group-10-lifeos-spine-recovery-map)
 <!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
 
 <!-- LIFEOS_CURRENT_BUILD_START -->
 ## Current build
 
-**Current completed version:** v3.9  
-**Current completed screenshot group:** Group 09 â€” Final Offline OS  
-**Build lane:** Local-first offline OS foundation  
-**Next planned lane:** v4.x integrations
+**Current completed version:** v4.0  
+**Current completed screenshot group:** Group 10 - LifeOS Spine Recovery Map  
+**Build lane:** LifeOS spine completion  
+**Next planned version:** v4.1 Item Type / State Engine
 
-LifeOS v3.9 closes the offline/local-first OS foundation. The app now has command, money, work, proof, relationship, daily flow, safety, Universal Spine, OS Navigation, Search / Knowledge, Desktop Release, and Final Offline OS checkpoint structure.
+LifeOS v4.0 starts the corrected v4 road. v3.9 remains the offline foundation checkpoint. v4.x now completes the original LifeOS operating spine before v5 integrations.
 
-v3.9 is the integration-ready checkpoint. It defines landing zones for Outlook/Gmail, Calendar, SharePoint/Drive/local files, Xero/accounting exports, TimerAgent/work logs, docs/knowledge sources, manual imports, and future APIs. Real integrations, AI assistant execution, cloud sync, automatic messaging, team/business scaling, and the major workspace redesign are still deliberately outside v3.9.
+Master rule:
+
+```text
+Everything important becomes an item.
+Every item has state.
+Every state affects pressure.
+Every pressure feeds the Command Centre.
+```
+
+Current roadmap:
+
+```text
+v3.9 = offline foundation checkpoint
+v4.x = LifeOS spine completion
+v5.x = integrations
+v6.x = controlled automation / hardening
+v6.5 = companion app
+v7.x = AI assistant layer
+v8-v9 = full mobile + major workspace reshape
+v10 = platform / plugin ecosystem
+```
 <!-- LIFEOS_CURRENT_BUILD_END -->
 
 LifeOS Desktop is a local-first command centre for reducing chaos across work, money pressure, follow-ups, proof, evidence, and daily execution.
@@ -299,6 +327,8 @@ v2.0 should include the core desktop feature set in manual/local-first form. Aut
 LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
+
+
 
 
 

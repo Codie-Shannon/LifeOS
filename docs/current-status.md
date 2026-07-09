@@ -2,10 +2,10 @@
 
 ## Current completed version
 
-**Current completed version:** v2.0  
-**Current completed screenshot group:** Group 05 — v2 Paid Desktop Release  
-**Build lane:** Local-first paid desktop release candidate  
-**Next planned group:** Group 06 — Universal Spine
+**Current completed version:** v2.1  
+**Current completed screenshot group:** Group 06 — Universal Spine  
+**Build lane:** Local-first offline OS foundation  
+**Next planned group:** Group 07 — OS Navigation / Core Modules
 
 ## Completed screenshot groups
 
@@ -16,6 +16,7 @@
 | Group 03 | Paid Work / Money / Proof | v1.7 | Complete |
 | Group 04 | Settings / Safety / Theme | v1.8 | Complete |
 | Group 05 | v2 Paid Desktop Release | v2.0 | Complete |
+| Group 06 | Universal Spine | v2.1 | Complete |
 
 ## Current app capability
 
@@ -35,11 +36,9 @@ LifeOS now has local-first foundations for:
 - desktop release readiness checkpoint
 - local release readiness storage
 - release readiness scoring and checklist
-
-## Module version note
-
-Some pages may keep their module version labels. For example, Settings / Safety can still show v1.8 because that module was introduced in v1.8. v2.0 is the overall paid desktop release checkpoint.
+- Universal Spine local cross-module item/link model
+- Universal Spine local storage and demo-safe link map
 
 ## Boundary
 
-LifeOS remains offline/local-first in this build lane. It does not yet include external integrations, accounting automation, AI assistant execution, cloud sync, mobile capture, automatic messaging, production installer/signing, or full dynamic theming.
+LifeOS remains offline/local-first in this build lane. v2.1 is not external integrations, accounting automation, AI assistant execution, cloud sync, mobile capture, automatic messaging, universal search, inbox scanning, production installer/signing, or full dynamic theming.

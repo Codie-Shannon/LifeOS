@@ -3,32 +3,32 @@
 <!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
 ## Current screenshots
 
-### Command Centre â€” v2.0
+### Command Centre â€” v2.1
 
-![LifeOS v2.0 Command Centre](docs/screenshot-groups/group-05-v2-paid-desktop-release/screenshots/lifeos_v2_0_group05_01_command-centre.png)
+![LifeOS v2.1 Command Centre](docs/screenshot-groups/group-06-universal-spine/screenshots/lifeos_v2_1_group06_01_command-centre.png)
 
-### Desktop Release Centre â€” v2.0
+### Universal Spine â€” v2.1
 
-![LifeOS v2.0 Desktop Release Centre](docs/screenshot-groups/group-05-v2-paid-desktop-release/screenshots/lifeos_v2_0_group05_02_desktop-release-centre-top.png)
+![LifeOS v2.1 Universal Spine](docs/screenshot-groups/group-06-universal-spine/screenshots/lifeos_v2_1_group06_02_universal-spine-top.png)
 
-### Release readiness checks â€” v2.0
+### Priority signals and cross-module links â€” v2.1
 
-![LifeOS v2.0 Release Readiness Checks](docs/screenshot-groups/group-05-v2-paid-desktop-release/screenshots/lifeos_v2_0_group05_03_release-readiness-review-checks.png)
+![LifeOS v2.1 Universal Spine Links](docs/screenshot-groups/group-06-universal-spine/screenshots/lifeos_v2_1_group06_04_priority-signals-cross-module-links.png)
 
-Full screenshot group: [`docs/screenshot-groups/group-05-v2-paid-desktop-release`](docs/screenshot-groups/group-05-v2-paid-desktop-release)
+Full screenshot group: [`docs/screenshot-groups/group-06-universal-spine`](docs/screenshot-groups/group-06-universal-spine)
 <!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
 
 <!-- LIFEOS_CURRENT_BUILD_START -->
 ## Current build
 
-**Current completed version:** v2.0  
-**Current completed screenshot group:** Group 05 â€” v2 Paid Desktop Release  
-**Build lane:** Local-first paid desktop release candidate  
-**Next planned group:** Group 06 â€” Universal Spine
+**Current completed version:** v2.1  
+**Current completed screenshot group:** Group 06 â€” Universal Spine  
+**Build lane:** Local-first offline OS foundation  
+**Next planned group:** Group 07 â€” OS Navigation / Core Modules
 
-LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, paid work / money / proof control, settings/safety guardrails, and desktop release readiness.
+LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, paid work / money / proof control, settings/safety guardrails, desktop release readiness, and the Universal Spine.
 
-v2.0 is the paid desktop release checkpoint for the offline app. It confirms release readiness, screenshot safety, local-only boundaries, documentation flow, and manual-review guardrails before later integrations and AI layers.
+v2.1 adds the local Universal Spine: cross-module items and links between work, money, proof, relationships, daily flow, evidence, release state, settings/safety, and docs/knowledge. It remains local-first and manual-review before integrations, universal search, or AI assistant layers.
 <!-- LIFEOS_CURRENT_BUILD_END -->
 
 LifeOS Desktop is a local-first command centre for reducing chaos across work, money pressure, follow-ups, proof, evidence, and daily execution.
@@ -295,6 +295,8 @@ v2.0 should include the core desktop feature set in manual/local-first form. Aut
 LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
+
+
 
 
 

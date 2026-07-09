@@ -2,10 +2,10 @@
 
 ## Current completed version
 
-**Current completed version:** v3.0  
-**Current completed screenshot group:** Group 07 — OS Navigation / Core Modules  
+**Current completed version:** v3.5  
+**Current completed screenshot group:** Group 08 — Advanced Modules / Search / Knowledge  
 **Build lane:** Local-first offline OS foundation  
-**Next planned group:** Group 08 — Advanced Modules / Search / Knowledge
+**Next planned group:** Group 09 — Final Offline OS
 
 ## Completed screenshot groups
 
@@ -18,6 +18,7 @@
 | Group 05 | v2 Paid Desktop Release | v2.0 | Complete |
 | Group 06 | Universal Spine | v2.1 | Complete |
 | Group 07 | OS Navigation / Core Modules | v3.0 | Complete |
+| Group 08 | Advanced Modules / Search / Knowledge | v3.5 | Complete |
 
 ## Current app capability
 
@@ -44,7 +45,12 @@ LifeOS now has local-first foundations for:
 - workspace group map
 - planned/future module separation
 - module-review state
+- Search / Knowledge local item model
+- Search / Knowledge local search profiles
+- knowledge source boundaries
+- review/planned knowledge item separation
+- future integration landing-zone notes
 
 ## Boundary
 
-LifeOS remains offline/local-first in this build lane. v3.0 is not the major workspace redesign, external integrations, accounting automation, AI assistant execution, cloud sync, mobile capture, automatic messaging, universal search, advanced knowledge layer, inbox scanning, production installer/signing, or full dynamic theming.
+LifeOS remains offline/local-first in this build lane. v3.5 is not external search, full-text indexing, connector search, inbox scanning, cloud sync, external integrations, accounting automation, AI assistant execution, AI reasoning, automatic summarisation, mobile capture, automatic messaging, production installer/signing, final knowledge automation, or the major workspace redesign.

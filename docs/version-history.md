@@ -5,6 +5,7 @@
 
 | Version | Screenshot group | Summary | Status |
 |---|---|---|---|
+| v3.5 | Group 08 â€” Advanced Modules / Search / Knowledge | Search / Knowledge Centre, local knowledge items, source boundaries, search profiles, review/planned item separation, and future integration landing-zone notes. | Complete |
 | v3.0 | Group 07 â€” OS Navigation / Core Modules | OS Navigation Centre, visible/core/pinned module map, workspace groups, module-review state, planned/future separation, and deferred UI reshape boundary. | Complete |
 | v2.1 | Group 06 â€” Universal Spine | Local cross-module spine/link foundation connecting work, money, proof, relationships, daily flow, evidence, release state, settings/safety, and docs/knowledge. | Complete |
 | v2.0 | Group 05 â€” v2 Paid Desktop Release | Desktop Release Centre, release readiness scoring, local release checklist, v2.0 boundary, and paid desktop release checkpoint. | Complete |
@@ -14,6 +15,7 @@
 | v1.5 | Group 01 â€” Evidence + Relationships | Relationship Radar and local relationship-state tracking. | Complete |
 | v1.4 | Group 01 â€” Evidence + Relationships | Evidence Vault local proof workspace. | Complete |
 <!-- LIFEOS_VERSION_HISTORY_END -->
+
 
 
 

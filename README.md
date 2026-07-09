@@ -3,36 +3,36 @@
 <!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
 ## Current screenshots
 
-### Command Centre â€” v3.0
+### Command Centre â€” v3.5
 
-![LifeOS v3.0 Command Centre](docs/screenshot-groups/group-07-os-navigation-core-modules/screenshots/lifeos_v3_0_group07_01_command-centre.png)
+![LifeOS v3.5 Command Centre](docs/screenshot-groups/group-08-advanced-modules-search-knowledge/screenshots/lifeos_v3_5_group08_01_command-centre.png)
 
-### OS Navigation Centre â€” v3.0
+### Search / Knowledge Centre â€” v3.5
 
-![LifeOS v3.0 OS Navigation Centre](docs/screenshot-groups/group-07-os-navigation-core-modules/screenshots/lifeos_v3_0_group07_02_os-navigation-top.png)
+![LifeOS v3.5 Search / Knowledge Centre](docs/screenshot-groups/group-08-advanced-modules-search-knowledge/screenshots/lifeos_v3_5_group08_02_search-knowledge-top.png)
 
-### Workspace group map â€” v3.0
+### Pinned/local search profiles â€” v3.5
 
-![LifeOS v3.0 Workspace Group Map](docs/screenshot-groups/group-07-os-navigation-core-modules/screenshots/lifeos_v3_0_group07_05_workspace-group-map.png)
+![LifeOS v3.5 Search Profiles](docs/screenshot-groups/group-08-advanced-modules-search-knowledge/screenshots/lifeos_v3_5_group08_04_pinned-local-search-profiles.png)
 
-### Boundary and local navigation file â€” v3.0
+### Boundary and local knowledge file â€” v3.5
 
-![LifeOS v3.0 Boundary](docs/screenshot-groups/group-07-os-navigation-core-modules/screenshots/lifeos_v3_0_group07_07_boundary-local-navigation-file.png)
+![LifeOS v3.5 Boundary](docs/screenshot-groups/group-08-advanced-modules-search-knowledge/screenshots/lifeos_v3_5_group08_07_boundary-local-knowledge-file.png)
 
-Full screenshot group: [`docs/screenshot-groups/group-07-os-navigation-core-modules`](docs/screenshot-groups/group-07-os-navigation-core-modules)
+Full screenshot group: [`docs/screenshot-groups/group-08-advanced-modules-search-knowledge`](docs/screenshot-groups/group-08-advanced-modules-search-knowledge)
 <!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
 
 <!-- LIFEOS_CURRENT_BUILD_START -->
 ## Current build
 
-**Current completed version:** v3.0  
-**Current completed screenshot group:** Group 07 â€” OS Navigation / Core Modules  
+**Current completed version:** v3.5  
+**Current completed screenshot group:** Group 08 â€” Advanced Modules / Search / Knowledge  
 **Build lane:** Local-first offline OS foundation  
-**Next planned group:** Group 08 â€” Advanced Modules / Search / Knowledge
+**Next planned group:** Group 09 â€” Final Offline OS
 
-LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, paid work / money / proof control, settings/safety guardrails, desktop release readiness, Universal Spine, and OS Navigation.
+LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, paid work / money / proof control, settings/safety guardrails, desktop release readiness, Universal Spine, OS Navigation, and Search / Knowledge.
 
-v3.0 strengthens the offline OS shell with visible/core/pinned module mapping, workspace groups, module-review state, planned/future module separation, and explicit boundaries before the later integrations, search, knowledge, AI assistant, and major UI reshape layers.
+v3.5 adds local Advanced Search / Knowledge foundations: knowledge items, source boundaries, search profiles, manual review state, planned/future knowledge separation, and future integration landing-zone notes. External search, connector search, integrations, cloud sync, inbox scanning, AI reasoning, and automatic summarisation remain off.
 <!-- LIFEOS_CURRENT_BUILD_END -->
 
 LifeOS Desktop is a local-first command centre for reducing chaos across work, money pressure, follow-ups, proof, evidence, and daily execution.
@@ -299,6 +299,8 @@ v2.0 should include the core desktop feature set in manual/local-first form. Aut
 LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
+
+
 
 
 

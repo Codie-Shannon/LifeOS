@@ -3,32 +3,36 @@
 <!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
 ## Current screenshots
 
-### Command Centre â€” v2.1
+### Command Centre â€” v3.0
 
-![LifeOS v2.1 Command Centre](docs/screenshot-groups/group-06-universal-spine/screenshots/lifeos_v2_1_group06_01_command-centre.png)
+![LifeOS v3.0 Command Centre](docs/screenshot-groups/group-07-os-navigation-core-modules/screenshots/lifeos_v3_0_group07_01_command-centre.png)
 
-### Universal Spine â€” v2.1
+### OS Navigation Centre â€” v3.0
 
-![LifeOS v2.1 Universal Spine](docs/screenshot-groups/group-06-universal-spine/screenshots/lifeos_v2_1_group06_02_universal-spine-top.png)
+![LifeOS v3.0 OS Navigation Centre](docs/screenshot-groups/group-07-os-navigation-core-modules/screenshots/lifeos_v3_0_group07_02_os-navigation-top.png)
 
-### Priority signals and cross-module links â€” v2.1
+### Workspace group map â€” v3.0
 
-![LifeOS v2.1 Universal Spine Links](docs/screenshot-groups/group-06-universal-spine/screenshots/lifeos_v2_1_group06_04_priority-signals-cross-module-links.png)
+![LifeOS v3.0 Workspace Group Map](docs/screenshot-groups/group-07-os-navigation-core-modules/screenshots/lifeos_v3_0_group07_05_workspace-group-map.png)
 
-Full screenshot group: [`docs/screenshot-groups/group-06-universal-spine`](docs/screenshot-groups/group-06-universal-spine)
+### Boundary and local navigation file â€” v3.0
+
+![LifeOS v3.0 Boundary](docs/screenshot-groups/group-07-os-navigation-core-modules/screenshots/lifeos_v3_0_group07_07_boundary-local-navigation-file.png)
+
+Full screenshot group: [`docs/screenshot-groups/group-07-os-navigation-core-modules`](docs/screenshot-groups/group-07-os-navigation-core-modules)
 <!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
 
 <!-- LIFEOS_CURRENT_BUILD_START -->
 ## Current build
 
-**Current completed version:** v2.1  
-**Current completed screenshot group:** Group 06 â€” Universal Spine  
+**Current completed version:** v3.0  
+**Current completed screenshot group:** Group 07 â€” OS Navigation / Core Modules  
 **Build lane:** Local-first offline OS foundation  
-**Next planned group:** Group 07 â€” OS Navigation / Core Modules
+**Next planned group:** Group 08 â€” Advanced Modules / Search / Knowledge
 
-LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, paid work / money / proof control, settings/safety guardrails, desktop release readiness, and the Universal Spine.
+LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, paid work / money / proof control, settings/safety guardrails, desktop release readiness, Universal Spine, and OS Navigation.
 
-v2.1 adds the local Universal Spine: cross-module items and links between work, money, proof, relationships, daily flow, evidence, release state, settings/safety, and docs/knowledge. It remains local-first and manual-review before integrations, universal search, or AI assistant layers.
+v3.0 strengthens the offline OS shell with visible/core/pinned module mapping, workspace groups, module-review state, planned/future module separation, and explicit boundaries before the later integrations, search, knowledge, AI assistant, and major UI reshape layers.
 <!-- LIFEOS_CURRENT_BUILD_END -->
 
 LifeOS Desktop is a local-first command centre for reducing chaos across work, money pressure, follow-ups, proof, evidence, and daily execution.
@@ -295,6 +299,8 @@ v2.0 should include the core desktop feature set in manual/local-first form. Aut
 LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
+
+
 
 
 

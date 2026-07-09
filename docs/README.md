@@ -3,14 +3,14 @@
 <!-- LIFEOS_DOCS_INDEX_START -->
 ## Current docs index
 
-**Current completed version:** v2.1  
-**Current screenshot group:** Group 06 â€” Universal Spine
+**Current completed version:** v3.0  
+**Current screenshot group:** Group 07 â€” OS Navigation / Core Modules
 
 ### Key docs
 
 - [Current status](current-status.md)
-- [v2.1 release notes](release-notes/v2.1.md)
-- [Group 06 screenshots](screenshot-groups/group-06-universal-spine/README.md)
+- [v3.0 release notes](release-notes/v3.0.md)
+- [Group 07 screenshots](screenshot-groups/group-07-os-navigation-core-modules/README.md)
 - [Version history](version-history.md)
 
 ### Completed screenshot groups
@@ -21,7 +21,9 @@
 - Group 04 â€” Settings / Safety / Theme
 - Group 05 â€” v2 Paid Desktop Release
 - Group 06 â€” Universal Spine
+- Group 07 â€” OS Navigation / Core Modules
 <!-- LIFEOS_DOCS_INDEX_END -->
+
 
 
 

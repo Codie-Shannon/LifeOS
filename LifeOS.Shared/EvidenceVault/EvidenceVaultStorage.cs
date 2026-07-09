@@ -24,4 +24,9 @@ public static class EvidenceVaultStorage
     {
         File.WriteAllText(FilePath, JsonSerializer.Serialize(items.ToList(), Options));
     }
+
+    public static void ResetToDemoData()
+    {
+        Save(EvidenceVaultDemoData.CreateDefaultItems());
+    }
 }

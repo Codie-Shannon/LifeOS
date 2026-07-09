@@ -1,7 +1,22 @@
 {
-  "currentVersion": "v4.3-code",
-  "currentStage": "069",
-  "screenshotGroup": "13_money_profile_hidden_deductions_safe_to_spend",
-  "generatedFrom": "LifeOS v4.2 pushed baseline",
-  "notes": "v4.3 Money Profile / Hidden Deductions / Safe-to-Spend code checkpoint. Screenshot/docs/README pack and v4.3 tag should follow visual verification."
+  "currentVersion": "v4.4-code",
+  "releaseVersion": "v4.4",
+  "stage": "074",
+  "lane": "Agenda + Payment Calendar",
+  "status": "code checkpoint complete - screenshots pending",
+  "tagAfterScreenshots": "v4.4",
+  "nextVersion": "v4.5",
+  "nextLane": "Work Pipeline",
+  "boundary": [
+    "local/manual only",
+    "no real calendar sync",
+    "no real email sync",
+    "no real bank sync",
+    "no BNPL provider sync",
+    "no accounting sync",
+    "no OCR automation",
+    "no OAuth",
+    "no AI actions"
+  ],
+  "generatedAt": "2026-07-09T13:43:38.805553+00:00"
 }

@@ -1,7 +1,7 @@
 {
-  "currentVersion": "v4.2-code",
-  "currentStage": "064",
-  "screenshotGroup": "12_bills_upcoming_payments_paylater",
-  "generatedFrom": "LifeOS v4.1 pushed baseline",
-  "notes": "v4.2 Bills / Upcoming Payments / Pay Later code checkpoint. Screenshot/docs/README pack and v4.2 tag should follow visual verification."
+  "currentVersion": "v4.3-code",
+  "currentStage": "069",
+  "screenshotGroup": "13_money_profile_hidden_deductions_safe_to_spend",
+  "generatedFrom": "LifeOS v4.2 pushed baseline",
+  "notes": "v4.3 Money Profile / Hidden Deductions / Safe-to-Spend code checkpoint. Screenshot/docs/README pack and v4.3 tag should follow visual verification."
 }

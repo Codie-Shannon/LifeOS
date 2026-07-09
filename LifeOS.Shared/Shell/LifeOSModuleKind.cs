@@ -9,6 +9,7 @@ public enum LifeOSModuleKind
     WeeklyCloseOut,
     FollowUps,
     WorkPipeline,
+    DailyOperatingFlow,
     WorkSessions,
     ProofTracker,
     Projects,

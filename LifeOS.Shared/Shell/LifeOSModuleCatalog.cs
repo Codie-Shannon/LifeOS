@@ -82,6 +82,20 @@ public static class LifeOSModuleCatalog
             IsSharedCoreModule = true
         },
 
+
+        new LifeOSModuleDefinition
+        {
+            Kind = LifeOSModuleKind.DailyOperatingFlow,
+            Title = "Daily Operating Flow",
+            Badge = "v1.6",
+            ShortDescription = "Daily blocks, stop points, waiting checkpoints, and low-energy fallback control.",
+            DetailDescription = "Daily Operating Flow turns the day into a small controlled plan: anchors, next actions, waiting checkpoints, recovery blocks, low-energy fallbacks, proof capture, and stop points.",
+            PlatformRole = "Shared operating-loop module. Desktop proves the full flow before mobile gets the quick daily version.",
+            NextBuildFocus = "Connect daily flow with Command Centre, evidence, relationships, and work states without forcing noisy task management.",
+            IsBuilt = true,
+            IsSharedCoreModule = true
+        },
+
         new LifeOSModuleDefinition
         {
             Kind = LifeOSModuleKind.WorkPipeline,

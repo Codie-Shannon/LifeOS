@@ -11,6 +11,8 @@ using LifeOS.Core.WorkPipeline;
 using LifeOS.Shared.WorkPipeline;
 using LifeOS.Core.DailyState;
 using LifeOS.Shared.DailyState;
+using LifeOS.Core.DailyOperatingFlow;
+using LifeOS.Shared.DailyOperatingFlow;
 using LifeOS.Core.TimesheetEvidence;
 using LifeOS.Shared.TimesheetEvidence;
 using LifeOS.Core.EvidenceVault;
@@ -168,6 +170,8 @@ public partial class MainWindow : Window
     private void FollowUpsNavButton_Click(object sender, RoutedEventArgs e) => ShowFollowUpsPage();
 
     private void WorkPipelineNavButton_Click(object sender, RoutedEventArgs e) => ShowWorkPipelinePage();
+
+    private void DailyOperatingFlowNavButton_Click(object sender, RoutedEventArgs e) => ShowDailyOperatingFlowPage();
 
     private void DailyStateNavButton_Click(object sender, RoutedEventArgs e) => ShowDailyStatePage();
 
@@ -2804,16 +2808,219 @@ public partial class MainWindow : Window
         motherPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(motherPanel);
 
-        var stagePanel = CreateInfoPanel(
-            "v0.5 boundary",
-            "This is a first pressure/timeline view, not bank sync or formal budgeting software. It is intentionally simple: local data, clear assumptions, conservative safe-to-spend, and no automatic financial decisions.");
-        stagePanel.Margin = new Thickness(0, 16, 0, 0);
-        root.Children.Add(stagePanel);
-
         MainContentControl.Content = root;
     }
 
 
+
+
+    private void ResetDailyOperatingFlowButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset Daily Operating Flow defaults?", "This replaces your saved daily operating flow blocks with fictional demo defaults."))
+        {
+            return;
+        }
+
+        DailyOperatingFlowStorage.ResetToDemoData();
+        ShowDailyOperatingFlowPage();
+    }
+
+    private void StartDailyOperatingFlowBlockButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.Tag is Guid id)
+        {
+            UpdateDailyOperatingFlowBlockStatus(id, DailyOperatingFlowStatus.InProgress);
+        }
+    }
+
+    private void CompleteDailyOperatingFlowBlockButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.Tag is Guid id)
+        {
+            UpdateDailyOperatingFlowBlockStatus(id, DailyOperatingFlowStatus.Done);
+        }
+    }
+
+    private void ParkDailyOperatingFlowBlockButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.Tag is Guid id)
+        {
+            UpdateDailyOperatingFlowBlockStatus(id, DailyOperatingFlowStatus.Parked);
+        }
+    }
+
+    private void ArchiveDailyOperatingFlowBlockButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.Tag is Guid id)
+        {
+            UpdateDailyOperatingFlowBlockStatus(id, DailyOperatingFlowStatus.Archived);
+        }
+    }
+
+    private void UpdateDailyOperatingFlowBlockStatus(Guid id, DailyOperatingFlowStatus status)
+    {
+        var blocks = DailyOperatingFlowStorage.Load();
+        var block = blocks.FirstOrDefault(block => block.Id == id);
+
+        if (block is null)
+        {
+            return;
+        }
+
+        block.Status = status;
+        block.UpdatedAt = DateTime.Now;
+
+        DailyOperatingFlowStorage.Save(blocks);
+        ShowDailyOperatingFlowPage();
+    }
+
+    private void ShowDailyOperatingFlowPage()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var blocks = DailyOperatingFlowStorage.Load();
+        var summary = DailyOperatingFlowCalculator.Calculate(blocks, today);
+
+        SetHeader("Daily Operating Flow", $"Daily Operating Flow • v1.6 local day control • {summary.TodayOpenCount} visible today");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Daily Operating Flow",
+            "Control the day without turning every thought into a task. Use anchors, next actions, waiting checkpoints, low-energy fallback blocks, proof capture, recovery blocks, and stop points."));
+
+        var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
+        metricsPanel.Children.Add(CreateDashboardCard("Today visible", summary.TodayOpenCount.ToString(), "Flow"));
+        metricsPanel.Children.Add(CreateDashboardCard("In progress", summary.InProgressCount.ToString(), "Now"));
+        metricsPanel.Children.Add(CreateDashboardCard("Done today", summary.DoneTodayCount.ToString(), "Wins"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pinned", summary.PinnedCount.ToString(), "Anchors"));
+        metricsPanel.Children.Add(CreateDashboardCard("High pressure", summary.HighPressureCount.ToString(), "Careful"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting", summary.WaitingCount.ToString(), "Do not force"));
+        metricsPanel.Children.Add(CreateDashboardCard("Low-energy", summary.LowEnergyFallbackCount.ToString(), "Fallback"));
+        metricsPanel.Children.Add(CreateDashboardCard("Stop points", summary.StopPointCount.ToString(), "Control"));
+        root.Children.Add(metricsPanel);
+
+        var buttonPanel = CreatePanel();
+        var buttonRoot = new StackPanel();
+        buttonRoot.Children.Add(new TextBlock
+        {
+            Text = "Daily flow controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        buttonRoot.Children.Add(new TextBlock
+        {
+            Text = "Use reset only for fictional demo data. Day blocks are local JSON and intentionally manual.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 12)
+        });
+
+        var resetButton = CreateActionButton("Reset Demo Flow", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetDailyOperatingFlowButton_Click;
+        buttonRoot.Children.Add(resetButton);
+        buttonPanel.Child = buttonRoot;
+        buttonPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(buttonPanel);
+
+        var todayPanel = CreateDailyOperatingFlowListPanel("Today operating blocks", summary.TodayBlocks);
+        todayPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(todayPanel);
+
+        var waitingPanel = CreateDailyOperatingFlowListPanel("Waiting / do not force", summary.WaitingBlocks.Take(6));
+        waitingPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(waitingPanel);
+
+        var recoveryPanel = CreateDailyOperatingFlowListPanel("Low-energy / recovery / stop points", summary.RecoveryBlocks.Take(8));
+        recoveryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(recoveryPanel);
+
+        var reasonsPanel = CreateInfoPanel("Daily flow pressure", FormatReasons(summary.Reasons));
+        reasonsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reasonsPanel);
+
+        var guardrailPanel = CreateInfoPanel(
+            "v1.6 scope",
+            $"Local Daily Operating Flow blocks with JSON persistence. Saved file: {DailyOperatingFlowStorage.FilePath}. No calendar sync, notifications, AI scheduling, mobile reminders, or automatic task creation.");
+        guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(guardrailPanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateDailyOperatingFlowListPanel(string title, IEnumerable<DailyOperatingFlowBlock> blocks)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+        var blockList = blocks.ToList();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        if (blockList.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No blocks in this section."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var block in blockList)
+        {
+            var body = $"{block.Kind} • {block.Status} • {block.Pressure} • {block.TimeWindow} • {block.Area}";
+            var notes = $"Next: {block.NextAction}";
+
+            if (!string.IsNullOrWhiteSpace(block.Detail))
+            {
+                notes += Environment.NewLine + block.Detail;
+            }
+
+            var card = CreateSimpleItemCard(block.Title, body, notes);
+
+            var buttonRow = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(0, 12, 0, 0)
+            };
+
+            var startButton = CreateSmallActionButton("Start");
+            startButton.Tag = block.Id;
+            startButton.Click += StartDailyOperatingFlowBlockButton_Click;
+
+            var doneButton = CreateSmallActionButton("Done");
+            doneButton.Tag = block.Id;
+            doneButton.Click += CompleteDailyOperatingFlowBlockButton_Click;
+
+            var parkButton = CreateSmallActionButton("Park");
+            parkButton.Tag = block.Id;
+            parkButton.Click += ParkDailyOperatingFlowBlockButton_Click;
+
+            var archiveButton = CreateSmallActionButton("Archive");
+            archiveButton.Tag = block.Id;
+            archiveButton.Click += ArchiveDailyOperatingFlowBlockButton_Click;
+
+            buttonRow.Children.Add(startButton);
+            buttonRow.Children.Add(doneButton);
+            buttonRow.Children.Add(parkButton);
+            buttonRow.Children.Add(archiveButton);
+
+            if (card.Child is StackPanel cardStack)
+            {
+                cardStack.Children.Add(buttonRow);
+            }
+
+            root.Children.Add(card);
+        }
+
+        panel.Child = root;
+        return panel;
+    }
 
     private void ShowDailyStatePage()
     {
@@ -3278,8 +3485,9 @@ public partial class MainWindow : Window
     private void ShowCommandCentre()
     {
         var summary = CommandCentreSummaryService.Create();
+        var dailyFlowSummary = DailyOperatingFlowCalculator.Calculate(DailyOperatingFlowStorage.Load(), DateOnly.FromDateTime(DateTime.Today));
 
-        SetHeader("Command Centre", $"Unified Command Centre • v1.3 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v1.6 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -3297,6 +3505,8 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Agenda open", summary.Agenda.TotalOpen.ToString(), "Week"));
         metricsPanel.Children.Add(CreateDashboardCard("Pay later open", FormatMoney(summary.PayLater.TotalAmountOpen), "Deferred"));
         metricsPanel.Children.Add(CreateDashboardCard("Open follow-ups", summary.FollowUps.TotalOpen.ToString(), "Waiting-on"));
+        metricsPanel.Children.Add(CreateDashboardCard("Daily flow", dailyFlowSummary.TodayOpenCount.ToString(), "Today"));
+        metricsPanel.Children.Add(CreateDashboardCard("Stop points", dailyFlowSummary.StopPointCount.ToString(), "Control"));
 
         metricsPanel.Children.Add(CreateDashboardCard("Pipeline open", summary.WorkPipeline.OpenItems.ToString(), "Work Pipeline"));
         metricsPanel.Children.Add(CreateDashboardCard("Pipeline blocked", summary.WorkPipeline.BlockedItems.ToString(), "Blocked"));
@@ -3355,16 +3565,23 @@ public partial class MainWindow : Window
         pipelineSignalsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(pipelineSignalsPanel);
 
+        var dailyFlowPanel = CreateInfoPanel(
+            "Daily Operating Flow",
+            FormatReasons(dailyFlowSummary.TodayBlocks.Take(6).Select(block => $"{block.Pressure} • {block.Kind} • {block.Title}: {block.NextAction}")));
+
+        dailyFlowPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(dailyFlowPanel);
+
         var workPanel = CreateInfoPanel(
-            "v1.3 evidence rule",
-            "Command Centre now has a metadata-only Evidence Vault foundation. Evidence can be tracked and reviewed without building receipt OCR or provider sync yet.");
+            "v1.6 operating rule",
+            "Command Centre now includes Daily Operating Flow: anchors, next actions, waiting checkpoints, low-energy fallbacks, and stop points. It controls the day without turning every thought into a task.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v1.3 scope",
-            "Evidence Vault metadata only. No receipt OCR, email sync, mobile scanner, cloud storage, provider auth, or automatic evidence classification.");
+            "v1.6 scope",
+            "Daily Operating Flow is local JSON state only. No calendar sync, notifications, mobile reminders, AI scheduling, or automatic task creation.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

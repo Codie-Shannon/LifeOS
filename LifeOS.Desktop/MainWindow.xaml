@@ -102,6 +102,12 @@
                             Style="{StaticResource NavButtonStyle}"
                             Click="WorkPipelineNavButton_Click"/>
 
+
+                    <Button x:Name="DailyOperatingFlowNavButton"
+                            Content="Daily Operating Flow"
+                            Style="{StaticResource NavButtonStyle}"
+                            Click="DailyOperatingFlowNavButton_Click"/>
+
                     <Button x:Name="DailyStateNavButton"
                             Content="Daily State"
                             Style="{StaticResource NavButtonStyle}"
@@ -146,10 +152,10 @@
                         Padding="14"
                         Margin="0,18,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v1.4"
+                        <TextBlock Text="Desktop v1.6"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="Evidence Vault usable workspace with local review and proof metadata control."
+                        <TextBlock Text="Daily Operating Flow adds a controlled day plan layer over pressure, evidence, relationships, and work."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -210,7 +216,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v1.4 keeps the workflow local-first, pressure-aware, and conservative about expected money."
+                <TextBlock Text="LifeOS Desktop v1.6 keeps the workflow local-first, pressure-aware, conservative about expected money, and controlled by daily operating flow."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

@@ -1,7 +1,7 @@
 {
-  "currentVersion": "v1.5",
-  "currentStage": "01",
-  "screenshotGroup": "01_evidence_relationships",
-  "generatedFrom": "LifeOS v1.3.5 clean baseline",
-  "notes": "Group 01 safe patch pack: Evidence Vault + Relationship Radar. No shell rewrite."
+  "currentVersion": "v1.6-code",
+  "currentStage": "013",
+  "screenshotGroup": "02_daily_operating_flow",
+  "generatedFrom": "LifeOS v1.5 pushed baseline",
+  "notes": "Daily Operating Flow code checkpoint. Screenshot pack and v1.6 tag should follow visual verification."
 }

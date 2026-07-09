@@ -18,7 +18,9 @@ using LifeOS.Shared.TimesheetEvidence;
 using LifeOS.Core.EvidenceVault;
 using LifeOS.Shared.EvidenceVault;
 using LifeOS.Core.RelationshipRadar;
+using LifeOS.Core.PaidWorkMoneyProof;
 using LifeOS.Shared.RelationshipRadar;
+using LifeOS.Shared.PaidWorkMoneyProof;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -2672,48 +2674,69 @@ public partial class MainWindow : Window
     private void ShowPaidWorkCentrePage()
     {
         var summary = WorkSessionCalculator.Calculate(_workSessions);
+        var paidWorkProofSummary = PaidWorkMoneyProofSnapshotService.Create();
         var invoiceReady = _workSessions
             .Where(session => session.IsBillable && session.Status is WorkSessionStatus.Completed or WorkSessionStatus.Invoiced)
             .OrderBy(session => session.ClientOrProject)
             .ThenBy(session => session.Date)
             .ToList();
 
-        SetHeader("Paid Work Centre", "Paid Work Centre • v0.5 invoice-ready admin");
+        SetHeader("Paid Work Centre", $"Paid Work / Money / Proof • v1.7 • {FormatPaidWorkMoneyProofHealth(paidWorkProofSummary.Health)}");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
-            "Paid Work Centre",
-            "Turn real work sessions into invoice-ready summaries. This is the bridge from doing the work, to logging time, to knowing what is owed, what is paid, and what should feed the Money Timeline."));
+            "Paid Work / Money / Proof",
+            "Turn work into controlled proof-backed money: log the session, check timesheet/invoice readiness, attach proof, keep expected money separate from safe money, then decide the next client-safe action."));
 
         var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
-        metricsPanel.Children.Add(CreateDashboardCard("Invoice-ready sessions", invoiceReady.Count.ToString(), "Ready"));
-        metricsPanel.Children.Add(CreateDashboardCard("Invoice-ready value", FormatMoney(invoiceReady.Sum(session => session.BillableValue)), "Owed"));
-        metricsPanel.Children.Add(CreateDashboardCard("Unpaid billable", FormatMoney(summary.UnpaidBillableValue), "Pressure"));
+        metricsPanel.Children.Add(CreateDashboardCard("Health", FormatPaidWorkMoneyProofHealth(paidWorkProofSummary.Health), "v1.7"));
+        metricsPanel.Children.Add(CreateDashboardCard("Admin actions", paidWorkProofSummary.AdminActionCount.ToString(), "Need review"));
+        metricsPanel.Children.Add(CreateDashboardCard("Invoice-ready", FormatMoney(paidWorkProofSummary.InvoiceReadyValue), $"{paidWorkProofSummary.InvoiceReadySessionCount} session(s)"));
+        metricsPanel.Children.Add(CreateDashboardCard("Unpaid billable", FormatMoney(paidWorkProofSummary.UnpaidBillableValue), "Not safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Expected pipeline", FormatMoney(paidWorkProofSummary.PendingPipelineValue), "Not safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pending manual", FormatMoney(paidWorkProofSummary.PendingManualIncome), "Not safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Money at risk", FormatMoney(paidWorkProofSummary.MoneyAtRisk), "Watch"));
+        metricsPanel.Children.Add(CreateDashboardCard("Proof ready", paidWorkProofSummary.ReadyProofCount.ToString(), "Attach"));
+        metricsPanel.Children.Add(CreateDashboardCard("Client proof", paidWorkProofSummary.ClientProofCount.ToString(), "Reusable"));
         metricsPanel.Children.Add(CreateDashboardCard("Paid value", FormatMoney(summary.PaidValue), "Landed"));
         metricsPanel.Children.Add(CreateDashboardCard("Billable hours", summary.BillableHours.ToString("0.##"), "Tracked"));
         metricsPanel.Children.Add(CreateDashboardCard("Clients/projects", summary.ActiveClientOrProjectCount.ToString(), "Spread"));
         root.Children.Add(metricsPanel);
 
         var spinePanel = CreateInfoPanel(
-            "v0.5 spine",
-            "Do work → log work session → review invoice-ready items → generate work summary → send invoice/email → mark paid → feed expected income into Money Timeline.");
+            "v1.7 paid-work spine",
+            "Do work → log work session → attach proof → check timesheet/invoice readiness → prepare copy-ready client update → send manually → mark paid only when money lands.");
         spinePanel.Margin = new Thickness(0, 8, 0, 0);
         root.Children.Add(spinePanel);
+
+        var moneyGatePanel = CreateInfoPanel(
+            "Money/proof gate",
+            FormatReasons(paidWorkProofSummary.Reasons));
+        moneyGatePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(moneyGatePanel);
+
+        var focusPanel = CreatePaidWorkMoneyProofFocusPanel(paidWorkProofSummary);
+        focusPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(focusPanel);
+
+        var updatePanel = CreatePaidWorkMoneyProofClientUpdatePanel(paidWorkProofSummary);
+        updatePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(updatePanel);
 
         var summaryText = BuildInvoiceReadySummary(invoiceReady);
         var summaryPanel = CreatePanel();
         var summaryStack = new StackPanel();
         summaryStack.Children.Add(new TextBlock
         {
-            Text = "Copy-ready work summary",
+            Text = "Legacy invoice-ready work summary",
             Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
             FontSize = 20,
             FontWeight = FontWeights.Bold
         });
         summaryStack.Children.Add(new TextBlock
         {
-            Text = "Use this as the base for a client work summary or invoice note. PDF generation comes later; v0.5 keeps it copy-ready and safe.",
+            Text = "Kept for continuity. v1.7 adds the stronger money/proof gate above this older invoice-ready summary.",
             Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
             FontSize = 13,
             TextWrapping = TextWrapping.Wrap,
@@ -2724,7 +2747,7 @@ public partial class MainWindow : Window
             Text = summaryText,
             AcceptsReturn = true,
             TextWrapping = TextWrapping.Wrap,
-            MinHeight = 220,
+            MinHeight = 180,
             IsReadOnly = true,
             Background = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
             Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
@@ -2745,18 +2768,89 @@ public partial class MainWindow : Window
         root.Children.Add(listPanel);
 
         var scopePanel = CreateInfoPanel(
-            "v0.5 boundary",
-            "This is an invoice-ready/admin layer, not final accounting software. It does not send invoices, collect payments, calculate tax, or replace client approval. It helps prepare clear work summaries and track what is owed/paid.");
+            "v1.7 boundary",
+            "This is a local-first paid-work admin and proof-readiness layer. It does not send invoices, collect payments, calculate tax, connect to accounting systems, or decide that expected money is safe.");
         scopePanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(scopePanel);
 
         MainContentControl.Content = root;
     }
 
+    private Border CreatePaidWorkMoneyProofFocusPanel(PaidWorkMoneyProofSummary summary)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
 
+        root.Children.Add(new TextBlock
+        {
+            Text = "Paid-work focus queue",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        if (summary.FocusItems.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No paid-work focus items need action right now."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in summary.FocusItems.Take(8))
+        {
+            root.Children.Add(CreateSimpleItemCard(
+                item.Title,
+                $"{item.Priority} • {item.Source} • {item.Value}",
+                item.NextAction));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreatePaidWorkMoneyProofClientUpdatePanel(PaidWorkMoneyProofSummary summary)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Copy-ready client/admin update",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Manual-only. Review wording before sending. This is not invoice generation or automatic communication.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 12)
+        });
+
+        root.Children.Add(new TextBox
+        {
+            Text = summary.CopyReadyClientUpdate,
+            AcceptsReturn = true,
+            TextWrapping = TextWrapping.Wrap,
+            MinHeight = 240,
+            IsReadOnly = true,
+            Background = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(51, 65, 85)),
+            Padding = new Thickness(12),
+            FontFamily = new FontFamily("Consolas")
+        });
+
+        panel.Child = root;
+        return panel;
+    }
 
     private void ShowMoneyTimelinePage()
     {
+        var paidWorkProofSummary = PaidWorkMoneyProofSnapshotService.Create();
         var targetDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7));
         var currentBalance = _moneyPressureInput.CurrentBalance;
         var expectedIncome = _moneyPressureInput.PaidIncome + _moneyPressureInput.PendingIncome + _workSessions
@@ -2774,7 +2868,7 @@ public partial class MainWindow : Window
             _ => "Calm"
         };
 
-        SetHeader("Money Timeline", "Money Timeline • v0.5 paper-bills workflow");
+        SetHeader("Money Timeline", "Money Timeline • v1.7 proof-gated money view");
 
         var root = new StackPanel();
         root.Children.Add(CreateHeroPanel(
@@ -2788,6 +2882,8 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Projected balance", FormatMoney(projectedBalance), pressureLabel));
         metricsPanel.Children.Add(CreateDashboardCard("Lowest point", FormatMoney(lowestPoint), "Watch"));
         metricsPanel.Children.Add(CreateDashboardCard("Safe to spend", FormatMoney(safeToSpend), "Conservative"));
+        metricsPanel.Children.Add(CreateDashboardCard("Money at risk", FormatMoney(paidWorkProofSummary.MoneyAtRisk), FormatPaidWorkMoneyProofHealth(paidWorkProofSummary.Health)));
+        metricsPanel.Children.Add(CreateDashboardCard("Proof ready", paidWorkProofSummary.ReadyProofCount.ToString(), "Before send"));
         root.Children.Add(metricsPanel);
 
         var timelinePanel = CreateInfoPanel(
@@ -2797,10 +2893,16 @@ public partial class MainWindow : Window
         root.Children.Add(timelinePanel);
 
         var sourcePanel = CreateInfoPanel(
-            "What this is using in v0.5",
-            "Incoming includes manual paid/pending income plus completed/invoiced billable work sessions. Outgoing includes manual bills, deductions, food/fuel buffer, and emergency buffer. Later versions can add dated income/outgoing rows, recurring bills, reminders, and direct links from invoices.");
+            "What this is using in v1.7",
+            "Incoming includes manual paid/pending income plus completed/invoiced billable work sessions. v1.7 also shows proof-gated money-at-risk so expected income stays separate from safe-to-spend until work, proof, invoice, and payment state are clear.");
         sourcePanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(sourcePanel);
+
+        var proofGatePanel = CreateInfoPanel(
+            "Proof-gated money",
+            FormatReasons(paidWorkProofSummary.Reasons));
+        proofGatePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(proofGatePanel);
 
         var motherPanel = CreateInfoPanel(
             "Why this exists",
@@ -3486,8 +3588,9 @@ public partial class MainWindow : Window
     {
         var summary = CommandCentreSummaryService.Create();
         var dailyFlowSummary = DailyOperatingFlowCalculator.Calculate(DailyOperatingFlowStorage.Load(), DateOnly.FromDateTime(DateTime.Today));
+        var paidWorkProofSummary = PaidWorkMoneyProofSnapshotService.Create();
 
-        SetHeader("Command Centre", $"Unified Command Centre • v1.6 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v1.7 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -3517,6 +3620,8 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Unpaid work", FormatMoney(summary.WorkSessions.UnpaidBillableValue), "Income"));
         metricsPanel.Children.Add(CreateDashboardCard("Proof items", summary.ProofTracker.TotalProofItems.ToString(), "Proof"));
         metricsPanel.Children.Add(CreateDashboardCard("Proof ready", summary.ProofTracker.ReadyCount.ToString(), "Shareable"));
+        metricsPanel.Children.Add(CreateDashboardCard("Paid-work risk", FormatMoney(paidWorkProofSummary.MoneyAtRisk), FormatPaidWorkMoneyProofHealth(paidWorkProofSummary.Health)));
+        metricsPanel.Children.Add(CreateDashboardCard("Admin actions", paidWorkProofSummary.AdminActionCount.ToString(), "Money/proof"));
 
         root.Children.Add(metricsPanel);
 
@@ -3572,16 +3677,23 @@ public partial class MainWindow : Window
         dailyFlowPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(dailyFlowPanel);
 
+        var paidWorkProofPanel = CreateInfoPanel(
+            "Paid Work / Money / Proof",
+            FormatReasons(paidWorkProofSummary.Reasons));
+
+        paidWorkProofPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(paidWorkProofPanel);
+
         var workPanel = CreateInfoPanel(
-            "v1.6 operating rule",
-            "Command Centre now includes Daily Operating Flow: anchors, next actions, waiting checkpoints, low-energy fallbacks, and stop points. It controls the day without turning every thought into a task.");
+            "v1.7 operating rule",
+            "Paid work is not real control until the proof, timesheet, invoice, payment, and safe-money state are visible together. Expected money stays separate from safe money until paid.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v1.6 scope",
-            "Daily Operating Flow is local JSON state only. No calendar sync, notifications, mobile reminders, AI scheduling, or automatic task creation.");
+            "v1.7 scope",
+            "Paid Work / Money / Proof is local JSON state only. No accounting integration, automatic invoice sending, payment collection, tax calculation, bank sync, or automatic client messaging.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);
@@ -4242,6 +4354,19 @@ public partial class MainWindow : Window
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(18),
             Padding = new Thickness(24)
+        };
+    }
+
+
+    private static string FormatPaidWorkMoneyProofHealth(PaidWorkMoneyProofHealth health)
+    {
+        return health switch
+        {
+            PaidWorkMoneyProofHealth.Calm => "Calm",
+            PaidWorkMoneyProofHealth.Watch => "Watch",
+            PaidWorkMoneyProofHealth.NeedsReview => "Needs Review",
+            PaidWorkMoneyProofHealth.HighPressure => "High Pressure",
+            _ => health.ToString()
         };
     }
 

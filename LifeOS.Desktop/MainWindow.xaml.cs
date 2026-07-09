@@ -29,6 +29,8 @@ using LifeOS.Core.UniversalSpine;
 using LifeOS.Shared.UniversalSpine;
 using LifeOS.Core.OsNavigation;
 using LifeOS.Shared.OsNavigation;
+using LifeOS.Core.SearchKnowledge;
+using LifeOS.Shared.SearchKnowledge;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -145,6 +147,8 @@ public partial class MainWindow : Window
 
     private OsNavigationProfile _osNavigationProfile = OsNavigationStorage.Load();
 
+    private SearchKnowledgeProfile _searchKnowledgeProfile = SearchKnowledgeStorage.Load();
+
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
 
@@ -218,6 +222,8 @@ public partial class MainWindow : Window
 
     private void TimerAgentNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.TimerAgent);
 
+    private void SearchKnowledgeNavButton_Click(object sender, RoutedEventArgs e) => ShowSearchKnowledgePage();
+
     private void OsNavigationNavButton_Click(object sender, RoutedEventArgs e) => ShowOsNavigationPage();
 
     private void UniversalSpineNavButton_Click(object sender, RoutedEventArgs e) => ShowUniversalSpinePage();
@@ -235,6 +241,195 @@ public partial class MainWindow : Window
 
 
 
+
+
+
+    private void ResetSearchKnowledgeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset search/knowledge demo data?", "This will replace the local Search / Knowledge profile with fictional demo items and profiles."))
+        {
+            return;
+        }
+
+        SearchKnowledgeStorage.ResetToDemoData();
+        _searchKnowledgeProfile = SearchKnowledgeStorage.Load();
+        ShowSearchKnowledgePage();
+    }
+
+    private void ShowSearchKnowledgePage()
+    {
+        _searchKnowledgeProfile = SearchKnowledgeStorage.Load();
+        var summary = SearchKnowledgeCalculator.Calculate(_searchKnowledgeProfile);
+
+        SetHeader("Search / Knowledge Centre", $"Search / Knowledge Centre • v3.5 • {summary.TotalItems} local items • {summary.ProfileCount} search profiles");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Search / Knowledge Centre",
+            "Build the local knowledge and search shape before integrations or AI reasoning. Capture what should be searchable, how search should be scoped, what must be reviewed, and which future sources can feed the app later."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Knowledge items", summary.TotalItems.ToString(), "Local"));
+        metricsPanel.Children.Add(CreateDashboardCard("Active", summary.ActiveItems.ToString(), "Usable"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.ReviewNeededItems.ToString(), "Manual"));
+        metricsPanel.Children.Add(CreateDashboardCard("Planned", summary.PlannedItems.ToString(), "Future"));
+        metricsPanel.Children.Add(CreateDashboardCard("Search profiles", summary.ProfileCount.ToString(), "Scoped"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pinned profiles", summary.PinnedProfiles.ToString(), "Fast"));
+        metricsPanel.Children.Add(CreateDashboardCard("Manual profiles", summary.ManualProfiles.ToString(), "Review"));
+        metricsPanel.Children.Add(CreateDashboardCard("Sources", summary.SourceCount.ToString(), "Types"));
+        metricsPanel.Children.Add(CreateDashboardCard("Local index", summary.LocalIndexOnly ? "Only" : "Mixed", "v3.5"));
+        metricsPanel.Children.Add(CreateDashboardCard("External search", summary.ExternalSearchEnabled ? "On" : "Off", "Later"));
+        metricsPanel.Children.Add(CreateDashboardCard("AI reasoning", summary.AiReasoningEnabled ? "On" : "Off", "Later"));
+        metricsPanel.Children.Add(CreateDashboardCard("Integrations", summary.IntegrationSourcesEnabled ? "On" : "Off", "v4+"));
+
+        root.Children.Add(metricsPanel);
+
+        var rulePanel = CreateInfoPanel("Search / Knowledge rule", FormatReasons(summary.Reasons));
+        rulePanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(rulePanel);
+
+        var controlsPanel = CreateSearchKnowledgeControlsPanel();
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        var profilesPanel = CreateSearchProfilePanel("Pinned/local search profiles", summary.Profiles);
+        profilesPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(profilesPanel);
+
+        var priorityPanel = CreateKnowledgeItemPanel("Knowledge items needing review/planning", summary.PriorityItems);
+        priorityPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(priorityPanel);
+
+        var recentPanel = CreateKnowledgeItemPanel("Recent local knowledge items", summary.RecentItems);
+        recentPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(recentPanel);
+
+        var boundaryPanel = CreateInfoPanel(
+            "v3.5 boundary",
+            "v3.5 is local Search / Knowledge structure only. It is not external search, full-text indexing, cloud sync, connector search, inbox scanning, AI reasoning, automatic summarisation, or final knowledge automation.");
+
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local knowledge file",
+            $"Search / Knowledge file: {SearchKnowledgeStorage.FilePath}");
+
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateSearchKnowledgeControlsPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Search / Knowledge controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Use reset only for fictional/demo search and knowledge data. v3.5 proves local scoping and review rules before external search, integrations, or AI assistant reasoning.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal
+        };
+
+        var resetButton = CreateActionButton("Reset Demo Knowledge", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetSearchKnowledgeButton_Click;
+
+        buttonRow.Children.Add(resetButton);
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateSearchProfilePanel(string title, IEnumerable<KnowledgeSearchProfile> profiles)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = profiles.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No local search profiles captured yet."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var profile in list)
+        {
+            root.Children.Add(CreateSimpleItemCard(
+                profile.Name,
+                $"{(profile.IsPinned ? "Pinned" : "Standard")} • {(profile.IsManualOnly ? "Manual review" : "Automated")} • External index {(profile.UsesExternalIndex ? "on" : "off")}",
+                $"Query hint: {profile.QueryHint}\nScope: {profile.Scope}\n{profile.Notes}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateKnowledgeItemPanel(string title, IEnumerable<KnowledgeItem> items)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = items.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No knowledge items in this section."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in list)
+        {
+            root.Children.Add(CreateSimpleItemCard(
+                item.Title,
+                $"{SearchKnowledgeCalculator.FormatKind(item.Kind)} • {SearchKnowledgeCalculator.FormatStatus(item.Status)} • {SearchKnowledgeCalculator.FormatSourceType(item.SourceType)} • {item.SourceModule}",
+                $"{item.Summary}\nNext: {item.NextAction}\nSearch terms: {item.SearchText}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
 
 
     private void ResetOsNavigationButton_Click(object sender, RoutedEventArgs e)
@@ -4392,8 +4587,9 @@ public partial class MainWindow : Window
         var desktopReleaseSummary = DesktopReleaseReadinessCalculator.Calculate(DesktopReleaseStorage.Load());
         var universalSpineSummary = UniversalSpineCalculator.Calculate(UniversalSpineStorage.Load());
         var osNavigationSummary = OsNavigationCalculator.Calculate(OsNavigationStorage.Load());
+        var searchKnowledgeSummary = SearchKnowledgeCalculator.Calculate(SearchKnowledgeStorage.Load());
 
-        SetHeader("Command Centre", $"Unified Command Centre • v3.0 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v3.5 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -4435,6 +4631,9 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Visible modules", osNavigationSummary.VisibleModules.ToString(), "v3.0"));
         metricsPanel.Children.Add(CreateDashboardCard("Workspace groups", osNavigationSummary.GroupCount.ToString(), "OS map"));
         metricsPanel.Children.Add(CreateDashboardCard("Core modules", osNavigationSummary.CoreModules.ToString(), "Protected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Knowledge items", searchKnowledgeSummary.TotalItems.ToString(), "v3.5"));
+        metricsPanel.Children.Add(CreateDashboardCard("Search profiles", searchKnowledgeSummary.ProfileCount.ToString(), "Scoped"));
+        metricsPanel.Children.Add(CreateDashboardCard("Knowledge review", searchKnowledgeSummary.ReviewNeededItems.ToString(), "Manual"));
 
         root.Children.Add(metricsPanel);
 
@@ -4525,16 +4724,23 @@ public partial class MainWindow : Window
         navigationPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(navigationPanel);
 
+        var knowledgePanel = CreateInfoPanel(
+            "Search / Knowledge Centre",
+            FormatReasons(searchKnowledgeSummary.Reasons));
+
+        knowledgePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(knowledgePanel);
+
         var workPanel = CreateInfoPanel(
-            "v3.0 operating rule",
-            "LifeOS now has a stronger offline OS navigation layer. The current page model stays intact, core modules stay protected, and workspace groups make the growing app easier to operate before the later major UI reshape.");
+            "v3.5 operating rule",
+            "LifeOS now has local Search / Knowledge foundations. Search profiles and knowledge items define what future integrations and AI can use, without turning external search or AI reasoning on yet.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v3.0 scope",
-            "v3.0 is OS navigation and core module structure. It is not the major workspace redesign, universal search, advanced knowledge layer, cloud sync, external integrations, AI assistant execution, or automatic decision-making yet.");
+            "v3.5 scope",
+            "v3.5 is local search/knowledge structure. It is not external search, full-text indexing, cloud sync, connector search, inbox scanning, AI reasoning, automatic summarisation, or final knowledge automation.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

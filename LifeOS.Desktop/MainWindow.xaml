@@ -56,10 +56,10 @@
                         Padding="14"
                         Margin="0,12,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v3.0"
+                        <TextBlock Text="Desktop v3.5"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="v3.0 strengthens the offline OS shell: scrollable navigation, grouped core modules, protected workflows, and clear boundaries before the later workspace redesign."
+                        <TextBlock Text="v3.5 adds local Advanced Search / Knowledge foundations: search profiles, knowledge items, source boundaries, and review gates before integrations or AI reasoning."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -161,6 +161,11 @@
                                 Style="{StaticResource NavButtonStyle}"
                                 Click="TimerAgentNavButton_Click"/>
 
+                        <Button x:Name="SearchKnowledgeNavButton"
+                                Content="Search / Knowledge"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="SearchKnowledgeNavButton_Click"/>
+
                         <Button x:Name="OsNavigationNavButton"
                                 Content="OS Navigation"
                                 Style="{StaticResource NavButtonStyle}"
@@ -236,7 +241,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v3.0 strengthens OS navigation and core modules while keeping the major workspace redesign deferred until integrations and AI assistant workflows are proven."
+                <TextBlock Text="LifeOS Desktop v3.5 adds local Advanced Search / Knowledge foundations while keeping external search, integrations, and AI reasoning disabled until later layers."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

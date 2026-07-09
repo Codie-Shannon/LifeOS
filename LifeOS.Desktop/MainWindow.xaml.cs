@@ -37,6 +37,8 @@ using LifeOS.Core.LifeOsSpine;
 using LifeOS.Shared.LifeOsSpine;
 using LifeOS.Core.ItemState;
 using LifeOS.Shared.ItemState;
+using LifeOS.Core.MoneyObligations;
+using LifeOS.Shared.MoneyObligations;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -160,6 +162,8 @@ public partial class MainWindow : Window
 
     private LifeOsItemStateProfile _lifeOsItemStateProfile = LifeOsItemStateStorage.Load();
 
+    private MoneyObligationProfile _moneyObligationProfile = MoneyObligationStorage.Load();
+
 
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
@@ -203,6 +207,8 @@ public partial class MainWindow : Window
     private void MoneyPressureNavButton_Click(object sender, RoutedEventArgs e) => ShowMoneyPressurePage();
 
     private void MoneyTimelineNavButton_Click(object sender, RoutedEventArgs e) => ShowMoneyTimelinePage();
+
+    private void BillsPaymentsNavButton_Click(object sender, RoutedEventArgs e) => ShowBillsPaymentsPage();
 
     private void AgendaNavButton_Click(object sender, RoutedEventArgs e) => ShowAgendaPage();
 
@@ -264,6 +270,193 @@ public partial class MainWindow : Window
 
 
     
+
+
+    private void ResetBillsPaymentsButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset bills/payments demo data?", "This will replace the local Bills / Payments profile with fictional/demo money obligation data."))
+        {
+            return;
+        }
+
+        MoneyObligationStorage.ResetToDemoData();
+        _moneyObligationProfile = MoneyObligationStorage.Load();
+        ShowBillsPaymentsPage();
+    }
+
+    private void ShowBillsPaymentsPage()
+    {
+        _moneyObligationProfile = MoneyObligationStorage.Load();
+        var summary = MoneyObligationCalculator.Calculate(_moneyObligationProfile);
+
+        SetHeader("Bills / Payments", $"Bills / Payments • v4.2 • {summary.TotalItems} obligations • {summary.RequiredThisWeekItems} this week • {summary.PayLaterItems} BNPL");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Bills / Upcoming Payments / Pay Later",
+            "v4.2 turns bills, subscriptions, upcoming payments, Pay Later / Zip / Afterpay instalments, hidden deductions, and manual cashflow items into reviewed stateful money obligations before they affect safe-to-spend."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v4.2"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pressure", summary.PressureLabel, "Money"));
+        metricsPanel.Children.Add(CreateDashboardCard("Obligations", summary.TotalItems.ToString(), "Tracked"));
+        metricsPanel.Children.Add(CreateDashboardCard("This week", summary.RequiredThisWeekItems.ToString(), "Required"));
+        metricsPanel.Children.Add(CreateDashboardCard("Due today", summary.DueTodayItems.ToString(), FormatMoney(summary.AmountDueToday)));
+        metricsPanel.Children.Add(CreateDashboardCard("Due soon", summary.DueSoonItems.ToString(), "7 days"));
+        metricsPanel.Children.Add(CreateDashboardCard("Overdue", summary.OverdueItems.ToString(), FormatMoney(summary.OverdueAmount)));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.NeedsReviewItems.ToString(), "Gate"));
+        metricsPanel.Children.Add(CreateDashboardCard("Untrusted", summary.UntrustedItems.ToString(), "Source"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pay later", summary.PayLaterItems.ToString(), FormatMoney(summary.PayLaterBalance)));
+        metricsPanel.Children.Add(CreateDashboardCard("BNPL week", FormatMoney(summary.PayLaterDueThisWeek), "Load"));
+        metricsPanel.Children.Add(CreateDashboardCard("Hidden", summary.HiddenDeductionItems.ToString(), FormatMoney(summary.HiddenDeductionMonthlyEstimate)));
+        metricsPanel.Children.Add(CreateDashboardCard("Safe drag", FormatMoney(summary.SafeToSpendDrag), "This week"));
+        metricsPanel.Children.Add(CreateDashboardCard("Projected safe", FormatMoney(summary.ProjectedSafeToSpendAfterObligations), "After obligations"));
+        metricsPanel.Children.Add(CreateDashboardCard("Paid/closed", summary.PaidOrClosedItems.ToString(), "Evidence"));
+
+        root.Children.Add(metricsPanel);
+
+        var rulePanel = CreateInfoPanel("Bills/payments rule", FormatReasons(summary.Reasons));
+        rulePanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(rulePanel);
+
+        var controlsPanel = CreateBillsPaymentsControlsPanel();
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        var duePanel = CreateMoneyObligationPanel("Due pressure / safe-to-spend impact", summary.DuePressureItems);
+        duePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(duePanel);
+
+        var billsPanel = CreateMoneyObligationPanel("Bills / subscriptions", summary.BillsAndSubscriptions);
+        billsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(billsPanel);
+
+        var upcomingPanel = CreateMoneyObligationPanel("Upcoming payments / manual cashflow", summary.UpcomingPayments);
+        upcomingPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(upcomingPanel);
+
+        var payLaterPanel = CreateMoneyObligationPanel("Pay Later / Zip / Afterpay", summary.PayLaterItemsList);
+        payLaterPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(payLaterPanel);
+
+        var hiddenPanel = CreateMoneyObligationPanel("Money Profile / hidden deductions", summary.HiddenDeductionItemsList);
+        hiddenPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(hiddenPanel);
+
+        var reviewPanel = CreateMoneyObligationPanel("Review / evidence queue", summary.ReviewQueue);
+        reviewPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reviewPanel);
+
+        var paidPanel = CreateMoneyObligationPanel("Paid / closed with evidence", summary.PaidOrClosedItemsList);
+        paidPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(paidPanel);
+
+        var boundaryPanel = CreateInfoPanel(
+            "v4.2 boundary",
+            "v4.2 models bills, upcoming payments, Pay Later / BNPL, hidden deductions, safe-to-spend drag, and payment evidence gates locally. It does not connect bank feeds, Pay Later providers, accounting systems, email, OCR automation, or OAuth yet.");
+
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var nextPanel = CreateInfoPanel(
+            "After v4.2",
+            "Next lane: v4.3 Money Profile / Hidden Deductions / Safe-to-Spend. v4.2 defines the obligations; v4.3 turns hidden deductions and safe-to-spend calculation into a stronger money profile.");
+
+        nextPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(nextPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local bills/payments file",
+            $"Bills / Payments file: {MoneyObligationStorage.FilePath}");
+
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateBillsPaymentsControlsPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Bills / payments controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Use reset only for fictional/demo money obligations. v4.2 is local/manual money-state modelling; no real bank, Pay Later, accounting, email, or OCR connector is active.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal
+        };
+
+        var resetButton = CreateActionButton("Reset Bills / Payments Demo", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetBillsPaymentsButton_Click;
+
+        buttonRow.Children.Add(resetButton);
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateMoneyObligationPanel(string title, IEnumerable<MoneyObligationItem> items)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = items.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No money obligations in this section."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in list)
+        {
+            var dueText = item.DueDate.HasValue ? $" • Due {item.DueDate.Value:dd MMM yyyy}" : string.Empty;
+            var amountText = item.AmountDue > 0 ? $" • Due {FormatMoney(item.AmountDue)}" : string.Empty;
+            var balanceText = item.RemainingBalance > 0 ? $" • Balance {FormatMoney(item.RemainingBalance)}" : string.Empty;
+            var monthlyText = item.MonthlyEstimate > 0 ? $" • Monthly {FormatMoney(item.MonthlyEstimate)}" : string.Empty;
+            var trustedText = item.Trusted ? "Trusted" : "Untrusted";
+
+            root.Children.Add(CreateSimpleItemCard(
+                item.Title,
+                $"{MoneyObligationCalculator.FormatKind(item.Kind)} • {LifeOsItemStateCalculator.FormatState(item.State)} • {MoneyObligationCalculator.FormatPressure(item.PressureLevel)} • {trustedText}{amountText}{balanceText}{monthlyText}{dueText}",
+                $"Provider: {item.Provider}\nSource: {MoneyObligationCalculator.FormatSource(item.SourceKind)}\nCategory: {item.Category}\nSchedule: {item.ScheduleLabel}\nEvidence: {item.EvidenceSummary}\nEvidence state: {MoneyObligationCalculator.FormatEvidence(item.EvidenceState)}\nReview: {item.ReviewGate}\nPressure: {item.PressureSignal}\nNext: {item.SafeNextAction}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
 
     private void ResetItemStateEngineButton_Click(object sender, RoutedEventArgs e)
     {
@@ -5262,8 +5455,9 @@ public partial class MainWindow : Window
         var finalOfflineOsSummary = FinalOfflineOsCalculator.Calculate(FinalOfflineOsStorage.Load());
         var lifeOsSpineSummary = LifeOsSpineCalculator.Calculate(LifeOsSpineStorage.Load());
         var itemStateSummary = LifeOsItemStateCalculator.Calculate(LifeOsItemStateStorage.Load());
+        var moneyObligationSummary = MoneyObligationCalculator.Calculate(MoneyObligationStorage.Load());
 
-        SetHeader("Command Centre", $"Unified Command Centre • v4.1 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v4.2 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -5317,6 +5511,11 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("State items", itemStateSummary.TotalItems.ToString(), "v4.1"));
         metricsPanel.Children.Add(CreateDashboardCard("Needs review", itemStateSummary.NeedsReviewItems.ToString(), "Items"));
         metricsPanel.Children.Add(CreateDashboardCard("Untrusted", itemStateSummary.UntrustedItems.ToString(), "Items"));
+        metricsPanel.Children.Add(CreateDashboardCard("Money obligations", moneyObligationSummary.TotalItems.ToString(), "v4.2"));
+        metricsPanel.Children.Add(CreateDashboardCard("Due today", moneyObligationSummary.DueTodayItems.ToString(), FormatMoney(moneyObligationSummary.AmountDueToday)));
+        metricsPanel.Children.Add(CreateDashboardCard("Pay later load", FormatMoney(moneyObligationSummary.PayLaterBalance), "BNPL"));
+        metricsPanel.Children.Add(CreateDashboardCard("Hidden deductions", moneyObligationSummary.HiddenDeductionItems.ToString(), FormatMoney(moneyObligationSummary.HiddenDeductionMonthlyEstimate)));
+        metricsPanel.Children.Add(CreateDashboardCard("Safe drag", FormatMoney(moneyObligationSummary.SafeToSpendDrag), "v4.2"));
 
         root.Children.Add(metricsPanel);
 
@@ -5435,16 +5634,23 @@ public partial class MainWindow : Window
         itemStatePanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(itemStatePanel);
 
+        var moneyObligationsPanel = CreateInfoPanel(
+            "Bills / Upcoming Payments / Pay Later",
+            FormatReasons(moneyObligationSummary.Reasons));
+
+        moneyObligationsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(moneyObligationsPanel);
+
         var workPanel = CreateInfoPanel(
-            "v4.1 operating rule",
-            "LifeOS now turns the spine map into item/state behaviour. Bills, payments, receipts, invoices, work, follow-ups, agenda, proof, and future imported data all become reviewed items with state, evidence, pressure impact, and safe next action.");
+            "v4.2 operating rule",
+            "LifeOS now tracks bills, subscriptions, upcoming payments, Pay Later / Zip / Afterpay, hidden deductions, and manual cashflow items as reviewed stateful money obligations before they affect safe-to-spend.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v4.1 scope",
-            "v4.1 models item state and transition rules. It is not real OAuth, live email/calendar/accounting/bank sync, automatic AI action, the companion app, or the major workspace redesign.");
+            "v4.2 scope",
+            "v4.2 models local bills, upcoming payments, Pay Later / BNPL, hidden deductions, safe-to-spend drag, and payment evidence gates. It is not real bank sync, Pay Later sync, accounting sync, OAuth, AI action, the companion app, or the major workspace redesign.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

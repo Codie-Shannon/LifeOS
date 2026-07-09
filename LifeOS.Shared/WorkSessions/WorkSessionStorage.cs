@@ -51,14 +51,25 @@ public static class WorkSessionStorage
         [
             new WorkSession
             {
-                ClientOrProject = "AIE",
-                Date = today,
-                Hours = 1.5m,
-                HourlyRate = 35m,
+                ClientOrProject = "Workshop Proof Project",
+                Date = today.AddDays(-1),
+                Hours = 2.0m,
+                HourlyRate = 45m,
                 IsBillable = true,
                 Status = WorkSessionStatus.Completed,
-                Description = "Example paid-work discovery/proof session.",
-                Notes = "Default starter data. Replace with real tracked sessions."
+                Description = "Built and checked a local proof workflow slice.",
+                Notes = "Fictional demo data. Shows completed billable work that still needs invoice/proof review."
+            },
+            new WorkSession
+            {
+                ClientOrProject = "Door Invoice OCR Proof",
+                Date = today,
+                Hours = 1.25m,
+                HourlyRate = 45m,
+                IsBillable = true,
+                Status = WorkSessionStatus.Invoiced,
+                Description = "Prepared review notes and screenshot proof for an invoice extraction demo.",
+                Notes = "Fictional demo data. Expected money is not safe money until paid."
             }
         ];
     }

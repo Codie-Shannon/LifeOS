@@ -51,14 +51,36 @@ public static class ProofStorage
         [
             new ProofItem
             {
-                Project = "LifeOS",
-                Title = "LifeOS v0.1 release",
-                Type = ProofType.Release,
-                Status = ProofStatus.Accepted,
+                Project = "Workshop Proof Project",
+                Title = "Local proof workflow screenshot set",
+                Type = ProofType.Screenshot,
+                Status = ProofStatus.Ready,
+                Date = today,
+                Description = "Demo screenshots that can support a client-safe work summary.",
+                LinkOrPath = "docs/screenshot-groups/group-03-paid-work-money-proof/",
+                Notes = "Fictional demo data. Replace with real proof only in private local use."
+            },
+            new ProofItem
+            {
+                Project = "Door Invoice OCR Proof",
+                Title = "Invoice extraction review notes",
+                Type = ProofType.Documentation,
+                Status = ProofStatus.Ready,
                 Date = today.AddDays(-1),
-                Description = "Desktop shell proof with Money Pressure, Follow-Ups, and Command Centre.",
+                Description = "Review notes showing what was tested and what still requires human approval.",
+                LinkOrPath = "docs/release-notes/v1.7.md",
+                Notes = "Fictional demo data. Conservative wording only."
+            },
+            new ProofItem
+            {
+                Project = "Portfolio Review Lead",
+                Title = "Accepted portfolio summary proof",
+                Type = ProofType.CaseStudy,
+                Status = ProofStatus.Accepted,
+                Date = today.AddDays(-4),
+                Description = "A fictional accepted proof brick for case-study tracking.",
                 LinkOrPath = "README.md",
-                Notes = "Default starter proof item."
+                Notes = "Fictional demo data."
             }
         ];
     }

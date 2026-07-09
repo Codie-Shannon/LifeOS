@@ -1,7 +1,7 @@
 {
-  "currentVersion": "v4.0-code",
-  "currentStage": "054",
-  "screenshotGroup": "10_lifeos_spine_recovery_map",
-  "generatedFrom": "LifeOS v3.9 pushed baseline",
-  "notes": "v4.0 LifeOS Spine Recovery Map code checkpoint. Screenshot/docs/README pack and v4.0 tag should follow visual verification."
+  "currentVersion": "v4.1-code",
+  "currentStage": "059",
+  "screenshotGroup": "11_item_type_state_engine",
+  "generatedFrom": "LifeOS v4.0 pushed baseline",
+  "notes": "v4.1 Item Type / State Engine code checkpoint. Screenshot/docs/README pack and v4.1 tag should follow visual verification."
 }

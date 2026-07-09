@@ -1,7 +1,7 @@
 {
-  "currentVersion": "v2.1-code",
-  "currentStage": "034",
-  "screenshotGroup": "06_universal_spine",
-  "generatedFrom": "LifeOS v2.0 pushed baseline",
-  "notes": "Universal Spine code checkpoint. Screenshot/docs/README pack and v2.1 tag should follow visual verification."
+  "currentVersion": "v3.0-code",
+  "currentStage": "039",
+  "screenshotGroup": "07_os_navigation_core_modules",
+  "generatedFrom": "LifeOS v2.1 pushed baseline",
+  "notes": "OS Navigation/Core Modules code checkpoint. Screenshot/docs/README pack and v3.0 tag should follow visual verification."
 }

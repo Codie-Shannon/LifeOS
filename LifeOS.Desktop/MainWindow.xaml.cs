@@ -39,6 +39,8 @@ using LifeOS.Core.ItemState;
 using LifeOS.Shared.ItemState;
 using LifeOS.Core.MoneyObligations;
 using LifeOS.Shared.MoneyObligations;
+using LifeOS.Core.MoneyProfile;
+using LifeOS.Shared.MoneyProfile;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -164,6 +166,8 @@ public partial class MainWindow : Window
 
     private MoneyObligationProfile _moneyObligationProfile = MoneyObligationStorage.Load();
 
+    private MoneyProfilePlan _moneyProfilePlan = MoneyProfileStorage.Load();
+
 
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
@@ -209,6 +213,8 @@ public partial class MainWindow : Window
     private void MoneyTimelineNavButton_Click(object sender, RoutedEventArgs e) => ShowMoneyTimelinePage();
 
     private void BillsPaymentsNavButton_Click(object sender, RoutedEventArgs e) => ShowBillsPaymentsPage();
+
+    private void MoneyProfileNavButton_Click(object sender, RoutedEventArgs e) => ShowMoneyProfilePage();
 
     private void AgendaNavButton_Click(object sender, RoutedEventArgs e) => ShowAgendaPage();
 
@@ -270,6 +276,296 @@ public partial class MainWindow : Window
 
 
     
+
+
+
+    private void ResetMoneyProfileButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset money profile demo data?", "This will replace the local Money Profile with fictional/demo hidden deduction and safe-to-spend data."))
+        {
+            return;
+        }
+
+        MoneyProfileStorage.ResetToDemoData();
+        _moneyProfilePlan = MoneyProfileStorage.Load();
+        ShowMoneyProfilePage();
+    }
+
+    private void ShowMoneyProfilePage()
+    {
+        _moneyProfilePlan = MoneyProfileStorage.Load();
+        var summary = MoneyProfileCalculator.Calculate(_moneyProfilePlan);
+
+        SetHeader("Money Profile", $"Money Profile • v4.3 • {summary.HiddenDeductionCount} hidden deductions • {summary.ReviewNeededCount} review • {summary.ConfidenceLabel} confidence");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Money Profile / Hidden Deductions / Safe-to-Spend",
+            "v4.3 strengthens the real money profile: confirmed cash, visible obligations, hidden deductions, expected-money exclusion, buffers, reserve rules, and safe-to-spend confidence before integrations."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v4.3"));
+        metricsPanel.Children.Add(CreateDashboardCard("Confidence", summary.ConfidenceLabel, "Money"));
+        metricsPanel.Children.Add(CreateDashboardCard("Visible balance", FormatMoney(summary.CurrentVisibleBalance), "Raw"));
+        metricsPanel.Children.Add(CreateDashboardCard("Confirmed cash", FormatMoney(summary.ConfirmedCashOnHand), "Safe source"));
+        metricsPanel.Children.Add(CreateDashboardCard("Known obligations", FormatMoney(summary.WeeklyKnownObligations), "This week"));
+        metricsPanel.Children.Add(CreateDashboardCard("Hidden monthly", FormatMoney(summary.HiddenDeductionMonthlyEstimate), "Reserve"));
+        metricsPanel.Children.Add(CreateDashboardCard("Hidden weekly", FormatMoney(summary.HiddenDeductionWeeklyReserve), "Drag"));
+        metricsPanel.Children.Add(CreateDashboardCard("Minimum buffer", FormatMoney(summary.MinimumBuffer), "Protected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Emergency hold", FormatMoney(summary.EmergencyHold), "Protected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Safe before hidden", FormatMoney(summary.SafeToSpendBeforeHidden), "Pre-reserve"));
+        metricsPanel.Children.Add(CreateDashboardCard("Safe after hidden", FormatMoney(summary.SafeToSpendAfterHidden), "Post-reserve"));
+        metricsPanel.Children.Add(CreateDashboardCard("Final safe", FormatMoney(summary.SafeToSpendFinal), "Spendable"));
+        metricsPanel.Children.Add(CreateDashboardCard("Expected money", FormatMoney(summary.ExpectedMoneyTotal), "Visible"));
+        metricsPanel.Children.Add(CreateDashboardCard("Excluded expected", FormatMoney(summary.ExpectedExcludedFromSafe), "Not safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.ReviewNeededCount.ToString(), "Gate"));
+        metricsPanel.Children.Add(CreateDashboardCard("Untrusted", summary.UntrustedCount.ToString(), "Deductions"));
+
+        root.Children.Add(metricsPanel);
+
+        var rulePanel = CreateInfoPanel("Money profile rule", FormatReasons(summary.Reasons));
+        rulePanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(rulePanel);
+
+        var controlsPanel = CreateMoneyProfileControlsPanel();
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        var calculationPanel = CreateMoneyProfileCalculationPanel(summary);
+        calculationPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(calculationPanel);
+
+        var hiddenPanel = CreateMoneyProfileHiddenDeductionPanel("Hidden deductions / reserve rules", summary.HiddenDeductions);
+        hiddenPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(hiddenPanel);
+
+        var reviewPanel = CreateMoneyProfileHiddenDeductionPanel("Hidden deduction review gates", summary.ReviewDeductions);
+        reviewPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reviewPanel);
+
+        var expectedPanel = CreateMoneyProfileExpectedMoneyPanel("Expected money excluded from safe money", summary.ExpectedMoneyItems);
+        expectedPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(expectedPanel);
+
+        var confidencePanel = CreateMoneyProfileConfidencePanel(summary);
+        confidencePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(confidencePanel);
+
+        var boundaryPanel = CreateInfoPanel(
+            "v4.3 boundary",
+            "v4.3 models hidden deductions, reserves, buffers, expected-money exclusion, and safe-to-spend confidence locally. It does not connect bank feeds, payslips, IRD/tax portals, accounting systems, open banking, email, OCR automation, OAuth, or AI actions.");
+
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var nextPanel = CreateInfoPanel(
+            "After v4.3",
+            "Next lane: v4.4 Agenda + Payment Calendar. v4.3 defines safer money confidence; v4.4 puts due dates, payment dates, bills, BNPL instalments, and agenda commitments into one time-aware calendar lane.");
+
+        nextPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(nextPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local money profile file",
+            $"Money Profile file: {MoneyProfileStorage.FilePath}");
+
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateMoneyProfileControlsPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Money profile controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Use reset only for fictional/demo money-profile data. v4.3 is local/manual safe-to-spend modelling; no real bank, payslip, tax, accounting, open banking, email, or OCR connector is active.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal
+        };
+
+        var resetButton = CreateActionButton("Reset Money Profile Demo", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetMoneyProfileButton_Click;
+
+        buttonRow.Children.Add(resetButton);
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateMoneyProfileCalculationPanel(MoneyProfileSummary summary)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Safe-to-spend calculation",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "This section proves the actual money rule: confirmed cash minus obligations, hidden deductions, minimum buffer, and emergency hold. Expected money is visible, but excluded.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 12)
+        });
+
+        foreach (var line in summary.CalculationLines)
+        {
+            root.Children.Add(new TextBlock
+            {
+                Text = "• " + line,
+                Foreground = new SolidColorBrush(Color.FromRgb(191, 219, 254)),
+                FontSize = 13,
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 2, 0, 0)
+            });
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateMoneyProfileHiddenDeductionPanel(string title, IEnumerable<MoneyProfileHiddenDeduction> deductions)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = deductions.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No hidden deductions in this section."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in list)
+        {
+            var trustedText = item.Trusted ? "Trusted" : "Untrusted";
+
+            root.Children.Add(CreateSimpleItemCard(
+                item.Title,
+                $"{MoneyProfileCalculator.FormatKind(item.Kind)} • {LifeOsItemStateCalculator.FormatState(item.State)} • {trustedText} • Monthly {FormatMoney(item.MonthlyEstimate)} • Weekly {FormatMoney(item.WeeklyReserve)}",
+                $"Source: {MoneyProfileCalculator.FormatSource(item.SourceKind)}\nRule: {item.RuleSummary}\nEvidence: {item.EvidenceSummary}\nReview: {item.ReviewGate}\nSafe-to-spend impact: {item.SafeToSpendImpact}\nNext: {item.NextAction}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateMoneyProfileExpectedMoneyPanel(string title, IEnumerable<MoneyProfileExpectedMoney> items)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = items.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No expected money items in this section."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in list)
+        {
+            var trustedText = item.Trusted ? "Trusted" : "Untrusted";
+            var safeText = item.CountsAsSafeMoney ? "Counts as safe" : "Excluded from safe";
+            var dateText = item.ExpectedDate.HasValue ? $" • Expected {item.ExpectedDate.Value:dd MMM yyyy}" : string.Empty;
+
+            root.Children.Add(CreateSimpleItemCard(
+                item.Title,
+                $"{LifeOsItemStateCalculator.FormatState(item.State)} • {trustedText} • {safeText} • {FormatMoney(item.Amount)}{dateText}",
+                $"Source: {item.SourceSummary}\nEvidence: {item.EvidenceSummary}\nReview: {item.ReviewGate}\nSafe money rule: {item.SafeMoneyRule}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateMoneyProfileConfidencePanel(MoneyProfileSummary summary)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Safe-to-spend confidence gates",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = $"Confidence: {summary.ConfidenceLabel}",
+            Foreground = new SolidColorBrush(Color.FromRgb(56, 189, 248)),
+            FontSize = 14,
+            FontWeight = FontWeights.SemiBold,
+            Margin = new Thickness(0, 6, 0, 8)
+        });
+
+        foreach (var line in summary.ConfidenceChecklist)
+        {
+            root.Children.Add(new TextBlock
+            {
+                Text = "• " + line,
+                Foreground = new SolidColorBrush(Color.FromRgb(191, 219, 254)),
+                FontSize = 13,
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 2, 0, 0)
+            });
+        }
+
+        panel.Child = root;
+        return panel;
+    }
 
 
     private void ResetBillsPaymentsButton_Click(object sender, RoutedEventArgs e)
@@ -5456,8 +5752,9 @@ public partial class MainWindow : Window
         var lifeOsSpineSummary = LifeOsSpineCalculator.Calculate(LifeOsSpineStorage.Load());
         var itemStateSummary = LifeOsItemStateCalculator.Calculate(LifeOsItemStateStorage.Load());
         var moneyObligationSummary = MoneyObligationCalculator.Calculate(MoneyObligationStorage.Load());
+        var moneyProfileSummary = MoneyProfileCalculator.Calculate(MoneyProfileStorage.Load());
 
-        SetHeader("Command Centre", $"Unified Command Centre • v4.2 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v4.3 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -5516,6 +5813,10 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Pay later load", FormatMoney(moneyObligationSummary.PayLaterBalance), "BNPL"));
         metricsPanel.Children.Add(CreateDashboardCard("Hidden deductions", moneyObligationSummary.HiddenDeductionItems.ToString(), FormatMoney(moneyObligationSummary.HiddenDeductionMonthlyEstimate)));
         metricsPanel.Children.Add(CreateDashboardCard("Safe drag", FormatMoney(moneyObligationSummary.SafeToSpendDrag), "v4.2"));
+        metricsPanel.Children.Add(CreateDashboardCard("Money profile", moneyProfileSummary.ConfidenceLabel, "v4.3"));
+        metricsPanel.Children.Add(CreateDashboardCard("Final safe", FormatMoney(moneyProfileSummary.SafeToSpendFinal), "v4.3"));
+        metricsPanel.Children.Add(CreateDashboardCard("Expected excluded", FormatMoney(moneyProfileSummary.ExpectedExcludedFromSafe), "Not safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Hidden weekly", FormatMoney(moneyProfileSummary.HiddenDeductionWeeklyReserve), "Reserve"));
 
         root.Children.Add(metricsPanel);
 
@@ -5641,16 +5942,23 @@ public partial class MainWindow : Window
         moneyObligationsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(moneyObligationsPanel);
 
+        var moneyProfilePanel = CreateInfoPanel(
+            "Money Profile / Hidden Deductions / Safe-to-Spend",
+            FormatReasons(moneyProfileSummary.Reasons));
+
+        moneyProfilePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(moneyProfilePanel);
+
         var workPanel = CreateInfoPanel(
-            "v4.2 operating rule",
-            "LifeOS now tracks bills, subscriptions, upcoming payments, Pay Later / Zip / Afterpay, hidden deductions, and manual cashflow items as reviewed stateful money obligations before they affect safe-to-spend.");
+            "v4.3 operating rule",
+            "LifeOS now separates confirmed cash, expected money, visible obligations, hidden deductions, minimum buffers, and emergency holds so safe-to-spend is not inflated by money that is not actually safe.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v4.2 scope",
-            "v4.2 models local bills, upcoming payments, Pay Later / BNPL, hidden deductions, safe-to-spend drag, and payment evidence gates. It is not real bank sync, Pay Later sync, accounting sync, OAuth, AI action, the companion app, or the major workspace redesign.");
+            "v4.3 scope",
+            "v4.3 models local hidden deductions, reserves, buffers, expected-money exclusion, and safe-to-spend confidence. It is not real bank sync, tax/payslip sync, accounting sync, OAuth, AI action, the companion app, or the major workspace redesign.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

@@ -6279,8 +6279,9 @@ public partial class MainWindow : Window
         var moneyObligationSummary = MoneyObligationCalculator.Calculate(MoneyObligationStorage.Load());
         var moneyProfileSummary = MoneyProfileCalculator.Calculate(MoneyProfileStorage.Load());
         var paymentCalendarSummary = PaymentCalendarCalculator.Calculate(PaymentCalendarStorage.Load(), DateOnly.FromDateTime(DateTime.Today));
+        var workPipelineOperatingSummary = WorkPipelineOperatingCalculator.Calculate(_workPipelineItems, DateOnly.FromDateTime(DateTime.Today));
 
-        SetHeader("Command Centre", $"Unified Command Centre • v4.4 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v4.5 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -6305,6 +6306,11 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Pipeline blocked", summary.WorkPipeline.BlockedItems.ToString(), "Blocked"));
         metricsPanel.Children.Add(CreateDashboardCard("Pipeline follow-ups", (summary.WorkPipeline.FollowUpsOverdue + summary.WorkPipeline.FollowUpsDueToday).ToString(), "Now"));
         metricsPanel.Children.Add(CreateDashboardCard("Expected pipeline", FormatMoney(summary.WorkPipeline.ExpectedValueTotal), "Not safe money"));
+        metricsPanel.Children.Add(CreateDashboardCard("Work lane", workPipelineOperatingSummary.PressureLabel, "v4.5"));
+        metricsPanel.Children.Add(CreateDashboardCard("Work review", workPipelineOperatingSummary.ReviewNeededItems.ToString(), "Pipeline"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting me", workPipelineOperatingSummary.WaitingOnMeItems.ToString(), "Owner"));
+        metricsPanel.Children.Add(CreateDashboardCard("Invoice ready", (workPipelineOperatingSummary.InvoiceReadyItems + workPipelineOperatingSummary.TimesheetReadyItems).ToString(), "Admin"));
+        metricsPanel.Children.Add(CreateDashboardCard("Payment expected", workPipelineOperatingSummary.PaymentExpectedItems.ToString(), FormatMoney(workPipelineOperatingSummary.ExpectedValueExcludedFromSafe)));
 
         metricsPanel.Children.Add(CreateDashboardCard("Billable value", FormatMoney(summary.WorkSessions.BillableValue), "Work"));
         metricsPanel.Children.Add(CreateDashboardCard("Unpaid work", FormatMoney(summary.WorkSessions.UnpaidBillableValue), "Income"));
@@ -6396,6 +6402,29 @@ public partial class MainWindow : Window
 
         pipelineSignalsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(pipelineSignalsPanel);
+
+        var pipelineOperatingPanel = CreateInfoPanel(
+            "v4.5 Work Pipeline operating lane",
+            FormatReasons(workPipelineOperatingSummary.Reasons));
+
+        pipelineOperatingPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pipelineOperatingPanel);
+
+        var pipelineOperatingSignalsPanel = CreateInfoPanel(
+            "v4.5 Work Pipeline signals",
+            FormatReasons(workPipelineOperatingSummary.CommandCentreSignals.Select(signal => $"{signal.Label}: {signal.Value} - {signal.Detail}")));
+
+        pipelineOperatingSignalsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pipelineOperatingSignalsPanel);
+
+        var pipelineIntegrityPanel = CreateInfoPanel(
+            "v4.5 Pipeline integrity warnings",
+            workPipelineOperatingSummary.IntegrityWarnings.Count == 0
+                ? "No v4.5 pipeline integrity warnings."
+                : FormatReasons(workPipelineOperatingSummary.IntegrityWarnings));
+
+        pipelineIntegrityPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pipelineIntegrityPanel);
 
         var dailyFlowPanel = CreateInfoPanel(
             "Daily Operating Flow",
@@ -6489,15 +6518,15 @@ public partial class MainWindow : Window
         root.Children.Add(paymentCalendarPanel);
 
         var workPanel = CreateInfoPanel(
-            "v4.4 operating rule",
-            "LifeOS now puts due dates, payment dates, BNPL instalments, agenda commitments, expected-money dates, and review windows into one time-aware lane. Dates create visibility; evidence still decides trusted money state.");
+            "v4.5 operating rule",
+            "LifeOS now makes Work Pipeline the operating lane for active work, leads, blocked projects, follow-ups, invoice readiness, payment expected state, and proof gaps before v5 integrations.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v4.4 scope",
-            "v4.4 models local agenda/payment dates only. It is not Google Calendar sync, Outlook Calendar sync, real bank sync, BNPL provider sync, email sync, accounting sync, OCR automation, OAuth, AI action, the companion app, or the major workspace redesign.");
+            "v4.5 scope",
+            "v4.5 models local Work Pipeline operating state only. It does not send messages, sync email/calendar/accounting/bank data, create invoices, create calendar events, run AI actions, replace a CRM, or perform the major workspace redesign.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

@@ -15,6 +15,8 @@ using LifeOS.Core.TimesheetEvidence;
 using LifeOS.Shared.TimesheetEvidence;
 using LifeOS.Core.EvidenceVault;
 using LifeOS.Shared.EvidenceVault;
+using LifeOS.Core.RelationshipRadar;
+using LifeOS.Shared.RelationshipRadar;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -95,6 +97,19 @@ public partial class MainWindow : Window
 
     private List<ProofItem> _proofItems = ProofStorage.Load();
 
+    private List<RelationshipRadarProfile> _relationshipProfiles = RelationshipRadarStorage.Load();
+
+    private TextBox? _relationshipNameTextBox;
+    private TextBox? _relationshipContextTextBox;
+    private ComboBox? _relationshipStatusComboBox;
+    private ComboBox? _relationshipWaitingOnComboBox;
+    private TextBox? _relationshipLastContactTextBox;
+    private TextBox? _relationshipNextFollowUpTextBox;
+    private TextBox? _relationshipLinkedWorkTextBox;
+    private TextBox? _relationshipNextActionTextBox;
+    private TextBox? _relationshipNotesTextBox;
+    private CheckBox? _relationshipDoNotChaseCheckBox;
+
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
 
@@ -159,6 +174,8 @@ public partial class MainWindow : Window
     private void TimesheetEvidenceNavButton_Click(object sender, RoutedEventArgs e) => ShowTimesheetEvidencePage();
 
     private void EvidenceVaultNavButton_Click(object sender, RoutedEventArgs e) => ShowEvidenceVaultPage();
+
+    private void RelationshipRadarNavButton_Click(object sender, RoutedEventArgs e) => ShowRelationshipRadarPage();
 
     private void ProjectsNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.Projects);
 
@@ -1240,6 +1257,339 @@ public partial class MainWindow : Window
         return string.Join(Environment.NewLine, reasonList.Select(reason => $"• {reason}"));
     }
 
+
+
+    private void AddRelationshipProfileButton_Click(object sender, RoutedEventArgs e)
+    {
+        var lastContactDate = DateOnly.TryParse(_relationshipLastContactTextBox?.Text.Trim(), out var parsedLastContactDate)
+            ? parsedLastContactDate
+            : (DateOnly?)null;
+
+        var nextFollowUpDate = DateOnly.TryParse(_relationshipNextFollowUpTextBox?.Text.Trim(), out var parsedNextFollowUpDate)
+            ? parsedNextFollowUpDate
+            : (DateOnly?)null;
+
+        var status = _relationshipStatusComboBox?.SelectedItem is RelationshipRadarStatus selectedStatus
+            ? selectedStatus
+            : RelationshipRadarStatus.Active;
+
+        var waitingOn = _relationshipWaitingOnComboBox?.SelectedItem is RelationshipWaitingOn selectedWaitingOn
+            ? selectedWaitingOn
+            : RelationshipWaitingOn.Unknown;
+
+        _relationshipProfiles.Add(new RelationshipRadarProfile
+        {
+            Name = ReadTextValue(_relationshipNameTextBox, "Unnamed relationship"),
+            RoleOrContext = ReadTextValue(_relationshipContextTextBox, "No relationship context entered."),
+            Status = status,
+            WaitingOn = waitingOn,
+            LastContactDate = lastContactDate,
+            NextFollowUpDate = nextFollowUpDate,
+            LinkedWork = _relationshipLinkedWorkTextBox?.Text.Trim() ?? string.Empty,
+            NextAction = ReadTextValue(_relationshipNextActionTextBox, "No next action entered."),
+            Notes = _relationshipNotesTextBox?.Text.Trim() ?? string.Empty,
+            DoNotChase = _relationshipDoNotChaseCheckBox?.IsChecked == true,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        });
+
+        RelationshipRadarStorage.Save(_relationshipProfiles);
+        ShowRelationshipRadarPage();
+    }
+
+    private void ResetRelationshipRadarButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset Relationship Radar defaults?", "This will replace saved relationship profiles with fictional local demo data."))
+        {
+            return;
+        }
+
+        RelationshipRadarStorage.ResetToDemoData();
+        _relationshipProfiles = RelationshipRadarStorage.Load();
+        ShowRelationshipRadarPage();
+    }
+
+    private void CloseRelationshipProfileButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        var profile = _relationshipProfiles.FirstOrDefault(profile => profile.Id == id);
+
+        if (profile is null)
+        {
+            return;
+        }
+
+        profile.Status = RelationshipRadarStatus.Closed;
+        profile.UpdatedAt = DateTime.Now;
+
+        RelationshipRadarStorage.Save(_relationshipProfiles);
+        ShowRelationshipRadarPage();
+    }
+
+    private void DeleteRelationshipProfileButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not Guid id)
+        {
+            return;
+        }
+
+        if (!ConfirmRiskyAction("Delete relationship profile?", "This removes the selected relationship profile from local storage."))
+        {
+            return;
+        }
+
+        _relationshipProfiles = _relationshipProfiles
+            .Where(profile => profile.Id != id)
+            .ToList();
+
+        RelationshipRadarStorage.Save(_relationshipProfiles);
+        ShowRelationshipRadarPage();
+    }
+
+    private void ShowRelationshipRadarPage()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var summary = RelationshipRadarCalculator.Calculate(_relationshipProfiles, today);
+
+        SetHeader("Relationship Radar", $"Relationship Radar • v1.5 local relationship state • {summary.TotalProfiles} open");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Relationship Radar",
+            "Track relationship state without exposing real inboxes, names, emails, or private client details. Use fictional/local profiles to prove waiting-on, follow-up, do-not-chase, and linked-work behaviour."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Open profiles", summary.TotalProfiles.ToString(), "Relationships"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting on them", summary.WaitingOnThemCount.ToString(), "External"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting on me", summary.WaitingOnMeCount.ToString(), "Action"));
+        metricsPanel.Children.Add(CreateDashboardCard("Follow-up due", summary.FollowUpDueCount.ToString(), "Today/overdue"));
+        metricsPanel.Children.Add(CreateDashboardCard("Do not chase", summary.DoNotChaseCount.ToString(), "Protected"));
+
+        root.Children.Add(metricsPanel);
+
+        var reasonsPanel = CreateInfoPanel("Relationship pressure", FormatReasons(summary.Reasons));
+        reasonsPanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(reasonsPanel);
+
+        var dueList = summary.FollowUpDueProfiles.Count == 0
+            ? "No relationship follow-ups are due right now."
+            : string.Join(Environment.NewLine, summary.FollowUpDueProfiles.Select(profile => $"• {profile.Name}: {profile.NextAction}"));
+
+        var duePanel = CreateInfoPanel("Due follow-ups", dueList);
+        duePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(duePanel);
+
+        var inputPanel = CreateRelationshipRadarInputPanel();
+        inputPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(inputPanel);
+
+        var listPanel = CreateRelationshipRadarListPanel();
+        listPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(listPanel);
+
+        var guardrailPanel = CreateInfoPanel(
+            "v1.5 scope",
+            $"Local-only Relationship Radar with JSON persistence. Saved file: {RelationshipRadarStorage.FilePath}. No email import, contact sync, calendar sync, auto-chasing, or real client data.");
+
+        guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(guardrailPanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateRelationshipRadarInputPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Add relationship profile",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Capture who/what the relationship represents, who is waiting on who, when it was last touched, and whether it should not be chased yet.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var grid = new Grid();
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+        for (var i = 0; i < 7; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        }
+
+        _relationshipNameTextBox = CreateStandardTextBox("Project Reviewer");
+        _relationshipContextTextBox = CreateStandardTextBox("Workshop proof review / client portal cleanup");
+        _relationshipStatusComboBox = CreateEnumComboBox(RelationshipRadarStatus.Active);
+        _relationshipWaitingOnComboBox = CreateEnumComboBox(RelationshipWaitingOn.Unknown);
+        _relationshipLastContactTextBox = CreateStandardTextBox(DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd"));
+        _relationshipNextFollowUpTextBox = CreateStandardTextBox(DateOnly.FromDateTime(DateTime.Today).AddDays(3).ToString("yyyy-MM-dd"));
+        _relationshipLinkedWorkTextBox = CreateStandardTextBox("Workshop Proof Project");
+        _relationshipNextActionTextBox = CreateStandardTextBox("Next practical action");
+        _relationshipNotesTextBox = CreateStandardTextBox("Optional notes");
+        _relationshipDoNotChaseCheckBox = new CheckBox
+        {
+            Content = "Do not chase yet",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            Margin = new Thickness(0, 8, 14, 0)
+        };
+
+        AddInputField(grid, "Name", _relationshipNameTextBox, 0, 0);
+        AddInputField(grid, "Context", _relationshipContextTextBox, 0, 1);
+        AddInputField(grid, "Status", _relationshipStatusComboBox, 1, 0);
+        AddInputField(grid, "Waiting on", _relationshipWaitingOnComboBox, 1, 1);
+        AddInputField(grid, "Last contact yyyy-mm-dd", _relationshipLastContactTextBox, 2, 0);
+        AddInputField(grid, "Next follow-up yyyy-mm-dd", _relationshipNextFollowUpTextBox, 2, 1);
+        AddInputField(grid, "Linked work", _relationshipLinkedWorkTextBox, 3, 0);
+        AddInputField(grid, "Next action", _relationshipNextActionTextBox, 3, 1);
+        AddInputField(grid, "Notes", _relationshipNotesTextBox, 4, 0);
+
+        Grid.SetRow(_relationshipDoNotChaseCheckBox, 4);
+        Grid.SetColumn(_relationshipDoNotChaseCheckBox, 1);
+        grid.Children.Add(_relationshipDoNotChaseCheckBox);
+
+        root.Children.Add(grid);
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Margin = new Thickness(0, 18, 0, 0)
+        };
+
+        var addButton = CreateActionButton("Add Relationship Profile", Color.FromRgb(56, 189, 248), Color.FromRgb(15, 23, 42));
+        addButton.Click += AddRelationshipProfileButton_Click;
+
+        var resetButton = CreateActionButton("Reset Demo Data", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetRelationshipRadarButton_Click;
+
+        buttonRow.Children.Add(addButton);
+        buttonRow.Children.Add(resetButton);
+
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateRelationshipRadarListPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Relationship profiles",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var visibleProfiles = _relationshipProfiles
+            .Where(profile => profile.Status != RelationshipRadarStatus.Closed)
+            .OrderBy(profile => profile.DoNotChase)
+            .ThenBy(profile => profile.NextFollowUpDate ?? DateOnly.MaxValue)
+            .ThenBy(profile => profile.Name)
+            .ToList();
+
+        if (visibleProfiles.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No open relationship profiles. Add one or reset the fictional demo data."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var profile in visibleProfiles)
+        {
+            var body = $"{FormatRelationshipRadarStatus(profile.Status)} • Waiting on: {FormatRelationshipWaitingOn(profile.WaitingOn)} • Last: {FormatDate(profile.LastContactDate)} • Next: {FormatDate(profile.NextFollowUpDate)}";
+            var notes = $"Linked work: {profile.LinkedWork}{Environment.NewLine}Next: {profile.NextAction}";
+
+            if (profile.DoNotChase)
+            {
+                notes += Environment.NewLine + "Do not chase yet.";
+            }
+
+            if (!string.IsNullOrWhiteSpace(profile.Notes))
+            {
+                notes += Environment.NewLine + profile.Notes;
+            }
+
+            var card = CreateSimpleItemCard(profile.Name, body, notes);
+
+            var buttonRow = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                Margin = new Thickness(0, 12, 0, 0)
+            };
+
+            var closeButton = CreateSmallActionButton("Close");
+            closeButton.Tag = profile.Id;
+            closeButton.Click += CloseRelationshipProfileButton_Click;
+
+            var deleteButton = CreateSmallActionButton("Delete");
+            deleteButton.Tag = profile.Id;
+            deleteButton.Click += DeleteRelationshipProfileButton_Click;
+
+            buttonRow.Children.Add(closeButton);
+            buttonRow.Children.Add(deleteButton);
+
+            if (card.Child is StackPanel cardStack)
+            {
+                cardStack.Children.Add(buttonRow);
+            }
+
+            root.Children.Add(card);
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private static string FormatRelationshipRadarStatus(RelationshipRadarStatus status)
+    {
+        return status switch
+        {
+            RelationshipRadarStatus.Active => "Active",
+            RelationshipRadarStatus.WaitingOnThem => "Waiting on Them",
+            RelationshipRadarStatus.WaitingOnMe => "Waiting on Me",
+            RelationshipRadarStatus.FollowUpDue => "Follow-up Due",
+            RelationshipRadarStatus.DoNotChaseYet => "Do Not Chase Yet",
+            RelationshipRadarStatus.Parked => "Parked",
+            RelationshipRadarStatus.Closed => "Closed",
+            _ => status.ToString()
+        };
+    }
+
+    private static string FormatRelationshipWaitingOn(RelationshipWaitingOn waitingOn)
+    {
+        return waitingOn switch
+        {
+            RelationshipWaitingOn.Me => "Me",
+            RelationshipWaitingOn.Them => "Them",
+            RelationshipWaitingOn.Both => "Both",
+            RelationshipWaitingOn.Neither => "Neither",
+            RelationshipWaitingOn.Unknown => "Unknown",
+            _ => waitingOn.ToString()
+        };
+    }
 
     private void AddWorkPipelineItemButton_Click(object sender, RoutedEventArgs e)
     {

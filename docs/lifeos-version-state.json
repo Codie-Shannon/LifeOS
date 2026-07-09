@@ -1,7 +1,7 @@
 {
-  "currentVersion": "v1.8-code",
-  "currentStage": "023",
-  "screenshotGroup": "04_settings_safety_theme",
-  "generatedFrom": "LifeOS v1.7 pushed baseline",
-  "notes": "Settings / Safety / Theme code checkpoint. Screenshot/docs/README pack and v1.8 tag should follow visual verification."
+  "currentVersion": "v2.0-code",
+  "currentStage": "029",
+  "screenshotGroup": "05_v2_paid_desktop_release",
+  "generatedFrom": "LifeOS v1.8 pushed baseline",
+  "notes": "Desktop Release Centre code checkpoint. Screenshot/docs/README pack and v2.0 tag should follow visual verification."
 }

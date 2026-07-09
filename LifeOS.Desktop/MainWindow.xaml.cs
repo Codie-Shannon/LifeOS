@@ -21,6 +21,8 @@ using LifeOS.Core.RelationshipRadar;
 using LifeOS.Core.PaidWorkMoneyProof;
 using LifeOS.Shared.RelationshipRadar;
 using LifeOS.Shared.PaidWorkMoneyProof;
+using LifeOS.Core.SettingsSafety;
+using LifeOS.Shared.SettingsSafety;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -114,6 +116,23 @@ public partial class MainWindow : Window
     private TextBox? _relationshipNotesTextBox;
     private CheckBox? _relationshipDoNotChaseCheckBox;
 
+
+
+    private SettingsSafetyThemeProfile _settingsSafetyProfile = SettingsSafetyThemeStorage.Load();
+
+    private ComboBox? _settingsSafetyModeComboBox;
+    private ComboBox? _settingsAppearanceComboBox;
+    private ComboBox? _settingsAccentComboBox;
+    private CheckBox? _settingsLocalOnlyCheckBox;
+    private CheckBox? _settingsManualReviewCheckBox;
+    private CheckBox? _settingsExpectedMoneyUnsafeCheckBox;
+    private CheckBox? _settingsScreenshotSafetyCheckBox;
+    private CheckBox? _settingsConfirmDestructiveCheckBox;
+    private CheckBox? _settingsDemoSafeDataCheckBox;
+    private CheckBox? _settingsExperimentalModulesCheckBox;
+    private TextBox? _settingsBuildLaneTextBox;
+    private TextBox? _settingsVersionNoteTextBox;
+
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
 
@@ -187,13 +206,234 @@ public partial class MainWindow : Window
 
     private void TimerAgentNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.TimerAgent);
 
-    private void SettingsNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.Settings);
+    private void SettingsNavButton_Click(object sender, RoutedEventArgs e) => ShowSettingsSafetyThemePage();
 
     private void RecalculateMoneyPressureButton_Click(object sender, RoutedEventArgs e)
     {
         UpdateMoneyPressureInputFromTextBoxes();
         ShowMoneyPressurePage();
     }
+
+
+
+    private void SaveSettingsSafetyThemeButton_Click(object sender, RoutedEventArgs e)
+    {
+        _settingsSafetyProfile.SafetyMode = _settingsSafetyModeComboBox?.SelectedItem is LifeOSSafetyMode selectedSafetyMode
+            ? selectedSafetyMode
+            : LifeOSSafetyMode.Strict;
+
+        _settingsSafetyProfile.Appearance = _settingsAppearanceComboBox?.SelectedItem is LifeOSAppearancePreference selectedAppearance
+            ? selectedAppearance
+            : LifeOSAppearancePreference.Dark;
+
+        _settingsSafetyProfile.Accent = _settingsAccentComboBox?.SelectedItem is LifeOSAccentPreference selectedAccent
+            ? selectedAccent
+            : LifeOSAccentPreference.Cyan;
+
+        _settingsSafetyProfile.LocalOnlyMode = _settingsLocalOnlyCheckBox?.IsChecked == true;
+        _settingsSafetyProfile.RequireManualReviewBeforeSend = _settingsManualReviewCheckBox?.IsChecked == true;
+        _settingsSafetyProfile.TreatExpectedMoneyAsUnsafe = _settingsExpectedMoneyUnsafeCheckBox?.IsChecked == true;
+        _settingsSafetyProfile.HidePrivateDetailsInScreenshots = _settingsScreenshotSafetyCheckBox?.IsChecked == true;
+        _settingsSafetyProfile.ConfirmDestructiveActions = _settingsConfirmDestructiveCheckBox?.IsChecked == true;
+        _settingsSafetyProfile.DemoSafeDataMode = _settingsDemoSafeDataCheckBox?.IsChecked == true;
+        _settingsSafetyProfile.EnableExperimentalModules = _settingsExperimentalModulesCheckBox?.IsChecked == true;
+        _settingsSafetyProfile.ActiveBuildLane = ReadTextValue(_settingsBuildLaneTextBox, "Offline foundation");
+        _settingsSafetyProfile.CurrentVersionNote = ReadTextValue(_settingsVersionNoteTextBox, "v1.8 settings, safety, and theme foundation");
+        _settingsSafetyProfile.UpdatedAt = DateTime.Now;
+
+        SettingsSafetyThemeStorage.Save(_settingsSafetyProfile);
+        ShowSettingsSafetyThemePage();
+    }
+
+    private void ResetSettingsSafetyThemeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset Settings / Safety / Theme defaults?", "This will replace local Settings / Safety / Theme preferences with the fictional v1.8 defaults."))
+        {
+            return;
+        }
+
+        SettingsSafetyThemeStorage.ResetToDemoData();
+        _settingsSafetyProfile = SettingsSafetyThemeStorage.Load();
+        ShowSettingsSafetyThemePage();
+    }
+
+    private void ShowSettingsSafetyThemePage()
+    {
+        _settingsSafetyProfile = SettingsSafetyThemeStorage.Load();
+        var summary = SettingsSafetyThemeCalculator.Calculate(_settingsSafetyProfile);
+
+        SetHeader("Settings / Safety", $"Settings / Safety / Theme • v1.8 • {summary.SafetyLabel}");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Settings / Safety / Theme",
+            "Control LifeOS guardrails before integrations: local-only mode, manual review gates, expected-money safety, screenshot privacy, destructive-action confirmations, and theme preferences."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Safety mode", summary.SafetyLabel, "Guardrails"));
+        metricsPanel.Children.Add(CreateDashboardCard("Enabled guardrails", summary.EnabledGuardrails.ToString(), "Protected"));
+        metricsPanel.Children.Add(CreateDashboardCard("Manual gates", summary.ManualReviewGates.ToString(), "Review"));
+        metricsPanel.Children.Add(CreateDashboardCard("Privacy protections", summary.PrivacyProtections.ToString(), "Screenshots"));
+        metricsPanel.Children.Add(CreateDashboardCard("Appearance", summary.AppearanceLabel, "Theme"));
+        metricsPanel.Children.Add(CreateDashboardCard("Accent", summary.AccentLabel, "Visual"));
+        metricsPanel.Children.Add(CreateDashboardCard("Local-first", summary.IsLocalFirst ? "On" : "Off", "Storage"));
+        metricsPanel.Children.Add(CreateDashboardCard("Expected money", summary.IsExpectedMoneyProtected ? "Not safe" : "Unprotected", "Money rule"));
+
+        root.Children.Add(metricsPanel);
+
+        var controlsPanel = CreateSettingsSafetyThemeInputPanel(summary);
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        var guardrailsPanel = CreateInfoPanel(
+            "Active guardrails",
+            FormatReasons(summary.GuardrailReasons));
+        guardrailsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(guardrailsPanel);
+
+        var themePanel = CreateInfoPanel(
+            "Theme boundary",
+            FormatReasons(summary.ThemeNotes));
+        themePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(themePanel);
+
+        var privacyPanel = CreateInfoPanel(
+            "Screenshot privacy checklist",
+            "Before screenshots/docs: use fictional names only; hide emails, phone numbers, tenant/app IDs, URLs, private client data, bank/payment details, and secrets. Real workflow shape is allowed; real private identity is not.");
+        privacyPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(privacyPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local storage",
+            $"Settings file: {SettingsSafetyThemeStorage.FilePath}");
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        var scopePanel = CreateInfoPanel(
+            "v1.8 scope",
+            "This stage records settings, guardrails, safety boundaries, and theme preferences. It does not add account management, permissions, encryption, live theme switching, cloud sync, or integration controls yet.");
+        scopePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(scopePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateSettingsSafetyThemeInputPanel(SettingsSafetyThemeSummary summary)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Settings controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "These settings protect the offline foundation. They are saved locally and intentionally conservative before integrations.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var grid = new Grid();
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+        for (var i = 0; i < 6; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        }
+
+        _settingsSafetyModeComboBox = CreateEnumComboBox(_settingsSafetyProfile.SafetyMode);
+        _settingsAppearanceComboBox = CreateEnumComboBox(_settingsSafetyProfile.Appearance);
+        _settingsAccentComboBox = CreateEnumComboBox(_settingsSafetyProfile.Accent);
+        _settingsBuildLaneTextBox = CreateStandardTextBox(_settingsSafetyProfile.ActiveBuildLane);
+        _settingsVersionNoteTextBox = CreateStandardTextBox(_settingsSafetyProfile.CurrentVersionNote);
+
+        AddInputField(grid, "Safety mode", _settingsSafetyModeComboBox, 0, 0);
+        AddInputField(grid, "Appearance", _settingsAppearanceComboBox, 0, 1);
+        AddInputField(grid, "Accent", _settingsAccentComboBox, 1, 0);
+        AddInputField(grid, "Build lane", _settingsBuildLaneTextBox, 1, 1);
+        AddInputField(grid, "Version note", _settingsVersionNoteTextBox, 2, 0);
+
+        var checks = new WrapPanel
+        {
+            Margin = new Thickness(0, 8, 0, 0)
+        };
+
+        _settingsLocalOnlyCheckBox = CreateSettingsSafetyCheckBox("Local-only mode", _settingsSafetyProfile.LocalOnlyMode);
+        _settingsManualReviewCheckBox = CreateSettingsSafetyCheckBox("Manual review before send", _settingsSafetyProfile.RequireManualReviewBeforeSend);
+        _settingsExpectedMoneyUnsafeCheckBox = CreateSettingsSafetyCheckBox("Expected money is not safe", _settingsSafetyProfile.TreatExpectedMoneyAsUnsafe);
+        _settingsScreenshotSafetyCheckBox = CreateSettingsSafetyCheckBox("Screenshot privacy", _settingsSafetyProfile.HidePrivateDetailsInScreenshots);
+        _settingsConfirmDestructiveCheckBox = CreateSettingsSafetyCheckBox("Confirm destructive actions", _settingsSafetyProfile.ConfirmDestructiveActions);
+        _settingsDemoSafeDataCheckBox = CreateSettingsSafetyCheckBox("Demo-safe data", _settingsSafetyProfile.DemoSafeDataMode);
+        _settingsExperimentalModulesCheckBox = CreateSettingsSafetyCheckBox("Show experimental modules", _settingsSafetyProfile.EnableExperimentalModules);
+
+        checks.Children.Add(_settingsLocalOnlyCheckBox);
+        checks.Children.Add(_settingsManualReviewCheckBox);
+        checks.Children.Add(_settingsExpectedMoneyUnsafeCheckBox);
+        checks.Children.Add(_settingsScreenshotSafetyCheckBox);
+        checks.Children.Add(_settingsConfirmDestructiveCheckBox);
+        checks.Children.Add(_settingsDemoSafeDataCheckBox);
+        checks.Children.Add(_settingsExperimentalModulesCheckBox);
+
+        Grid.SetRow(checks, 3);
+        Grid.SetColumn(checks, 0);
+        Grid.SetColumnSpan(checks, 2);
+        grid.Children.Add(checks);
+
+        root.Children.Add(grid);
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Margin = new Thickness(0, 18, 0, 0)
+        };
+
+        var saveButton = CreateActionButton("Save Settings", Color.FromRgb(56, 189, 248), Color.FromRgb(15, 23, 42));
+        saveButton.Click += SaveSettingsSafetyThemeButton_Click;
+
+        var resetButton = CreateActionButton("Reset Demo Safety", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetSettingsSafetyThemeButton_Click;
+
+        buttonRow.Children.Add(saveButton);
+        buttonRow.Children.Add(resetButton);
+        root.Children.Add(buttonRow);
+
+        root.Children.Add(new TextBlock
+        {
+            Text = $"Current summary: {summary.EnabledGuardrails} guardrail(s), {summary.ManualReviewGates} manual review gate(s), {summary.PrivacyProtections} privacy protection(s).",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 14, 0, 0)
+        });
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private static CheckBox CreateSettingsSafetyCheckBox(string text, bool isChecked)
+    {
+        return new CheckBox
+        {
+            Content = text,
+            IsChecked = isChecked,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            Margin = new Thickness(0, 8, 18, 8)
+        };
+    }
+
 
     private void AddFollowUpButton_Click(object sender, RoutedEventArgs e)
     {
@@ -3589,8 +3829,9 @@ public partial class MainWindow : Window
         var summary = CommandCentreSummaryService.Create();
         var dailyFlowSummary = DailyOperatingFlowCalculator.Calculate(DailyOperatingFlowStorage.Load(), DateOnly.FromDateTime(DateTime.Today));
         var paidWorkProofSummary = PaidWorkMoneyProofSnapshotService.Create();
+        var settingsSafetySummary = SettingsSafetyThemeCalculator.Calculate(SettingsSafetyThemeStorage.Load());
 
-        SetHeader("Command Centre", $"Unified Command Centre • v1.7 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v1.8 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -3622,6 +3863,8 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Proof ready", summary.ProofTracker.ReadyCount.ToString(), "Shareable"));
         metricsPanel.Children.Add(CreateDashboardCard("Paid-work risk", FormatMoney(paidWorkProofSummary.MoneyAtRisk), FormatPaidWorkMoneyProofHealth(paidWorkProofSummary.Health)));
         metricsPanel.Children.Add(CreateDashboardCard("Admin actions", paidWorkProofSummary.AdminActionCount.ToString(), "Money/proof"));
+        metricsPanel.Children.Add(CreateDashboardCard("Safety mode", settingsSafetySummary.SafetyLabel, "Settings"));
+        metricsPanel.Children.Add(CreateDashboardCard("Guardrails", settingsSafetySummary.EnabledGuardrails.ToString(), "Safety"));
 
         root.Children.Add(metricsPanel);
 
@@ -3684,16 +3927,23 @@ public partial class MainWindow : Window
         paidWorkProofPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(paidWorkProofPanel);
 
+        var safetyPanel = CreateInfoPanel(
+            "Settings / Safety / Theme",
+            FormatReasons(settingsSafetySummary.GuardrailReasons));
+
+        safetyPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(safetyPanel);
+
         var workPanel = CreateInfoPanel(
-            "v1.7 operating rule",
-            "Paid work is not real control until the proof, timesheet, invoice, payment, and safe-money state are visible together. Expected money stays separate from safe money until paid.");
+            "v1.8 operating rule",
+            "LifeOS stays local-first and manual-review by default. Expected money is not safe money, private details stay out of screenshots, and integrations wait until the offline foundation is stable.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v1.7 scope",
-            "Paid Work / Money / Proof is local JSON state only. No accounting integration, automatic invoice sending, payment collection, tax calculation, bank sync, or automatic client messaging.");
+            "v1.8 scope",
+            "Settings / Safety / Theme records local preferences and guardrails only. No account system, permissions layer, encryption, cloud sync, live theme engine, or integration controls yet.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

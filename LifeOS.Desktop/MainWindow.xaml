@@ -139,7 +139,7 @@
                             Click="TimerAgentNavButton_Click"/>
 
                     <Button x:Name="SettingsNavButton"
-                            Content="Settings"
+                            Content="Settings / Safety"
                             Style="{StaticResource NavButtonStyle}"
                             Click="SettingsNavButton_Click"/>
                 </StackPanel>
@@ -152,10 +152,10 @@
                         Padding="14"
                         Margin="0,18,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v1.7"
+                        <TextBlock Text="Desktop v1.8"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="Paid Work / Money / Proof connects billable work, expected money, proof readiness, and safe-money rules."
+                        <TextBlock Text="Settings / Safety / Theme protects the offline foundation with local-only mode, review gates, screenshot privacy, and theme preferences."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -216,7 +216,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v1.6 keeps the workflow local-first, pressure-aware, conservative about expected money, and controlled by daily operating flow."
+                <TextBlock Text="LifeOS Desktop v1.8 keeps the workflow local-first, pressure-aware, conservative about expected money, and protected by settings/safety guardrails."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

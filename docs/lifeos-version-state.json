@@ -1,7 +1,7 @@
 {
-  "currentVersion": "v3.5-code",
-  "currentStage": "044",
-  "screenshotGroup": "08_advanced_modules_search_knowledge",
-  "generatedFrom": "LifeOS v3.0 pushed baseline",
-  "notes": "Search / Knowledge code checkpoint. Screenshot/docs/README pack and v3.5 tag should follow visual verification."
+  "currentVersion": "v3.9-code",
+  "currentStage": "049",
+  "screenshotGroup": "09_final_offline_os",
+  "generatedFrom": "LifeOS v3.5 pushed baseline",
+  "notes": "Final Offline OS code checkpoint. Screenshot/docs/README pack and v3.9 tag should follow visual verification."
 }

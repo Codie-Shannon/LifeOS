@@ -1,7 +1,7 @@
 {
-  "currentVersion": "v2.0-code",
-  "currentStage": "029",
-  "screenshotGroup": "05_v2_paid_desktop_release",
-  "generatedFrom": "LifeOS v1.8 pushed baseline",
-  "notes": "Desktop Release Centre code checkpoint. Screenshot/docs/README pack and v2.0 tag should follow visual verification."
+  "currentVersion": "v2.1-code",
+  "currentStage": "034",
+  "screenshotGroup": "06_universal_spine",
+  "generatedFrom": "LifeOS v2.0 pushed baseline",
+  "notes": "Universal Spine code checkpoint. Screenshot/docs/README pack and v2.1 tag should follow visual verification."
 }

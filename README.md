@@ -1,4 +1,4 @@
-﻿# LifeOS Desktop
+# LifeOS Desktop
 
 <!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
 ## Current screenshot group
@@ -22,11 +22,11 @@ v4.3 strengthens the money profile before v5 integrations by making hidden deduc
 
 LifeOS Desktop is a local-first command centre for reducing chaos across work, money pressure, follow-ups, proof, evidence, and daily execution.
 
-Current release: **LifeOS Desktop v1.3.5 â€” Unified Command Centre + Evidence Vault Foundation**
+Current release: **LifeOS Desktop v1.3.5 Ã¢â‚¬â€ Unified Command Centre + Evidence Vault Foundation**
 
 ## Release position
 
-LifeOS v1.3.5 is the visible-page completion pass for the v1.3 release. It exposes the v1.1â€“v1.3 modules in the desktop sidebar and gives the release a clearer proof trail.
+LifeOS v1.3.5 is the visible-page completion pass for the v1.3 release. It exposes the v1.1Ã¢â‚¬â€œv1.3 modules in the desktop sidebar and gives the release a clearer proof trail.
 
 The v1.x direction is:
 
@@ -42,9 +42,9 @@ Expected money is not safe money until paid.
 
 ## What v1.3 adds
 
-### v1.0 â€” Unified Command Centre foundation
+### v1.0 Ã¢â‚¬â€ Unified Command Centre foundation
 
-v1.0 introduced the Command Centre signal model and a stronger â€œwhat matters nowâ€ view.
+v1.0 introduced the Command Centre signal model and a stronger Ã¢â‚¬Å“what matters nowÃ¢â‚¬Â view.
 
 It focuses on:
 
@@ -54,9 +54,9 @@ It focuses on:
 - timesheet, invoice, and payment warnings
 - money pressure and safe-money awareness
 
-### v1.1 â€” Daily state, passive waiting, and scheduled communication
+### v1.1 Ã¢â‚¬â€ Daily state, passive waiting, and scheduled communication
 
-v1.1 added manual daily state concepts so LifeOS can represent â€œwaitâ€ as a real status instead of turning everything into noise.
+v1.1 added manual daily state concepts so LifeOS can represent Ã¢â‚¬Å“waitÃ¢â‚¬Â as a real status instead of turning everything into noise.
 
 It supports:
 
@@ -67,7 +67,7 @@ It supports:
 - low-energy options
 - stop points
 
-### v1.2 â€” Timesheet evidence and proof-linked work
+### v1.2 Ã¢â‚¬â€ Timesheet evidence and proof-linked work
 
 v1.2 added the timesheet evidence layer.
 
@@ -86,7 +86,7 @@ Accepted time buckets:
 1.0h+ = implementation / testing / proof build / debugging / documentation
 ```
 
-### v1.3 â€” Evidence Vault metadata foundation
+### v1.3 Ã¢â‚¬â€ Evidence Vault metadata foundation
 
 v1.3 added the metadata-first Evidence Vault foundation.
 
@@ -195,59 +195,59 @@ Expected income is visible, but does not reduce pressure until paid.
 
 ## Version history
 
-### v0.1 â€” First usable desktop foundation
+### v0.1 Ã¢â‚¬â€ First usable desktop foundation
 
 Reusable shell, local data direction, dark UI foundation, and early navigation.
 
-### v0.2 â€” Weekly pressure foundation
+### v0.2 Ã¢â‚¬â€ Weekly pressure foundation
 
 Added Agenda, Pay Later, Weekly Close-Out, and early weekly pressure framing.
 
-### v0.3 â€” Work, income, and proof foundation
+### v0.3 Ã¢â‚¬â€ Work, income, and proof foundation
 
 Added Work Sessions, Proof Tracker, work/income metrics, and proof visibility.
 
-### v0.4 â€” Trust polish release
+### v0.4 Ã¢â‚¬â€ Trust polish release
 
 Improved reliability, wording, safety, confirmations, empty states, and docs.
 
-### v0.5 â€” Paid Work Centre + Money Timeline
+### v0.5 Ã¢â‚¬â€ Paid Work Centre + Money Timeline
 
 Added Paid Work Centre and date-based Money Timeline.
 
-### v0.6 â€” Work Pipeline foundation
+### v0.6 Ã¢â‚¬â€ Work Pipeline foundation
 
 Added Work Pipeline models, stage/status/priority tracking, summary calculation, storage, and desktop visibility.
 
-### v0.7 â€” Follow-up and opportunity behaviour
+### v0.7 Ã¢â‚¬â€ Follow-up and opportunity behaviour
 
 Strengthened follow-up states, waiting-on pressure, opportunity scoring, and follow-up bridging.
 
-### v0.8 â€” Command Centre Work Pipeline integration
+### v0.8 Ã¢â‚¬â€ Command Centre Work Pipeline integration
 
 Connected Work Pipeline signals into Command Centre.
 
-### v0.9 â€” Work Pipeline release candidate polish
+### v0.9 Ã¢â‚¬â€ Work Pipeline release candidate polish
 
 Added backup safety, stage counts, desktop stage display polish, and v0.9 documentation/screenshots.
 
-### v1.0 â€” Unified Command Centre foundation
+### v1.0 Ã¢â‚¬â€ Unified Command Centre foundation
 
 Added signal model, snapshot builder, today actions, and a stronger Command Centre foundation.
 
-### v1.1 â€” Daily State foundation
+### v1.1 Ã¢â‚¬â€ Daily State foundation
 
 Added daily state, passive waiting rules, scheduled communication, and Command Centre integration.
 
-### v1.2 â€” Timesheet Evidence foundation
+### v1.2 Ã¢â‚¬â€ Timesheet Evidence foundation
 
 Added timesheet evidence model, helper rules, proof links, and Command Centre pressure signals.
 
-### v1.3 â€” Evidence Vault foundation
+### v1.3 Ã¢â‚¬â€ Evidence Vault foundation
 
 Added metadata-first Evidence Vault records, storage, linking, and Command Centre evidence signals.
 
-### v1.3.5 â€” Visible v1.3 pages
+### v1.3.5 Ã¢â‚¬â€ Visible v1.3 pages
 
 Exposed Daily State, Timesheet Evidence, and Evidence Vault as visible desktop pages.
 
@@ -285,24 +285,19 @@ LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local 
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
 
+<!-- LIFEOS_CURRENT_BUILD_START -->
+## Current build
 
+**LifeOS Desktop v4.4 - Agenda + Payment Calendar**
 
+v4.4 adds the time-aware agenda/payment lane before v5 integrations. Bills, subscriptions, BNPL instalments, expected-money dates, review windows, and agenda commitments now sit together so the week can be reviewed without pretending dates make money safe.
 
+**Boundary:** v4.4 remains local/manual. No real calendar, email, bank, BNPL, accounting, OCR, OAuth, or AI connector is active.
+<!-- LIFEOS_CURRENT_BUILD_END -->
 
+<!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
+## Current screenshot evidence
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- `docs/screenshot-groups/group-14-agenda-payment-calendar/` - v4.4 Agenda + Payment Calendar screenshots.
+- `docs/release-notes/v4.4.md` - v4.4 release notes.
+<!-- LIFEOS_CURRENT_SCREENSHOTS_END -->

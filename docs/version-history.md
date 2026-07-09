@@ -1,4 +1,4 @@
-﻿# LifeOS Version History
+# LifeOS Version History
 
 <!-- LIFEOS_VERSION_HISTORY_START -->
 ## v4.3 - Money Profile / Hidden Deductions / Safe-to-Spend
@@ -32,3 +32,31 @@
 - Mapped modules, item types, weekly pressure sources, and v4 road.
 <!-- LIFEOS_VERSION_HISTORY_END -->
 
+<!-- LIFEOS_VERSION_HISTORY_START -->
+## Version history
+
+### v4.4 - Agenda + Payment Calendar
+
+- Added Payment Calendar.
+- Added `Payment Calendar` navigation.
+- Added local/manual date-aware lane for bills, subscriptions, BNPL instalments, expected-money dates, agenda commitments, and review windows.
+- Added Payment Calendar metrics and time-aware sections.
+- Updated Command Centre to expose v4.4 calendar lane signals.
+- Confirmed boundary: no real external integrations, OAuth, OCR automation, bank sync, calendar sync, or AI actions.
+
+### v4.3 - Money Profile / Hidden Deductions / Safe-to-Spend
+
+- Strengthened hidden deductions, reserves, expected-money exclusion, buffers, and safe-to-spend confidence.
+
+### v4.2 - Bills / Upcoming Payments / Pay Later
+
+- Added bills, upcoming payments, Pay Later / BNPL totals, hidden deductions, due pressure, and payment evidence gates.
+
+### v4.1 - Item State Engine
+
+- Added item/state rules, review queues, trusted/untrusted state, pressure items, money/work impacts, and transition rules.
+
+### v4.0 - LifeOS Spine Map
+
+- Restored the original LifeOS operating spine before integrations.
+<!-- LIFEOS_VERSION_HISTORY_END -->

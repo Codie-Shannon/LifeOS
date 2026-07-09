@@ -1,4 +1,4 @@
-﻿# LifeOS Docs
+# LifeOS Docs
 
 <!-- LIFEOS_DOCS_INDEX_START -->
 ## Current release
@@ -16,3 +16,12 @@
 - Group 10 - v4.0 LifeOS Spine Map
 <!-- LIFEOS_DOCS_INDEX_END -->
 
+<!-- LIFEOS_DOCS_INDEX_START -->
+## Current docs index
+
+- `current-status.md` - current release state and next lane.
+- `version-history.md` - version history.
+- `release-notes/v4.4.md` - v4.4 release notes.
+- `screenshot-groups/group-14-agenda-payment-calendar/README.md` - v4.4 screenshot group.
+- `stage-manifests/073_v4_4_group14_docs_screenshots_readme.md` - docs/screenshots manifest.
+<!-- LIFEOS_DOCS_INDEX_END -->

@@ -1,48 +1,23 @@
 # LifeOS Current Status
 
-## Current version
+## Current release
 
-**LifeOS Desktop v4.3**
-
-## Current checkpoint
-
-Group 13 - Money Profile / Hidden Deductions / Safe-to-Spend
+LifeOS Desktop v4.4 is the current tagged release target after Group 14 screenshots/docs.
 
 ## Current state
 
-v4.3 strengthens the LifeOS money profile before v5 integrations.
+v4.4 adds Agenda + Payment Calendar. It puts due dates, bill/payment dates, BNPL instalments, expected-money dates, fixed commitments, and review windows into one time-aware lane before v5 integrations.
 
-The app now has:
+## Completed screenshot group
 
-- local/manual Money Profile workspace
-- hidden deduction/reserve items
-- expected money excluded from safe money
-- safe-to-spend calculation
-- safe-to-spend confidence gates
-- v4.3 Command Centre money profile signals
-- screenshot documentation for Group 13
-- v4.3 release notes
+Group 14 - Agenda + Payment Calendar.
 
-## Current boundary
+## Important boundary
 
-v4.3 is local/manual modelling only.
+v4.4 is still local/manual. It does not connect Google Calendar, Outlook Calendar, Gmail/Outlook email, bank feeds, BNPL providers, accounting systems, open banking, OCR automation, OAuth, or AI actions.
 
-It does not connect:
+## Next lane
 
-- bank feeds
-- payslips
-- IRD/tax portals
-- accounting systems
-- open banking
-- email
-- OCR automation
-- OAuth
-- AI actions
-- companion app
-- major workspace redesign
+v4.5 Work Pipeline.
 
-## Next target
-
-v4.4 - Agenda + Payment Calendar.
-
-The v4.4 lane should make due dates, payment dates, bills, BNPL instalments, agenda commitments, and review windows visible in one time-aware calendar lane.
+v4.5 should push active work, leads, blocked projects, follow-ups, invoice readiness, and payment states through the same item/state/date-aware spine.

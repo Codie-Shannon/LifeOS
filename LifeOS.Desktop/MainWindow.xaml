@@ -56,10 +56,10 @@
                         Padding="14"
                         Margin="0,12,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v3.9"
+                        <TextBlock Text="Desktop v4.0"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="v3.9 closes the offline OS foundation: module readiness, local data boundaries, safety gates, final docs/screenshots, and v4 integration landing zones."
+                        <TextBlock Text="v4.0 starts LifeOS spine completion: item/state rules, pressure engine mapping, money/work/time/proof spine recovery, and v5 integration readiness."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -161,6 +161,11 @@
                                 Style="{StaticResource NavButtonStyle}"
                                 Click="TimerAgentNavButton_Click"/>
 
+                        <Button x:Name="LifeOsSpineNavButton"
+                                Content="LifeOS Spine Map"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="LifeOsSpineNavButton_Click"/>
+
                         <Button x:Name="FinalOfflineOsNavButton"
                                 Content="Final Offline OS"
                                 Style="{StaticResource NavButtonStyle}"
@@ -246,7 +251,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v3.9 closes the offline/local-first OS foundation and prepares clean landing zones for v4 integrations."
+                <TextBlock Text="LifeOS Desktop v4.0 starts the LifeOS spine completion road before v5 integrations."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

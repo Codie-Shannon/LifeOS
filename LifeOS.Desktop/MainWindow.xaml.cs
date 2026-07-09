@@ -33,6 +33,8 @@ using LifeOS.Core.SearchKnowledge;
 using LifeOS.Shared.SearchKnowledge;
 using LifeOS.Core.FinalOfflineOs;
 using LifeOS.Shared.FinalOfflineOs;
+using LifeOS.Core.LifeOsSpine;
+using LifeOS.Shared.LifeOsSpine;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -152,6 +154,8 @@ public partial class MainWindow : Window
     private SearchKnowledgeProfile _searchKnowledgeProfile = SearchKnowledgeStorage.Load();
 
     private FinalOfflineOsProfile _finalOfflineOsProfile = FinalOfflineOsStorage.Load();
+    private LifeOsSpineProfile _lifeOsSpineProfile = LifeOsSpineStorage.Load();
+
 
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
@@ -226,6 +230,8 @@ public partial class MainWindow : Window
 
     private void TimerAgentNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.TimerAgent);
 
+    private void LifeOsSpineNavButton_Click(object sender, RoutedEventArgs e) => ShowLifeOsSpinePage();
+
     private void FinalOfflineOsNavButton_Click(object sender, RoutedEventArgs e) => ShowFinalOfflineOsPage();
 
     private void SearchKnowledgeNavButton_Click(object sender, RoutedEventArgs e) => ShowSearchKnowledgePage();
@@ -249,6 +255,236 @@ public partial class MainWindow : Window
 
 
 
+
+
+    
+    private void ResetLifeOsSpineButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset LifeOS spine demo data?", "This will replace the local LifeOS Spine Map with fictional/canon roadmap demo data."))
+        {
+            return;
+        }
+
+        LifeOsSpineStorage.ResetToDemoData();
+        _lifeOsSpineProfile = LifeOsSpineStorage.Load();
+        ShowLifeOsSpinePage();
+    }
+
+    private void ShowLifeOsSpinePage()
+    {
+        _lifeOsSpineProfile = LifeOsSpineStorage.Load();
+        var summary = LifeOsSpineCalculator.Calculate(_lifeOsSpineProfile);
+
+        SetHeader("LifeOS Spine Map", $"LifeOS Spine Map • v4.0 • {summary.ModuleCount} modules • {summary.ItemTypesCovered} item types • {summary.PressureSourceCount} pressure sources");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "LifeOS Spine Recovery Map",
+            "v4.0 restores the original LifeOS operating spine before integrations. Every important real-world input becomes a reviewed item with state, evidence, timeline/context, pressure impact, and a Command Centre signal."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Road", "v4 spine", "Before v5"));
+        metricsPanel.Children.Add(CreateDashboardCard("Modules", summary.ModuleCount.ToString(), "Mapped"));
+        metricsPanel.Children.Add(CreateDashboardCard("Canon", summary.CanonModules.ToString(), "Original"));
+        metricsPanel.Children.Add(CreateDashboardCard("Active", summary.ActiveModules.ToString(), "Existing"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs model", summary.NeedsModelModules.ToString(), "v4 work"));
+        metricsPanel.Children.Add(CreateDashboardCard("Required v4", summary.RequiredForV4Modules.ToString(), "Spine"));
+        metricsPanel.Children.Add(CreateDashboardCard("Item rules", summary.ItemRuleCount.ToString(), "Stateful"));
+        metricsPanel.Children.Add(CreateDashboardCard("Item types", summary.ItemTypesCovered.ToString(), "Covered"));
+        metricsPanel.Children.Add(CreateDashboardCard("States", summary.StateCount.ToString(), "Common"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pressure", summary.PressureSourceCount.ToString(), "Sources"));
+        metricsPanel.Children.Add(CreateDashboardCard("Integrations", summary.IntegrationsDeferredToV5 ? "v5" : "v4", "Deferred"));
+        metricsPanel.Children.Add(CreateDashboardCard("Companion", summary.CompanionAppDeferredToV65 ? "v6.5" : "Earlier", "Mobile arm"));
+
+        root.Children.Add(metricsPanel);
+
+        var rulePanel = CreateInfoPanel("Master spine rule", FormatReasons(summary.Reasons));
+        rulePanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(rulePanel);
+
+        var controlsPanel = CreateLifeOsSpineControlsPanel();
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        var modulesPanel = CreateLifeOsSpineModulePanel("LifeOS operating spine", summary.CoreModules);
+        modulesPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(modulesPanel);
+
+        var itemPanel = CreateLifeOsItemRulePanel("Item type / state model", summary.ItemRules);
+        itemPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(itemPanel);
+
+        var pressurePanel = CreateLifeOsPressureSourcePanel("Weekly pressure sources", summary.PressureSources);
+        pressurePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pressurePanel);
+
+        var boundaryPanel = CreateInfoPanel(
+            "v4.0 boundary",
+            "v4.0 maps the LifeOS operating spine. It does not connect real APIs, request OAuth permissions, sync email/calendar/accounting/bank data, run AI actions, build the companion app, or do the major workspace redesign.");
+
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var nextPanel = CreateInfoPanel(
+            "v4 road",
+            "v4.1 Item Type / State Engine → v4.2 Bills / Upcoming Payments / Pay Later → v4.3 Money Profile / Hidden Deductions / Safe-to-Spend → v4.4 Agenda + Payment Calendar → v4.5 Work Pipeline → v4.6 Receipt OCR / Evidence-to-Item → v4.7 Weekly Close-Out → v4.8 Command Centre Pressure Engine → v4.9 Integration Inbox + v5 readiness.");
+
+        nextPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(nextPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local spine map file",
+            $"LifeOS Spine Map file: {LifeOsSpineStorage.FilePath}");
+
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateLifeOsSpineControlsPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Spine controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Use reset only for fictional/canon roadmap demo data. v4.0 is a map, not a live integration layer.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal
+        };
+
+        var resetButton = CreateActionButton("Reset Spine Map Demo", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetLifeOsSpineButton_Click;
+
+        buttonRow.Children.Add(resetButton);
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateLifeOsSpineModulePanel(string title, IEnumerable<LifeOsSpineModule> modules)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = modules.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No spine modules mapped yet."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var module in list)
+        {
+            root.Children.Add(CreateSimpleItemCard(
+                module.Name,
+                $"{LifeOsSpineCalculator.FormatArea(module.Area)} • {LifeOsSpineCalculator.FormatStatus(module.Status)} • Priority {module.Priority} • {(module.RequiredForV4 ? "Required for v4" : "Optional")}",
+                $"Purpose: {module.Purpose}\nConnects: {module.ConnectsTo}\nCommand signal: {module.CommandCentreSignal}\nBoundary: {module.Boundary}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateLifeOsItemRulePanel(string title, IEnumerable<LifeOsStatefulItemRule> rules)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = rules.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No item/state rules mapped yet."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var rule in list)
+        {
+            root.Children.Add(CreateSimpleItemCard(
+                rule.Name,
+                $"{LifeOsSpineCalculator.FormatItemType(rule.ItemType)} • {(rule.RequiredForV4 ? "Required for v4" : "Optional")} • {LifeOsSpineCalculator.FormatStates(rule.AllowedStates.Take(6))}...",
+                $"Sources: {rule.SourceExamples}\nEvidence: {rule.EvidenceRule}\nPressure: {rule.PressureRule}\nLanding: {rule.LandingRule}\nReview: {rule.ReviewGate}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateLifeOsPressureSourcePanel(string title, IEnumerable<LifeOsPressureSource> sources)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = sources.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No pressure sources mapped yet."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var source in list)
+        {
+            root.Children.Add(CreateSimpleItemCard(
+                source.Name,
+                $"{LifeOsSpineCalculator.FormatArea(source.Area)} • {LifeOsSpineCalculator.FormatImpact(source.ImpactLevel)} pressure",
+                $"Source items: {source.SourceItems}\nQuestion: {source.PressureQuestion}\nCommand signal: {source.CommandCentreSignal}\nSafe next action: {source.SafeNextAction}"));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
 
 
     private void ResetFinalOfflineOsButton_Click(object sender, RoutedEventArgs e)
@@ -4791,8 +5027,9 @@ public partial class MainWindow : Window
         var osNavigationSummary = OsNavigationCalculator.Calculate(OsNavigationStorage.Load());
         var searchKnowledgeSummary = SearchKnowledgeCalculator.Calculate(SearchKnowledgeStorage.Load());
         var finalOfflineOsSummary = FinalOfflineOsCalculator.Calculate(FinalOfflineOsStorage.Load());
+        var lifeOsSpineSummary = LifeOsSpineCalculator.Calculate(LifeOsSpineStorage.Load());
 
-        SetHeader("Command Centre", $"Unified Command Centre • v3.9 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v4.0 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -4840,6 +5077,9 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Offline OS", finalOfflineOsSummary.LocalFirstComplete ? "Complete" : "Review", "v3.9"));
         metricsPanel.Children.Add(CreateDashboardCard("v4 landing zones", finalOfflineOsSummary.LandingZones.ToString(), "Ready map"));
         metricsPanel.Children.Add(CreateDashboardCard("v4 ready", finalOfflineOsSummary.ReadyForV4Integrations ? "Yes" : "No", "Gate"));
+        metricsPanel.Children.Add(CreateDashboardCard("Spine modules", lifeOsSpineSummary.ModuleCount.ToString(), "v4 map"));
+        metricsPanel.Children.Add(CreateDashboardCard("Item rules", lifeOsSpineSummary.ItemRuleCount.ToString(), "Stateful"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pressure sources", lifeOsSpineSummary.PressureSourceCount.ToString(), "Weekly"));
 
         root.Children.Add(metricsPanel);
 
@@ -4944,16 +5184,23 @@ public partial class MainWindow : Window
         finalOsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(finalOsPanel);
 
+        var lifeOsSpineMapPanel = CreateInfoPanel(
+            "LifeOS Spine Map",
+            FormatReasons(lifeOsSpineSummary.Reasons));
+
+        lifeOsSpineMapPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(lifeOsSpineMapPanel);
+
         var workPanel = CreateInfoPanel(
-            "v3.9 operating rule",
-            "LifeOS now closes the offline/local-first OS foundation. The next road is v4 integrations, using defined landing zones and Universal Spine links without bypassing safety, proof, money, or review gates.");
+            "v4.0 operating rule",
+            "LifeOS now starts the spine completion road. v4 finishes item/state rules, bills, upcoming payments, Pay Later, hidden deductions, Agenda/payment calendar, Work Pipeline, Receipt OCR, Weekly Close-Out, and the Command Centre Pressure Engine before v5 integrations.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v3.9 scope",
-            "v3.9 is the final offline OS checkpoint. It is not real integrations, AI assistant execution, automatic messaging, cloud sync, team/business scaling, or the major workspace redesign yet.");
+            "v4.0 scope",
+            "v4.0 maps the LifeOS spine. It is not real OAuth, live email/calendar/accounting/bank sync, automatic AI action, the companion app, or the major workspace redesign.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

@@ -257,3 +257,10 @@ Not included yet:
 The next roadmap target is **LifeOS Desktop v2.0** as the full paid desktop roadmap version.
 
 v2.0 should include the core desktop feature set in manual/local-first form. Automation, mobile, provider integrations, OCR, and sync come later.
+
+
+## LifeOS Desktop v1.4 - Evidence Vault Usable Workspace
+
+LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
+
+No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.

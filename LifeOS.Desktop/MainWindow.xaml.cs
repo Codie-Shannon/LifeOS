@@ -23,6 +23,8 @@ using LifeOS.Shared.RelationshipRadar;
 using LifeOS.Shared.PaidWorkMoneyProof;
 using LifeOS.Core.SettingsSafety;
 using LifeOS.Shared.SettingsSafety;
+using LifeOS.Core.DesktopRelease;
+using LifeOS.Shared.DesktopRelease;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -133,6 +135,8 @@ public partial class MainWindow : Window
     private TextBox? _settingsBuildLaneTextBox;
     private TextBox? _settingsVersionNoteTextBox;
 
+    private DesktopReleaseReadinessProfile _desktopReleaseProfile = DesktopReleaseStorage.Load();
+
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
 
@@ -206,6 +210,8 @@ public partial class MainWindow : Window
 
     private void TimerAgentNavButton_Click(object sender, RoutedEventArgs e) => ShowModulePage(LifeOSModuleKind.TimerAgent);
 
+    private void DesktopReleaseNavButton_Click(object sender, RoutedEventArgs e) => ShowDesktopReleasePage();
+
     private void SettingsNavButton_Click(object sender, RoutedEventArgs e) => ShowSettingsSafetyThemePage();
 
     private void RecalculateMoneyPressureButton_Click(object sender, RoutedEventArgs e)
@@ -214,6 +220,158 @@ public partial class MainWindow : Window
         ShowMoneyPressurePage();
     }
 
+
+
+
+    private void ResetDesktopReleaseReadinessButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset desktop release readiness?", "This will replace the local release readiness checklist with the fictional v2.0 default set."))
+        {
+            return;
+        }
+
+        DesktopReleaseStorage.ResetToDemoData();
+        _desktopReleaseProfile = DesktopReleaseStorage.Load();
+        ShowDesktopReleasePage();
+    }
+
+    private void ShowDesktopReleasePage()
+    {
+        _desktopReleaseProfile = DesktopReleaseStorage.Load();
+        var summary = DesktopReleaseReadinessCalculator.Calculate(_desktopReleaseProfile);
+
+        SetHeader("Desktop Release Centre", $"Desktop Release Centre • v2.0 • {summary.ReleaseStateLabel}");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Desktop Release Centre",
+            "Turn the offline LifeOS foundation into a paid desktop release candidate: local-first data, proof-backed money control, manual review gates, demo-safe screenshots, docs, and release readiness checks."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Release state", summary.ReleaseStateLabel, "v2.0"));
+        metricsPanel.Children.Add(CreateDashboardCard("Readiness", $"{summary.ScorePercent}%", "Checks"));
+        metricsPanel.Children.Add(CreateDashboardCard("Complete", summary.CompleteChecks.ToString(), "Done"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.ReviewNeededChecks.ToString(), "Before tag"));
+        metricsPanel.Children.Add(CreateDashboardCard("Blocked", summary.BlockedChecks.ToString(), "Stop"));
+        metricsPanel.Children.Add(CreateDashboardCard("Planned next", summary.PlannedNextChecks.ToString(), "Future"));
+        metricsPanel.Children.Add(CreateDashboardCard("Local-only", summary.IsLocalOnly ? "On" : "Off", "Safety"));
+        metricsPanel.Children.Add(CreateDashboardCard("Screenshot safe", summary.IsScreenshotSafe ? "On" : "Review", "Docs"));
+
+        root.Children.Add(metricsPanel);
+
+        var reasonsPanel = CreateInfoPanel("Release readiness", FormatReasons(summary.Reasons));
+        reasonsPanel.Margin = new Thickness(0, 8, 0, 0);
+        root.Children.Add(reasonsPanel);
+
+        var controlsPanel = CreateDesktopReleaseControlsPanel();
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        var reviewPanel = CreateDesktopReleaseChecklistPanel("Review before v2.0 tag", summary.PriorityItems);
+        reviewPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(reviewPanel);
+
+        var completePanel = CreateDesktopReleaseChecklistPanel("Completed release foundation", summary.CompletedItems.Take(10));
+        completePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(completePanel);
+
+        var plannedPanel = CreateDesktopReleaseChecklistPanel("Planned after v2.0", summary.PlannedNextItems);
+        plannedPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(plannedPanel);
+
+        var boundaryPanel = CreateInfoPanel(
+            "v2.0 boundary",
+            "v2.0 is the paid desktop release readiness checkpoint for the offline/local-first app. It is not integrations, cloud sync, automatic messaging, accounting automation, mobile capture, AI assistant execution, or a production installer/signing system.");
+
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local release file",
+            $"Desktop release readiness file: {DesktopReleaseStorage.FilePath}");
+
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateDesktopReleaseControlsPanel()
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Release controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = "Use reset only for fictional/demo release readiness data. The final v2.0 tag should happen after Group 05 screenshots/docs/README are committed.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 16)
+        });
+
+        var buttonRow = new StackPanel
+        {
+            Orientation = Orientation.Horizontal
+        };
+
+        var resetButton = CreateActionButton("Reset Demo Release State", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetDesktopReleaseReadinessButton_Click;
+
+        buttonRow.Children.Add(resetButton);
+
+        root.Children.Add(buttonRow);
+
+        panel.Child = root;
+        return panel;
+    }
+
+    private Border CreateDesktopReleaseChecklistPanel(string title, IEnumerable<DesktopReleaseChecklistItem> items)
+    {
+        var panel = CreatePanel();
+        var root = new StackPanel();
+
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = items.ToList();
+
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No release checks in this section."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in list)
+        {
+            root.Children.Add(CreateSimpleItemCard(
+                item.Title,
+                $"{DesktopReleaseReadinessCalculator.FormatArea(item.Area)} • {DesktopReleaseReadinessCalculator.FormatStatus(item.Status)} • Priority {item.Priority}",
+                item.Notes));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
 
 
     private void SaveSettingsSafetyThemeButton_Click(object sender, RoutedEventArgs e)
@@ -3830,8 +3988,9 @@ public partial class MainWindow : Window
         var dailyFlowSummary = DailyOperatingFlowCalculator.Calculate(DailyOperatingFlowStorage.Load(), DateOnly.FromDateTime(DateTime.Today));
         var paidWorkProofSummary = PaidWorkMoneyProofSnapshotService.Create();
         var settingsSafetySummary = SettingsSafetyThemeCalculator.Calculate(SettingsSafetyThemeStorage.Load());
+        var desktopReleaseSummary = DesktopReleaseReadinessCalculator.Calculate(DesktopReleaseStorage.Load());
 
-        SetHeader("Command Centre", $"Unified Command Centre • v1.8 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v2.0 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -3865,6 +4024,8 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Admin actions", paidWorkProofSummary.AdminActionCount.ToString(), "Money/proof"));
         metricsPanel.Children.Add(CreateDashboardCard("Safety mode", settingsSafetySummary.SafetyLabel, "Settings"));
         metricsPanel.Children.Add(CreateDashboardCard("Guardrails", settingsSafetySummary.EnabledGuardrails.ToString(), "Safety"));
+        metricsPanel.Children.Add(CreateDashboardCard("Release state", desktopReleaseSummary.ReleaseStateLabel, "v2.0"));
+        metricsPanel.Children.Add(CreateDashboardCard("Release readiness", $"{desktopReleaseSummary.ScorePercent}%", "Desktop"));
 
         root.Children.Add(metricsPanel);
 
@@ -3934,16 +4095,23 @@ public partial class MainWindow : Window
         safetyPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(safetyPanel);
 
+        var releasePanel = CreateInfoPanel(
+            "Desktop Release Centre",
+            FormatReasons(desktopReleaseSummary.Reasons));
+
+        releasePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(releasePanel);
+
         var workPanel = CreateInfoPanel(
-            "v1.8 operating rule",
-            "LifeOS stays local-first and manual-review by default. Expected money is not safe money, private details stay out of screenshots, and integrations wait until the offline foundation is stable.");
+            "v2.0 operating rule",
+            "LifeOS is now treated as a paid desktop release candidate for the offline/local-first foundation. Expected money is not safe money, private details stay out of screenshots, and integrations wait until the manual workflows are proven.");
 
         workPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(workPanel);
 
         var guardrailPanel = CreateInfoPanel(
-            "v1.8 scope",
-            "Settings / Safety / Theme records local preferences and guardrails only. No account system, permissions layer, encryption, cloud sync, live theme engine, or integration controls yet.");
+            "v2.0 scope",
+            "v2.0 confirms the local desktop foundation and release-readiness workflow. It is not cloud sync, external integrations, AI assistant execution, automatic messaging, mobile capture, accounting automation, or a full installer/signing system yet.");
 
         guardrailPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(guardrailPanel);

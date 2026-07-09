@@ -5,6 +5,7 @@
 
 | Version | Screenshot group | Summary | Status |
 |---|---|---|---|
+| v4.1 | Group 11 - Item Type / State Engine | Adds local stateful item model, review queue, trusted/untrusted state, pressure items, money-impact items, work/people/proof items, and guarded transition rules. | Complete |
 | v4.0 | Group 10 - LifeOS Spine Recovery Map | Restores the original LifeOS operating spine, item/state rule model, pressure source map, corrected v4 road, and v5 integration boundary. | Complete |
 | v3.9 | Group 09 - Final Offline OS | Final offline/local-first OS checkpoint, required offline readiness checks, v4 integration landing zones, final boundary, and v4 integration lane. | Complete |
 | v3.5 | Group 08 - Advanced Modules / Search / Knowledge | Search / Knowledge Centre, local knowledge items, source boundaries, search profiles, review/planned item separation, and future integration landing-zone notes. | Complete |
@@ -17,6 +18,7 @@
 | v1.5 | Group 01 - Evidence + Relationships | Relationship Radar and local relationship-state tracking. | Complete |
 | v1.4 | Group 01 - Evidence + Relationships | Evidence Vault local proof workspace. | Complete |
 <!-- LIFEOS_VERSION_HISTORY_END -->
+
 
 
 

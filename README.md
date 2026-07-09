@@ -3,42 +3,42 @@
 <!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
 ## Current screenshots
 
-### Command Centre - v4.0
+### Command Centre - v4.1
 
-![LifeOS v4.0 Command Centre](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_01_command-centre.png)
+![LifeOS v4.1 Command Centre](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_02_command-centre-item-state-signals.png)
 
-### LifeOS Spine Map - v4.0
+### Item State Engine - v4.1
 
-![LifeOS v4.0 LifeOS Spine Map](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_02_lifeos-spine-map-top.png)
+![LifeOS v4.1 Item State Engine](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_03_item-state-engine-top.png)
 
-### Money spine - v4.0
+### Review queue - v4.1
 
-![LifeOS v4.0 Money Spine](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_05_operating-spine-money-timeline-paylater-hidden-deductions.png)
+![LifeOS v4.1 Review Queue](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_06_review-queue-integration-ocr.png)
 
-### Item/state model - v4.0
+### Money-impact items - v4.1
 
-![LifeOS v4.0 Item State Model](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_11_item-state-model-money-top.png)
+![LifeOS v4.1 Money Impact Items](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_11_money-impact-items-top.png)
 
-### Weekly pressure sources - v4.0
+### State transition rules - v4.1
 
-![LifeOS v4.0 Weekly Pressure Sources](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_17_weekly-pressure-source-work-stuck-invoice-ready.png)
+![LifeOS v4.1 State Transition Rules](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_15_state-transition-rules-top.png)
 
-### v4 boundary and road - v4.0
+### v4.1 boundary and next lane
 
-![LifeOS v4.0 Boundary and Road](docs/screenshot-groups/group-10-lifeos-spine-recovery-map/screenshots/lifeos_v4_0_group10_18_boundary-road-local-file.png)
+![LifeOS v4.1 Boundary](docs/screenshot-groups/group-11-item-type-state-engine/screenshots/lifeos_v4_1_group11_17_v4-1-boundary-next-local-file.png)
 
-Full screenshot group: [`docs/screenshot-groups/group-10-lifeos-spine-recovery-map`](docs/screenshot-groups/group-10-lifeos-spine-recovery-map)
+Full screenshot group: [`docs/screenshot-groups/group-11-item-type-state-engine`](docs/screenshot-groups/group-11-item-type-state-engine)
 <!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
 
 <!-- LIFEOS_CURRENT_BUILD_START -->
 ## Current build
 
-**Current completed version:** v4.0  
-**Current completed screenshot group:** Group 10 - LifeOS Spine Recovery Map  
+**Current completed version:** v4.1  
+**Current completed screenshot group:** Group 11 - Item Type / State Engine  
 **Build lane:** LifeOS spine completion  
-**Next planned version:** v4.1 Item Type / State Engine
+**Next planned version:** v4.2 Bills / Upcoming Payments / Pay Later
 
-LifeOS v4.0 starts the corrected v4 road. v3.9 remains the offline foundation checkpoint. v4.x now completes the original LifeOS operating spine before v5 integrations.
+LifeOS v4.1 turns the v4.0 spine map into a working local item/state engine.
 
 Master rule:
 
@@ -327,6 +327,8 @@ v2.0 should include the core desktop feature set in manual/local-first form. Aut
 LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
+
+
 
 
 

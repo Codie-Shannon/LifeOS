@@ -1,66 +1,23 @@
 ﻿# LifeOS Desktop
 
 <!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
-## Current screenshots
+## Current screenshot group
 
-### Command Centre - v4.2
+**Group 13 - v4.3 Money Profile / Hidden Deductions / Safe-to-Spend**
 
-![LifeOS v4.2 Command Centre](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_02_command-centre-money-obligation-signals.png)
+Screenshots and notes:
 
-### Bills / Payments - v4.2
-
-![LifeOS v4.2 Bills Payments](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_03_bills-payments-top.png)
-
-### Due pressure and safe-to-spend - v4.2
-
-![LifeOS v4.2 Due Pressure](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_05_due-pressure-safe-to-spend-impact.png)
-
-### Pay Later / Zip / Afterpay - v4.2
-
-![LifeOS v4.2 Pay Later](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_08_pay-later-zip-afterpay.png)
-
-### Hidden deductions - v4.2
-
-![LifeOS v4.2 Hidden Deductions](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_09_money-profile-hidden-deductions.png)
-
-### v4.2 boundary and next lane
-
-![LifeOS v4.2 Boundary](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater/screenshots/lifeos_v4_2_group12_12_v4-2-boundary-next-local-file.png)
-
-Full screenshot group: [`docs/screenshot-groups/group-12-bills-upcoming-payments-paylater`](docs/screenshot-groups/group-12-bills-upcoming-payments-paylater)
+``text
+docs/screenshot-groups/group-13-money-profile-hidden-deductions-safe-to-spend/README.md
+``
 <!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
 
 <!-- LIFEOS_CURRENT_BUILD_START -->
 ## Current build
 
-**Current completed version:** v4.2  
-**Current completed screenshot group:** Group 12 - Bills / Upcoming Payments / Pay Later  
-**Build lane:** LifeOS spine completion  
-**Next planned version:** v4.3 Money Profile / Hidden Deductions / Safe-to-Spend
+**LifeOS Desktop v4.3** - Money Profile / Hidden Deductions / Safe-to-Spend.
 
-LifeOS v4.2 adds the local Bills / Payments engine.
-
-Money rule:
-
-```text
-Expected money is not safe money.
-Bills and Pay Later reduce safe-to-spend until paid/cleared with evidence.
-Hidden deductions must be visible before spending.
-Paid state requires evidence or a trusted source note.
-```
-
-Current roadmap:
-
-```text
-v3.9 = offline foundation checkpoint
-v4.x = LifeOS spine completion
-v5.x = integrations
-v6.x = controlled automation / hardening
-v6.5 = companion app
-v7.x = AI assistant layer
-v8-v9 = full mobile + major workspace reshape
-v10 = platform / plugin ecosystem
-```
+v4.3 strengthens the money profile before v5 integrations by making hidden deductions, expected-money exclusion, buffers, reserves, and safe-to-spend confidence visible.
 <!-- LIFEOS_CURRENT_BUILD_END -->
 
 LifeOS Desktop is a local-first command centre for reducing chaos across work, money pressure, follow-ups, proof, evidence, and daily execution.
@@ -327,6 +284,8 @@ v2.0 should include the core desktop feature set in manual/local-first form. Aut
 LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
+
+
 
 
 

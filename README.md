@@ -3,32 +3,32 @@
 <!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
 ## Current screenshots
 
-### Command Centre â€” v1.7
+### Command Centre â€” v1.8
 
-![LifeOS v1.7 Command Centre](docs/screenshot-groups/group-03-paid-work-money-proof/screenshots/lifeos_v1_7_group03_01_command-centre.png)
+![LifeOS v1.8 Command Centre](docs/screenshot-groups/group-04-settings-safety-theme/screenshots/lifeos_v1_8_group04_01_command-centre.png)
 
-### Paid Work / Money / Proof â€” v1.7
+### Settings / Safety / Theme â€” v1.8
 
-![LifeOS v1.7 Paid Work Money Proof](docs/screenshot-groups/group-03-paid-work-money-proof/screenshots/lifeos_v1_7_group03_02_paid-work-money-proof-top.png)
+![LifeOS v1.8 Settings Safety Theme](docs/screenshot-groups/group-04-settings-safety-theme/screenshots/lifeos_v1_8_group04_02_settings-safety-theme-top-sidebar-visible.png)
 
-### Copy-ready client/admin update â€” v1.7
+### Settings controls and guardrails â€” v1.8
 
-![LifeOS v1.7 Copy Ready Client Admin Update](docs/screenshot-groups/group-03-paid-work-money-proof/screenshots/lifeos_v1_7_group03_04_copy-ready-client-admin-update.png)
+![LifeOS v1.8 Settings Controls Guardrails](docs/screenshot-groups/group-04-settings-safety-theme/screenshots/lifeos_v1_8_group04_03_settings-safety-theme-controls-guardrails.png)
 
-Full screenshot group: [`docs/screenshot-groups/group-03-paid-work-money-proof`](docs/screenshot-groups/group-03-paid-work-money-proof)
+Full screenshot group: [`docs/screenshot-groups/group-04-settings-safety-theme`](docs/screenshot-groups/group-04-settings-safety-theme)
 <!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
 
 <!-- LIFEOS_CURRENT_BUILD_START -->
 ## Current build
 
-**Current completed version:** v1.7  
-**Current completed screenshot group:** Group 03 â€” Paid Work / Money / Proof  
+**Current completed version:** v1.8  
+**Current completed screenshot group:** Group 04 â€” Settings / Safety / Theme  
 **Build lane:** Local-first WPF desktop foundation  
-**Next planned group:** Group 04 â€” Settings / Safety / Theme
+**Next planned group:** Group 05 â€” v2 Paid Desktop Release
 
-LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, and paid work / money / proof control.
+LifeOS currently includes local-first foundations for command centre pressure signals, evidence/proof metadata, relationship state, daily operating flow, paid work / money / proof control, and settings/safety guardrails.
 
-v1.7 keeps expected money separate from safe money and prepares manual, copy-ready client/admin updates without sending anything automatically.
+v1.8 adds local-only safety settings, manual review gates, expected-money protection, screenshot privacy, demo-safe controls, and theme preference foundation. Full dynamic theming remains future work.
 <!-- LIFEOS_CURRENT_BUILD_END -->
 
 LifeOS Desktop is a local-first command centre for reducing chaos across work, money pressure, follow-ups, proof, evidence, and daily execution.
@@ -295,5 +295,7 @@ v2.0 should include the core desktop feature set in manual/local-first form. Aut
 LifeOS v1.4 turns Evidence Vault from a metadata foundation into a usable local workspace for proof records. It supports manual evidence capture, local persistence, review pressure, source/reference tracking, linked work context, status changes, archive/delete actions, and safe fictional demo records.
 
 No OCR, cloud sync, mobile capture, provider integration, automatic imports, or automatic sending are included in this version.
+
+
 
 

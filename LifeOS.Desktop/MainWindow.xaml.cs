@@ -1890,7 +1890,7 @@ public partial class MainWindow : Window
             grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         }
 
-        _workSessionClientTextBox = CreateStandardTextBox("AIE / JV / LifeOS");
+        _workSessionClientTextBox = CreateStandardTextBox("Workshop / Admin / LifeOS");
         _workSessionDateTextBox = CreateStandardTextBox(DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd"));
         _workSessionHoursTextBox = CreateStandardTextBox("1.00");
         _workSessionRateTextBox = CreateStandardTextBox("35.00");
@@ -2584,16 +2584,19 @@ public partial class MainWindow : Window
 
     private void ShowEvidenceVaultPage()
     {
-        var items = EvidenceVaultStorage.Load();
+        var items = EvidenceVaultStorage.Load()
+            .OrderByDescending(item => item.EvidenceDate)
+            .ThenBy(item => item.Title)
+            .ToList();
         var summary = EvidenceVaultCalculator.Calculate(items);
 
-        SetHeader("Evidence Vault", "Evidence Vault • v1.3 metadata foundation");
+        SetHeader("Evidence Vault", "Evidence Vault • v1.4 usable local evidence workspace");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "Evidence Vault",
-            "Metadata-only evidence tracking for screenshots, email/message proof, work notes, timesheet descriptions, code commits, documents, and other local proof. No OCR, mobile capture, cloud sync, or provider integration yet."));
+            "Capture evidence metadata, review what is missing, link proof to work context, and keep source references local-first. This is manual proof control before OCR, mobile capture, cloud sync, or provider integrations."));
 
         var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
         metricsPanel.Children.Add(CreateDashboardCard("Total evidence", summary.TotalItems.ToString(), "Vault"));
@@ -2605,31 +2608,239 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Commits", summary.CommitProofCount.ToString(), "Repo"));
         root.Children.Add(metricsPanel);
 
+        var formPanel = CreatePanel();
+        formPanel.Margin = new Thickness(0, 8, 0, 0);
+        var form = new StackPanel();
+
+        form.Children.Add(new TextBlock
+        {
+            Text = "Add evidence record",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 18,
+            FontWeight = FontWeights.Bold
+        });
+
+        form.Children.Add(new TextBlock
+        {
+            Text = "Use this for screenshots, email/message proof, work notes, commits, test results, documents, receipts, invoices, and client-safe proof references.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 8, 0, 14)
+        });
+
+        var titleTextBox = CreateTextBox("Evidence title");
+        var contextTextBox = CreateTextBox("Linked project/client/context");
+        var sourceTextBox = CreateTextBox("Source path or reference");
+        var summaryTextBox = CreateTextBox("Summary / what this proves");
+        summaryTextBox.AcceptsReturn = true;
+        summaryTextBox.MinHeight = 70;
+        var notesTextBox = CreateTextBox("Notes / review comments");
+        notesTextBox.AcceptsReturn = true;
+        notesTextBox.MinHeight = 70;
+
+        var typeComboBox = new ComboBox
+        {
+            ItemsSource = Enum.GetValues<EvidenceVaultItemType>(),
+            SelectedItem = EvidenceVaultItemType.Screenshot,
+            Margin = new Thickness(0, 0, 0, 10),
+            Padding = new Thickness(10),
+            Background = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240))
+        };
+
+        var statusComboBox = new ComboBox
+        {
+            ItemsSource = Enum.GetValues<EvidenceVaultStatus>(),
+            SelectedItem = EvidenceVaultStatus.Captured,
+            Margin = new Thickness(0, 0, 0, 10),
+            Padding = new Thickness(10),
+            Background = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240))
+        };
+
+        var dateTextBox = CreateTextBox(DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd"));
+        var needsReviewCheckBox = new CheckBox
+        {
+            Content = "Needs review",
+            Foreground = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
+            Margin = new Thickness(0, 0, 0, 12)
+        };
+
+        form.Children.Add(CreateFieldLabel("Type"));
+        form.Children.Add(typeComboBox);
+        form.Children.Add(CreateFieldLabel("Status"));
+        form.Children.Add(statusComboBox);
+        form.Children.Add(CreateFieldLabel("Evidence date"));
+        form.Children.Add(dateTextBox);
+        form.Children.Add(CreateFieldLabel("Title"));
+        form.Children.Add(titleTextBox);
+        form.Children.Add(CreateFieldLabel("Linked context"));
+        form.Children.Add(contextTextBox);
+        form.Children.Add(CreateFieldLabel("Source/reference"));
+        form.Children.Add(sourceTextBox);
+        form.Children.Add(CreateFieldLabel("Summary"));
+        form.Children.Add(summaryTextBox);
+        form.Children.Add(CreateFieldLabel("Notes"));
+        form.Children.Add(notesTextBox);
+        form.Children.Add(needsReviewCheckBox);
+
+        var addButton = new Button
+        {
+            Content = "Add Evidence Record",
+            Padding = new Thickness(14, 10, 14, 10),
+            Background = new SolidColorBrush(Color.FromRgb(14, 165, 233)),
+            Foreground = Brushes.White,
+            BorderThickness = new Thickness(0),
+            FontWeight = FontWeights.SemiBold,
+            Cursor = System.Windows.Input.Cursors.Hand
+        };
+
+        addButton.Click += (_, _) =>
+        {
+            var title = titleTextBox.Text.Trim();
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                title = "Untitled evidence";
+            }
+
+            if (!DateOnly.TryParse(dateTextBox.Text.Trim(), out var evidenceDate))
+            {
+                evidenceDate = DateOnly.FromDateTime(DateTime.Today);
+            }
+
+            var newItem = new EvidenceVaultItem
+            {
+                Title = title,
+                Type = typeComboBox.SelectedItem is EvidenceVaultItemType selectedType ? selectedType : EvidenceVaultItemType.Other,
+                Status = statusComboBox.SelectedItem is EvidenceVaultStatus selectedStatus ? selectedStatus : EvidenceVaultStatus.Captured,
+                EvidenceDate = evidenceDate,
+                ProjectOrClient = contextTextBox.Text.Trim(),
+                SourcePathOrReference = sourceTextBox.Text.Trim(),
+                Summary = summaryTextBox.Text.Trim(),
+                Notes = notesTextBox.Text.Trim(),
+                NeedsReview = needsReviewCheckBox.IsChecked == true,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            newItem.NeedsReview = newItem.NeedsReview || EvidenceVaultReviewRules.IsReviewRequired(newItem);
+
+            var saved = EvidenceVaultStorage.Load();
+            saved.Add(newItem);
+            EvidenceVaultStorage.Save(saved);
+            ShowEvidenceVaultPage();
+        };
+
+        form.Children.Add(addButton);
+        formPanel.Child = form;
+        root.Children.Add(formPanel);
+
         var reviewPanel = CreateInfoPanel(
             "Evidence needing review",
             summary.NeedsReviewItems.Count == 0
                 ? "No evidence items currently need review."
-                : FormatReasons(summary.NeedsReviewItems.Take(8).Select(item => $"{item.Type} • {item.Title} • {item.ProjectOrClient}: {item.Summary}")));
-        reviewPanel.Margin = new Thickness(0, 8, 0, 0);
+                : FormatReasons(summary.NeedsReviewItems.Take(8).Select(item => $"{item.Type} • {item.Title} • {item.ProjectOrClient}: {EvidenceVaultReviewRules.GetReviewReason(item)}")));
+        reviewPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(reviewPanel);
 
-        var recentPanel = CreateInfoPanel(
-            "Recent evidence records",
-            items.Count == 0
-                ? "No Evidence Vault records have been captured yet."
-                : FormatReasons(items.OrderByDescending(item => item.EvidenceDate).Take(8).Select(item => $"{item.Status} • {item.Type} • {item.Title}: {item.SourcePathOrReference}")));
-        recentPanel.Margin = new Thickness(0, 16, 0, 0);
-        root.Children.Add(recentPanel);
+        var listPanel = CreatePanel();
+        listPanel.Margin = new Thickness(0, 16, 0, 0);
+        var listStack = new StackPanel();
+        listStack.Children.Add(new TextBlock
+        {
+            Text = "Evidence records",
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            FontSize = 18,
+            FontWeight = FontWeights.Bold
+        });
+
+        if (items.Count == 0)
+        {
+            listStack.Children.Add(new TextBlock
+            {
+                Text = "No Evidence Vault records have been captured yet.",
+                Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+                Margin = new Thickness(0, 10, 0, 0)
+            });
+        }
+        else
+        {
+            foreach (var item in items.Take(20))
+            {
+                var itemPanel = new Border
+                {
+                    Background = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+                    BorderBrush = new SolidColorBrush(Color.FromRgb(30, 41, 59)),
+                    BorderThickness = new Thickness(1),
+                    CornerRadius = new CornerRadius(12),
+                    Padding = new Thickness(14),
+                    Margin = new Thickness(0, 12, 0, 0)
+                };
+
+                var itemStack = new StackPanel();
+                itemStack.Children.Add(new TextBlock
+                {
+                    Text = $"{item.Status} • {item.Type} • {item.Title}",
+                    Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+                    FontSize = 15,
+                    FontWeight = FontWeights.SemiBold,
+                    TextWrapping = TextWrapping.Wrap
+                });
+
+                itemStack.Children.Add(new TextBlock
+                {
+                    Text = $"{item.EvidenceDate:yyyy-MM-dd} • {item.ProjectOrClient} • {item.SourcePathOrReference}",
+                    Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+                    FontSize = 12,
+                    TextWrapping = TextWrapping.Wrap,
+                    Margin = new Thickness(0, 6, 0, 0)
+                });
+
+                itemStack.Children.Add(new TextBlock
+                {
+                    Text = string.IsNullOrWhiteSpace(item.Summary) ? "No summary entered." : item.Summary,
+                    Foreground = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
+                    FontSize = 13,
+                    TextWrapping = TextWrapping.Wrap,
+                    Margin = new Thickness(0, 8, 0, 0)
+                });
+
+                if (EvidenceVaultReviewRules.IsReviewRequired(item))
+                {
+                    itemStack.Children.Add(new TextBlock
+                    {
+                        Text = $"Review: {EvidenceVaultReviewRules.GetReviewReason(item)}",
+                        Foreground = new SolidColorBrush(Color.FromRgb(251, 191, 36)),
+                        FontSize = 12,
+                        TextWrapping = TextWrapping.Wrap,
+                        Margin = new Thickness(0, 8, 0, 0)
+                    });
+                }
+
+                var actions = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    Margin = new Thickness(0, 12, 0, 0)
+                };
+
+                actions.Children.Add(CreateEvidenceActionButton("Reviewed", () => UpdateEvidenceStatus(item.Id, EvidenceVaultStatus.Reviewed, false)));
+                actions.Children.Add(CreateEvidenceActionButton("Needs Review", () => UpdateEvidenceStatus(item.Id, EvidenceVaultStatus.NeedsReview, true)));
+                actions.Children.Add(CreateEvidenceActionButton("Archive", () => UpdateEvidenceStatus(item.Id, EvidenceVaultStatus.Archived, false)));
+                actions.Children.Add(CreateEvidenceActionButton("Delete", () => DeleteEvidenceItem(item.Id)));
+                itemStack.Children.Add(actions);
+
+                itemPanel.Child = itemStack;
+                listStack.Children.Add(itemPanel);
+            }
+        }
+
+        listPanel.Child = listStack;
+        root.Children.Add(listPanel);
 
         var reasonsPanel = CreateInfoPanel("Evidence Vault pressure", FormatReasons(summary.Reasons));
         reasonsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(reasonsPanel);
-
-        var scopePanel = CreateInfoPanel(
-            "v1.3 scope",
-            "Evidence Vault is metadata-first. It tracks what evidence exists, where it came from, what it links to, and whether it needs review. File copying, receipt OCR, mobile capture, and provider sync belong later.");
-        scopePanel.Margin = new Thickness(0, 16, 0, 0);
-        root.Children.Add(scopePanel);
 
         var storagePanel = CreateInfoPanel("Local storage", EvidenceVaultStorage.FilePath);
         storagePanel.Margin = new Thickness(0, 16, 0, 0);
@@ -2637,6 +2848,82 @@ public partial class MainWindow : Window
 
         MainContentControl.Content = root;
     }
+
+    private static TextBlock CreateFieldLabel(string label)
+    {
+        return new TextBlock
+        {
+            Text = label,
+            Foreground = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
+            FontSize = 12,
+            FontWeight = FontWeights.SemiBold,
+            Margin = new Thickness(0, 4, 0, 4)
+        };
+    }
+
+    private static TextBox CreateTextBox(string text = "")
+    {
+        return new TextBox
+        {
+            Text = text,
+            Margin = new Thickness(0, 0, 0, 10),
+            Padding = new Thickness(10),
+            Background = new SolidColorBrush(Color.FromRgb(15, 23, 42)),
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(51, 65, 85)),
+            BorderThickness = new Thickness(1),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap
+        };
+    }
+
+    private Button CreateEvidenceActionButton(string label, Action action)
+    {
+        var button = new Button
+        {
+            Content = label,
+            Margin = new Thickness(0, 0, 8, 0),
+            Padding = new Thickness(10, 6, 10, 6),
+            Background = new SolidColorBrush(Color.FromRgb(30, 41, 59)),
+            Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(51, 65, 85)),
+            BorderThickness = new Thickness(1),
+            Cursor = System.Windows.Input.Cursors.Hand
+        };
+
+        button.Click += (_, _) => action();
+        return button;
+    }
+
+    private void UpdateEvidenceStatus(Guid id, EvidenceVaultStatus status, bool needsReview)
+    {
+        var items = EvidenceVaultStorage.Load();
+        var item = items.FirstOrDefault(candidate => candidate.Id == id);
+        if (item is null)
+        {
+            return;
+        }
+
+        item.Status = status;
+        item.NeedsReview = needsReview;
+        item.UpdatedAt = DateTime.Now;
+        EvidenceVaultStorage.Save(items);
+        ShowEvidenceVaultPage();
+    }
+
+    private void DeleteEvidenceItem(Guid id)
+    {
+        if (!ConfirmRiskyAction("Delete evidence record?", "This removes the local Evidence Vault metadata record. It does not delete the original source file."))
+        {
+            return;
+        }
+
+        var items = EvidenceVaultStorage.Load();
+        items.RemoveAll(item => item.Id == id);
+        EvidenceVaultStorage.Save(items);
+        ShowEvidenceVaultPage();
+    }
+
 
     private void ShowCommandCentre()
     {
@@ -2882,7 +3169,7 @@ public partial class MainWindow : Window
             grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         }
 
-        _followUpPersonTextBox = CreateStandardTextBox("Example: Vanessa / OSHE");
+        _followUpPersonTextBox = CreateStandardTextBox("Example: Project Reviewer / Admin Workflow");
         _followUpContextTextBox = CreateStandardTextBox("Example: OnboardingFlow scoped work");
         _followUpNextActionTextBox = CreateStandardTextBox("Example: Follow up Monday 20 July");
         _followUpDateTextBox = CreateStandardTextBox(DateOnly.FromDateTime(DateTime.Today).AddDays(3).ToString("yyyy-MM-dd"));

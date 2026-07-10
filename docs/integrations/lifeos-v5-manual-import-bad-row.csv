@@ -1,0 +1,3 @@
+externalReference,title,summary,amount,currency,date,suggestedTarget,suggestedAction
+good-row-1,Valid imported preview,This row should import successfully,42.00,NZD,2026-07-10,EvidenceVault,Review imported evidence
+bad-row-missing-title,,,12.50,NZD,2026-07-10,BillsPayments,Review skipped row warning

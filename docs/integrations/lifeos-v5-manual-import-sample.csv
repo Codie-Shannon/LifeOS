@@ -1,0 +1,4 @@
+externalReference,title,summary,amount,currency,date,suggestedTarget,suggestedAction
+bill-power-2026-07,Power bill due,Imported local CSV bill candidate for v5 manual connector screenshots,91.45,NZD,2026-07-10,BillsPayments,Review bill and confirm due date
+receipt-pharmacy-2026-07,Pharmacy receipt,Receipt evidence candidate imported from local CSV,28.90,NZD,2026-07-09,EvidenceVault,Attach receipt evidence
+followup-supplier-quote,Supplier quote follow-up,Follow-up candidate imported from local CSV,,,2026-07-11,FollowUps,Check whether supplier quote arrived

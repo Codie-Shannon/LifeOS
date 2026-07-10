@@ -7,6 +7,7 @@
 - `version-history.md` - consolidated milestone history.
 - `release-notes/v4.9.md` - v4.9 release notes.
 - `screenshot-groups/group-19-integration-inbox-v5-readiness/README.md` - Group 19 screenshot index.
+- `screenshot-groups/group-20-v5-manual-import-connector/README.md` - Group 20 manual import connector screenshot index.
 - `stage-manifests/103_v4_9_group19_docs_screenshots_readme.md` - final v4.9 docs manifest.
 - `integrations/v5-0-build-brief.md` - first v5.0 connector brief.
 - `integrations/v5-integration-architecture-pack.md` - connector registry, scope, risk, and roadmap architecture.
@@ -28,6 +29,7 @@ Groups 10-19 cover the complete v4 spine:
 - Group 17 - Weekly Close-Out
 - Group 18 - Command Centre Pressure Engine
 - Group 19 - Integration Inbox + v5 Readiness
+- Group 20 - v5 Manual Import Connector
 
 ## Documentation rule
 

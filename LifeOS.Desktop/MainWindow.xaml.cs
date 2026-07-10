@@ -104,6 +104,7 @@ public partial class MainWindow : Window
     private TextBox? _payLaterNotesTextBox;
 
     private List<WeeklyCloseOutEntry> _weeklyCloseOutEntries = WeeklyCloseOutStorage.Load();
+    private List<WeeklyCloseOutReviewItem> _weeklyCloseOutReviewItems = WeeklyCloseOutReviewStorage.Load();
 
     private TextBox? _closeOutWeekStartTextBox;
     private TextBox? _closeOutDoneTextBox;
@@ -3520,30 +3521,120 @@ public partial class MainWindow : Window
     private void ShowWeeklyCloseOutPage()
     {
         var today = DateOnly.FromDateTime(DateTime.Today);
-        var summary = WeeklyCloseOutCalculator.Calculate(_weeklyCloseOutEntries, today);
+        var historySummary = WeeklyCloseOutCalculator.Calculate(_weeklyCloseOutEntries, today);
+        var operatingSummary = WeeklyCloseOutOperatingCalculator.Calculate(_weeklyCloseOutReviewItems);
 
-        SetHeader("Weekly Close-Out", "Weekly Close-Out • v0.4 weekly review foundation");
+        SetHeader(
+            "Weekly Close-Out",
+            $"Weekly Close-Out • v4.7 • {operatingSummary.PressureLabel} • {operatingSummary.RollForwardItems} roll forward");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "Weekly Close-Out",
-            "Capture what got done, what moved, what is still waiting, and what pressure rolls into next week."));
+            "v4.7 closes the weekly loop across work, money, waiting-on, proof, receipt evidence, and next-week pressure. It separates what can close now from what must deliberately roll forward."));
 
         var metricsPanel = new WrapPanel
         {
             Margin = new Thickness(0, 22, 0, 0)
         };
 
-        metricsPanel.Children.Add(CreateDashboardCard("Total entries", summary.TotalEntries.ToString(), "Close-out"));
-        metricsPanel.Children.Add(CreateDashboardCard("This week", summary.EntriesThisWeek.ToString(), "Current week"));
-        metricsPanel.Children.Add(CreateDashboardCard("Current close-out", summary.HasCurrentWeekCloseOut ? "Yes" : "No", "Weekly loop"));
-        metricsPanel.Children.Add(CreateDashboardCard("Waiting-on count", summary.WaitingOnCount.ToString(), "Pressure"));
+        metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v4.7"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pressure", operatingSummary.PressureLabel, "Close-out"));
+        metricsPanel.Children.Add(CreateDashboardCard("Review items", operatingSummary.TotalItems.ToString(), "Cross-module"));
+        metricsPanel.Children.Add(CreateDashboardCard("Close now", operatingSummary.ReadyToCloseItems.ToString(), "This week"));
+        metricsPanel.Children.Add(CreateDashboardCard("Roll forward", operatingSummary.RollForwardItems.ToString(), "Next week"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting", operatingSummary.WaitingItems.ToString(), "Do not chase"));
+        metricsPanel.Children.Add(CreateDashboardCard("Blocked", operatingSummary.BlockedItems.ToString(), "Visible"));
+        metricsPanel.Children.Add(CreateDashboardCard("Money review", operatingSummary.MoneyReviewItems.ToString(), FormatMoney(operatingSummary.MoneyStillUnderReview)));
+        metricsPanel.Children.Add(CreateDashboardCard("Proof checks", operatingSummary.ProofReviewItems.ToString(), "Evidence"));
+        metricsPanel.Children.Add(CreateDashboardCard("Receipt checks", operatingSummary.ReceiptReviewItems.ToString(), "v4.6"));
+        metricsPanel.Children.Add(CreateDashboardCard("Work checks", operatingSummary.WorkReviewItems.ToString(), "v4.5"));
+        metricsPanel.Children.Add(CreateDashboardCard("Untrusted", operatingSummary.UntrustedItems.ToString(), "Manual gate"));
+        metricsPanel.Children.Add(CreateDashboardCard("Current close-out", historySummary.HasCurrentWeekCloseOut ? "Yes" : "No", "History"));
 
         root.Children.Add(metricsPanel);
 
-        var reasonsPanel = CreateInfoPanel("Weekly close-out pressure", FormatReasons(summary.Reasons));
-        reasonsPanel.Margin = new Thickness(0, 8, 0, 0);
+        var rulePanel = CreateInfoPanel(
+            "v4.7 Weekly Close-Out rule",
+            FormatReasons(new[]
+            {
+                "Close completed, evidence-backed items so they stop creating pressure.",
+                "Roll unfinished work forward deliberately instead of silently carrying it.",
+                "Waiting-on and blocked work remain visible without consuming active sprint time.",
+                "Expected money remains excluded from safe money until paid and cleared.",
+                "Receipt/OCR candidates remain untrusted until source-backed and accepted.",
+                "Proof, invoice, timesheet, payment, and next-action gaps must remain visible.",
+                $"{operatingSummary.ReadyToCloseItems} item(s) can close now.",
+                $"{operatingSummary.RollForwardItems} item(s) should roll into next week.",
+                $"{FormatMoney(operatingSummary.MoneyStillUnderReview)} remains under review."
+            }));
+        rulePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(rulePanel);
+
+        var controlsPanel = CreatePanel();
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        var controlsRoot = new StackPanel();
+        controlsRoot.Children.Add(new TextBlock
+        {
+            Text = "Local controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+        controlsRoot.Children.Add(new TextBlock
+        {
+            Text = "Reset restores fictional local review items. It does not close real work, send messages, move money, or update external systems.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 12)
+        });
+        var resetReviewButton = CreateSmallActionButton("Reset v4.7 close-out review");
+        resetReviewButton.Click += ResetWeeklyCloseOutReviewButton_Click;
+        controlsRoot.Children.Add(resetReviewButton);
+        controlsPanel.Child = controlsRoot;
+        root.Children.Add(controlsPanel);
+
+        root.Children.Add(CreateWeeklyCloseOutReviewLanePanel(
+            "Close this week now",
+            "Completed, trusted, evidence-backed items that can stop creating pressure.",
+            operatingSummary.CloseNow));
+
+        root.Children.Add(CreateWeeklyCloseOutReviewLanePanel(
+            "Roll into next week",
+            "Unfinished items that need an explicit next action, owner, and reason for carrying forward.",
+            operatingSummary.RollForward));
+
+        root.Children.Add(CreateWeeklyCloseOutReviewLanePanel(
+            "Waiting / blocked / do not chase",
+            "External blockers remain visible, but they should not consume active sprint time before the follow-up or unblock point.",
+            operatingSummary.WaitingOrBlocked));
+
+        root.Children.Add(CreateWeeklyCloseOutReviewLanePanel(
+            "Money and payment checks",
+            "Expected, reserved, invoice-ready, or payment-related money remains visible without automatically becoming safe money.",
+            operatingSummary.MoneyChecks));
+
+        root.Children.Add(CreateWeeklyCloseOutReviewLanePanel(
+            "Proof / evidence checks",
+            "Proof and evidence must be complete before clean handoff, invoicing, payment confidence, or portfolio use.",
+            operatingSummary.ProofChecks));
+
+        root.Children.Add(CreateWeeklyCloseOutReviewLanePanel(
+            "Receipt evidence checks",
+            "Receipt/OCR items remain review-first and source-gated before they affect trusted item state.",
+            operatingSummary.ReceiptChecks));
+
+        root.Children.Add(CreateWeeklyCloseOutReviewLanePanel(
+            "Work Pipeline checks",
+            "Active, blocked, waiting, invoice-ready, payment-expected, and parked work feeds the close-out loop.",
+            operatingSummary.WorkChecks));
+
+        var reasonsPanel = CreateInfoPanel(
+            "v4.7 close-out operating signals",
+            FormatReasons(operatingSummary.Reasons));
+        reasonsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(reasonsPanel);
 
         var inputPanel = CreateWeeklyCloseOutInputPanel();
@@ -3554,7 +3645,90 @@ public partial class MainWindow : Window
         listPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(listPanel);
 
+        var boundaryPanel = CreateInfoPanel(
+            "v4.7 boundary",
+            "Local/manual weekly review only. v4.7 does not close real projects, send follow-ups, create invoices, move money, reconcile accounts, trust OCR automatically, sync external systems, or run AI actions.");
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var nextPanel = CreateInfoPanel(
+            "After v4.7",
+            "Next lane: v4.8 Command Centre Pressure Engine. Weekly Close-Out now supplies a deliberate close-now, roll-forward, waiting, money, proof, receipt, and work review loop.");
+        nextPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(nextPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local weekly close-out files",
+            $"{WeeklyCloseOutStorage.FilePath}{Environment.NewLine}{WeeklyCloseOutReviewStorage.FilePath}");
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
         MainContentControl.Content = root;
+    }
+
+
+    private void ResetWeeklyCloseOutReviewButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction(
+                "Reset v4.7 weekly close-out review?",
+                "This replaces the fictional local v4.7 review items. It does not change your historical close-out entries."))
+        {
+            return;
+        }
+
+        WeeklyCloseOutReviewStorage.Reset();
+        _weeklyCloseOutReviewItems = WeeklyCloseOutReviewStorage.Load();
+        ShowWeeklyCloseOutPage();
+    }
+
+    private Border CreateWeeklyCloseOutReviewLanePanel(
+        string title,
+        string description,
+        IEnumerable<WeeklyCloseOutReviewItem> items)
+    {
+        var panel = CreatePanel();
+        panel.Margin = new Thickness(0, 16, 0, 0);
+
+        var root = new StackPanel();
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = description,
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 4)
+        });
+
+        var list = items.ToList();
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No close-out review items in this lane."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var item in list)
+        {
+            var amountText = item.Amount > 0 ? $" • Amount: {FormatMoney(item.Amount)}" : string.Empty;
+            var body =
+                $"{item.SourceModule} • {item.Status} • {item.Pressure} • Owner: {item.Owner}{amountText}{Environment.NewLine}" +
+                $"Next: {item.NextAction}{Environment.NewLine}" +
+                $"Evidence: {item.EvidenceState}{Environment.NewLine}" +
+                $"Trusted: {(item.IsTrusted ? "Yes" : "No")} • Roll forward: {(item.RollIntoNextWeek ? "Yes" : "No")}";
+
+            root.Children.Add(CreateSimpleItemCard(item.Title, body, item.Notes));
+        }
+
+        panel.Child = root;
+        return panel;
     }
 
     private Border CreateWeeklyCloseOutInputPanel()

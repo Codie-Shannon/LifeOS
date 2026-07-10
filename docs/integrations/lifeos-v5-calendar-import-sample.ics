@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//LifeOS//v5 Local Calendar Fixture//EN
+BEGIN:VEVENT
+UID:lifeos-calendar-client-planning
+DTSTART:20260710T090000
+DTEND:20260710T100000
+SUMMARY:Client planning call
+DESCRIPTION:Prep agenda before the call and confirm next action.
+LOCATION:Zoom
+END:VEVENT
+BEGIN:VEVENT
+UID:lifeos-calendar-rent-review
+DTSTART:20260711T140000
+DTEND:20260711T143000
+SUMMARY:Rent and payment calendar review
+DESCRIPTION:Check upcoming obligations before the next week starts.
+LOCATION:LifeOS
+END:VEVENT
+END:VCALENDAR

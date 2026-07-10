@@ -63,7 +63,7 @@ public partial class MainWindow
             TextWrapping = TextWrapping.Wrap,
             Margin = new Thickness(0, 8, 0, 12)
         });
-        var import = CreateEvidenceActionButton("Import CSV/JSON preview file", ImportIntegrationInboxPreviewFile);
+        var import = CreateEvidenceActionButton("Import CSV/JSON/ICS preview file", ImportIntegrationInboxPreviewFile);
         controlsStack.Children.Add(import);
         var reset = CreateEvidenceActionButton("Reset v4.9 integration previews", ResetIntegrationInboxDemo);
         controlsStack.Children.Add(reset);
@@ -355,7 +355,7 @@ public partial class MainWindow
         var dialog = new OpenFileDialog
         {
             Title = "Import LifeOS preview file",
-            Filter = "CSV or JSON preview files (*.csv;*.json)|*.csv;*.json|CSV files (*.csv)|*.csv|JSON files (*.json)|*.json",
+            Filter = "Preview files (*.csv;*.json;*.ics)|*.csv;*.json;*.ics|CSV files (*.csv)|*.csv|JSON files (*.json)|*.json|ICS calendar files (*.ics)|*.ics",
             CheckFileExists = true,
             Multiselect = false
         };
@@ -373,7 +373,8 @@ public partial class MainWindow
             {
                 ".csv" => ManualIntegrationImportConnector.ImportCsv(content, dialog.FileName),
                 ".json" => ManualIntegrationImportConnector.ImportJson(content, dialog.FileName),
-                _ => throw new InvalidOperationException("Choose a .csv or .json file.")
+                ".ics" => IcsCalendarImportConnector.Import(content, dialog.FileName),
+                _ => throw new InvalidOperationException("Choose a .csv, .json, or .ics file.")
             };
 
             var items = IntegrationInboxStorage.Load();

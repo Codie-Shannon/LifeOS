@@ -1,6 +1,6 @@
 # LifeOS v5.0 Build Brief - Manual Import Preview Connector
 
-Status: implemented as the first local v5 connector foundation.
+Status: implemented as the first local v5 connector foundation, now extended with the local `.ics` calendar preview connector.
 
 ## Purpose
 
@@ -8,14 +8,18 @@ v5.0 should prove the real integration path without OAuth, live polling, or exte
 
 ## First Connector
 
-Manual CSV/JSON import.
+Manual CSV/JSON import, followed by local `.ics` calendar import.
 
 This is the safest first connector because it exercises the same intake, provenance, duplicate, review, and handoff rules that later Gmail, Outlook, calendar, accounting, file, OCR, and banking connectors must obey.
+
+The `.ics` connector proves calendar-shaped data without OAuth or live Google/Outlook access.
 
 ## Scope
 
 - Read a user-selected local CSV or JSON file.
+- Read a user-selected local `.ics` calendar file.
 - Map each row/record into an `IntegrationPreviewDraft`.
+- Map each VEVENT into a calendar `IntegrationPreviewDraft`.
 - Create previews only through `IntegrationPreviewIntake.CreatePreview`.
 - Show a preview confirmation summary before saving imported previews.
 - Store previews in the existing Integration Inbox local file.
@@ -60,6 +64,7 @@ The current implementation accepts `title`, `name`, `subject`, `description`, or
 - Core tests cover importer mapping, fallback row references, missing title errors, quoted CSV fields, and review gates.
 - Manual import creates previews through the shared intake guard.
 - Integration Inbox UI imports local `.csv` and `.json` files, shows a pre-save summary, and shows imported previews with provenance.
+- Integration Inbox UI imports local `.ics` files through the same confirmation, duplicate, audit, and preview path.
 - Integration Inbox UI shows recent manual import audit runs and stores them locally.
 - Duplicate reimports are marked `DuplicateSuspected` and remain blocked by the review gate.
 - Build is green.

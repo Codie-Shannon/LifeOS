@@ -27,6 +27,7 @@ Group 20 proves the first real v5 connector path: a local CSV/JSON file can be s
 - `docs/integrations/lifeos-v5-manual-import-sample.csv` - clean local CSV used for import success and provenance screenshots.
 - `docs/integrations/lifeos-v5-manual-import-bad-row.csv` - mixed valid/invalid CSV used for row-level rejection screenshots.
 - `docs/integrations/lifeos-v5-manual-import-sample.json` - clean local JSON used for confirmation and JSON import screenshots.
+- `docs/integrations/lifeos-v5-calendar-import-sample.ics` - clean local ICS used for the next local calendar connector proof.
 
 ## Verified behavior
 

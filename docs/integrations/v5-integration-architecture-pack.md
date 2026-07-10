@@ -110,4 +110,4 @@ The core tests assert:
 
 ## Next Implementation Step
 
-The first real connector is now the manual CSV/JSON import path with audit and duplicate detection. The next connector should reuse the same registry, preview, provenance, duplicate-key, audit, and review-gate rules.
+The first real connector is now the manual CSV/JSON import path with audit and duplicate detection. The second local connector is `.ics` calendar import, which reuses the same registry, preview, provenance, duplicate-key, audit, confirmation, and review-gate rules before any Google/Outlook OAuth work.

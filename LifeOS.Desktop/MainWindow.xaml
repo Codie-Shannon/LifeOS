@@ -141,6 +141,11 @@
                                 Style="{StaticResource NavButtonStyle}"
                                 Click="WorkPipelineNavButton_Click"/>
 
+                        <Button x:Name="ReceiptEvidenceNavButton"
+                                Content="Receipt OCR / Evidence"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="ReceiptEvidenceNavButton_Click"/>
+
                         <Button x:Name="DailyOperatingFlowNavButton"
                                 Content="Daily Operating Flow"
                                 Style="{StaticResource NavButtonStyle}"

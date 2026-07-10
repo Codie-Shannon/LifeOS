@@ -43,6 +43,8 @@ using LifeOS.Core.MoneyProfile;
 using LifeOS.Shared.MoneyProfile;
 using LifeOS.Core.PaymentCalendar;
 using LifeOS.Shared.PaymentCalendar;
+using LifeOS.Core.ReceiptEvidence;
+using LifeOS.Shared.ReceiptEvidence;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -172,6 +174,8 @@ public partial class MainWindow : Window
 
     private PaymentCalendarPlan _paymentCalendarPlan = PaymentCalendarStorage.Load();
 
+    private List<ReceiptEvidenceItem> _receiptEvidenceItems = ReceiptEvidenceStorage.Load();
+
 
     private List<WorkPipelineItem> _workPipelineItems = WorkPipelineStorage.Load();
     private string _workPipelineFilter = "Active";
@@ -237,6 +241,8 @@ public partial class MainWindow : Window
     private void FollowUpsNavButton_Click(object sender, RoutedEventArgs e) => ShowFollowUpsPage();
 
     private void WorkPipelineNavButton_Click(object sender, RoutedEventArgs e) => ShowWorkPipelinePage();
+
+    private void ReceiptEvidenceNavButton_Click(object sender, RoutedEventArgs e) => ShowReceiptEvidencePage();
 
     private void DailyOperatingFlowNavButton_Click(object sender, RoutedEventArgs e) => ShowDailyOperatingFlowPage();
 
@@ -4770,6 +4776,145 @@ public partial class MainWindow : Window
         };
     }
 
+
+
+    private void ResetReceiptEvidenceButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction("Reset receipt evidence demo?", "This replaces the local receipt evidence file with fictional v4.6 demo candidates."))
+        {
+            return;
+        }
+
+        ReceiptEvidenceStorage.Reset();
+        _receiptEvidenceItems = ReceiptEvidenceStorage.Load();
+        ShowReceiptEvidencePage();
+    }
+
+    private void ShowReceiptEvidencePage()
+    {
+        var summary = ReceiptEvidenceCalculator.Calculate(_receiptEvidenceItems);
+
+        SetHeader("Receipt OCR / Evidence-to-Item", $"Receipt evidence • v4.6 • {summary.ReviewCount} review • {summary.MissingSourceCount} missing source");
+
+        var root = new StackPanel();
+
+        root.Children.Add(CreateHeroPanel(
+            "Receipt OCR / Evidence-to-Item",
+            "v4.6 turns local receipt/OCR outputs into reviewable evidence candidates before they can become trusted LifeOS items. OCR is evidence intake, not money truth."));
+
+        var metricsPanel = new WrapPanel
+        {
+            Margin = new Thickness(0, 22, 0, 0)
+        };
+
+        metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v4.6"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pressure", summary.PressureLabel, "Evidence"));
+        metricsPanel.Children.Add(CreateDashboardCard("Candidates", summary.TotalItems.ToString(), "Local"));
+        metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.ReviewCount.ToString(), "Manual gate"));
+        metricsPanel.Children.Add(CreateDashboardCard("Missing source", summary.MissingSourceCount.ToString(), "Evidence"));
+        metricsPanel.Children.Add(CreateDashboardCard("Accepted", summary.AcceptedCount.ToString(), "Trusted"));
+        metricsPanel.Children.Add(CreateDashboardCard("Untrusted", summary.UntrustedCount.ToString(), "Blocked"));
+        metricsPanel.Children.Add(CreateDashboardCard("Candidate value", FormatMoney(summary.CandidateValue), "Not safe money"));
+        metricsPanel.Children.Add(CreateDashboardCard("Money candidates", summary.MoneyCandidates.Count.ToString(), "Review"));
+        metricsPanel.Children.Add(CreateDashboardCard("Work proof", summary.WorkProofCandidates.Count.ToString(), "Review"));
+
+        root.Children.Add(metricsPanel);
+
+        var rulePanel = CreateInfoPanel("v4.6 receipt evidence rule", FormatReasons(summary.Reasons));
+        rulePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(rulePanel);
+
+        var controlsPanel = CreatePanel();
+        var controlsRoot = new StackPanel();
+        controlsRoot.Children.Add(new TextBlock
+        {
+            Text = "Local controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+        controlsRoot.Children.Add(new TextBlock
+        {
+            Text = "Reset restores fictional local demo candidates. It does not run OCR or import external data.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            Margin = new Thickness(0, 8, 0, 12),
+            TextWrapping = TextWrapping.Wrap
+        });
+        var resetButton = CreateActionButton("Reset receipt evidence demo", Color.FromRgb(30, 41, 59), Color.FromRgb(226, 232, 240));
+        resetButton.Click += ResetReceiptEvidenceButton_Click;
+        controlsRoot.Children.Add(resetButton);
+        controlsPanel.Child = controlsRoot;
+        controlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(controlsPanel);
+
+        root.Children.Add(CreateReceiptEvidenceLanePanel("Review queue / untrusted candidates", summary.ReviewQueue));
+        root.Children.Add(CreateReceiptEvidenceLanePanel("Missing source evidence", summary.MissingSourceItems));
+        root.Children.Add(CreateReceiptEvidenceLanePanel("Accepted / trusted after review", summary.AcceptedItems));
+        root.Children.Add(CreateReceiptEvidenceLanePanel("Money-impact candidates", summary.MoneyCandidates));
+        root.Children.Add(CreateReceiptEvidenceLanePanel("Paid-work / proof candidates", summary.WorkProofCandidates));
+
+        var boundaryPanel = CreateInfoPanel(
+            "v4.6 boundary",
+            "Local/manual evidence review only. No real OCR API, scanner, Gmail/Outlook import, bank feed, accounting sync, BNPL provider, OAuth flow, invoice creation, automatic payment state, or AI action is active.");
+        boundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(boundaryPanel);
+
+        var nextPanel = CreateInfoPanel(
+            "After v4.6",
+            "Next lane: v4.7 Weekly Close-Out. Receipt evidence is now ready to feed reviewed proof and item state without trusting raw imports automatically.");
+        nextPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(nextPanel);
+
+        var storagePanel = CreateInfoPanel(
+            "Local receipt evidence file",
+            ReceiptEvidenceStorage.FilePath);
+        storagePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(storagePanel);
+
+        MainContentControl.Content = root;
+    }
+
+    private Border CreateReceiptEvidenceLanePanel(string title, IEnumerable<ReceiptEvidenceItem> items)
+    {
+        var panel = CreatePanel();
+        panel.Margin = new Thickness(0, 16, 0, 0);
+
+        var root = new StackPanel();
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        var list = items.ToList();
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No receipt evidence candidates in this lane."));
+        }
+        else
+        {
+            foreach (var item in list)
+            {
+                var trust = item.IsTrusted ? "Trusted" : "Untrusted";
+                var body = $"{item.Merchant} • {FormatMoney(item.Amount)} • {item.ReceiptDate:yyyy-MM-dd} • {item.State} • {trust}" +
+                           Environment.NewLine +
+                           $"Category: {item.Category} • Source: {item.SourceType} • Confidence: {item.ConfidenceLabel} • Target: {item.TargetItemType}" +
+                           Environment.NewLine +
+                           $"Next: {item.NextAction}";
+
+                var notes = $"Source evidence: {(item.HasSourceEvidence ? item.SourcePathOrNote : "Missing")}" +
+                            Environment.NewLine +
+                            $"Notes: {item.Notes}";
+
+                root.Children.Add(CreateSimpleItemCard(item.Title, body, notes));
+            }
+        }
+
+        panel.Child = root;
+        return panel;
+    }
 
     private void AddWorkSessionButton_Click(object sender, RoutedEventArgs e)
     {

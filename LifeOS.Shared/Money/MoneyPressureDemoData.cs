@@ -1,4 +1,5 @@
-﻿using LifeOS.Core.Money;
+using LifeOS.Core;
+using LifeOS.Core.Money;
 
 namespace LifeOS.Shared.Money;
 
@@ -7,7 +8,7 @@ public static class MoneyPressureDemoData
     public static MoneyPressureSummary CreateSummary()
     {
         var today = DateOnly.FromDateTime(DateTime.Today);
-        var weekStart = today.AddDays(-(int)today.DayOfWeek + 1);
+        var weekStart = LifeOSWeek.GetMondayStart(today);
         var weekEnd = weekStart.AddDays(6);
 
         var income = new List<IncomeItem>

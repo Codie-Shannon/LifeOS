@@ -5,7 +5,7 @@ public static class AgendaCalculator
     public static AgendaSummary Calculate(IEnumerable<AgendaItem> items, DateOnly today)
     {
         var itemList = items.ToList();
-        var weekStart = today.AddDays(-(int)today.DayOfWeek + 1);
+        var weekStart = LifeOSWeek.GetMondayStart(today);
         var weekEnd = weekStart.AddDays(6);
 
         var openItems = itemList

@@ -4,7 +4,7 @@ public static class PayLaterCalculator
 {
     public static PayLaterSummary Calculate(IEnumerable<PayLaterItem> items, DateOnly today)
     {
-        var weekStart = today.AddDays(-(int)today.DayOfWeek + 1);
+        var weekStart = LifeOSWeek.GetMondayStart(today);
         var weekEnd = weekStart.AddDays(6);
 
         var openItems = items

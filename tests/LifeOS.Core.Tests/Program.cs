@@ -1,5 +1,8 @@
+using LifeOS.Core;
 using LifeOS.Core.CommandCentrePressure;
 using LifeOS.Core.IntegrationInbox;
+using LifeOS.Core.Money;
+using LifeOS.Core.WeeklyCloseOut;
 using LifeOS.Shared.IntegrationInbox;
 
 var tests = new (string Name, Action Run)[]
@@ -14,7 +17,11 @@ var tests = new (string Name, Action Run)[]
     ("Pressure engine suppresses early waiting-on-others signals", PressureEngineTests.SuppressWaitingOnOthers),
     ("Pressure engine forces untrusted signals into review", PressureEngineTests.UntrustedSignalsRequireReview),
     ("Pressure engine chooses act-now next action before review", PressureEngineTests.ActNowWinsNextSafestAction),
-    ("Pressure engine limits top ranked signals", PressureEngineTests.TopSignalsRespectPolicyLimit)
+    ("Pressure engine limits top ranked signals", PressureEngineTests.TopSignalsRespectPolicyLimit),
+    ("LifeOS week starts on the current Monday even on Sunday", CalendarRuleTests.MondayWeekStartHandlesSunday),
+    ("Money pressure excludes pending income from safe-to-spend", MoneyRuleTests.PendingIncomeIsNotSafeMoney),
+    ("Money pressure counts only unpaid events in the active week", MoneyRuleTests.BillsDueUseActiveWeekAndPaidState),
+    ("Weekly close-out recognizes the current week on Sunday", WeeklyCloseOutRuleTests.CurrentWeekCloseOutHandlesSunday)
 };
 
 var failures = new List<string>();
@@ -306,6 +313,127 @@ static class PressureEngineTests
             SuppressWaitingOnOthers = true,
             RequireReviewForUntrusted = true
         };
+    }
+}
+
+static class CalendarRuleTests
+{
+    public static void MondayWeekStartHandlesSunday()
+    {
+        var sunday = new DateOnly(2026, 7, 12);
+
+        Assert.Equal(new DateOnly(2026, 7, 6), LifeOSWeek.GetMondayStart(sunday));
+    }
+}
+
+static class MoneyRuleTests
+{
+    public static void PendingIncomeIsNotSafeMoney()
+    {
+        var summary = MoneyPressureCalculator.Calculate(
+            currentBalance: 100m,
+            incomeItems:
+            [
+                new IncomeItem
+                {
+                    Source = "Paid invoice",
+                    Amount = 100m,
+                    Status = IncomeStatus.Paid,
+                    TaxSetAsidePercent = 20m
+                },
+                new IncomeItem
+                {
+                    Source = "Expected invoice",
+                    Amount = 1000m,
+                    Status = IncomeStatus.Expected,
+                    TaxSetAsidePercent = 20m
+                }
+            ],
+            moneyEvents: [],
+            deductionRules: [],
+            foodFuelBuffer: 50m,
+            emergencyBuffer: 20m,
+            weekStart: new DateOnly(2026, 7, 6),
+            weekEnd: new DateOnly(2026, 7, 12));
+
+        Assert.Equal(80m, summary.ConfirmedPaidIncome);
+        Assert.Equal(800m, summary.PendingIncome);
+        Assert.Equal(110m, summary.SafeToSpend);
+    }
+
+    public static void BillsDueUseActiveWeekAndPaidState()
+    {
+        var summary = MoneyPressureCalculator.Calculate(
+            currentBalance: 500m,
+            incomeItems: [],
+            moneyEvents:
+            [
+                new MoneyEvent
+                {
+                    Name = "Due this week",
+                    Amount = 120m,
+                    DueDate = new DateOnly(2026, 7, 8)
+                },
+                new MoneyEvent
+                {
+                    Name = "Already paid",
+                    Amount = 80m,
+                    DueDate = new DateOnly(2026, 7, 8),
+                    IsPaid = true
+                },
+                new MoneyEvent
+                {
+                    Name = "Next week",
+                    Amount = 90m,
+                    DueDate = new DateOnly(2026, 7, 13)
+                }
+            ],
+            deductionRules:
+            [
+                new DeductionRule
+                {
+                    Name = "Fixed deduction",
+                    Type = DeductionType.FixedAmount,
+                    Value = 40m
+                },
+                new DeductionRule
+                {
+                    Name = "Inactive deduction",
+                    Type = DeductionType.FixedAmount,
+                    Value = 999m,
+                    IsActive = false
+                }
+            ],
+            foodFuelBuffer: 50m,
+            emergencyBuffer: 30m,
+            weekStart: new DateOnly(2026, 7, 6),
+            weekEnd: new DateOnly(2026, 7, 12));
+
+        Assert.Equal(120m, summary.BillsDue);
+        Assert.Equal(40m, summary.DeductionsDue);
+        Assert.Equal(260m, summary.SafeToSpend);
+    }
+}
+
+static class WeeklyCloseOutRuleTests
+{
+    public static void CurrentWeekCloseOutHandlesSunday()
+    {
+        var today = new DateOnly(2026, 7, 12);
+        var summary = WeeklyCloseOutCalculator.Calculate(
+        [
+            new WeeklyCloseOutEntry
+            {
+                WeekStart = new DateOnly(2026, 7, 6),
+                WhatGotDone = "Closed the week.",
+                StillWaitingOn = "Client reply"
+            }
+        ],
+        today);
+
+        Assert.True(summary.HasCurrentWeekCloseOut, "Sunday should still belong to the Monday-start current week.");
+        Assert.Equal(1, summary.EntriesThisWeek);
+        Assert.Equal(1, summary.WaitingOnCount);
     }
 }
 

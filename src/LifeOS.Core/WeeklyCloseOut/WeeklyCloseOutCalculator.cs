@@ -5,7 +5,7 @@ public static class WeeklyCloseOutCalculator
     public static WeeklyCloseOutSummary Calculate(IEnumerable<WeeklyCloseOutEntry> entries, DateOnly today)
     {
         var entryList = entries.ToList();
-        var weekStart = today.AddDays(-(int)today.DayOfWeek + 1);
+        var weekStart = LifeOSWeek.GetMondayStart(today);
         var latestWeekStart = entryList.Count == 0 ? (DateOnly?)null : entryList.Max(entry => entry.WeekStart);
         var entriesThisWeek = entryList.Count(entry => entry.WeekStart == weekStart);
         var waitingOnCount = entryList.Count(entry => !string.IsNullOrWhiteSpace(entry.StillWaitingOn));

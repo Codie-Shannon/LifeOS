@@ -1,4 +1,5 @@
 using System.Text.Json;
+using LifeOS.Core;
 using LifeOS.Core.WeeklyCloseOut;
 using LifeOS.Shared.Storage;
 
@@ -46,7 +47,7 @@ public static class WeeklyCloseOutStorage
     private static List<WeeklyCloseOutEntry> CreateDefaultEntries()
     {
         var today = DateOnly.FromDateTime(DateTime.Today);
-        var weekStart = today.AddDays(-(int)today.DayOfWeek + 1);
+        var weekStart = LifeOSWeek.GetMondayStart(today);
 
         return
         [

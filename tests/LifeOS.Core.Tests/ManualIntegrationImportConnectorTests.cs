@@ -100,4 +100,45 @@ public sealed class ManualIntegrationImportConnectorTests
         Assert.Equal("Receipt, pharmacy", preview.Title);
         Assert.Equal("Painkillers, vitamins", preview.Summary);
     }
+
+    [Fact]
+    public void PreviewSummaryCapturesJsonImportCounts()
+    {
+        const string content = """
+        [
+          {
+            "id": "json-money-1",
+            "title": "JSON invoice candidate",
+            "summary": "Imported JSON invoice preview",
+            "amount": 125.50,
+            "target": "BillsPayments"
+          }
+        ]
+        """;
+
+        var result = ManualIntegrationImportConnector.ImportJson(content, "sample.json");
+        var summary = ManualIntegrationImportPreviewSummary.Create(result, @"C:\Projects\LifeOS\docs\integrations\sample.json", ".json");
+
+        Assert.Equal("manual-json", summary.ConnectorKey);
+        Assert.Equal("sample.json", summary.SourceFileName);
+        Assert.Equal("JSON", summary.FileKind);
+        Assert.Equal(1, summary.PreviewCount);
+        Assert.Equal(0, summary.DuplicateSuspectedCount);
+        Assert.Equal(0, summary.SkippedRowCount);
+        Assert.Equal(125.50m, summary.PreviewMoney);
+    }
+
+    [Fact]
+    public void PreviewSummaryCountsDuplicateSuspicionsBeforeSave()
+    {
+        const string content = "externalReference,title,amount,date\r\nbill-1,Power bill,91.45,2026-07-10";
+        var result = ManualIntegrationImportConnector.ImportCsv(content, "sample.csv");
+        IntegrationImportDuplicateDetector.MarkDuplicateSuspicions(
+            [new IntegrationPreviewItem { DuplicateKey = "manual-csv:bill-1:20260710:91.45" }],
+            result.Previews);
+
+        var summary = ManualIntegrationImportPreviewSummary.Create(result, "sample.csv", ".csv");
+
+        Assert.Equal(1, summary.DuplicateSuspectedCount);
+    }
 }

@@ -17,6 +17,7 @@ This is the safest first connector because it exercises the same intake, provena
 - Read a user-selected local CSV or JSON file.
 - Map each row/record into an `IntegrationPreviewDraft`.
 - Create previews only through `IntegrationPreviewIntake.CreatePreview`.
+- Show a preview confirmation summary before saving imported previews.
 - Store previews in the existing Integration Inbox local file.
 - Store a manual import audit entry with file identity, hash, imported/skipped counts, row errors, preview IDs, and timestamp.
 - Mark incoming previews as duplicate-suspected when their duplicate key already exists or repeats inside the same import batch.
@@ -58,7 +59,7 @@ The current implementation accepts `title`, `name`, `subject`, `description`, or
 
 - Core tests cover importer mapping, fallback row references, missing title errors, quoted CSV fields, and review gates.
 - Manual import creates previews through the shared intake guard.
-- Integration Inbox UI imports local `.csv` and `.json` files and shows imported previews with provenance.
+- Integration Inbox UI imports local `.csv` and `.json` files, shows a pre-save summary, and shows imported previews with provenance.
 - Integration Inbox UI shows recent manual import audit runs and stores them locally.
 - Duplicate reimports are marked `DuplicateSuspected` and remain blocked by the review gate.
 - Build is green.

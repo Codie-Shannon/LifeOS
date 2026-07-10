@@ -1,0 +1,19 @@
+[
+  {
+    "id": "json-invoice-2026-07",
+    "title": "JSON invoice candidate",
+    "summary": "Imported local JSON invoice candidate for v5 manual connector screenshots",
+    "amount": 125.50,
+    "currency": "NZD",
+    "date": "2026-07-10",
+    "target": "BillsPayments",
+    "action": "Review JSON invoice candidate"
+  },
+  {
+    "id": "json-followup-2026-07",
+    "title": "JSON follow-up candidate",
+    "notes": "Follow-up candidate imported from local JSON",
+    "target": "FollowUps",
+    "action": "Check JSON follow-up source"
+  }
+]

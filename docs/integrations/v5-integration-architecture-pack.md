@@ -16,6 +16,8 @@ Connector runs also leave audit records. For the manual import connector, the au
 
 Incoming previews are checked against existing Integration Inbox duplicate keys before they are saved. Repeated keys are preserved as evidence but marked `DuplicateSuspected`, counted in the import audit, and blocked by the review gate.
 
+Manual imports require a pre-save confirmation summary. The user sees file identity, connector key, preview count, duplicate-suspected count, skipped row count, and preview money before LifeOS writes previews or an audit entry.
+
 ## Provider Registry
 
 The core registry lives in `src/LifeOS.Core/IntegrationConnectors`.

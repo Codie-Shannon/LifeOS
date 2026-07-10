@@ -378,6 +378,12 @@ public partial class MainWindow
 
             var items = IntegrationInboxStorage.Load();
             var duplicateCount = IntegrationImportDuplicateDetector.MarkDuplicateSuspicions(items, result.Previews);
+            var summary = ManualIntegrationImportPreviewSummary.Create(result, dialog.FileName, extension);
+            if (!ConfirmManualImportPreview(summary))
+            {
+                return;
+            }
+
             items.AddRange(result.Previews);
             IntegrationInboxStorage.Save(items);
             IntegrationImportAuditStorage.Append(IntegrationImportAudit.CreateManualImportEntry(
@@ -405,5 +411,27 @@ public partial class MainWindow
         {
             MessageBox.Show(ex.Message, "LifeOS manual import", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+    }
+
+    private bool ConfirmManualImportPreview(ManualIntegrationImportPreviewSummary summary)
+    {
+        var message =
+            $"File: {summary.SourceFileName}\n" +
+            $"Kind: {summary.FileKind}\n" +
+            $"Connector: {summary.ConnectorKey}\n" +
+            $"Previews to create: {summary.PreviewCount}\n" +
+            $"Duplicate-suspected: {summary.DuplicateSuspectedCount}\n" +
+            $"Skipped rows: {summary.SkippedRowCount}\n" +
+            $"Preview money: {FormatMoney(summary.PreviewMoney)}";
+
+        if (summary.Errors.Count > 0)
+        {
+            message += "\n\nFirst skipped rows:\n" +
+                string.Join("\n", summary.Errors.Take(5).Select(error => $"Row {error.RowNumber}: {error.Message}"));
+        }
+
+        message += "\n\nImport these previews into the review queue?";
+
+        return MessageBox.Show(message, "Review manual import preview", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
     }
 }

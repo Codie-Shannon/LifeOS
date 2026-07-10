@@ -9,6 +9,7 @@
 - `screenshot-groups/group-19-integration-inbox-v5-readiness/README.md` - Group 19 screenshot index.
 - `stage-manifests/103_v4_9_group19_docs_screenshots_readme.md` - final v4.9 docs manifest.
 - `integrations/v5-0-build-brief.md` - first v5.0 connector brief.
+- `integrations/v5-integration-architecture-pack.md` - connector registry, scope, risk, and roadmap architecture.
 - `integrations/temporary-integration-master-list.md` - temporary broad integration planning list before the v5 architecture pack.
 
 ## Screenshot groups

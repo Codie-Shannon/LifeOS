@@ -245,7 +245,7 @@
                                    FontSize="28"
                                    FontWeight="Bold"/>
                         <TextBlock x:Name="PageSubtitleTextBlock"
-                                   Text="Work, income, proof command centre â€¢ Desktop v1.4"
+                                   Text="Work, income, proof command centre Ã¢â‚¬Â¢ Desktop v1.4"
                                    Foreground="#94A3B8"
                                    FontSize="14"
                                    Margin="0,4,0,0"/>
@@ -276,7 +276,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v4.6 adds receipt evidence candidates, source checks, review gates, and trusted evidence-to-item handoff."
+                <TextBlock Text="LifeOS Desktop v4.8 ranks reviewed local pressure into act-now, review-first, waiting/do-not-chase, and protected lanes."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

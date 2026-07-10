@@ -45,6 +45,8 @@ using LifeOS.Core.PaymentCalendar;
 using LifeOS.Shared.PaymentCalendar;
 using LifeOS.Core.ReceiptEvidence;
 using LifeOS.Shared.ReceiptEvidence;
+using LifeOS.Core.CommandCentrePressure;
+using LifeOS.Shared.CommandCentrePressure;
 
 using LifeOS.Core.Agenda;
 using LifeOS.Core.PayLater;
@@ -105,6 +107,7 @@ public partial class MainWindow : Window
 
     private List<WeeklyCloseOutEntry> _weeklyCloseOutEntries = WeeklyCloseOutStorage.Load();
     private List<WeeklyCloseOutReviewItem> _weeklyCloseOutReviewItems = WeeklyCloseOutReviewStorage.Load();
+    private CommandCentrePressurePolicy _commandCentrePressurePolicy = CommandCentrePressurePolicyStorage.Load();
 
     private TextBox? _closeOutWeekStartTextBox;
     private TextBox? _closeOutDoneTextBox;
@@ -6582,6 +6585,215 @@ public partial class MainWindow : Window
     }
 
 
+    private List<PressureSignal> CreateCommandCentrePressureSignals(
+        CommandCentreSummary summary,
+        DailyOperatingFlowSummary dailyFlowSummary,
+        MoneyObligationSummary moneyObligationSummary,
+        MoneyProfileSummary moneyProfileSummary,
+        PaymentCalendarSummary paymentCalendarSummary,
+        WorkPipelineOperatingSummary workPipelineSummary,
+        ReceiptEvidenceSummary receiptEvidenceSummary,
+        WeeklyCloseOutOperatingSummary weeklyCloseOutSummary)
+    {
+        var signals = new List<PressureSignal>();
+
+        signals.Add(new PressureSignal
+        {
+            Key = "safe-to-spend",
+            Module = "Money Profile",
+            Title = "Final safe-to-spend",
+            Detail = $"Final safe-to-spend is {FormatMoney(moneyProfileSummary.SafeToSpendFinal)}.",
+            NextAction = "Review visible obligations, hidden deductions, and required buffers before discretionary spending.",
+            Severity = moneyProfileSummary.SafeToSpendFinal < 0 ? PressureSeverity.Critical : PressureSeverity.Normal,
+            Lane = moneyProfileSummary.SafeToSpendFinal < 0 ? PressureLane.ActNow : PressureLane.Review,
+            MoneyAmount = Math.Abs(Math.Min(0m, moneyProfileSummary.SafeToSpendFinal)),
+            IsDueNow = moneyProfileSummary.SafeToSpendFinal < 0,
+            IsTrusted = true
+        });
+
+        signals.Add(new PressureSignal
+        {
+            Key = "money-due-today",
+            Module = "Bills / Payments",
+            Title = "Money due today",
+            Detail = $"{moneyObligationSummary.DueTodayItems} obligation(s) due today totalling {FormatMoney(moneyObligationSummary.AmountDueToday)}.",
+            NextAction = "Confirm what is genuinely due today and pay or record evidence only when verified.",
+            Severity = moneyObligationSummary.DueTodayItems > 0 ? PressureSeverity.Critical : PressureSeverity.Low,
+            Lane = moneyObligationSummary.DueTodayItems > 0 ? PressureLane.ActNow : PressureLane.Protected,
+            MoneyAmount = moneyObligationSummary.AmountDueToday,
+            IsDueNow = moneyObligationSummary.DueTodayItems > 0,
+            IsTrusted = true
+        });
+
+        signals.Add(new PressureSignal
+        {
+            Key = "follow-ups",
+            Module = "Follow-Ups",
+            Title = "Open follow-ups",
+            Detail = $"{summary.FollowUps.TotalOpen} follow-up(s) remain open.",
+            NextAction = "Only chase follow-ups that are due now; leave protected waiting items alone.",
+            Severity = summary.FollowUps.TotalOpen > 0 ? PressureSeverity.High : PressureSeverity.Low,
+            Lane = summary.FollowUps.TotalOpen > 0 ? PressureLane.Review : PressureLane.Protected,
+            IsTrusted = true
+        });
+
+        signals.Add(new PressureSignal
+        {
+            Key = "daily-flow",
+            Module = "Daily Operating Flow",
+            Title = "Today flow",
+            Detail = $"{dailyFlowSummary.TodayOpenCount} item(s) remain in today's operating flow with {dailyFlowSummary.StopPointCount} stop point(s).",
+            NextAction = "Choose the highest-value action that can actually move today.",
+            Severity = dailyFlowSummary.StopPointCount > 0 ? PressureSeverity.High : PressureSeverity.Normal,
+            Lane = dailyFlowSummary.TodayOpenCount > 0 ? PressureLane.ActNow : PressureLane.Protected,
+            IsDueNow = dailyFlowSummary.TodayOpenCount > 0,
+            IsTrusted = true
+        });
+
+        signals.Add(new PressureSignal
+        {
+            Key = "work-blocked",
+            Module = "Work Pipeline",
+            Title = "Blocked work",
+            Detail = $"{workPipelineSummary.BlockedItems} work item(s) are blocked.",
+            NextAction = "Keep blocked work visible, record the blocker, and do not consume deep sprint time until it clears.",
+            Severity = workPipelineSummary.BlockedItems > 0 ? PressureSeverity.High : PressureSeverity.Low,
+            Lane = PressureLane.Waiting,
+            IsBlocked = workPipelineSummary.BlockedItems > 0,
+            IsWaitingOnOthers = workPipelineSummary.WaitingOnOthersItems > 0,
+            IsTrusted = true
+        });
+
+        signals.Add(new PressureSignal
+        {
+            Key = "work-review",
+            Module = "Work Pipeline",
+            Title = "Work review needed",
+            Detail = $"{workPipelineSummary.ReviewNeededItems} work item(s) need date, proof, payment, or next-action review.",
+            NextAction = "Resolve the smallest review gap that unlocks paid work or removes uncertainty.",
+            Severity = workPipelineSummary.ReviewNeededItems > 0 ? PressureSeverity.High : PressureSeverity.Low,
+            Lane = workPipelineSummary.ReviewNeededItems > 0 ? PressureLane.Review : PressureLane.Protected,
+            MoneyAmount = workPipelineSummary.ExpectedValueExcludedFromSafe,
+            IsTrusted = false
+        });
+
+        signals.Add(new PressureSignal
+        {
+            Key = "receipt-review",
+            Module = "Receipt OCR / Evidence",
+            Title = "Receipt evidence review",
+            Detail = $"{receiptEvidenceSummary.ReviewCount} receipt candidate(s) need review and {receiptEvidenceSummary.MissingSourceCount} are missing source evidence.",
+            NextAction = "Attach or compare source evidence before accepting any receipt candidate.",
+            Severity = receiptEvidenceSummary.MissingSourceCount > 0 ? PressureSeverity.High : PressureSeverity.Normal,
+            Lane = receiptEvidenceSummary.ReviewCount > 0 ? PressureLane.Review : PressureLane.Protected,
+            MoneyAmount = receiptEvidenceSummary.CandidateValue,
+            IsTrusted = receiptEvidenceSummary.ReviewCount == 0
+        });
+
+        signals.Add(new PressureSignal
+        {
+            Key = "weekly-close-out",
+            Module = "Weekly Close-Out",
+            Title = "Weekly close-out",
+            Detail = $"{weeklyCloseOutSummary.ReadyToCloseItems} can close and {weeklyCloseOutSummary.RollForwardItems} should roll forward.",
+            NextAction = "Close trusted completed items, then deliberately assign next actions to roll-forward items.",
+            Severity = weeklyCloseOutSummary.PressureLabel == "Critical"
+                ? PressureSeverity.Critical
+                : weeklyCloseOutSummary.PressureLabel == "High"
+                    ? PressureSeverity.High
+                    : PressureSeverity.Normal,
+            Lane = weeklyCloseOutSummary.ReadyToCloseItems > 0 ? PressureLane.ActNow : PressureLane.Review,
+            MoneyAmount = weeklyCloseOutSummary.MoneyStillUnderReview,
+            IsDueNow = weeklyCloseOutSummary.ReadyToCloseItems > 0,
+            IsTrusted = weeklyCloseOutSummary.UntrustedItems == 0
+        });
+
+        signals.Add(new PressureSignal
+        {
+            Key = "payment-calendar",
+            Module = "Payment Calendar",
+            Title = "Payment and agenda dates",
+            Detail = $"{paymentCalendarSummary.TodayItems} item(s) land today and {paymentCalendarSummary.ReviewQueueItems} date item(s) need review.",
+            NextAction = "Protect fixed commitments and verify payment dates without treating expected income as safe.",
+            Severity = paymentCalendarSummary.TodayItems > 0 ? PressureSeverity.High : PressureSeverity.Normal,
+            Lane = paymentCalendarSummary.TodayItems > 0 ? PressureLane.ActNow : PressureLane.Review,
+            MoneyAmount = paymentCalendarSummary.AmountDueToday,
+            IsDueNow = paymentCalendarSummary.TodayItems > 0,
+            IsTrusted = paymentCalendarSummary.UntrustedItems == 0
+        });
+
+        signals.Add(new PressureSignal
+        {
+            Key = "expected-money",
+            Module = "Money / Work Pipeline",
+            Title = "Expected money excluded",
+            Detail = $"{FormatMoney(moneyProfileSummary.ExpectedExcludedFromSafe)} remains expected rather than paid.",
+            NextAction = "Keep expected money visible for planning but do not spend it until paid and cleared.",
+            Severity = moneyProfileSummary.ExpectedExcludedFromSafe > 0 ? PressureSeverity.Normal : PressureSeverity.Low,
+            Lane = PressureLane.Protected,
+            MoneyAmount = moneyProfileSummary.ExpectedExcludedFromSafe,
+            IsWaitingOnOthers = true,
+            IsTrusted = true,
+            SuppressionReason = "Expected money is visible for planning but protected from safe money."
+        });
+
+        return signals;
+    }
+
+    private Border CreatePressureSignalLanePanel(
+        string title,
+        string description,
+        IEnumerable<PressureSignal> signals)
+    {
+        var panel = CreatePanel();
+        panel.Margin = new Thickness(0, 16, 0, 0);
+
+        var root = new StackPanel();
+        root.Children.Add(new TextBlock
+        {
+            Text = title,
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        root.Children.Add(new TextBlock
+        {
+            Text = description,
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 4)
+        });
+
+        var list = signals.ToList();
+        if (list.Count == 0)
+        {
+            root.Children.Add(CreateEmptyTextBlock("No pressure signals in this lane."));
+            panel.Child = root;
+            return panel;
+        }
+
+        foreach (var signal in list)
+        {
+            var moneyText = signal.MoneyAmount > 0 ? $" • Money: {FormatMoney(signal.MoneyAmount)}" : string.Empty;
+            var body =
+                $"{signal.Module} • {signal.Severity} • {signal.Lane}{moneyText}{Environment.NewLine}" +
+                $"{signal.Detail}{Environment.NewLine}" +
+                $"Next: {signal.NextAction}{Environment.NewLine}" +
+                $"Trusted: {(signal.IsTrusted ? "Yes" : "No")} • Due now: {(signal.IsDueNow ? "Yes" : "No")}";
+
+            var note = signal.IsSuppressed
+                ? $"Suppressed: {signal.SuppressionReason}"
+                : signal.SuppressionReason;
+
+            root.Children.Add(CreateSimpleItemCard(signal.Title, body, note));
+        }
+
+        panel.Child = root;
+        return panel;
+    }
+
     private void ShowCommandCentre()
     {
         var summary = CommandCentreSummaryService.Create();
@@ -6601,14 +6813,26 @@ public partial class MainWindow : Window
         var workPipelineOperatingSummary = WorkPipelineOperatingCalculator.Calculate(_workPipelineItems, DateOnly.FromDateTime(DateTime.Today));
         var receiptEvidenceSummary = ReceiptEvidenceCalculator.Calculate(_receiptEvidenceItems);
         var weeklyCloseOutOperatingSummary = WeeklyCloseOutOperatingCalculator.Calculate(_weeklyCloseOutReviewItems);
+        var pressureSignals = CreateCommandCentrePressureSignals(
+            summary,
+            dailyFlowSummary,
+            moneyObligationSummary,
+            moneyProfileSummary,
+            paymentCalendarSummary,
+            workPipelineOperatingSummary,
+            receiptEvidenceSummary,
+            weeklyCloseOutOperatingSummary);
+        var pressureEngineSummary = CommandCentrePressureCalculator.Calculate(
+            pressureSignals,
+            _commandCentrePressurePolicy);
 
-        SetHeader("Command Centre", $"Unified Command Centre • v4.7 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v4.8 • {pressureEngineSummary.PressureLabel}");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "LifeOS Command Centre",
-            "LifeOS now turns local module data into a unified signal list: paid work that can move today, follow-ups due, blocked/waiting client work, timesheet/invoice/payment warnings, and safe-money pressure."));
+            "v4.8 turns reviewed local module signals into one ranked pressure engine: act now, review first, waiting/do not chase, and protected work."));
 
         var metricsPanel = new WrapPanel
         {
@@ -6643,6 +6867,17 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Roll forward", weeklyCloseOutOperatingSummary.RollForwardItems.ToString(), "Next week"));
         metricsPanel.Children.Add(CreateDashboardCard("Close-out blocked", weeklyCloseOutOperatingSummary.BlockedItems.ToString(), "Visible"));
         metricsPanel.Children.Add(CreateDashboardCard("Close-out money", FormatMoney(weeklyCloseOutOperatingSummary.MoneyStillUnderReview), "Not safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pressure engine", pressureEngineSummary.PressureLabel, "v4.8"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pressure score", pressureEngineSummary.PressureScore.ToString(), "Ranked"));
+        metricsPanel.Children.Add(CreateDashboardCard("Critical signals", pressureEngineSummary.CriticalSignals.ToString(), "Act first"));
+        metricsPanel.Children.Add(CreateDashboardCard("High signals", pressureEngineSummary.HighSignals.ToString(), "Visible"));
+        metricsPanel.Children.Add(CreateDashboardCard("Act now", pressureEngineSummary.ActNowSignals.ToString(), "Today"));
+        metricsPanel.Children.Add(CreateDashboardCard("Review first", pressureEngineSummary.ReviewSignals.ToString(), "Manual"));
+        metricsPanel.Children.Add(CreateDashboardCard("Waiting", pressureEngineSummary.WaitingSignals.ToString(), "Do not chase"));
+        metricsPanel.Children.Add(CreateDashboardCard("Protected", pressureEngineSummary.ProtectedSignals.ToString(), "Contained"));
+        metricsPanel.Children.Add(CreateDashboardCard("Pressure money", FormatMoney(pressureEngineSummary.MoneyUnderPressure), "Not safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Suppressed", pressureEngineSummary.SuppressedSignals.ToString(), "Safety"));
+
 
 
         metricsPanel.Children.Add(CreateDashboardCard("Billable value", FormatMoney(summary.WorkSessions.BillableValue), "Work"));
@@ -6693,11 +6928,33 @@ public partial class MainWindow : Window
 
         var actionPanel = CreateInfoPanel(
             "Next safest action",
-            summary.NextSafestAction);
+            pressureEngineSummary.NextSafestAction);
 
         actionPanel.Margin = new Thickness(0, 8, 0, 0);
         root.Children.Add(actionPanel);
 
+
+        var pressureRulePanel = CreateInfoPanel(
+            "v4.8 Command Centre Pressure Engine rule",
+            FormatReasons(new[]
+            {
+                "Rank reviewed local signals instead of dumping every module card into Today.",
+                "Critical and due-now items rise first.",
+                "Untrusted items go to review before action.",
+                "Waiting-on-others items are protected until due unless critical.",
+                "Expected money and pressure money remain excluded from safe money.",
+                "Blocked work stays visible without consuming active sprint time.",
+                $"Pressure score: {pressureEngineSummary.PressureScore}.",
+                $"Visible signals: {pressureEngineSummary.TopSignals.Count} top / {pressureEngineSummary.TotalSignals} total."
+            }));
+
+        pressureRulePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pressureRulePanel);
+
+        root.Children.Add(CreatePressureSignalLanePanel(
+            "Top ranked pressure signals",
+            "The highest-ranked visible signals after trust, waiting, due-now, and suppression rules.",
+            pressureEngineSummary.TopSignals));
 
         var unifiedPanel = CreateInfoPanel(
             "What matters now",

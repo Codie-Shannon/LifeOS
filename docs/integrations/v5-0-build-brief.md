@@ -1,5 +1,7 @@
 # LifeOS v5.0 Build Brief - Manual Import Preview Connector
 
+Status: implemented as the first local v5 connector foundation.
+
 ## Purpose
 
 v5.0 should prove the real integration path without OAuth, live polling, or external mutation. The first connector is a narrow manual CSV/JSON import that turns local rows into read-only Integration Inbox previews.
@@ -17,6 +19,7 @@ This is the safest first connector because it exercises the same intake, provena
 - Create previews only through `IntegrationPreviewIntake.CreatePreview`.
 - Store previews in the existing Integration Inbox local file.
 - Show imported records as review-only until the user accepts, defers, rejects, or links them.
+- Report row-level import errors without creating partial trusted records.
 
 ## Required Fields
 
@@ -27,6 +30,8 @@ This is the safest first connector because it exercises the same intake, provena
 - Suggested target module when known.
 - Source evidence pointing to the imported file and row/record identifier.
 - Deterministic duplicate key.
+
+The current implementation accepts `title`, `name`, `subject`, `description`, or `summary` as the title source. If an external reference is missing, it creates a deterministic `row-N` reference for the imported file row.
 
 ## Prohibited
 
@@ -49,8 +54,8 @@ This is the safest first connector because it exercises the same intake, provena
 
 ## Definition Of Done
 
-- Core tests cover the importer mapping and review gates.
+- Core tests cover importer mapping, fallback row references, missing title errors, quoted CSV fields, and review gates.
 - Manual import creates previews through the shared intake guard.
-- Integration Inbox UI shows imported previews with provenance.
+- Integration Inbox UI imports local `.csv` and `.json` files and shows imported previews with provenance.
 - Build is green.
 - No live connector or target-module mutation exists.

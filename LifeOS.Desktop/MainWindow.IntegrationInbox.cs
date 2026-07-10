@@ -1,8 +1,11 @@
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using LifeOS.Core.IntegrationConnectors;
 using LifeOS.Core.IntegrationInbox;
 using LifeOS.Shared.IntegrationInbox;
+using Microsoft.Win32;
 
 namespace LifeOS.Desktop;
 
@@ -60,6 +63,8 @@ public partial class MainWindow
             TextWrapping = TextWrapping.Wrap,
             Margin = new Thickness(0, 8, 0, 12)
         });
+        var import = CreateEvidenceActionButton("Import CSV/JSON preview file", ImportIntegrationInboxPreviewFile);
+        controlsStack.Children.Add(import);
         var reset = CreateEvidenceActionButton("Reset v4.9 integration previews", ResetIntegrationInboxDemo);
         controlsStack.Children.Add(reset);
         controls.Child = controlsStack;
@@ -294,5 +299,51 @@ public partial class MainWindow
 
         _integrationInboxItems = IntegrationInboxStorage.Reset();
         ShowIntegrationInboxPage();
+    }
+
+    private void ImportIntegrationInboxPreviewFile()
+    {
+        var dialog = new OpenFileDialog
+        {
+            Title = "Import LifeOS preview file",
+            Filter = "CSV or JSON preview files (*.csv;*.json)|*.csv;*.json|CSV files (*.csv)|*.csv|JSON files (*.json)|*.json",
+            CheckFileExists = true,
+            Multiselect = false
+        };
+
+        if (dialog.ShowDialog() != true)
+        {
+            return;
+        }
+
+        try
+        {
+            var extension = Path.GetExtension(dialog.FileName).ToLowerInvariant();
+            var content = File.ReadAllText(dialog.FileName);
+            var result = extension switch
+            {
+                ".csv" => ManualIntegrationImportConnector.ImportCsv(content, dialog.FileName),
+                ".json" => ManualIntegrationImportConnector.ImportJson(content, dialog.FileName),
+                _ => throw new InvalidOperationException("Choose a .csv or .json file.")
+            };
+
+            var items = IntegrationInboxStorage.Load();
+            items.AddRange(result.Previews);
+            IntegrationInboxStorage.Save(items);
+
+            var message = $"Imported {result.Previews.Count} preview record(s) through {result.ConnectorKey}.";
+            if (result.Errors.Count > 0)
+            {
+                message += $"\n\nSkipped {result.Errors.Count} row(s):\n" +
+                    string.Join("\n", result.Errors.Take(5).Select(error => $"Row {error.RowNumber}: {error.Message}"));
+            }
+
+            MessageBox.Show(message, "LifeOS manual import", MessageBoxButton.OK, MessageBoxImage.Information);
+            ShowIntegrationInboxPage();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException or System.Text.Json.JsonException)
+        {
+            MessageBox.Show(ex.Message, "LifeOS manual import", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
     }
 }

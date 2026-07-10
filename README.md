@@ -41,6 +41,14 @@ LifeOS v4.9 is local and review-first. It does not connect to live email, calend
 dotnet build .\LifeOS.slnx
 ```
 
+## Test
+
+```powershell
+dotnet test .\LifeOS.slnx
+```
+
+The core regression suite lives in `tests/LifeOS.Core.Tests/` and covers the v5 safety rules around Integration Inbox intake, duplicate handling, pressure ranking, money safety, week boundaries, receipt evidence, payment calendar, money profile, and weekly close-out.
+
 ## Repository shape
 
 - `LifeOS.Desktop/` - WPF desktop application.
@@ -49,6 +57,30 @@ dotnet build .\LifeOS.slnx
 - `src/LifeOS.Modules.Timer/` - timer module.
 - `src/LifeOS.TimerAgent/` - timer agent utility.
 - `docs/` - release notes, screenshot evidence, manifests, and current-state documentation.
+
+## Local Storage
+
+LifeOS stores local JSON state under the user's local application data folder:
+
+```text
+%LOCALAPPDATA%\LifeOS
+```
+
+The app is local-first. Demo reset buttons restore fictional local records only; they do not call external services or mutate real systems.
+
+## Integration Safety Flow
+
+v5 integrations must follow the review-first path:
+
+```text
+external record -> IntegrationPreviewDraft -> IntegrationPreviewIntake.CreatePreview -> read-only IntegrationPreviewItem -> manual review -> accept/defer/reject -> explicit handoff/link
+```
+
+Connectors must not write directly to Money, Agenda, Work Pipeline, Evidence, Follow-Ups, or Command Centre. Imported or expected money is visible for planning but never safe money until reviewed and confirmed.
+
+## CI
+
+GitHub Actions runs restore, Release build, and `dotnet test` on pushes and pull requests to `main`.
 
 ## Next lane
 

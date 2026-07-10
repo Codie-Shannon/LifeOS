@@ -7112,6 +7112,8 @@ public partial class MainWindow : Window
         var workPipelineOperatingSummary = WorkPipelineOperatingCalculator.Calculate(_workPipelineItems, DateOnly.FromDateTime(DateTime.Today));
         var receiptEvidenceSummary = ReceiptEvidenceCalculator.Calculate(_receiptEvidenceItems);
         var weeklyCloseOutOperatingSummary = WeeklyCloseOutOperatingCalculator.Calculate(_weeklyCloseOutReviewItems);
+        var integrationInboxItems = IntegrationInboxStorage.Load();
+        var integrationInboxSummary = IntegrationInboxCalculator.Calculate(integrationInboxItems);
         var pressureSignals = CreateCommandCentrePressureSignals(
             summary,
             dailyFlowSummary,
@@ -7121,6 +7123,24 @@ public partial class MainWindow : Window
             workPipelineOperatingSummary,
             receiptEvidenceSummary,
             weeklyCloseOutOperatingSummary);
+        pressureSignals.Add(new PressureSignal
+        {
+            Key = "integration-inbox-review",
+            Module = "Integration Inbox",
+            Title = "Integration previews need review",
+            Detail = $"{integrationInboxSummary.NeedsReview} preview(s) require review and {integrationInboxSummary.DuplicateSuspected} duplicate conflict(s) remain.",
+            NextAction = "Review provenance and duplicates before accepting or linking any external preview.",
+            Severity = integrationInboxSummary.NeedsReview >= 4
+                ? PressureSeverity.Critical
+                : integrationInboxSummary.NeedsReview > 0
+                    ? PressureSeverity.High
+                    : PressureSeverity.Low,
+            Lane = integrationInboxSummary.NeedsReview > 0 ? PressureLane.Review : PressureLane.Protected,
+            MoneyAmount = integrationInboxSummary.PreviewMoney,
+            IsTrusted = integrationInboxSummary.NeedsReview == 0,
+            IsDueNow = integrationInboxSummary.NeedsReview > 0
+        });
+
         var pressureEngineSummary = CommandCentrePressureCalculator.Calculate(
             pressureSignals,
             _commandCentrePressurePolicy);
@@ -7131,7 +7151,7 @@ public partial class MainWindow : Window
 
         root.Children.Add(CreateHeroPanel(
             "LifeOS Command Centre",
-            "v4.8 turns reviewed local module signals into one ranked pressure engine: act now, review first, waiting/do not chase, and protected work."));
+            "v4.9 adds reviewed integration previews to the ranked pressure engine without allowing raw external data to change LifeOS automatically."));
 
         var metricsPanel = new WrapPanel
         {
@@ -7176,6 +7196,11 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Protected", pressureEngineSummary.ProtectedSignals.ToString(), "Contained"));
         metricsPanel.Children.Add(CreateDashboardCard("Pressure money", FormatMoney(pressureEngineSummary.MoneyUnderPressure), "Not safe"));
         metricsPanel.Children.Add(CreateDashboardCard("Suppressed", pressureEngineSummary.SuppressedSignals.ToString(), "Safety"));
+        metricsPanel.Children.Add(CreateDashboardCard("Integration previews", integrationInboxSummary.Total.ToString(), "v4.9"));
+        metricsPanel.Children.Add(CreateDashboardCard("Integration review", integrationInboxSummary.NeedsReview.ToString(), "Manual gate"));
+        metricsPanel.Children.Add(CreateDashboardCard("Preview conflicts", integrationInboxSummary.DuplicateSuspected.ToString(), "Duplicate"));
+        metricsPanel.Children.Add(CreateDashboardCard("Imported value", FormatMoney(integrationInboxSummary.PreviewMoney), "Not safe"));
+
 
 
 

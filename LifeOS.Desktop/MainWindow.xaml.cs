@@ -6600,8 +6600,9 @@ public partial class MainWindow : Window
         var paymentCalendarSummary = PaymentCalendarCalculator.Calculate(PaymentCalendarStorage.Load(), DateOnly.FromDateTime(DateTime.Today));
         var workPipelineOperatingSummary = WorkPipelineOperatingCalculator.Calculate(_workPipelineItems, DateOnly.FromDateTime(DateTime.Today));
         var receiptEvidenceSummary = ReceiptEvidenceCalculator.Calculate(_receiptEvidenceItems);
+        var weeklyCloseOutOperatingSummary = WeeklyCloseOutOperatingCalculator.Calculate(_weeklyCloseOutReviewItems);
 
-        SetHeader("Command Centre", $"Unified Command Centre • v4.6 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v4.7 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -6637,6 +6638,12 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Missing source", receiptEvidenceSummary.MissingSourceCount.ToString(), "Evidence"));
         metricsPanel.Children.Add(CreateDashboardCard("Accepted receipts", receiptEvidenceSummary.AcceptedCount.ToString(), "Trusted"));
         metricsPanel.Children.Add(CreateDashboardCard("Receipt value", FormatMoney(receiptEvidenceSummary.CandidateValue), "Not safe"));
+        metricsPanel.Children.Add(CreateDashboardCard("Weekly close-out", weeklyCloseOutOperatingSummary.PressureLabel, "v4.7"));
+        metricsPanel.Children.Add(CreateDashboardCard("Close now", weeklyCloseOutOperatingSummary.ReadyToCloseItems.ToString(), "This week"));
+        metricsPanel.Children.Add(CreateDashboardCard("Roll forward", weeklyCloseOutOperatingSummary.RollForwardItems.ToString(), "Next week"));
+        metricsPanel.Children.Add(CreateDashboardCard("Close-out blocked", weeklyCloseOutOperatingSummary.BlockedItems.ToString(), "Visible"));
+        metricsPanel.Children.Add(CreateDashboardCard("Close-out money", FormatMoney(weeklyCloseOutOperatingSummary.MoneyStillUnderReview), "Not safe"));
+
 
         metricsPanel.Children.Add(CreateDashboardCard("Billable value", FormatMoney(summary.WorkSessions.BillableValue), "Work"));
         metricsPanel.Children.Add(CreateDashboardCard("Unpaid work", FormatMoney(summary.WorkSessions.UnpaidBillableValue), "Income"));
@@ -6772,6 +6779,30 @@ public partial class MainWindow : Window
 
         receiptEvidenceSignalsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(receiptEvidenceSignalsPanel);
+
+        var weeklyCloseOutPanel = CreateInfoPanel(
+            "v4.7 Weekly Close-Out",
+            FormatReasons(weeklyCloseOutOperatingSummary.Reasons));
+
+        weeklyCloseOutPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(weeklyCloseOutPanel);
+
+        var weeklyCloseOutSignalsPanel = CreateInfoPanel(
+            "v4.7 weekly close-out signals",
+            FormatReasons(new[]
+            {
+                $"Close now: {weeklyCloseOutOperatingSummary.ReadyToCloseItems}",
+                $"Roll forward: {weeklyCloseOutOperatingSummary.RollForwardItems}",
+                $"Waiting: {weeklyCloseOutOperatingSummary.WaitingItems}",
+                $"Blocked: {weeklyCloseOutOperatingSummary.BlockedItems}",
+                $"Money under review: {FormatMoney(weeklyCloseOutOperatingSummary.MoneyStillUnderReview)}",
+                $"Proof checks: {weeklyCloseOutOperatingSummary.ProofReviewItems}",
+                $"Receipt checks: {weeklyCloseOutOperatingSummary.ReceiptReviewItems}",
+                $"Work checks: {weeklyCloseOutOperatingSummary.WorkReviewItems}"
+            }));
+
+        weeklyCloseOutSignalsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(weeklyCloseOutSignalsPanel);
 
         var dailyFlowPanel = CreateInfoPanel(
             "Daily Operating Flow",

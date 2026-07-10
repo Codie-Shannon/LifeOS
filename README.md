@@ -4,7 +4,7 @@ LifeOS Desktop is a local-first weekly pressure command centre. It turns local m
 
 ## Current version
 
-**Desktop v4.5 ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚¢ÃƒÆ’Ã‚¢Ãƒ¢Ã¢â€š¬Ã…¡Ãƒâ€šÃ‚¬ÃƒÆ’Ã‚¢Ãƒ¢Ã¢â‚¬Å¡Ã‚¬Ãƒâ€šÃ‚ Work Pipeline**
+**Desktop v4.5 ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â¢ÃƒÆ’Ã†â€™Ã‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â¢ÃƒÆ’Ã†â€™Ã‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â Work Pipeline**
 
 v4.5 strengthens the Work Pipeline lane: active work, warm leads, blocked items, follow-ups, invoice readiness, payment expected state, and proof gaps now sit in one operating lane.
 
@@ -44,4 +44,21 @@ v4.7 completes the weekly operating loop across work, money, waiting-on, proof, 
 
 - `docs/screenshot-groups/group-17-weekly-close-out/` - v4.7 Weekly Close-Out screenshots.
 - `docs/release-notes/v4.7.md` - v4.7 release notes.
+<!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
+
+<!-- LIFEOS_CURRENT_BUILD_START -->
+## Current build
+
+**LifeOS Desktop v4.8 - Command Centre Pressure Engine**
+
+v4.8 ranks reviewed local module signals into deliberate operating lanes: act now, review before action, waiting/do not chase, and protected/suppressed.
+
+**Boundary:** v4.8 is local ranking and suppression only. It does not send messages, pay bills, move money, close projects, create invoices, accept OCR automatically, change external calendars, sync external systems, or run AI actions.
+<!-- LIFEOS_CURRENT_BUILD_END -->
+
+<!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
+## Current screenshot evidence
+
+- `docs/screenshot-groups/group-18-command-centre-pressure-engine/` - v4.8 Command Centre Pressure Engine screenshots.
+- `docs/release-notes/v4.8.md` - v4.8 release notes.
 <!-- LIFEOS_CURRENT_SCREENSHOTS_END -->

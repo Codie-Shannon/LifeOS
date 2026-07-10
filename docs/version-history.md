@@ -109,3 +109,29 @@
 
 - Added local date-aware agenda and payment lane.
 <!-- LIFEOS_VERSION_HISTORY_END -->
+
+<!-- LIFEOS_VERSION_HISTORY_START -->
+## Version history
+
+### v4.8 - Command Centre Pressure Engine
+
+- Added ranked pressure signals across reviewed local modules.
+- Added act-now, review-before-action, waiting/do-not-chase, and protected/suppressed lanes.
+- Added pressure score, severity counts, lane counts, pressure money, and suppression metrics.
+- Added local pressure-policy controls and storage.
+- Added next-safest-action output and module pressure bridge.
+- Preserved conservative boundaries: no messages, payments, invoices, project closure, OCR acceptance, external sync, or AI actions.
+
+### v4.7 - Weekly Close-Out
+
+- Added cross-module weekly close-out review.
+- Added close-this-week, roll-forward, waiting/blocked, money, proof, receipt, and Work Pipeline lanes.
+
+### v4.6 - Receipt OCR / Evidence-to-Item
+
+- Added review-first receipt evidence candidates, source checks, trusted acceptance, and Command Centre receipt signals.
+
+### v4.5 - Work Pipeline
+
+- Added active work, waiting, blocked work, invoice readiness, payment expected state, proof gaps, warm opportunities, and Command Centre work signals.
+<!-- LIFEOS_VERSION_HISTORY_END -->

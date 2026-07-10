@@ -45,3 +45,13 @@
 - `screenshot-groups/group-17-weekly-close-out/README.md` - v4.7 screenshot group.
 - `stage-manifests/091_v4_7_group17_docs_screenshots_readme.md` - docs/screenshots manifest.
 <!-- LIFEOS_DOCS_INDEX_END -->
+
+<!-- LIFEOS_DOCS_INDEX_START -->
+## Current docs index
+
+- `current-status.md` - current release state and next lane.
+- `version-history.md` - version history.
+- `release-notes/v4.8.md` - v4.8 release notes.
+- `screenshot-groups/group-18-command-centre-pressure-engine/README.md` - v4.8 screenshot group.
+- `stage-manifests/098_v4_8_group18_docs_screenshots_readme.md` - docs/screenshots manifest.
+<!-- LIFEOS_DOCS_INDEX_END -->

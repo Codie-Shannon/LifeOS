@@ -1,5 +1,13 @@
 # LifeOS Version History
 
+## v5.0-alpha - Local Connector Foundation
+
+- Activated local CSV, JSON, and ICS imports into read-only Integration Inbox previews.
+- Added explicit import confirmation before preview records are saved.
+- Added duplicate detection that remains visible and blocks unsafe acceptance.
+- Added preserved import audit history and source provenance.
+- Kept all target-module handoffs manual and all live OAuth, API sync, inbox scanning, bank feeds, and automatic mutation inactive.
+
 ## v4.9 - Integration Inbox + v5 Readiness
 
 - Added review-first integration previews.

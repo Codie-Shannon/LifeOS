@@ -1403,7 +1403,7 @@ public partial class MainWindow : Window
 
         var nextPanel = CreateInfoPanel(
             "v4 road",
-            "v4.1 Item Type / State Engine → v4.2 Bills / Upcoming Payments / Pay Later → v4.3 Money Profile / Hidden Deductions / Safe-to-Spend → v4.4 Agenda + Payment Calendar → v4.5 Work Pipeline → v4.6 Receipt OCR / Evidence-to-Item → v4.7 Weekly Close-Out → v4.8 Command Centre Pressure Engine → v4.9 Integration Inbox + v5 readiness.");
+            "v4.1 Item Type / State Engine → v4.2 Bills / Upcoming Payments / Pay Later → v4.3 Money Profile / Hidden Deductions / Safe-to-Spend → v4.4 Agenda + Payment Calendar → v4.5 Work Pipeline → v4.6 Receipt OCR / Evidence-to-Item → v4.7 Weekly Close-Out → v4.8 Command Centre Pressure Engine → v4.9 Integration Inbox + v5 readiness → v5.0-alpha local CSV / JSON / ICS connector foundation.");
 
         nextPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(nextPanel);

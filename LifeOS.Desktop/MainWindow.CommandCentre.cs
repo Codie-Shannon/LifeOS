@@ -336,13 +336,13 @@ public partial class MainWindow
             pressureSignals,
             _commandCentrePressurePolicy);
 
-        SetHeader("Command Centre", $"Unified Command Centre • v4.9 • {pressureEngineSummary.PressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v5.0-alpha • {pressureEngineSummary.PressureLabel}");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "LifeOS Command Centre",
-            "v4.9 adds reviewed integration previews to the ranked pressure engine without allowing raw external data to change LifeOS automatically."));
+            "v5.0-alpha adds reviewed local CSV, JSON, and ICS connector previews to the ranked pressure engine without allowing external data to change LifeOS automatically."));
 
         var metricsPanel = new WrapPanel
         {
@@ -387,7 +387,7 @@ public partial class MainWindow
         metricsPanel.Children.Add(CreateDashboardCard("Protected", pressureEngineSummary.ProtectedSignals.ToString(), "Contained"));
         metricsPanel.Children.Add(CreateDashboardCard("Pressure money", FormatMoney(pressureEngineSummary.MoneyUnderPressure), "Not safe"));
         metricsPanel.Children.Add(CreateDashboardCard("Suppressed", pressureEngineSummary.SuppressedSignals.ToString(), "Safety"));
-        metricsPanel.Children.Add(CreateDashboardCard("Integration previews", integrationInboxSummary.Total.ToString(), "v4.9"));
+        metricsPanel.Children.Add(CreateDashboardCard("Integration previews", integrationInboxSummary.Total.ToString(), "v5.0-alpha"));
         metricsPanel.Children.Add(CreateDashboardCard("Integration review", integrationInboxSummary.NeedsReview.ToString(), "Manual gate"));
         metricsPanel.Children.Add(CreateDashboardCard("Preview conflicts", integrationInboxSummary.DuplicateSuspected.ToString(), "Duplicate"));
         metricsPanel.Children.Add(CreateDashboardCard("Imported value", FormatMoney(integrationInboxSummary.PreviewMoney), "Not safe"));
@@ -652,8 +652,8 @@ public partial class MainWindow
         root.Children.Add(pressureBoundaryPanel);
 
         var pressureNextPanel = CreateInfoPanel(
-            "After v4.8",
-            "Next lane: v4.9 Integration Inbox + v5 readiness. The pressure engine is now ready to receive reviewed integration previews without allowing raw external data to act automatically.");
+            "Connector foundation",
+            "v5.0-alpha can rank manually reviewed local CSV, JSON, and ICS previews while confirmation gates, duplicate detection, and audit history keep external data contained.");
         pressureNextPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(pressureNextPanel);
 

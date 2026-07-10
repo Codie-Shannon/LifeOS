@@ -17,16 +17,16 @@ public partial class MainWindow
         var summary = IntegrationInboxCalculator.Calculate(_integrationInboxItems);
         var readiness = IntegrationReadinessMatrix.Create();
 
-        SetHeader("Integration Inbox", $"Integration Inbox - v4.9 - {summary.NeedsReview} review - {summary.DuplicateSuspected} duplicate");
+        SetHeader("Integration Inbox", $"Integration Inbox - v5.0-alpha - {summary.NeedsReview} review - {summary.DuplicateSuspected} duplicate");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateInfoPanel(
-            "Integration Inbox + v5 Readiness",
-            "v4.9 stages external-looking data as read-only previews. Every preview keeps source provenance, trust, duplicate state, suggested target, and a manual handoff gate. No raw connector record can update LifeOS automatically."));
+            "Local connector foundation",
+            "v5.0-alpha imports local CSV, JSON, and ICS files into read-only previews. Every preview keeps source provenance, trust, duplicate state, suggested target, confirmation state, and audit history. No imported record can update LifeOS automatically."));
 
         var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
-        metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v4.9"));
+        metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v5.0-alpha"));
         metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.NeedsReview.ToString(), "Review"));
         metricsPanel.Children.Add(CreateDashboardCard("Suspected", summary.DuplicateSuspected.ToString(), "Duplicate"));
         metricsPanel.Children.Add(CreateDashboardCard("Manual gate", summary.Untrusted.ToString(), "Untrusted"));
@@ -37,7 +37,7 @@ public partial class MainWindow
         root.Children.Add(metricsPanel);
 
         root.Children.Add(CreateInfoPanel(
-            "v4.9 Integration Inbox rule",
+            "v5.0-alpha connector rule",
             "- External records enter as read-only previews, never trusted items.\n" +
             "- Source evidence and provenance stay attached.\n" +
             "- Duplicate suspicion blocks acceptance.\n" +
@@ -65,7 +65,7 @@ public partial class MainWindow
         });
         var import = CreateEvidenceActionButton("Import CSV/JSON/ICS preview file", ImportIntegrationInboxPreviewFile);
         controlsStack.Children.Add(import);
-        var reset = CreateEvidenceActionButton("Reset v4.9 integration previews", ResetIntegrationInboxDemo);
+        var reset = CreateEvidenceActionButton("Reset local integration previews", ResetIntegrationInboxDemo);
         controlsStack.Children.Add(reset);
         controls.Child = controlsStack;
         root.Children.Add(controls);
@@ -88,16 +88,16 @@ public partial class MainWindow
             "Accepted previews may later be handed to Item State, Payment Calendar, Work Pipeline, Evidence Vault, Bills / Payments, Follow-Ups, or Search / Knowledge. The target module remains authoritative and must validate its own rules."));
 
         root.Children.Add(CreateInfoPanel(
-            "v4.9 audit and provenance contract",
+            "v5.0-alpha audit and provenance contract",
             "Every preview keeps a local ID, source type, source label, external reference, duplicate key, source evidence, review note, trust state, status, suggested target, timestamps, and optional link reference."));
 
         root.Children.Add(CreateInfoPanel(
-            "v4.9 boundary",
+            "v5.0-alpha boundary",
             "Local preview and readiness modelling only. No Gmail, Outlook, Google Calendar, Microsoft Calendar, Xero, SharePoint, Drive, OCR provider, banking provider, OAuth flow, live polling, automatic item creation, automatic updates, or AI actions are active."));
 
         root.Children.Add(CreateInfoPanel(
-            "After v4.9",
-            "The v4 spine is complete. v5.0 can begin with one narrow read-only connector, strict scopes, explicit preview review, duplicate detection, provenance, and a reversible manual handoff."));
+            "Active connector state",
+            "Local CSV, JSON, and ICS connectors are active. Imports require confirmation, remain read-only previews, expose duplicate suspicion, preserve audit history, and require deliberate human review before any later handoff."));
 
         root.Children.Add(CreateInfoPanel(
             "Local Integration Inbox file",
@@ -310,13 +310,13 @@ public partial class MainWindow
             switch (target)
             {
                 case IntegrationPreviewStatus.Accepted:
-                    IntegrationInboxReviewEngine.Accept(item, "Accepted through local v4.9 review control.");
+                    IntegrationInboxReviewEngine.Accept(item, "Accepted through local v5.0-alpha review control.");
                     break;
                 case IntegrationPreviewStatus.Deferred:
-                    IntegrationInboxReviewEngine.Defer(item, "Deferred through local v4.9 review control.");
+                    IntegrationInboxReviewEngine.Defer(item, "Deferred through local v5.0-alpha review control.");
                     break;
                 case IntegrationPreviewStatus.Rejected:
-                    IntegrationInboxReviewEngine.Reject(item, "Rejected through local v4.9 review control.");
+                    IntegrationInboxReviewEngine.Reject(item, "Rejected through local v5.0-alpha review control.");
                     break;
                 case IntegrationPreviewStatus.Linked:
                     if (item.Status != IntegrationPreviewStatus.Accepted)
@@ -340,7 +340,7 @@ public partial class MainWindow
     private void ResetIntegrationInboxDemo()
     {
         if (!ConfirmRiskyAction(
-                "Reset v4.9 Integration Inbox?",
+                "Reset local integration previews?",
                 "This restores fictional local preview records only. It does not contact external services."))
         {
             return;

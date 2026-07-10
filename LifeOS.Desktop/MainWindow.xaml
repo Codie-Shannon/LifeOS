@@ -56,10 +56,10 @@
                         Padding="14"
                         Margin="0,12,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v4.9"
+                        <TextBlock Text="Desktop v5.0-alpha"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="v4.9 adds a review-first Integration Inbox, provenance, duplicate handling, manual handoff, and v5 connector readiness."
+                        <TextBlock Text="v5.0-alpha activates local CSV, JSON, and ICS connector imports through read-only previews, confirmation gates, duplicate detection, and preserved audit history."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -281,7 +281,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v4.9 ranks reviewed local pressure into act-now, review-first, waiting/do-not-chase, and protected lanes."
+                <TextBlock Text="LifeOS Desktop v5.0-alpha ranks reviewed local connector previews without allowing external data to mutate LifeOS automatically."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

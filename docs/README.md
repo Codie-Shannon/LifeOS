@@ -2,15 +2,17 @@
 
 ## Authoritative current documents
 
-- `current-status.md` - current release, operating state, boundary, and next lane.
-- `lifeos-version-state.json` - machine-readable release state.
+- `current-status.md` - current product state, completed screenshot boundary, connector boundary, and next handoff.
+- `lifeos-version-state.json` - machine-readable v5.0-alpha product state.
 - `version-history.md` - consolidated milestone history.
-- `release-notes/v4.9.md` - v4.9 release notes.
-- `screenshot-groups/group-19-integration-inbox-v5-readiness/README.md` - Group 19 screenshot index.
-- `screenshot-groups/group-20-v5-manual-import-connector/README.md` - Group 20 manual import connector screenshot index.
-- `stage-manifests/103_v4_9_group19_docs_screenshots_readme.md` - final v4.9 docs manifest.
-- `integrations/v5-0-build-brief.md` - first v5.0 connector brief.
+- `release-notes/v5.0-alpha.md` - current v5.0-alpha connector-foundation release notes.
+- `screenshot-groups/group-21-v5-0-alpha-alignment/README.md` - current completed alignment screenshot evidence.
+- `screenshot-groups/group-20-v5-manual-import-connector/README.md` - detailed manual connector implementation evidence.
+- `integrations/v5-0-build-brief.md` - v5.0 connector build brief.
 - `integrations/v5-integration-architecture-pack.md` - connector registry, scope, risk, and roadmap architecture.
+- `integrations/v5-integration-contract.md` - connector safety and handoff contract.
+- `integrations/v5-connector-readiness-matrix.md` - connector readiness state.
+- `integrations/v5-handoff-checklist.md` - connector handoff checks.
 - `integrations/temporary-integration-master-list.md` - temporary broad integration planning list before the v5 architecture pack.
 
 ## Screenshot groups
@@ -29,8 +31,14 @@ Groups 10-19 cover the complete v4 spine:
 - Group 17 - Weekly Close-Out
 - Group 18 - Command Centre Pressure Engine
 - Group 19 - Integration Inbox + v5 Readiness
+
+The v5 connector foundation is documented by:
+
 - Group 20 - v5 Manual Import Connector
+- Group 21 - v5.0-alpha Alignment
+
+Group 21 is the current completed screenshot boundary. Further connector work begins only after a new Master Roadmap handoff.
 
 ## Documentation rule
 
-Current-state documents must describe only the current release. Historical release notes and screenshot groups remain as evidence. Temporary screenshot plans, generated backup folders, and duplicate current-state marker blocks are not authoritative documentation.
+Current-state documents describe only the current product state. Historical release notes and screenshot groups remain unchanged as evidence. Temporary screenshot plans, generated backup folders, and duplicate current-state marker blocks are not authoritative documentation.

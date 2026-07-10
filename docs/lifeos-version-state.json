@@ -1,11 +1,18 @@
 {
-  "currentVersion": "v4.9",
-  "currentRelease": "Integration Inbox + v5 Readiness",
-  "currentScreenshotGroup": 19,
-  "currentScreenshotGroupName": "Integration Inbox + v5 Readiness",
+  "currentVersion": "v5.0-alpha",
+  "currentRelease": "Local Connector Foundation",
+  "currentScreenshotGroup": 21,
+  "currentScreenshotGroupName": "v5.0-alpha Alignment",
   "v4SpineComplete": true,
-  "buildCommand": "dotnet build .\\LifeOS.slnx",
-  "boundary": "Local review-first previews only. No live connectors, automatic mutation, money movement, or AI actions.",
-  "nextLane": "v5.0 narrow read-only connector",
-  "tag": "v4.9"
+  "connectorFoundationActive": true,
+  "activeLocalConnectorFormats": [
+    "CSV",
+    "JSON",
+    "ICS"
+  ],
+  "buildCommand": "dotnet build .\\LifeOS.slnx -c Release",
+  "testCommand": "dotnet test .\\LifeOS.slnx",
+  "boundary": "Local files become read-only previews with confirmation, duplicate detection, provenance, human review, and audit history. No live OAuth, API sync, bank feed, inbox scan, or automatic mutation.",
+  "nextLane": "Return the completed Group 21 handoff to Master Roadmap before selecting another connector.",
+  "tag": "v5.0-alpha"
 }

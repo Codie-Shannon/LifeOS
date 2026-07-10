@@ -1,8 +1,9 @@
 {
-    "currentVersion":  "v4.7",
-    "currentLane":  "Weekly Close-Out",
-    "nextLane":  "v4.8 Command Centre Pressure Engine",
-    "lastScreenshotGroup":  "Group 17 - Weekly Close-Out",
-    "boundary":  "Local/manual weekly review only; no automatic project closure, follow-up messages, invoicing, money movement, reconciliation, OCR trust, external sync, or AI actions.",
-    "tagStatus":  "Tagged after Group 17 docs/screenshots."
+  "currentVersion": "v4.8-code",
+  "currentLane": "Command Centre Pressure Engine",
+  "nextLane": "v4.9 Integration Inbox + v5 readiness",
+  "lastScreenshotGroup": "Group 17 - Weekly Close-Out",
+  "boundary": "Local pressure ranking and suppression only; no messages, payments, money movement, project closure, invoicing, OCR acceptance, external sync, or AI actions.",
+  "tagStatus": "Do not tag v4.8 until Group 18 screenshots/docs are complete.",
+  "readmeHygiene": "Duplicate managed blocks and common mojibake cleaned in Stage 092."
 }

@@ -20,7 +20,7 @@ Groups 10-19 cover the complete v4 spine:
 - Group 12 - Bills / Payments / Pay Later
 - Group 13 - Money Profile / Safe-to-Spend
 - Group 14 - Agenda + Payment Calendar
-- Group 15 - Work Pipeline
+- Group 15 - Work Pipeline (tracked in v4.5 release notes and legacy screenshot indexes; no curated `screenshot-groups/group-15-*` folder is present in the current tree)
 - Group 16 - Receipt OCR / Evidence-to-Item
 - Group 17 - Weekly Close-Out
 - Group 18 - Command Centre Pressure Engine

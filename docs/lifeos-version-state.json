@@ -1,9 +1,8 @@
 {
-    "currentVersion":  "v4.6",
-    "currentLane":  "Receipt OCR / Evidence-to-Item",
-    "currentStatus":  "Code complete; Group 16 screenshots pending",
-    "lastCompletedCodeStage":  "084",
-    "lastScreenshotGroup":  "Group 16 - Receipt OCR / Evidence-to-Item",
-    "nextLane":  "v4.7 Weekly Close-Out",
-    "boundary":  "Local/manual receipt evidence review only; no live OCR, scanner, inbox import, bank/accounting sync, OAuth, automatic payment state, or AI action."
+  "currentVersion": "v4.7-code",
+  "currentLane": "Weekly Close-Out",
+  "nextLane": "v4.8 Command Centre Pressure Engine",
+  "lastScreenshotGroup": "Group 16 - Receipt OCR / Evidence-to-Item",
+  "boundary": "Local/manual weekly review only; no automatic project closure, messages, invoicing, money movement, external sync, OCR trust, or AI actions.",
+  "tagStatus": "Do not tag v4.7 until Group 17 screenshots/docs are complete."
 }

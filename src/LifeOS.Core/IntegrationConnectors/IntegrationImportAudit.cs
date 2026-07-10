@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using LifeOS.Core.IntegrationInbox;
 
 namespace LifeOS.Core.IntegrationConnectors;
 
@@ -32,6 +33,7 @@ public static class IntegrationImportAudit
             FileSha256 = HashContent(fileContent),
             ImportedCount = result.Previews.Count,
             SkippedRowCount = result.Errors.Count,
+            DuplicateSuspectedCount = result.Previews.Count(preview => preview.Status == IntegrationPreviewStatus.DuplicateSuspected),
             TotalRowsSeen = result.Previews.Count + result.Errors.Count,
             PreviewIds = result.Previews.Select(preview => preview.Id).ToArray(),
             Errors = result.Errors.ToArray(),

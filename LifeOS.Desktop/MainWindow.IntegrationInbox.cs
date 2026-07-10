@@ -284,7 +284,7 @@ public partial class MainWindow
             {
                 auditStack.Children.Add(CreateInfoPanel(
                     $"{audit.ConnectorKey} - {audit.SourceFileName}",
-                    $"Imported: {audit.ImportedCount} - Skipped rows: {audit.SkippedRowCount} - Rows seen: {audit.TotalRowsSeen}\n" +
+                    $"Imported: {audit.ImportedCount} - Duplicates suspected: {audit.DuplicateSuspectedCount} - Skipped rows: {audit.SkippedRowCount} - Rows seen: {audit.TotalRowsSeen}\n" +
                     $"File kind: {audit.FileKind} - Imported at: {audit.ImportedAt:g}\n" +
                     $"Source file: {audit.SourceFilePath}\nSHA-256: {audit.FileSha256}\n" +
                     $"Preview IDs: {string.Join(", ", audit.PreviewIds.Take(3))}" +
@@ -377,6 +377,7 @@ public partial class MainWindow
             };
 
             var items = IntegrationInboxStorage.Load();
+            var duplicateCount = IntegrationImportDuplicateDetector.MarkDuplicateSuspicions(items, result.Previews);
             items.AddRange(result.Previews);
             IntegrationInboxStorage.Save(items);
             IntegrationImportAuditStorage.Append(IntegrationImportAudit.CreateManualImportEntry(
@@ -386,6 +387,11 @@ public partial class MainWindow
                 content));
 
             var message = $"Imported {result.Previews.Count} preview record(s) through {result.ConnectorKey}.";
+            if (duplicateCount > 0)
+            {
+                message += $"\n\nMarked {duplicateCount} imported preview(s) as duplicate-suspected.";
+            }
+
             if (result.Errors.Count > 0)
             {
                 message += $"\n\nSkipped {result.Errors.Count} row(s):\n" +

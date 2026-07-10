@@ -10,6 +10,7 @@ public sealed class IntegrationImportAuditEntry
     public string FileSha256 { get; init; } = string.Empty;
     public int ImportedCount { get; init; }
     public int SkippedRowCount { get; init; }
+    public int DuplicateSuspectedCount { get; init; }
     public int TotalRowsSeen { get; init; }
     public IReadOnlyList<Guid> PreviewIds { get; init; } = [];
     public IReadOnlyList<ManualIntegrationImportError> Errors { get; init; } = [];

@@ -14,6 +14,8 @@ Connectors do not directly mutate LifeOS modules or external systems. They creat
 
 Connector runs also leave audit records. For the manual import connector, the audit entry stores the connector key, file kind, source file path, file name, SHA-256 hash, imported count, skipped row count, row errors, preview IDs, and timestamp.
 
+Incoming previews are checked against existing Integration Inbox duplicate keys before they are saved. Repeated keys are preserved as evidence but marked `DuplicateSuspected`, counted in the import audit, and blocked by the review gate.
+
 ## Provider Registry
 
 The core registry lives in `src/LifeOS.Core/IntegrationConnectors`.
@@ -106,4 +108,4 @@ The core tests assert:
 
 ## Next Implementation Step
 
-The first real connector is now the manual CSV/JSON import path. The next connector should reuse the same registry, preview, provenance, duplicate-key, audit, and review-gate rules.
+The first real connector is now the manual CSV/JSON import path with audit and duplicate detection. The next connector should reuse the same registry, preview, provenance, duplicate-key, audit, and review-gate rules.

@@ -22,10 +22,28 @@ public sealed class IntegrationImportAuditTests
         Assert.Equal("audit.csv", audit.SourceFileName);
         Assert.Equal(1, audit.ImportedCount);
         Assert.Equal(1, audit.SkippedRowCount);
+        Assert.Equal(0, audit.DuplicateSuspectedCount);
         Assert.Equal(2, audit.TotalRowsSeen);
         Assert.Single(audit.PreviewIds);
         Assert.Single(audit.Errors);
         Assert.Equal(64, audit.FileSha256.Length);
+    }
+
+    [Fact]
+    public void ManualImportAuditCountsDuplicateSuspicions()
+    {
+        const string content =
+            "externalReference,title,amount,date\r\n" +
+            "bill-1,Power bill,91.45,2026-07-10";
+
+        var result = ManualIntegrationImportConnector.ImportCsv(content, "sample.csv");
+        IntegrationImportDuplicateDetector.MarkDuplicateSuspicions(
+            [new() { DuplicateKey = "manual-csv:bill-1:20260710:91.45" }],
+            result.Previews);
+
+        var audit = IntegrationImportAudit.CreateManualImportEntry(result, "sample.csv", ".csv", content);
+
+        Assert.Equal(1, audit.DuplicateSuspectedCount);
     }
 
     [Fact]

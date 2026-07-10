@@ -1,57 +1,31 @@
-# LifeOS Docs
+# LifeOS Documentation
 
-<!-- LIFEOS_DOCS_INDEX_START -->
-## Current release
+## Authoritative current documents
 
-- Current status: docs/current-status.md
-- Version history: docs/version-history.md
-- v4.3 release notes: docs/release-notes/v4.3.md
-- Group 13 screenshots: docs/screenshot-groups/group-13-money-profile-hidden-deductions-safe-to-spend/README.md
+- `current-status.md` - current release, operating state, boundary, and next lane.
+- `lifeos-version-state.json` - machine-readable release state.
+- `version-history.md` - consolidated milestone history.
+- `release-notes/v4.9.md` - v4.9 release notes.
+- `screenshot-groups/group-19-integration-inbox-v5-readiness/README.md` - Group 19 screenshot index.
+- `stage-manifests/103_v4_9_group19_docs_screenshots_readme.md` - final v4.9 docs manifest.
 
-## Recent screenshot groups
+## Screenshot groups
 
-- Group 13 - v4.3 Money Profile / Hidden Deductions / Safe-to-Spend
-- Group 12 - v4.2 Bills / Upcoming Payments / Pay Later
-- Group 11 - v4.1 Item State Engine
-- Group 10 - v4.0 LifeOS Spine Map
-<!-- LIFEOS_DOCS_INDEX_END -->
+Groups 01-09 cover the v1-v3.9 offline operating-system foundation.
 
-<!-- LIFEOS_DOCS_INDEX_START -->
-## Current docs index
+Groups 10-19 cover the complete v4 spine:
 
-- `current-status.md` - current release state and next lane.
-- `version-history.md` - version history.
-- `release-notes/v4.4.md` - v4.4 release notes.
-- `screenshot-groups/group-14-agenda-payment-calendar/README.md` - v4.4 screenshot group.
-- `stage-manifests/073_v4_4_group14_docs_screenshots_readme.md` - docs/screenshots manifest.
-<!-- LIFEOS_DOCS_INDEX_END -->
+- Group 10 - Spine Recovery Map
+- Group 11 - Item State Engine
+- Group 12 - Bills / Payments / Pay Later
+- Group 13 - Money Profile / Safe-to-Spend
+- Group 14 - Agenda + Payment Calendar
+- Group 15 - Work Pipeline
+- Group 16 - Receipt OCR / Evidence-to-Item
+- Group 17 - Weekly Close-Out
+- Group 18 - Command Centre Pressure Engine
+- Group 19 - Integration Inbox + v5 Readiness
 
-<!-- LIFEOS_DOCS_INDEX_START -->
-## Current docs index
+## Documentation rule
 
-- `current-status.md` - current release state and next lane.
-- `version-history.md` - version history.
-- `release-notes/v4.6.md` - v4.6 release notes.
-- `screenshot-groups/group-16-receipt-ocr-evidence-to-item/README.md` - v4.6 screenshot group.
-- `stage-manifests/085_v4_6_group16_docs_screenshots_readme.md` - docs/screenshots manifest.
-<!-- LIFEOS_DOCS_INDEX_END -->
-
-<!-- LIFEOS_DOCS_INDEX_START -->
-## Current docs index
-
-- `current-status.md` - current release state and next lane.
-- `version-history.md` - version history.
-- `release-notes/v4.7.md` - v4.7 release notes.
-- `screenshot-groups/group-17-weekly-close-out/README.md` - v4.7 screenshot group.
-- `stage-manifests/091_v4_7_group17_docs_screenshots_readme.md` - docs/screenshots manifest.
-<!-- LIFEOS_DOCS_INDEX_END -->
-
-<!-- LIFEOS_DOCS_INDEX_START -->
-## Current docs index
-
-- `current-status.md` - current release state and next lane.
-- `version-history.md` - version history.
-- `release-notes/v4.8.md` - v4.8 release notes.
-- `screenshot-groups/group-18-command-centre-pressure-engine/README.md` - v4.8 screenshot group.
-- `stage-manifests/098_v4_8_group18_docs_screenshots_readme.md` - docs/screenshots manifest.
-<!-- LIFEOS_DOCS_INDEX_END -->
+Current-state documents must describe only the current release. Historical release notes and screenshot groups remain as evidence. Temporary screenshot plans, generated backup folders, and duplicate current-state marker blocks are not authoritative documentation.

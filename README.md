@@ -1,64 +1,55 @@
-# LifeOS Desktop
+# LifeOS
 
-LifeOS Desktop is a local-first weekly pressure command centre. It turns local module data into visible operating lanes for money, work, time, proof, follow-ups, and review gates before real external integrations are connected.
+LifeOS is a local-first personal operating system for turning life, work, money, evidence, follow-ups, projects, and pressure into visible state.
 
-## Current version
-
-**Desktop v4.5 ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â¢ÃƒÆ’Ã†â€™Ã‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ã‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â¢ÃƒÆ’Ã†â€™Ã‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ã‚Â Work Pipeline**
-
-v4.5 strengthens the Work Pipeline lane: active work, warm leads, blocked items, follow-ups, invoice readiness, payment expected state, and proof gaps now sit in one operating lane.
-
-## Current boundary
-
-v4.5 remains local/manual. It does not send messages, sync email/calendar/accounting/bank data, create invoices, create calendar events, run AI actions, or replace a CRM.
-
-## Road
-
-- v4.1: Item/state engine
-- v4.2: Bills / Upcoming Payments / Pay Later
-- v4.3: Money Profile / Hidden Deductions / Safe-to-Spend
-- v4.4: Agenda + Payment Calendar
-- v4.5: Work Pipeline
-- Next: v4.6 Receipt OCR / Evidence-to-Item
-
-
-
-
-
-
-
-
-
-<!-- LIFEOS_CURRENT_BUILD_START -->
 ## Current build
 
-**LifeOS Desktop v4.7 - Weekly Close-Out**
+**LifeOS Desktop v4.9 - Integration Inbox + v5 Readiness**
 
-v4.7 completes the weekly operating loop across work, money, waiting-on, proof, receipt evidence, and next-week pressure.
+v4.9 completes the v4 operating spine. External-looking data is staged as read-only previews with provenance, duplicate checks, deliberate review states, and explicit manual handoff contracts.
 
-**Boundary:** v4.7 remains local/manual. It does not close real projects, send follow-ups, create invoices, move money, reconcile accounts, trust OCR automatically, sync external systems, or run AI actions.
-<!-- LIFEOS_CURRENT_BUILD_END -->
+## Current operating rule
 
-<!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
+Everything important becomes an item. Every item has state. Every state affects pressure. Every pressure signal feeds the Command Centre.
+
+## v4 spine completed
+
+- v4.0 Spine Recovery Map
+- v4.1 Item Type / State Engine
+- v4.2 Bills / Upcoming Payments / Pay Later
+- v4.3 Money Profile / Hidden Deductions / Safe-to-Spend
+- v4.4 Agenda + Payment Calendar
+- v4.5 Work Pipeline
+- v4.6 Receipt OCR / Evidence-to-Item
+- v4.7 Weekly Close-Out
+- v4.8 Command Centre Pressure Engine
+- v4.9 Integration Inbox + v5 Readiness
+
+## Safety boundary
+
+LifeOS v4.9 is local and review-first. It does not connect to live email, calendars, accounting, files, OCR, banks, or BNPL providers. It does not send messages, move money, create invoices, trust imported data automatically, mutate external systems, or execute AI actions.
+
 ## Current screenshot evidence
 
-- `docs/screenshot-groups/group-17-weekly-close-out/` - v4.7 Weekly Close-Out screenshots.
-- `docs/release-notes/v4.7.md` - v4.7 release notes.
-<!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
+- `docs/screenshot-groups/group-19-integration-inbox-v5-readiness/`
+- `docs/release-notes/v4.9.md`
+- `docs/current-status.md`
 
-<!-- LIFEOS_CURRENT_BUILD_START -->
-## Current build
+## Build
 
-**LifeOS Desktop v4.8 - Command Centre Pressure Engine**
+```powershell
+dotnet build .\LifeOS.slnx
+```
 
-v4.8 ranks reviewed local module signals into deliberate operating lanes: act now, review before action, waiting/do not chase, and protected/suppressed.
+## Repository shape
 
-**Boundary:** v4.8 is local ranking and suppression only. It does not send messages, pay bills, move money, close projects, create invoices, accept OCR automatically, change external calendars, sync external systems, or run AI actions.
-<!-- LIFEOS_CURRENT_BUILD_END -->
+- `LifeOS.Desktop/` - WPF desktop application.
+- `LifeOS.Shared/` - local storage, demo data, and shared services.
+- `src/LifeOS.Core/` - domain models, rules, and calculators.
+- `src/LifeOS.Modules.Timer/` - timer module.
+- `src/LifeOS.TimerAgent/` - timer agent utility.
+- `docs/` - release notes, screenshot evidence, manifests, and current-state documentation.
 
-<!-- LIFEOS_CURRENT_SCREENSHOTS_START -->
-## Current screenshot evidence
+## Next lane
 
-- `docs/screenshot-groups/group-18-command-centre-pressure-engine/` - v4.8 Command Centre Pressure Engine screenshots.
-- `docs/release-notes/v4.8.md` - v4.8 release notes.
-<!-- LIFEOS_CURRENT_SCREENSHOTS_END -->
+v5.0 begins real integrations cautiously: one narrow read-only connector, strict scopes, explicit preview review, duplicate detection, provenance, and reversible manual handoff.

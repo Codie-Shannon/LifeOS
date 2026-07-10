@@ -1,7 +1,11 @@
 {
-  "currentVersion": "v4.9-code",
-  "currentLane": "Integration Inbox + v5 Readiness",
-  "nextLane": "Group 19 screenshots, then v5.0 first read-only connector",
-  "tagStatus": "Do not tag v4.9 until Group 19 docs/screenshots are complete.",
-  "boundary": "Local preview, review, provenance, duplicate, handoff, and readiness modelling only. No live connector or automatic mutation."
+  "currentVersion": "v4.9",
+  "currentRelease": "Integration Inbox + v5 Readiness",
+  "currentScreenshotGroup": 19,
+  "currentScreenshotGroupName": "Integration Inbox + v5 Readiness",
+  "v4SpineComplete": true,
+  "buildCommand": "dotnet build .\\LifeOS.slnx",
+  "boundary": "Local review-first previews only. No live connectors, automatic mutation, money movement, or AI actions.",
+  "nextLane": "v5.0 narrow read-only connector",
+  "tag": "v4.9"
 }

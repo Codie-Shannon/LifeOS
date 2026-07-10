@@ -40,7 +40,9 @@ public sealed class GoogleOAuthPkceClient(HttpClient httpClient, GoogleCalendarC
         var returnedState = query["state"];
         var code = query["code"];
         var error = query["error"];
-        var responseText = string.IsNullOrWhiteSpace(error) ? "LifeOS received the Google Calendar response. You can close this tab." : "Google Calendar connection was not completed. You can close this tab.";
+        var responseText = string.IsNullOrWhiteSpace(error)
+            ? "LifeOS received the Google Calendar response. You can close this tab."
+            : "Google Calendar connection was not completed. You can close this tab.";
         var responseBytes = Encoding.UTF8.GetBytes($"<html><body><h2>{WebUtility.HtmlEncode(responseText)}</h2></body></html>");
         context.Response.ContentType = "text/html; charset=utf-8";
         context.Response.ContentLength64 = responseBytes.Length;
@@ -65,11 +67,12 @@ public sealed class GoogleOAuthPkceClient(HttpClient httpClient, GoogleCalendarC
         using var response = await _httpClient.PostAsync("https://oauth2.googleapis.com/token", new FormUrlEncodedContent(new Dictionary<string, string>
         {
             ["client_id"] = _configuration.ClientId,
+            ["client_secret"] = _configuration.ClientSecret,
             ["refresh_token"] = token.RefreshToken,
             ["grant_type"] = "refresh_token"
         }), cancellationToken).ConfigureAwait(false);
         var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-        if (!response.IsSuccessStatusCode) throw new InvalidOperationException($"Google token refresh failed ({(int)response.StatusCode}).");
+        if (!response.IsSuccessStatusCode) throw CreateOAuthException("refresh", response.StatusCode, body);
         var refreshed = ParseToken(body, token.RefreshToken);
         GoogleOAuthTokenStore.Save(refreshed);
         return refreshed.AccessToken;
@@ -80,14 +83,35 @@ public sealed class GoogleOAuthPkceClient(HttpClient httpClient, GoogleCalendarC
         using var response = await _httpClient.PostAsync("https://oauth2.googleapis.com/token", new FormUrlEncodedContent(new Dictionary<string, string>
         {
             ["client_id"] = _configuration.ClientId,
+            ["client_secret"] = _configuration.ClientSecret,
             ["code"] = code,
             ["code_verifier"] = verifier,
             ["grant_type"] = "authorization_code",
             ["redirect_uri"] = _configuration.RedirectUri
         }), cancellationToken).ConfigureAwait(false);
         var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-        if (!response.IsSuccessStatusCode) throw new InvalidOperationException($"Google token exchange failed ({(int)response.StatusCode}).");
+        if (!response.IsSuccessStatusCode) throw CreateOAuthException("exchange", response.StatusCode, body);
         return ParseToken(body, string.Empty);
+    }
+
+    private static InvalidOperationException CreateOAuthException(string operation, HttpStatusCode statusCode, string body)
+    {
+        var detail = string.Empty;
+        try
+        {
+            using var document = JsonDocument.Parse(body);
+            var root = document.RootElement;
+            var error = root.TryGetProperty("error", out var errorValue) ? errorValue.GetString() : null;
+            var description = root.TryGetProperty("error_description", out var descriptionValue) ? descriptionValue.GetString() : null;
+            detail = string.Join(": ", new[] { error, description }.Where(value => !string.IsNullOrWhiteSpace(value)));
+        }
+        catch (JsonException)
+        {
+            // Do not expose arbitrary response content in the desktop UI.
+        }
+
+        var suffix = string.IsNullOrWhiteSpace(detail) ? string.Empty : $" {detail}.";
+        return new InvalidOperationException($"Google token {operation} failed ({(int)statusCode}).{suffix}");
     }
 
     private static GoogleOAuthToken ParseToken(string body, string existingRefreshToken)

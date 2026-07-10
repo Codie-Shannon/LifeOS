@@ -27,6 +27,7 @@ public static class GoogleCalendarConfigurationStore
             File.WriteAllText(FilePath, JsonSerializer.Serialize(new GoogleCalendarConnectorConfiguration
             {
                 ClientId = "REPLACE_WITH_LOCAL_GOOGLE_OAUTH_CLIENT_ID",
+                ClientSecret = "REPLACE_WITH_LOCAL_GOOGLE_OAUTH_CLIENT_SECRET",
                 RedirectUri = "http://127.0.0.1:53682/",
                 CalendarId = "primary"
             }, Options));

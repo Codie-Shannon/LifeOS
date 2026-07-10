@@ -4,8 +4,11 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using LifeOS.Core.IntegrationConnectors;
 using LifeOS.Core.IntegrationInbox;
+using LifeOS.Core.IntegrationConnectors.GoogleCalendar;
+using LifeOS.Shared.IntegrationConnectors.GoogleCalendar;
 using LifeOS.Shared.IntegrationInbox;
 using Microsoft.Win32;
+using System.Net.Http;
 
 namespace LifeOS.Desktop;
 
@@ -22,8 +25,8 @@ public partial class MainWindow
         var root = new StackPanel();
 
         root.Children.Add(CreateInfoPanel(
-            "Local connector foundation",
-            "v5.0-alpha imports local CSV, JSON, and ICS files into read-only previews. Every preview keeps source provenance, trust, duplicate state, suggested target, confirmation state, and audit history. No imported record can update LifeOS automatically."));
+            "Connector foundation",
+            "v5.0-alpha imports local CSV, JSON, and ICS files and exposes one narrow Google Calendar read-only connector. Every preview keeps source provenance, trust, duplicate state, suggested target, confirmation state, and audit history. No imported record can update LifeOS automatically."));
 
         var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
         metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v5.0-alpha"));
@@ -44,7 +47,10 @@ public partial class MainWindow
             "- Accept, reject, defer, and link are deliberate review states.\n" +
             "- Accepted previews still require a separate manual handoff.\n" +
             "- Expected or imported money remains excluded from safe money.\n" +
-            "- No OAuth, live API, bank feed, inbox scan, or automatic mutation is active."));
+            "- Google Calendar uses the calendar.readonly scope, manual bounded refresh, and explicit disconnect.\n" +
+            "- No calendar write, background polling, bank feed, inbox scan, or automatic mutation is active."));
+
+        AddGoogleCalendarConnectorPanel(root);
 
         var controls = CreatePanel();
         controls.Margin = new Thickness(0, 16, 0, 0);
@@ -93,11 +99,11 @@ public partial class MainWindow
 
         root.Children.Add(CreateInfoPanel(
             "v5.0-alpha boundary",
-            "Local preview and readiness modelling only. No Gmail, Outlook, Google Calendar, Microsoft Calendar, Xero, SharePoint, Drive, OCR provider, banking provider, OAuth flow, live polling, automatic item creation, automatic updates, or AI actions are active."));
+            "Google Calendar is the only live provider boundary in Group 22. It is read-only, manually refreshed, date-bounded, and review-first. No Gmail, Outlook, Microsoft Calendar, Xero, SharePoint, Drive, OCR provider, banking provider, background polling, automatic item creation, automatic updates, or AI actions are active."));
 
         root.Children.Add(CreateInfoPanel(
             "Active connector state",
-            "Local CSV, JSON, and ICS connectors are active. Imports require confirmation, remain read-only previews, expose duplicate suspicion, preserve audit history, and require deliberate human review before any later handoff."));
+            "Local CSV, JSON, and ICS connectors remain active. Google Calendar can be configured locally and connected with the minimum calendar.readonly scope. Imports require confirmation, remain read-only previews, expose duplicate suspicion, preserve audit history, and require deliberate human review before any later handoff."));
 
         root.Children.Add(CreateInfoPanel(
             "Local Integration Inbox file",
@@ -181,7 +187,8 @@ public partial class MainWindow
         {
             Text =
                 $"{item.Summary}\nSuggested target: {item.SuggestedTarget}\nSuggested action: {item.SuggestedAction}\n" +
-                $"External reference: {item.ExternalReference}\nDuplicate key: {item.DuplicateKey}\nSource evidence: {item.SourceEvidence}\n" +
+                $"Connector: {item.ConnectorKey}\nProvider account: {item.ProviderAccountLabel}\nProvider calendar: {item.ProviderContainerId}\n" +
+                $"External reference: {item.ExternalReference}\nEvent end: {item.EndsAt:g}\nFetched: {item.FetchedAt:g}\nDuplicate key: {item.DuplicateKey}\nSource evidence: {item.SourceEvidence}\n" +
                 $"Review note: {item.ReviewNote}\nRead-only preview: {(item.IsReadOnlyPreview ? "Yes" : "No")} - Human review: {(item.RequiresHumanReview ? "Required" : "Complete")}",
             Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
             Margin = new Thickness(0, 6, 0, 10),
@@ -335,6 +342,110 @@ public partial class MainWindow
         {
             MessageBox.Show(ex.Message, "LifeOS review gate", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+    }
+
+    private void AddGoogleCalendarConnectorPanel(Panel root)
+    {
+        GoogleCalendarConfigurationStore.EnsureTemplate();
+        var connected = GoogleOAuthTokenStore.Exists;
+        var panel = CreatePanel();
+        panel.Margin = new Thickness(0, 16, 0, 0);
+        var stack = new StackPanel();
+        stack.Children.Add(new TextBlock
+        {
+            Text = "Read-only Google Calendar connector",
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+        stack.Children.Add(new TextBlock
+        {
+            Text = $"Status: {(connected ? "Connected locally" : "Disconnected / configuration required")}\n" +
+                   "Scope: calendar.readonly only. Refresh: manual only. Maximum range: 31 days.\n" +
+                   "Fetched events enter as untrusted Integration Inbox previews. No external event or LifeOS module is changed automatically.\n" +
+                   $"Local configuration: {GoogleCalendarConfigurationStore.FilePath}",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            Margin = new Thickness(0, 8, 0, 12),
+            TextWrapping = TextWrapping.Wrap
+        });
+        stack.Children.Add(CreateEvidenceActionButton("Open local connector configuration", OpenGoogleCalendarConfiguration));
+        stack.Children.Add(CreateEvidenceActionButton("Connect read-only Google Calendar", ConnectGoogleCalendar));
+        stack.Children.Add(CreateEvidenceActionButton("Manual bounded calendar refresh", RefreshGoogleCalendar));
+        stack.Children.Add(CreateEvidenceActionButton("Disconnect and delete local token cache", DisconnectGoogleCalendar));
+        panel.Child = stack;
+        root.Children.Add(panel);
+    }
+
+    private void OpenGoogleCalendarConfiguration()
+    {
+        GoogleCalendarConfigurationStore.EnsureTemplate();
+        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(GoogleCalendarConfigurationStore.FilePath) { UseShellExecute = true });
+    }
+
+    private async void ConnectGoogleCalendar()
+    {
+        try
+        {
+            var configuration = GoogleCalendarConfigurationStore.Load();
+            configuration.Validate();
+            if (!ConfirmRiskyAction("Connect Google Calendar read-only?", "LifeOS will open Google authorization and request only calendar.readonly. It will not edit calendar events.")) return;
+            using var httpClient = new HttpClient();
+            var client = new GoogleOAuthPkceClient(httpClient, configuration);
+            await client.ConnectAsync();
+            MessageBox.Show("Google Calendar connected locally with read-only scope. Refresh remains manual.", "LifeOS", MessageBoxButton.OK, MessageBoxImage.Information);
+            ShowIntegrationInboxPage();
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or IOException or TimeoutException or HttpRequestException or PlatformNotSupportedException)
+        {
+            MessageBox.Show(ex.Message, "Google Calendar connection", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+    }
+
+    private async void RefreshGoogleCalendar()
+    {
+        var rangeDialog = new CalendarRefreshRangeDialog { Owner = this };
+        if (rangeDialog.ShowDialog() != true) return;
+
+        try
+        {
+            var range = rangeDialog.SelectedRange;
+            range.Validate(DateTimeOffset.Now);
+            if (!ConfirmRiskyAction("Refresh Google Calendar previews?", $"Read events from {range.From:d} through {range.To:d}? Results remain untrusted previews and no calendar or LifeOS module will be changed.")) return;
+
+            var configuration = GoogleCalendarConfigurationStore.Load();
+            configuration.Validate();
+            using var httpClient = new HttpClient();
+            var oauth = new GoogleOAuthPkceClient(httpClient, configuration);
+            var provider = new GoogleCalendarApiProvider(httpClient, configuration, () => oauth.GetAccessTokenAsync());
+            var service = new GoogleCalendarRefreshService(provider);
+            var result = await service.RefreshAsync(range);
+            var items = IntegrationInboxStorage.Load();
+            var duplicateCount = IntegrationImportDuplicateDetector.MarkDuplicateSuspicions(items, result.Previews);
+            items.AddRange(result.Previews);
+            IntegrationInboxStorage.Save(items);
+
+            var auditResult = new ManualIntegrationImportResult("google-calendar", result.Previews, result.Errors.Select((error, index) => new ManualIntegrationImportError(index + 1, error)).ToArray());
+            IntegrationImportAuditStorage.Append(IntegrationImportAudit.CreateManualImportEntry(
+                auditResult,
+                $"google-calendar://{configuration.CalendarId}/{range.From:yyyy-MM-dd}/{range.To:yyyy-MM-dd}",
+                "API-READ-ONLY",
+                string.Join("\n", result.Previews.Select(x => x.DuplicateKey))));
+
+            MessageBox.Show($"Received {result.Previews.Count} read-only calendar preview(s).\nDuplicate-suspected: {duplicateCount}.\nSkipped malformed events: {result.Errors.Count}.", "Google Calendar manual refresh", MessageBoxButton.OK, MessageBoxImage.Information);
+            ShowIntegrationInboxPage();
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or ArgumentException or HttpRequestException or IOException or PlatformNotSupportedException)
+        {
+            MessageBox.Show(ex.Message, "Google Calendar refresh", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+    }
+
+    private void DisconnectGoogleCalendar()
+    {
+        if (!ConfirmRiskyAction("Disconnect Google Calendar?", "This deletes the local encrypted token cache. Existing Integration Inbox previews remain for provenance and review.")) return;
+        GoogleCalendarConnectorCache.Disconnect();
+        MessageBox.Show("Google Calendar disconnected. Local token cache deleted. Existing previews were retained.", "LifeOS", MessageBoxButton.OK, MessageBoxImage.Information);
+        ShowIntegrationInboxPage();
     }
 
     private void ResetIntegrationInboxDemo()

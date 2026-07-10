@@ -1,8 +1,8 @@
 {
   "currentVersion": "v5.0-alpha",
-  "currentRelease": "Local Connector Foundation",
-  "currentScreenshotGroup": 21,
-  "currentScreenshotGroupName": "v5.0-alpha Alignment",
+  "currentRelease": "Calendar Connector Foundation",
+  "currentScreenshotGroup": 22,
+  "currentScreenshotGroupName": "Google Calendar Read-Only Connector (product checkpoint; screenshots pending)",
   "v4SpineComplete": true,
   "connectorFoundationActive": true,
   "activeLocalConnectorFormats": [
@@ -12,7 +12,10 @@
   ],
   "buildCommand": "dotnet build .\\LifeOS.slnx -c Release",
   "testCommand": "dotnet test .\\LifeOS.slnx",
-  "boundary": "Local files become read-only previews with confirmation, duplicate detection, provenance, human review, and audit history. No live OAuth, API sync, bank feed, inbox scan, or automatic mutation.",
-  "nextLane": "Return the completed Group 21 handoff to Master Roadmap before selecting another connector.",
-  "tag": "v5.0-alpha"
+  "boundary": "Google Calendar uses calendar.readonly, explicit connection, manual bounded refresh, untrusted Integration Inbox previews, duplicate detection, provenance, audit history, human review, and explicit disconnect. No calendar write, background polling, automatic acceptance, linking, or module mutation.",
+  "nextLane": "Validate Group 22 Pack 1, capture approved Group 22 screenshots, finalize docs, and return to Master Roadmap. Group 23 must not start.",
+  "tag": "v5.0-alpha",
+  "firstLiveReadOnlyConnector": "Google Calendar",
+  "manualRefreshOnly": true,
+  "maximumCalendarRefreshDays": 31
 }

@@ -6,22 +6,26 @@ LifeOS Desktop v5.0-alpha is the current product state.
 
 ## Current state
 
-The v4 operating spine remains complete. The v5.0-alpha connector foundation is active for local CSV, JSON, and ICS files.
+The v4 operating spine remains complete. The v5.0-alpha connector foundation now includes one narrow Google Calendar read-only provider boundary alongside local CSV, JSON, and ICS imports.
 
-Imported records enter as read-only previews. Each import requires confirmation, keeps source provenance, exposes duplicate suspicion, and writes an audit record. Human review remains required before acceptance or any later target-module handoff.
+Google Calendar connection is explicit, requests only `calendar.readonly`, and refreshes only when the user manually confirms a bounded date range. Provider events enter the existing Integration Inbox as untrusted read-only previews. Provenance, duplicate suspicion, audit history, human acceptance, and separate target-module handoff remain mandatory.
 
-## Completed screenshot group
+## Current build group
 
-Group 21 - v5.0-alpha Alignment.
+Group 22 — Google Calendar read-only connector product checkpoint.
 
-The aligned Command Centre, Integration Inbox, ICS confirmation gate, and ICS success result are captured under:
-
-`docs/screenshot-groups/group-21-v5-0-alpha-alignment/`
+Screenshot evidence is not complete until the product pack passes tests and Release build on the Windows repository, the provider is configured locally, and the approved Group 22 screenshots are returned for finalization.
 
 ## Important boundary
 
-No Gmail, Outlook, Microsoft 365, Google Calendar authentication, live OAuth, API synchronization, inbox scanning, bank feed, automatic external mutation, automatic LifeOS module mutation, or AI action is active.
+No calendar write, Gmail, Outlook, Microsoft Calendar, inbox scanning, bank feed, scheduled refresh, startup refresh, background polling, automatic retry loop, automatic preview acceptance, automatic linking, automatic LifeOS module mutation, or AI action is active.
+
+## Provider verification
+
+The provider boundary, OAuth PKCE flow, protected local token cache, bounded retrieval, mapping, review-first intake, duplicate handling, audit creation, and disconnect behavior are implemented in source.
+
+A real Google account connection has not been claimed as verified until local Google Cloud configuration and an actual manual refresh succeed.
 
 ## Next lane
 
-Return the verified Group 21 handoff to Master Roadmap. Do not start another connector until the next build group is explicitly selected.
+Validate Group 22 Pack 1, capture only the planned Group 22 screenshots, finalize screenshot documentation, then return control to Master Roadmap. Do not start Group 23.

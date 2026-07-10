@@ -1,9 +1,9 @@
 {
-  "currentVersion": "v4.5",
-  "currentLane": "Work Pipeline",
-  "lastScreenshotGroup": "Group 15",
-  "lastScreenshotGroupTitle": "v4.5 Work Pipeline",
-  "status": "code applied, screenshots captured, docs pack applied",
-  "nextLane": "v4.6 Receipt OCR / Evidence-to-Item",
-  "boundary": "local/manual only; no live integrations, no external actions, no automatic trust of imported data"
+  "currentVersion": "v4.6",
+  "currentLane": "Receipt OCR / Evidence-to-Item",
+  "currentStatus": "Code complete; Group 16 screenshots pending",
+  "lastCompletedCodeStage": "084",
+  "lastScreenshotGroup": "Group 15 - Work Pipeline",
+  "nextLane": "v4.7 Weekly Close-Out",
+  "boundary": "Local/manual receipt evidence review only; no live OCR, inbox, bank, accounting, OAuth, or AI integration."
 }

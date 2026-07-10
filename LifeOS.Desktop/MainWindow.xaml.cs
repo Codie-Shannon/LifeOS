@@ -6425,8 +6425,9 @@ public partial class MainWindow : Window
         var moneyProfileSummary = MoneyProfileCalculator.Calculate(MoneyProfileStorage.Load());
         var paymentCalendarSummary = PaymentCalendarCalculator.Calculate(PaymentCalendarStorage.Load(), DateOnly.FromDateTime(DateTime.Today));
         var workPipelineOperatingSummary = WorkPipelineOperatingCalculator.Calculate(_workPipelineItems, DateOnly.FromDateTime(DateTime.Today));
+        var receiptEvidenceSummary = ReceiptEvidenceCalculator.Calculate(_receiptEvidenceItems);
 
-        SetHeader("Command Centre", $"Unified Command Centre • v4.5 • {summary.OverallPressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v4.6 • {summary.OverallPressureLabel}");
 
         var root = new StackPanel();
 
@@ -6456,6 +6457,12 @@ public partial class MainWindow : Window
         metricsPanel.Children.Add(CreateDashboardCard("Waiting me", workPipelineOperatingSummary.WaitingOnMeItems.ToString(), "Owner"));
         metricsPanel.Children.Add(CreateDashboardCard("Invoice ready", (workPipelineOperatingSummary.InvoiceReadyItems + workPipelineOperatingSummary.TimesheetReadyItems).ToString(), "Admin"));
         metricsPanel.Children.Add(CreateDashboardCard("Payment expected", workPipelineOperatingSummary.PaymentExpectedItems.ToString(), FormatMoney(workPipelineOperatingSummary.ExpectedValueExcludedFromSafe)));
+
+        metricsPanel.Children.Add(CreateDashboardCard("Receipt evidence", receiptEvidenceSummary.TotalItems.ToString(), "v4.6"));
+        metricsPanel.Children.Add(CreateDashboardCard("Receipt review", receiptEvidenceSummary.ReviewCount.ToString(), receiptEvidenceSummary.PressureLabel));
+        metricsPanel.Children.Add(CreateDashboardCard("Missing source", receiptEvidenceSummary.MissingSourceCount.ToString(), "Evidence"));
+        metricsPanel.Children.Add(CreateDashboardCard("Accepted receipts", receiptEvidenceSummary.AcceptedCount.ToString(), "Trusted"));
+        metricsPanel.Children.Add(CreateDashboardCard("Receipt value", FormatMoney(receiptEvidenceSummary.CandidateValue), "Not safe"));
 
         metricsPanel.Children.Add(CreateDashboardCard("Billable value", FormatMoney(summary.WorkSessions.BillableValue), "Work"));
         metricsPanel.Children.Add(CreateDashboardCard("Unpaid work", FormatMoney(summary.WorkSessions.UnpaidBillableValue), "Income"));
@@ -6570,6 +6577,27 @@ public partial class MainWindow : Window
 
         pipelineIntegrityPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(pipelineIntegrityPanel);
+
+        var receiptEvidencePanel = CreateInfoPanel(
+            "v4.6 Receipt OCR / Evidence-to-Item",
+            FormatReasons(receiptEvidenceSummary.Reasons));
+
+        receiptEvidencePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(receiptEvidencePanel);
+
+        var receiptEvidenceSignalsPanel = CreateInfoPanel(
+            "v4.6 receipt evidence signals",
+            FormatReasons(new[]
+            {
+                $"Candidates: {receiptEvidenceSummary.TotalItems}",
+                $"Needs review: {receiptEvidenceSummary.ReviewCount}",
+                $"Missing source: {receiptEvidenceSummary.MissingSourceCount}",
+                $"Accepted and trusted: {receiptEvidenceSummary.AcceptedCount}",
+                $"Candidate value excluded from safe money: {FormatMoney(receiptEvidenceSummary.CandidateValue)}"
+            }));
+
+        receiptEvidenceSignalsPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(receiptEvidenceSignalsPanel);
 
         var dailyFlowPanel = CreateInfoPanel(
             "Daily Operating Flow",

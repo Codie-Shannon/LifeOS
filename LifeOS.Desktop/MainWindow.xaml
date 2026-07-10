@@ -56,10 +56,10 @@
                         Padding="14"
                         Margin="0,12,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v4.5"
+                        <TextBlock Text="Desktop v4.6"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="v4.5 strengthens Work Pipeline: active work, leads, blocked items, follow-ups, invoice readiness, payment states, and proof gaps in one operating lane."
+                        <TextBlock Text="v4.6 adds Receipt OCR / Evidence-to-Item: imported receipt data remains untrusted until source-backed and manually reviewed."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -276,7 +276,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v4.5 strengthens Work Pipeline: active work, leads, blocked items, follow-ups, invoice readiness, payment states, and proof gaps in one operating lane."
+                <TextBlock Text="LifeOS Desktop v4.6 adds receipt evidence candidates, source checks, review gates, and trusted evidence-to-item handoff."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

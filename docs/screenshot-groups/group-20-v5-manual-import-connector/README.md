@@ -21,6 +21,8 @@ Group 20 proves the first real v5 connector path: a local CSV/JSON file can be s
 9. `09-v5-connector-readiness-matrix.png` - Wider v5 connector readiness matrix remains visible after the manual import work.
 10. `10-import-preview-confirmation.png` - Pre-save confirmation summary for a JSON import, including connector key, counts, duplicate state, and preview money.
 11. `11-json-import-success-message.png` - JSON import success path after explicit confirmation.
+12. `12-ics-import-confirmation.png` - Pre-save confirmation summary for a local ICS calendar import through `ics-import`.
+14. `14-ics-import-success-message.png` - ICS import success path after explicit confirmation.
 
 ## Supporting fixtures
 
@@ -40,6 +42,7 @@ Group 20 proves the first real v5 connector path: a local CSV/JSON file can be s
 - Acceptance is blocked until the preview is source-backed and reviewed.
 - Manual imports show a confirmation summary before LifeOS saves previews or writes an audit entry.
 - JSON imports use the same preview, confirmation, provenance, and review path as CSV imports.
+- ICS calendar imports use the same local preview, confirmation, duplicate, audit, and review path before any Google/Outlook OAuth work.
 - No live API, OAuth, external polling, target-module mutation, or external write is active.
 
 ## Boundary

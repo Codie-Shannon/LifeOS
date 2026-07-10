@@ -80,6 +80,7 @@ public partial class MainWindow
             _integrationInboxItems.Where(x => x.Status is IntegrationPreviewStatus.Accepted or IntegrationPreviewStatus.Linked));
 
         AddIntegrationSourceLanes(root, summary);
+        AddIntegrationImportAuditSection(root);
         AddIntegrationReadinessMatrix(root, readiness);
 
         root.Children.Add(CreateInfoPanel(
@@ -247,6 +248,54 @@ public partial class MainWindow
         root.Children.Add(readinessPanel);
     }
 
+    private void AddIntegrationImportAuditSection(Panel root)
+    {
+        var audits = IntegrationImportAuditStorage.Load().Take(5).ToList();
+        var auditPanel = CreatePanel();
+        auditPanel.Margin = new Thickness(0, 16, 0, 0);
+        var auditStack = new StackPanel();
+        auditStack.Children.Add(new TextBlock
+        {
+            Text = "Manual import audit trail",
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+
+        auditStack.Children.Add(new TextBlock
+        {
+            Text = $"Local audit file: {IntegrationImportAuditStorage.FilePath}",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            Margin = new Thickness(0, 6, 0, 12),
+            TextWrapping = TextWrapping.Wrap
+        });
+
+        if (audits.Count == 0)
+        {
+            auditStack.Children.Add(new TextBlock
+            {
+                Text = "No manual import audit entries yet.",
+                Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184))
+            });
+        }
+        else
+        {
+            foreach (var audit in audits)
+            {
+                auditStack.Children.Add(CreateInfoPanel(
+                    $"{audit.ConnectorKey} - {audit.SourceFileName}",
+                    $"Imported: {audit.ImportedCount} - Skipped rows: {audit.SkippedRowCount} - Rows seen: {audit.TotalRowsSeen}\n" +
+                    $"File kind: {audit.FileKind} - Imported at: {audit.ImportedAt:g}\n" +
+                    $"Source file: {audit.SourceFilePath}\nSHA-256: {audit.FileSha256}\n" +
+                    $"Preview IDs: {string.Join(", ", audit.PreviewIds.Take(3))}" +
+                    (audit.Errors.Count > 0 ? $"\nFirst error: Row {audit.Errors[0].RowNumber}: {audit.Errors[0].Message}" : "")));
+            }
+        }
+
+        auditPanel.Child = auditStack;
+        root.Children.Add(auditPanel);
+    }
+
     private void ReviewIntegrationPreview(Guid id, IntegrationPreviewStatus target)
     {
         var items = IntegrationInboxStorage.Load();
@@ -330,6 +379,11 @@ public partial class MainWindow
             var items = IntegrationInboxStorage.Load();
             items.AddRange(result.Previews);
             IntegrationInboxStorage.Save(items);
+            IntegrationImportAuditStorage.Append(IntegrationImportAudit.CreateManualImportEntry(
+                result,
+                dialog.FileName,
+                extension,
+                content));
 
             var message = $"Imported {result.Previews.Count} preview record(s) through {result.ConnectorKey}.";
             if (result.Errors.Count > 0)

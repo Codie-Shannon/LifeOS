@@ -18,6 +18,7 @@ This is the safest first connector because it exercises the same intake, provena
 - Map each row/record into an `IntegrationPreviewDraft`.
 - Create previews only through `IntegrationPreviewIntake.CreatePreview`.
 - Store previews in the existing Integration Inbox local file.
+- Store a manual import audit entry with file identity, hash, imported/skipped counts, row errors, preview IDs, and timestamp.
 - Show imported records as review-only until the user accepts, defers, rejects, or links them.
 - Report row-level import errors without creating partial trusted records.
 
@@ -57,5 +58,6 @@ The current implementation accepts `title`, `name`, `subject`, `description`, or
 - Core tests cover importer mapping, fallback row references, missing title errors, quoted CSV fields, and review gates.
 - Manual import creates previews through the shared intake guard.
 - Integration Inbox UI imports local `.csv` and `.json` files and shows imported previews with provenance.
+- Integration Inbox UI shows recent manual import audit runs and stores them locally.
 - Build is green.
 - No live connector or target-module mutation exists.

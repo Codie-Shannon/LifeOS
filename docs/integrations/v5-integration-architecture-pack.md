@@ -12,6 +12,8 @@ External source -> connector definition -> connector implementation -> `Integrat
 
 Connectors do not directly mutate LifeOS modules or external systems. They create reviewable previews.
 
+Connector runs also leave audit records. For the manual import connector, the audit entry stores the connector key, file kind, source file path, file name, SHA-256 hash, imported count, skipped row count, row errors, preview IDs, and timestamp.
+
 ## Provider Registry
 
 The core registry lives in `src/LifeOS.Core/IntegrationConnectors`.
@@ -73,6 +75,12 @@ Future live connectors should translate OAuth/API permissions into this vocabula
 
 Money, BNPL, health, location, SMS, Messenger, Facebook, banking, government, password-manager metadata, and external messaging are never silent automation sources.
 
+## Audit Trail
+
+The manual import audit trail is stored locally beside the Integration Inbox data. It proves that imported previews came from a specific local import run, not from silent background sync or live API mutation.
+
+Future live connectors should extend the same idea into a sync-run audit model with provider key, external scope, started/finished times, imported/ignored/error counts, health status, and provenance references.
+
 ## Provider Placement
 
 The current placement is:
@@ -98,4 +106,4 @@ The core tests assert:
 
 ## Next Implementation Step
 
-Implement the first real connector against this pack: manual CSV/JSON import into `IntegrationPreviewDraft`. It should use the registry key for provenance, generate deterministic duplicate keys, and continue to create only read-only Integration Inbox previews.
+The first real connector is now the manual CSV/JSON import path. The next connector should reuse the same registry, preview, provenance, duplicate-key, audit, and review-gate rules.

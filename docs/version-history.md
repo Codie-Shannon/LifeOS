@@ -60,3 +60,28 @@
 
 - Restored the original LifeOS operating spine before integrations.
 <!-- LIFEOS_VERSION_HISTORY_END -->
+
+<!-- LIFEOS_VERSION_HISTORY_START -->
+## Version history
+
+### v4.6 - Receipt OCR / Evidence-to-Item
+
+- Added review-first receipt evidence candidates.
+- Added local receipt evidence storage.
+- Added receipt review, missing-source, accepted/trusted, money-impact, and paid-work/proof lanes.
+- Added Command Centre receipt evidence signals.
+- Confirmed that OCR/imported fields remain untrusted until source-backed and manually accepted.
+- Confirmed boundary: no live OCR, scanner, inbox import, bank/accounting sync, OAuth, automatic payment state, or AI action.
+
+### v4.5 - Work Pipeline
+
+- Added active work, waiting, blocked work, invoice readiness, payment expected state, proof gaps, warm opportunities, and Command Centre work signals.
+
+### v4.4 - Agenda + Payment Calendar
+
+- Added local date-aware agenda and payment lane.
+
+### v4.3 - Money Profile / Hidden Deductions / Safe-to-Spend
+
+- Strengthened reserves, hidden deductions, expected-money exclusion, and safe-to-spend confidence.
+<!-- LIFEOS_VERSION_HISTORY_END -->

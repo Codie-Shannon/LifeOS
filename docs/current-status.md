@@ -1,26 +1,21 @@
 # LifeOS Current Status
 
-## Desktop v4.5 — Work Pipeline
+## Current release
 
-v4.5 is applied, built, committed, and pushed.
+LifeOS Desktop v4.6 is the current tagged release target after Group 16 screenshots/docs.
 
-The Work Pipeline now acts as the local operating lane for active work, warm leads, blocked work, follow-ups, invoice readiness, payment expected state, and proof gaps.
+## Current state
 
-## What v4.5 proves
+v4.6 adds Receipt OCR / Evidence-to-Item. Receipt and OCR outputs become reviewable evidence candidates before they can become trusted LifeOS items.
 
-- Active work is separated from blocked and parked work.
-- Waiting-on-me and waiting-on-others are visible separately.
-- Follow-up pressure is visible without auto-sending messages.
-- Invoice/timesheet readiness is visible before expected money is trusted.
-- Expected pipeline value remains excluded from safe money until paid/cleared.
-- Proof gaps are surfaced before handoff, invoice, or portfolio use.
-- Work Pipeline feeds Command Centre pressure.
-- v4.5 bridges Work Pipeline with Payment Calendar, Paid Work Centre, Proof Tracker, Follow-Ups, and Weekly Close-Out.
+## Completed screenshot group
 
-## Boundary
+Group 16 - Receipt OCR / Evidence-to-Item.
 
-v4.5 is local/manual. It does not sync email, calendar, accounting, bank data, or CRM data. It does not create invoices, send messages, create calendar events, run AI actions, or change external systems.
+## Important boundary
+
+v4.6 is local/manual. No live OCR API, scanner, Gmail/Outlook import, bank feed, accounting sync, BNPL provider, OAuth flow, invoice creation, automatic payment state, or AI action is active.
 
 ## Next lane
 
-v4.6 Receipt OCR / Evidence-to-Item. Work Pipeline is now ready to receive reviewed evidence and OCR-derived items later without trusting raw imports automatically.
+v4.7 Weekly Close-Out.

@@ -35,3 +35,13 @@
 - `screenshot-groups/group-16-receipt-ocr-evidence-to-item/README.md` - v4.6 screenshot group.
 - `stage-manifests/085_v4_6_group16_docs_screenshots_readme.md` - docs/screenshots manifest.
 <!-- LIFEOS_DOCS_INDEX_END -->
+
+<!-- LIFEOS_DOCS_INDEX_START -->
+## Current docs index
+
+- `current-status.md` - current release state and next lane.
+- `version-history.md` - version history.
+- `release-notes/v4.7.md` - v4.7 release notes.
+- `screenshot-groups/group-17-weekly-close-out/README.md` - v4.7 screenshot group.
+- `stage-manifests/091_v4_7_group17_docs_screenshots_readme.md` - docs/screenshots manifest.
+<!-- LIFEOS_DOCS_INDEX_END -->

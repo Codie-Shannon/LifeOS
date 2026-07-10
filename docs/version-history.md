@@ -85,3 +85,27 @@
 
 - Strengthened reserves, hidden deductions, expected-money exclusion, and safe-to-spend confidence.
 <!-- LIFEOS_VERSION_HISTORY_END -->
+
+<!-- LIFEOS_VERSION_HISTORY_START -->
+## Version history
+
+### v4.7 - Weekly Close-Out
+
+- Added cross-module weekly close-out review.
+- Added close-this-week, roll-forward, waiting/blocked, money, proof, receipt, and Work Pipeline lanes.
+- Added Command Centre close-out metrics and signals.
+- Preserved the existing manual close-out form and history.
+- Confirmed boundary: no automatic project closure, follow-up messages, invoicing, money movement, reconciliation, OCR trust, external sync, or AI actions.
+
+### v4.6 - Receipt OCR / Evidence-to-Item
+
+- Added review-first receipt evidence candidates, source checks, trusted acceptance, and Command Centre receipt signals.
+
+### v4.5 - Work Pipeline
+
+- Added active work, waiting, blocked work, invoice readiness, payment expected state, proof gaps, warm opportunities, and Command Centre work signals.
+
+### v4.4 - Agenda + Payment Calendar
+
+- Added local date-aware agenda and payment lane.
+<!-- LIFEOS_VERSION_HISTORY_END -->

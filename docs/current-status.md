@@ -2,20 +2,20 @@
 
 ## Current release
 
-LifeOS Desktop v4.6 is the current tagged release target after Group 16 screenshots/docs.
+LifeOS Desktop v4.7 is the current tagged release target after Group 17 screenshots/docs.
 
 ## Current state
 
-v4.6 adds Receipt OCR / Evidence-to-Item. Receipt and OCR outputs become reviewable evidence candidates before they can become trusted LifeOS items.
+v4.7 completes Weekly Close-Out across work, money, waiting-on, proof, receipt evidence, and next-week pressure.
 
 ## Completed screenshot group
 
-Group 16 - Receipt OCR / Evidence-to-Item.
+Group 17 - Weekly Close-Out.
 
 ## Important boundary
 
-v4.6 is local/manual. No live OCR API, scanner, Gmail/Outlook import, bank feed, accounting sync, BNPL provider, OAuth flow, invoice creation, automatic payment state, or AI action is active.
+v4.7 is local/manual. It does not close real projects, send follow-ups, create invoices, move money, reconcile accounts, trust OCR automatically, sync external systems, or run AI actions.
 
 ## Next lane
 
-v4.7 Weekly Close-Out.
+v4.8 Command Centre Pressure Engine.

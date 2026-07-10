@@ -1,8 +1,8 @@
 {
-  "currentVersion": "v4.7-code",
-  "currentLane": "Weekly Close-Out",
-  "nextLane": "v4.8 Command Centre Pressure Engine",
-  "lastScreenshotGroup": "Group 16 - Receipt OCR / Evidence-to-Item",
-  "boundary": "Local/manual weekly review only; no automatic project closure, messages, invoicing, money movement, external sync, OCR trust, or AI actions.",
-  "tagStatus": "Do not tag v4.7 until Group 17 screenshots/docs are complete."
+    "currentVersion":  "v4.7",
+    "currentLane":  "Weekly Close-Out",
+    "nextLane":  "v4.8 Command Centre Pressure Engine",
+    "lastScreenshotGroup":  "Group 17 - Weekly Close-Out",
+    "boundary":  "Local/manual weekly review only; no automatic project closure, follow-up messages, invoicing, money movement, reconciliation, OCR trust, external sync, or AI actions.",
+    "tagStatus":  "Tagged after Group 17 docs/screenshots."
 }

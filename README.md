@@ -1,44 +1,60 @@
 # LifeOS
 
-LifeOS is a local-first personal operating system for turning life, work, money, evidence, follow-ups, projects, and pressure into visible state.
+LifeOS is a local-first personal operating system for turning life, work, money, evidence, follow-ups, projects, relationships, and pressure into visible state.
 
 ## Current build
 
-**LifeOS Desktop v4.9 - Integration Inbox + v5 Readiness**
+**LifeOS Desktop v5.0-alpha - first live read-only connector**
 
-v4.9 completes the v4 operating spine. External-looking data is staged as read-only previews with provenance, duplicate checks, deliberate review states, and explicit manual handoff contracts.
+The v4 operating spine remains complete. v5.0-alpha now includes guarded local CSV, JSON, and ICS preview imports plus one narrow authenticated Google Calendar read-only connector.
+
+Google Calendar uses explicit connection, `calendar.readonly`, manual bounded refresh, untrusted Integration Inbox previews, duplicate protection, provenance, audit history, human review, and explicit disconnect. It does not write to Google Calendar or automatically update LifeOS modules.
 
 ## Current operating rule
 
 Everything important becomes an item. Every item has state. Every state affects pressure. Every pressure signal feeds the Command Centre.
 
-## v4 spine completed
+## Integration safety flow
 
-- v4.0 Spine Recovery Map
-- v4.1 Item Type / State Engine
-- v4.2 Bills / Upcoming Payments / Pay Later
-- v4.3 Money Profile / Hidden Deductions / Safe-to-Spend
-- v4.4 Agenda + Payment Calendar
-- v4.5 Work Pipeline
-- v4.6 Receipt OCR / Evidence-to-Item
-- v4.7 Weekly Close-Out
-- v4.8 Command Centre Pressure Engine
-- v4.9 Integration Inbox + v5 Readiness
+```text
+external record
+-> untrusted read-only preview
+-> source-backed review
+-> accepted preview
+-> explicit manual handoff/link
+-> trusted LifeOS state
+```
+
+Connectors must not write directly to Money, Agenda, Work Pipeline, Evidence, Follow-Ups, or Command Centre. Imported or expected money is visible for planning but never safe money until reviewed and confirmed.
+
+## Current connector capability
+
+- Local CSV, JSON, and ICS preview imports.
+- Google Calendar read-only OAuth connection.
+- Manual refresh only.
+- User-confirmed date range, capped at 31 days.
+- Existing Integration Inbox intake and review engine.
+- Stable external references and duplicate keys.
+- Duplicate-suspected repeated refresh handling.
+- Provenance and audit history.
+- Explicit disconnect and local token-cache deletion.
 
 ## Safety boundary
 
-LifeOS v4.9 is local and review-first. It does not connect to live email, calendars, accounting, files, OCR, banks, or BNPL providers. It does not send messages, move money, create invoices, trust imported data automatically, mutate external systems, or execute AI actions.
+LifeOS does not currently provide calendar writes, Gmail or Outlook scanning, bank feeds, background synchronization, scheduled refresh, automatic preview acceptance, automatic module creation, money movement, email sending, or AI actions.
+
+External data remains untrusted by default. Acceptance and target-module handoff remain separate deliberate actions.
 
 ## Current screenshot evidence
 
-- `docs/screenshot-groups/group-19-integration-inbox-v5-readiness/`
-- `docs/release-notes/v4.9.md`
+- `docs/screenshot-groups/group-22-google-calendar-read-only/`
+- `docs/release-notes/v5.0-alpha.md`
 - `docs/current-status.md`
 
 ## Build
 
 ```powershell
-dotnet build .\LifeOS.slnx
+dotnet build .\LifeOS.slnx -c Release
 ```
 
 ## Test
@@ -47,36 +63,26 @@ dotnet build .\LifeOS.slnx
 dotnet test .\LifeOS.slnx
 ```
 
-The core regression suite lives in `tests/LifeOS.Core.Tests/` and covers the v5 safety rules around Integration Inbox intake, duplicate handling, pressure ranking, money safety, week boundaries, receipt evidence, payment calendar, money profile, and weekly close-out.
+The core regression suite lives in `tests/LifeOS.Core.Tests/` and covers Integration Inbox intake, duplicate handling, bounded calendar retrieval, provider mapping, audit creation, no automatic acceptance/linking, money safety, pressure ranking, week boundaries, receipt evidence, payment calendar, money profile, and weekly close-out.
 
 ## Repository shape
 
 - `LifeOS.Desktop/` - WPF desktop application.
 - `LifeOS.Shared/` - local storage, demo data, and shared services.
-- `src/LifeOS.Core/` - domain models, rules, and calculators.
+- `src/LifeOS.Core/` - domain models, rules, connector intake, and calculators.
 - `src/LifeOS.Modules.Timer/` - timer module.
 - `src/LifeOS.TimerAgent/` - timer agent utility.
 - `docs/` - release notes, screenshot evidence, manifests, and current-state documentation.
 
-## Local Storage
+## Local storage and connector configuration
 
-LifeOS stores local JSON state under the user's local application data folder:
+LifeOS stores local state under:
 
 ```text
 %LOCALAPPDATA%\LifeOS
 ```
 
-The app is local-first. Demo reset buttons restore fictional local records only; they do not call external services or mutate real systems.
-
-## Integration Safety Flow
-
-v5 integrations must follow the review-first path:
-
-```text
-external record -> IntegrationPreviewDraft -> IntegrationPreviewIntake.CreatePreview -> read-only IntegrationPreviewItem -> manual review -> accept/defer/reject -> explicit handoff/link
-```
-
-Connectors must not write directly to Money, Agenda, Work Pipeline, Evidence, Follow-Ups, or Command Centre. Imported or expected money is visible for planning but never safe money until reviewed and confirmed.
+Google connector configuration and protected OAuth tokens remain in the local user profile and are not committed. Disconnect deletes the local token cache while preserving imported review evidence.
 
 ## CI
 
@@ -84,4 +90,4 @@ GitHub Actions runs restore, Release build, and `dotnet test` on pushes and pull
 
 ## Next lane
 
-v5.0 begins real integrations cautiously: one narrow read-only connector, strict scopes, explicit preview review, duplicate detection, provenance, and reversible manual handoff.
+Return to Master Roadmap after the completed Group 22 checkpoint. Group 23 has not started.

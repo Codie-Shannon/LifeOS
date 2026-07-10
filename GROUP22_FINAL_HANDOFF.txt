@@ -1,0 +1,47 @@
+LIFEOS GROUP 22 FINAL HANDOFF
+
+Project: LifeOS
+Build group: 22
+Version lane: v5.0-alpha
+Feature: First live read-only Google Calendar connector
+Status: Product implementation and live screenshot proof complete; documentation finalization pack prepared
+
+VERIFIED PRODUCT BEHAVIOR
+- Real Google OAuth connection succeeded against a test account.
+- Requested permission: calendar.readonly only.
+- Refresh remained explicit and manual.
+- Date range was user-selected and bounded.
+- First verified refresh received 5 read-only previews.
+- First verified refresh reported 0 duplicate-suspected and 0 malformed events.
+- Events entered the existing Integration Inbox as New / Untrusted.
+- Human review remained required.
+- Provider provenance, external references, fetched timestamps, duplicate keys, and source evidence remained attached.
+- Repeating the same range produced 5 duplicate-suspected previews.
+- Disconnect deleted the local token cache and retained preview evidence.
+- Final connector state returned to Disconnected / configuration required.
+
+SAFETY BOUNDARY
+- No calendar writes.
+- No background polling, scheduled refresh, startup refresh, or automatic retry loop.
+- No automatic preview acceptance.
+- No automatic target-module linking or LifeOS mutation.
+- No Gmail, Outlook, bank feeds, email sending, or AI action.
+- Credentials and OAuth tokens remain local and are not included in the repository or screenshots.
+
+SCREENSHOT EVIDENCE
+- 13 privacy-safe documentation screenshots under:
+  docs/screenshot-groups/group-22-google-calendar-read-only/screenshots/
+- Screenshot index and interpretation:
+  docs/screenshot-groups/group-22-google-calendar-read-only/README.md
+
+PACK 2 ACTION
+Run Apply-Group22-Pack2.ps1 against C:\Projects\LifeOS.
+The runner verifies main/origin synchronization, refuses unrelated changes, copies only approved Group 22 screenshot/documentation files, runs tests, Release build, git diff --check, creates the screenshot/docs commit, pushes main, verifies local HEAD equals origin/main, and confirms a clean working tree.
+
+EXPECTED DOCS COMMIT SUBJECT
+- docs: add group 22 google calendar evidence
+
+MASTER ROADMAP HANDOFF
+Group 22 is complete after the Pack 2 runner succeeds and reports the final commit hash, passing test count, Release build success, git diff --check success, push verification, HEAD/origin-main match, and clean working tree.
+
+Group 23 has not started. Do not begin scheduled refresh, connector-management hardening, Email Radar, or another provider without a new Master Roadmap handoff.

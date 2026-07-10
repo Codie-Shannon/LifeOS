@@ -1,8 +1,9 @@
 {
   "currentVersion": "v5.0-alpha",
-  "currentRelease": "Calendar Connector Foundation",
+  "currentRelease": "First Live Read-Only Connector",
   "currentScreenshotGroup": 22,
-  "currentScreenshotGroupName": "Google Calendar Read-Only Connector (product checkpoint; screenshots pending)",
+  "currentScreenshotGroupName": "Google Calendar Read-Only Connector",
+  "currentScreenshotGroupComplete": true,
   "v4SpineComplete": true,
   "connectorFoundationActive": true,
   "activeLocalConnectorFormats": [
@@ -10,12 +11,19 @@
     "JSON",
     "ICS"
   ],
+  "firstLiveReadOnlyConnector": "Google Calendar",
+  "liveProviderVerification": "Verified against a real Google test account with safe sample events",
+  "oauthScope": "https://www.googleapis.com/auth/calendar.readonly",
+  "manualRefreshOnly": true,
+  "maximumCalendarRefreshDays": 31,
+  "reviewFirstIntake": true,
+  "automaticExternalMutation": false,
+  "automaticLifeOSMutation": false,
+  "backgroundPolling": false,
+  "disconnectDeletesLocalTokenCache": true,
   "buildCommand": "dotnet build .\\LifeOS.slnx -c Release",
   "testCommand": "dotnet test .\\LifeOS.slnx",
-  "boundary": "Google Calendar uses calendar.readonly, explicit connection, manual bounded refresh, untrusted Integration Inbox previews, duplicate detection, provenance, audit history, human review, and explicit disconnect. No calendar write, background polling, automatic acceptance, linking, or module mutation.",
-  "nextLane": "Validate Group 22 Pack 1, capture approved Group 22 screenshots, finalize docs, and return to Master Roadmap. Group 23 must not start.",
-  "tag": "v5.0-alpha",
-  "firstLiveReadOnlyConnector": "Google Calendar",
-  "manualRefreshOnly": true,
-  "maximumCalendarRefreshDays": 31
+  "boundary": "Google Calendar uses explicit connection, calendar.readonly, manual bounded refresh, untrusted Integration Inbox previews, duplicate detection, provenance, audit history, human review, explicit disconnect, and local token-cache deletion. No calendar write, background polling, automatic acceptance, linking, or module mutation is active.",
+  "nextLane": "Return to Master Roadmap. Group 23 has not started.",
+  "tag": "v5.0-alpha"
 }

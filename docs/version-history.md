@@ -1,12 +1,14 @@
 # LifeOS Version History
 
-## v5.0-alpha - Local Connector Foundation
+## v5.0-alpha - Connector Foundation and First Live Read-Only Connector
 
 - Activated local CSV, JSON, and ICS imports into read-only Integration Inbox previews.
-- Added explicit import confirmation before preview records are saved.
-- Added duplicate detection that remains visible and blocks unsafe acceptance.
-- Added preserved import audit history and source provenance.
-- Kept all target-module handoffs manual and all live OAuth, API sync, inbox scanning, bank feeds, and automatic mutation inactive.
+- Added explicit import confirmation, duplicate protection, source provenance, and preserved audit history.
+- Added one authenticated Google Calendar connector using `calendar.readonly`.
+- Kept refresh explicit, manual, user-confirmed, and capped at 31 days.
+- Routed provider events through the existing review-first Integration Inbox intake boundary.
+- Verified real event retrieval, untrusted preview creation, repeated-refresh duplicate suspicion, and explicit disconnect with local token-cache deletion.
+- Kept calendar writes, inbox scanning, background polling, scheduled refresh, automatic acceptance/linking, and automatic LifeOS module mutation inactive.
 
 ## v4.9 - Integration Inbox + v5 Readiness
 

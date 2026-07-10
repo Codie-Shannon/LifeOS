@@ -6585,6 +6585,20 @@ public partial class MainWindow : Window
     }
 
 
+    private void ResetCommandCentrePressurePolicyButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ConfirmRiskyAction(
+                "Reset v4.8 pressure policy?",
+                "This restores the conservative local scoring and suppression defaults. It does not change source module data."))
+        {
+            return;
+        }
+
+        CommandCentrePressurePolicyStorage.Reset();
+        _commandCentrePressurePolicy = CommandCentrePressurePolicyStorage.Load();
+        ShowCommandCentre();
+    }
+
     private List<PressureSignal> CreateCommandCentrePressureSignals(
         CommandCentreSummary summary,
         DailyOperatingFlowSummary dailyFlowSummary,
@@ -6956,6 +6970,75 @@ public partial class MainWindow : Window
             "The highest-ranked visible signals after trust, waiting, due-now, and suppression rules.",
             pressureEngineSummary.TopSignals));
 
+        root.Children.Add(CreatePressureSignalLanePanel(
+            "Act now",
+            "Trusted or time-critical signals that can move today.",
+            pressureEngineSummary.ActNow));
+
+        root.Children.Add(CreatePressureSignalLanePanel(
+            "Review before action",
+            "Untrusted, imported, estimated, or incomplete signals that require a human gate.",
+            pressureEngineSummary.Review));
+
+        root.Children.Add(CreatePressureSignalLanePanel(
+            "Waiting / do not chase",
+            "Blocked or externally owned pressure that remains visible without hijacking active work.",
+            pressureEngineSummary.Waiting));
+
+        root.Children.Add(CreatePressureSignalLanePanel(
+            "Protected / suppressed",
+            "Expected money, parked work, fixed commitments, and waiting-on-others signals contained by safety rules.",
+            pressureEngineSummary.Protected));
+
+        var pressureControlsPanel = CreatePanel();
+        pressureControlsPanel.Margin = new Thickness(0, 16, 0, 0);
+        var pressureControlsRoot = new StackPanel();
+        pressureControlsRoot.Children.Add(new TextBlock
+        {
+            Text = "Pressure engine controls",
+            Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+            FontSize = 20,
+            FontWeight = FontWeights.Bold
+        });
+        pressureControlsRoot.Children.Add(new TextBlock
+        {
+            Text = "The local policy controls score weights, top-signal limits, waiting-on suppression, and untrusted review gates.",
+            Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 6, 0, 12)
+        });
+        pressureControlsRoot.Children.Add(new TextBlock
+        {
+            Text = $"Weights L/N/H/C: {_commandCentrePressurePolicy.LowWeight}/{_commandCentrePressurePolicy.NormalWeight}/{_commandCentrePressurePolicy.HighWeight}/{_commandCentrePressurePolicy.CriticalWeight} • " +
+                   $"Thresholds N/H/C: {_commandCentrePressurePolicy.NormalScore}/{_commandCentrePressurePolicy.HighScore}/{_commandCentrePressurePolicy.CriticalScore} • " +
+                   $"Top signals: {_commandCentrePressurePolicy.MaximumTopSignals}",
+            Foreground = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 0, 0, 12)
+        });
+        var resetPressurePolicyButton = CreateSmallActionButton("Reset v4.8 pressure policy");
+        resetPressurePolicyButton.Click += ResetCommandCentrePressurePolicyButton_Click;
+        pressureControlsRoot.Children.Add(resetPressurePolicyButton);
+        pressureControlsPanel.Child = pressureControlsRoot;
+        root.Children.Add(pressureControlsPanel);
+
+        var pressureBridgePanel = CreateInfoPanel(
+            "v4.8 module pressure bridge",
+            FormatReasons(new[]
+            {
+                "Money Profile and Bills supply safe-money and due-now pressure.",
+                "Payment Calendar supplies time and payment-date pressure.",
+                "Work Pipeline supplies active, blocked, waiting, invoice-ready, and payment-expected pressure.",
+                "Receipt Evidence supplies untrusted and missing-source review pressure.",
+                "Weekly Close-Out supplies close-now and deliberate roll-forward pressure.",
+                "Daily Operating Flow supplies what can actually move today.",
+                "The engine ranks signals; it does not replace the source modules."
+            }));
+        pressureBridgePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pressureBridgePanel);
+
         var unifiedPanel = CreateInfoPanel(
             "What matters now",
             FormatReasons(summary.Snapshot.TodayActions.Select(action => $"{action.Priority} • {action.Title}: {action.Action}")));
@@ -7060,6 +7143,24 @@ public partial class MainWindow : Window
 
         weeklyCloseOutSignalsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(weeklyCloseOutSignalsPanel);
+
+        var pressureBoundaryPanel = CreateInfoPanel(
+            "v4.8 boundary",
+            "Local ranking and suppression only. v4.8 does not send messages, pay bills, move money, close projects, create invoices, accept OCR, change external calendars, sync external systems, or run AI actions.");
+        pressureBoundaryPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pressureBoundaryPanel);
+
+        var pressureNextPanel = CreateInfoPanel(
+            "After v4.8",
+            "Next lane: v4.9 Integration Inbox + v5 readiness. The pressure engine is now ready to receive reviewed integration previews without allowing raw external data to act automatically.");
+        pressureNextPanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pressureNextPanel);
+
+        var pressureFilePanel = CreateInfoPanel(
+            "Local pressure policy file",
+            CommandCentrePressurePolicyStorage.FilePath);
+        pressureFilePanel.Margin = new Thickness(0, 16, 0, 0);
+        root.Children.Add(pressureFilePanel);
 
         var dailyFlowPanel = CreateInfoPanel(
             "Daily Operating Flow",

@@ -1,12 +1,12 @@
 <Project>
   <PropertyGroup>
-    <Version>5.0.0-beta.1</Version>
-    <VersionPrefix>5.0.0</VersionPrefix>
-    <VersionSuffix>beta.1</VersionSuffix>
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
-    <FileVersion>5.0.1.0</FileVersion>
-    <InformationalVersion>5.0.0-beta.1</InformationalVersion>
-    <LifeOSDisplayVersion>v5.0.0-beta.1</LifeOSDisplayVersion>
-    <LifeOSReleaseName>v5 integration release checkpoint</LifeOSReleaseName>
+    <Version>6.0.0-alpha.1</Version>
+    <VersionPrefix>6.0.0</VersionPrefix>
+    <VersionSuffix>alpha.1</VersionSuffix>
+    <AssemblyVersion>6.0.0.0</AssemblyVersion>
+    <FileVersion>6.0.1.0</FileVersion>
+    <InformationalVersion>6.0.0-alpha.1</InformationalVersion>
+    <LifeOSDisplayVersion>v6.0.0-alpha.1</LifeOSDisplayVersion>
+    <LifeOSReleaseName>Controlled automation foundation</LifeOSReleaseName>
   </PropertyGroup>
 </Project>

@@ -1,4 +1,4 @@
-using LifeOS.Core.Money;
+﻿using LifeOS.Core.Money;
 using LifeOS.Shared.Money;
 using LifeOS.Shared.Shell;
 using System.Windows;
@@ -266,12 +266,12 @@ public partial class MainWindow
 
         foreach (var signal in list)
         {
-            var moneyText = signal.MoneyAmount > 0 ? $" • Money: {FormatMoney(signal.MoneyAmount)}" : string.Empty;
+            var moneyText = signal.MoneyAmount > 0 ? $" â€¢ Money: {FormatMoney(signal.MoneyAmount)}" : string.Empty;
             var body =
-                $"{signal.Module} • {signal.Severity} • {signal.Lane}{moneyText}{Environment.NewLine}" +
+                $"{signal.Module} â€¢ {signal.Severity} â€¢ {signal.Lane}{moneyText}{Environment.NewLine}" +
                 $"{signal.Detail}{Environment.NewLine}" +
                 $"Next: {signal.NextAction}{Environment.NewLine}" +
-                $"Trusted: {(signal.IsTrusted ? "Yes" : "No")} • Due now: {(signal.IsDueNow ? "Yes" : "No")}";
+                $"Trusted: {(signal.IsTrusted ? "Yes" : "No")} â€¢ Due now: {(signal.IsDueNow ? "Yes" : "No")}";
 
             var note = signal.IsSuppressed
                 ? $"Suppressed: {signal.SuppressionReason}"
@@ -336,13 +336,13 @@ public partial class MainWindow
             pressureSignals,
             _commandCentrePressurePolicy);
 
-        SetHeader("Command Centre", $"Unified Command Centre • v5.0.0-alpha.4 • {pressureEngineSummary.PressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre â€¢ v5.0.0-alpha.4 â€¢ {pressureEngineSummary.PressureLabel}");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "LifeOS Command Centre",
-            "v5.0.0-alpha.4 adds reviewed local CSV, JSON, and ICS connector previews to the ranked pressure engine without allowing external data to change LifeOS automatically."));
+            "v5.0.0-beta.1 unifies local imports, Google Calendar, Gmail, Integration Inbox, and Email Radar into one manual, read-only, review-first integration checkpoint without allowing automatic external or LifeOS operational mutation."));
 
         var metricsPanel = new WrapPanel
         {
@@ -511,8 +511,8 @@ public partial class MainWindow
         });
         pressureControlsRoot.Children.Add(new TextBlock
         {
-            Text = $"Weights L/N/H/C: {_commandCentrePressurePolicy.LowWeight}/{_commandCentrePressurePolicy.NormalWeight}/{_commandCentrePressurePolicy.HighWeight}/{_commandCentrePressurePolicy.CriticalWeight} • " +
-                   $"Thresholds N/H/C: {_commandCentrePressurePolicy.NormalScore}/{_commandCentrePressurePolicy.HighScore}/{_commandCentrePressurePolicy.CriticalScore} • " +
+            Text = $"Weights L/N/H/C: {_commandCentrePressurePolicy.LowWeight}/{_commandCentrePressurePolicy.NormalWeight}/{_commandCentrePressurePolicy.HighWeight}/{_commandCentrePressurePolicy.CriticalWeight} â€¢ " +
+                   $"Thresholds N/H/C: {_commandCentrePressurePolicy.NormalScore}/{_commandCentrePressurePolicy.HighScore}/{_commandCentrePressurePolicy.CriticalScore} â€¢ " +
                    $"Top signals: {_commandCentrePressurePolicy.MaximumTopSignals}",
             Foreground = new SolidColorBrush(Color.FromRgb(203, 213, 225)),
             FontSize = 13,
@@ -542,7 +542,7 @@ public partial class MainWindow
 
         var unifiedPanel = CreateInfoPanel(
             "What matters now",
-            FormatReasons(summary.Snapshot.TodayActions.Select(action => $"{action.Priority} • {action.Title}: {action.Action}")));
+            FormatReasons(summary.Snapshot.TodayActions.Select(action => $"{action.Priority} â€¢ {action.Title}: {action.Action}")));
 
         unifiedPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(unifiedPanel);
@@ -572,7 +572,7 @@ public partial class MainWindow
 
         var pipelineSignalsPanel = CreateInfoPanel(
             "Pipeline command signals",
-            FormatReasons(summary.WorkPipeline.CommandCentreSignals.Select(signal => $"{signal.Label}: {signal.Value} — {signal.Detail}")));
+            FormatReasons(summary.WorkPipeline.CommandCentreSignals.Select(signal => $"{signal.Label}: {signal.Value} â€” {signal.Detail}")));
 
         pipelineSignalsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(pipelineSignalsPanel);
@@ -665,7 +665,7 @@ public partial class MainWindow
 
         var dailyFlowPanel = CreateInfoPanel(
             "Daily Operating Flow",
-            FormatReasons(dailyFlowSummary.TodayBlocks.Take(6).Select(block => $"{block.Pressure} • {block.Kind} • {block.Title}: {block.NextAction}")));
+            FormatReasons(dailyFlowSummary.TodayBlocks.Take(6).Select(block => $"{block.Pressure} â€¢ {block.Kind} â€¢ {block.Title}: {block.NextAction}")));
 
         dailyFlowPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(dailyFlowPanel);

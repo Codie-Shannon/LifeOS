@@ -2,12 +2,13 @@
 
 ## Authoritative current documents
 
-- `current-status.md` — current completed Group 24 state and safety boundary.
-- `lifeos-version-state.json` — machine-readable `v5.0.0-alpha.4` state.
+- `current-status.md` — current completed Group 25 state and safety boundary.
+- `lifeos-version-state.json` — machine-readable `v5.0.0-alpha.5` state.
 - `version-history.md` — consolidated milestone history.
-- `release-notes/v5.0-alpha-group-24.md` — Group 24 release record.
-- `screenshot-groups/group-24-email-radar-foundation/README.md` — current screenshot evidence.
-- `screenshot-groups/group-23-connector-lifecycle/README.md` — prior connector lifecycle evidence.
+- `release-notes/v5.0-alpha-group-25.md` — Group 25 release record.
+- `screenshot-groups/group-25-read-only-gmail-connector/README.md` — current screenshot evidence.
+- `screenshot-groups/group-24-email-radar-foundation/README.md` — prior Email Radar foundation evidence.
+- `integrations/gmail-connector-setup.md` — private/testing-mode connector setup.
 - `integrations/v5-integration-contract.md` — connector safety and handoff contract.
 
 ## Screenshot groups
@@ -23,10 +24,11 @@ The v5 lane currently includes:
 - Group 22 — Google Calendar Read-Only Connector
 - Group 23 — Connector Lifecycle Hardening
 - Group 24 — Email Radar Foundation
+- Group 25 — Authenticated Read-Only Gmail Connector
 
-Group 24 is the current completed screenshot boundary. It proves local/imported communication evidence, mandatory import and candidate confirmation, deterministic explained matching, confirmed-only timelines, review-first suggestions, explicit rejection, duplicate suspicion, provenance, and no automatic operational mutation.
+Group 25 is the current completed screenshot boundary. It proves exact read-only scope, explicit browser connection, manual profile-bound bounded search, visible query/exclusions, retrieval confirmation, safe empty and successful results, provider-neutral evidence intake, confirmed-only timeline, repeated-search duplicate detection, disconnect, cache clear, and retained imported evidence.
 
-Group 25 has not started.
+Group 26 has not started.
 
 ## Documentation rule
 

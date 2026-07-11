@@ -1,5 +1,18 @@
 # LifeOS Version History
 
+## v5.0.0-alpha.5 — Authenticated Read-Only Gmail Connector
+
+- Added one private/testing-mode authenticated Gmail connector using exact `gmail.readonly`.
+- Added explicit browser authorization and connected/disconnected/cache-cleared lifecycle states.
+- Added profile-required manual searches bounded to 31 days.
+- Added default cap 25 and hard maximum cap 100.
+- Added visible generated Gmail query and reviewable noise exclusions.
+- Added bounded list/get retrieval, safe inert snippet normalization, message/thread references, provenance, and audit.
+- Routed Gmail results through the existing provider-neutral Email Radar evidence and candidate-review pipeline.
+- Verified a safe real Gmail test message, confirmed timeline entry, repeated-search duplicate detection, disconnect, and retained evidence.
+- Kept sending, drafts, mailbox mutation, attachments, active HTML, remote content, background scanning, scheduled searches, automatic Follow-Ups, automatic Work Pipeline mutation, Outlook, IMAP/POP3, and AI interpretation inactive.
+- Verified 91 passing tests and a successful Release build.
+
 ## v5.0.0-alpha.4 — Email Radar Foundation
 
 - Centralized formal version metadata and aligned visible/current-state surfaces.

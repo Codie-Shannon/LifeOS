@@ -6,34 +6,49 @@ LifeOS Desktop `v5.0.0-alpha.5` — Authenticated read-only Gmail connector.
 
 ## Completed checkpoint
 
-Screenshot Group 24 is complete.
+Screenshot Group 25 is complete.
 
-LifeOS now provides user-guided Email Radar profiles, safe local JSON/CSV communication evidence preview and confirmation, inert text normalization, malformed-row handling, duplicate suspicion, deterministic explained matching, explicit confirm/reject review, confirmed-only communication timelines, and review-first waiting-on/follow-up suggestions.
+LifeOS can explicitly connect one private/testing-mode Gmail account with the exact `gmail.readonly` scope. Searches are manual, require an Email Radar profile, are bounded to a maximum of 31 days, use a default cap of 25 and hard maximum of 100, show the generated query and suggested exclusions, and require explicit confirmation before retrieval.
+
+Retrieved Gmail messages normalize into the existing provider-neutral communication-evidence model. Duplicate detection, provenance, deterministic candidate explanations, explicit confirm/reject review, confirmed-only timeline behavior, and review-first suggestions remain the governing Email Radar flow.
 
 ## Verified result
 
-- 80 tests passed, 0 failed, 0 skipped
+- 91 tests passed, 0 failed, 0 skipped
 - Release build succeeded
 - product commits pushed to `main`
-- screenshot evidence captured with fictional data only
+- live private Gmail proof completed with safe test content
+- screenshot evidence captured without credentials or private mailbox content
 - formal application version aligned to `v5.0.0-alpha.5`
+
+## Gmail scope and lifecycle
+
+- scope: `https://www.googleapis.com/auth/gmail.readonly`
+- one local Gmail account
+- private/testing-mode OAuth project
+- explicit browser authorization
+- configured/disconnected and connected-local states
+- manual bounded search only
+- safe zero-result and successful-result handling
+- repeated-search duplicate detection
+- disconnect removes local authorization
+- connector cache clear removes local connector metadata
+- imported communication evidence remains retained
 
 ## Trust boundary
 
-Imported communication evidence is untrusted by default. A possible candidate does not become confirmed evidence until the user explicitly confirms it. Rejection and duplicate suspicion remain visible. Provenance is retained.
+Authentication does not make Gmail data trusted. Gmail records remain untrusted communication evidence until explicitly reviewed. Candidate confirmation and operational linking remain separate.
 
-Confirmed communication evidence may produce a suggestion such as “Possible waiting on them,” but the suggestion requires review. It does not create a Follow-Up or change Work Pipeline, relationship, project, money, invoice, task, or agenda state automatically.
+Confirmed communication evidence may produce a review-first waiting-on/follow-up suggestion, but it does not create a Follow-Up or change Work Pipeline, relationship, project, money, invoice, task, or agenda state automatically.
 
-## Provider boundary
+## Safety boundary
 
-Google Calendar remains the first authenticated read-only connector. Email Radar remains local/imported only.
-
-No Gmail, Outlook, Microsoft Graph, IMAP, POP3, mailbox scanning, message sending, inbox mutation, scheduled/background import, AI interpretation, automatic Follow-Up creation, or automatic LifeOS state mutation is active.
+No email sending, drafting, replying, forwarding, archiving, trashing, deleting, labelling, starring, mark-read/unread mutation, attachment download, active HTML, remote-image loading, background polling, startup scan, scheduled scan, Gmail push/history monitoring, Outlook, IMAP, POP3, AI interpretation, automatic Follow-Up, or automatic LifeOS state mutation is active.
 
 ## Screenshot evidence
 
-See `docs/screenshot-groups/group-24-email-radar-foundation/README.md`.
+See `docs/screenshot-groups/group-25-read-only-gmail-connector/README.md`.
 
 ## Next checkpoint
 
-Return control to the LifeOS Master / Roadmap chat. Group 25 has not started.
+Return control to the LifeOS Master / Roadmap chat. Group 26 has not started.

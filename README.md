@@ -6,43 +6,50 @@ LifeOS is a local-first personal operating system for turning life, work, money,
 
 **LifeOS Desktop v5.0.0-alpha.5 — Authenticated read-only Gmail connector**
 
-Group 24 is complete. LifeOS now includes a provider-neutral local/imported Authenticated read-only Gmail connector with user-guided profiles, inert JSON/CSV evidence, deterministic explained candidate matching, explicit confirm/reject review, confirmed-only communication timelines, and review-first waiting-on suggestions.
+Screenshot Group 25 is complete. LifeOS now includes one private/testing-mode authenticated Gmail connector using only `gmail.readonly`. Searches are explicit, profile-bound, date-bounded, result-capped, previewed before retrieval, and manually confirmed.
 
-Google Calendar remains the first authenticated read-only connector. Refresh is explicit, manual, date-bounded, review-first, and unable to write to Google Calendar or mutate LifeOS modules automatically.
+Gmail results normalize into the existing provider-neutral Email Radar communication-evidence model. They remain untrusted, pass through duplicate detection and deterministic candidate matching, require explicit confirm/reject review, and only confirmed evidence enters the communication timeline.
 
 ## Integration safety flow
 
 ```text
-external record
--> untrusted read-only preview
+authenticated Gmail result
+-> untrusted provider-neutral communication evidence
+-> duplicate detection and deterministic candidate
 -> source-backed review
--> accepted preview
--> explicit manual handoff/link
--> trusted LifeOS state
+-> explicit confirm or reject
+-> confirmed communication timeline
+-> review-first suggestion
+-> optional explicit later handoff to trusted LifeOS state
 ```
-
-Email Radar follows the same rule: imported evidence remains untrusted, candidate matches require confirmation, and communication suggestions do not create Follow-Ups or change Work Pipeline state automatically.
 
 ## Current capability
 
 - Local CSV, JSON, and ICS preview imports.
 - Google Calendar read-only OAuth connection with manual bounded refresh.
-- Local/imported Email Radar profiles and communication evidence.
+- Provider-neutral Email Radar profiles and communication evidence.
+- One authenticated Gmail account in private/testing mode.
+- Manual Gmail search only, bounded to 31 days.
+- Default result cap 25; hard maximum 100.
+- Visible generated Gmail query and reviewable noise exclusions.
+- Exact `gmail.readonly` scope; no modify/send scope.
+- Safe inert snippets, message/thread references, provenance, audit, and duplicate handling.
 - Deterministic candidate matching with visible reasons.
-- Explicit confirm/reject review and duplicate suspicion.
+- Explicit confirm/reject review.
 - Confirmed-only communication timeline.
 - Review-first waiting-on/follow-up suggestions.
-- Provenance and audit retention.
+- Disconnect and local connector-cache clearing while imported evidence remains retained.
 
 ## Safety boundary
 
-LifeOS does not currently provide Gmail, Outlook, Graph, IMAP, POP3, mailbox scanning, email sending, inbox mutation, calendar writes, background synchronization, scheduled refresh, automatic Follow-Up creation, automatic Work Pipeline mutation, or AI inbox interpretation.
+LifeOS does not send, draft, reply, forward, archive, trash, delete, label, star, or mark Gmail messages read/unread. It does not download attachments, render active HTML, load remote images, scan the mailbox in the background, schedule searches, use Gmail push/history monitoring, create Follow-Ups automatically, mutate Work Pipeline automatically, or perform AI email interpretation.
 
 ## Current screenshot evidence
 
-- [Group 24 — Authenticated read-only Gmail connector](docs/screenshot-groups/group-24-email-radar-foundation/README.md)
+- [Group 25 — Authenticated read-only Gmail connector](docs/screenshot-groups/group-25-read-only-gmail-connector/README.md)
+- [Group 24 — Email Radar foundation](docs/screenshot-groups/group-24-email-radar-foundation/README.md)
 - [Group 23 — Connector lifecycle](docs/screenshot-groups/group-23-connector-lifecycle/README.md)
-- `docs/release-notes/v5.0-alpha-group-24.md`
+- `docs/release-notes/v5.0-alpha-group-25.md`
 - `docs/current-status.md`
 
 ## Build and test
@@ -52,12 +59,12 @@ dotnet test .\LifeOS.slnx
 dotnet build .\LifeOS.slnx -c Release
 ```
 
-The verified Group 24 regression result is **80 passed, 0 failed, 0 skipped**.
+The verified Group 25 regression result is **91 passed, 0 failed, 0 skipped**.
 
 ## Repository shape
 
 - `LifeOS.Desktop/` — WPF desktop application.
-- `LifeOS.Shared/` — local storage and shared services.
+- `LifeOS.Shared/` — local storage and shared connector services.
 - `src/LifeOS.Core/` — domain models, rules, connector intake, and Email Radar logic.
 - `docs/` — release notes, screenshot evidence, integration contracts, and current-state documentation.
 
@@ -67,4 +74,4 @@ LifeOS stores local state under `%LOCALAPPDATA%\LifeOS`. Provider credentials an
 
 ## Next lane
 
-Return control to the LifeOS Master / Roadmap chat. Group 25 has not started.
+Return control to the LifeOS Master / Roadmap chat. Group 26 has not started.

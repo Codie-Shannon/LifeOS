@@ -4,9 +4,9 @@ LifeOS is a local-first personal operating system for turning life, work, money,
 
 ## Current build
 
-**LifeOS Desktop v5.0-alpha - first live read-only connector**
+**LifeOS Desktop v5.0.0-alpha.4 — Email Radar foundation**
 
-The v4 operating spine remains complete. v5.0-alpha now includes guarded local CSV, JSON, and ICS preview imports plus one narrow authenticated Google Calendar read-only connector.
+The v4 operating spine remains complete. v5.0.0-alpha.4 adds a local/imported Email Radar foundation with explainable candidate matching and mandatory confirmation while retaining the guarded connector work from Groups 21–23.
 
 Google Calendar uses explicit connection, `calendar.readonly`, manual bounded refresh, untrusted Integration Inbox previews, duplicate protection, provenance, audit history, human review, and explicit disconnect. It does not write to Google Calendar or automatically update LifeOS modules.
 

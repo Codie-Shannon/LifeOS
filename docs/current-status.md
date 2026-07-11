@@ -2,11 +2,11 @@
 
 ## Current release
 
-LifeOS Desktop v5.0-alpha remains the current product state.
+LifeOS Desktop v5.0.0-alpha.4 is the current product state.
 
 ## Current state
 
-The v4 operating spine remains complete. The v5.0-alpha integration lane now includes guarded local CSV, JSON, and ICS imports plus one authenticated Google Calendar read-only connector with a hardened local lifecycle model.
+The v4 operating spine remains complete. Group 24 adds the local/imported Email Radar foundation: user-guided profiles, inert JSON/CSV evidence, deterministic explained candidate matching, explicit confirm/reject review, confirmed-only communication timelines, and review-first waiting-on suggestions.
 
 Google Calendar connection remains explicit and requests only `calendar.readonly`. Refresh remains manual and date-bounded to a maximum of 31 days. Retrieved events enter the existing Integration Inbox as untrusted read-only previews. Provenance, duplicate suspicion, audit history, human acceptance, and separate target-module handoff remain mandatory.
 
@@ -50,3 +50,7 @@ Manual recovery controls include reconnect, retry last bounded refresh, disconne
 
 Verified visible states include successful connection, successful refresh, empty result, sanitized network failure, disconnected/reconnect state and final cache-cleared state. No scheduled refresh, background polling, automatic retry, automatic reconnect, second provider, calendar write, Email Radar or Group 24 work is active.
 <!-- GROUP23_CONNECTOR_LIFECYCLE_END -->
+
+## Group 24 active boundary
+
+Email Radar is local/imported evidence only. No Gmail or Outlook mailbox is connected. No message is sent, moved, deleted, or labelled. No background scanning, AI interpretation, automatic Follow-Up creation, or automatic Work Pipeline mutation is active. Group 25 has not started.

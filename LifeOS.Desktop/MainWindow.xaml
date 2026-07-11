@@ -255,7 +255,7 @@
                                    FontSize="28"
                                    FontWeight="Bold"/>
                         <TextBlock x:Name="PageSubtitleTextBlock"
-                                   Text="Work, income, proof command centre â€¢ Desktop v1.4"
+                                   Text="Work, income, proof command centre • Desktop v1.4"
                                    Foreground="#94A3B8"
                                    FontSize="14"
                                    Margin="0,4,0,0"/>

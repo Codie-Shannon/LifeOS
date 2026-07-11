@@ -255,6 +255,8 @@ public partial class MainWindow : Window
 
     private void EmailRadarNavButton_Click(object sender, RoutedEventArgs e) => ShowEmailRadarPage();
 
+    private void AutomationCentreNavButton_Click(object sender, RoutedEventArgs e) => ShowAutomationCentrePage();
+
     private void DailyOperatingFlowNavButton_Click(object sender, RoutedEventArgs e) => ShowDailyOperatingFlowPage();
 
     private void DailyStateNavButton_Click(object sender, RoutedEventArgs e) => ShowDailyStatePage();

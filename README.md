@@ -1,10 +1,10 @@
-﻿# LifeOS
+# LifeOS
 
 LifeOS is a local-first personal operating system for turning life, work, money, evidence, follow-ups, projects, relationships, and pressure into visible state.
 
 ## Current build
 
-**LifeOS Desktop v5.0.0-beta.1 â€” v5 integration release checkpoint**
+**LifeOS Desktop v6.0.0-alpha.1 — Controlled automation foundation**
 
 Screenshot Group 26 Pack 1 is active. LifeOS now includes one private/testing-mode authenticated Gmail connector using only `gmail.readonly`. Searches are explicit, profile-bound, date-bounded, result-capped, previewed before retrieval, and manually confirmed.
 
@@ -80,3 +80,8 @@ Return control to the LifeOS Master / Roadmap chat. Group 26 has not started.
 - [v5 release validation matrix](docs/integrations/v5-release-validation-matrix.json)
 
 - [Group 26 — v5 integration release checkpoint](docs/screenshot-groups/group-26-v5-integration-release-checkpoint/README.md)
+
+
+## v6 controlled automation foundation
+
+Group 27 adds disabled-by-default deterministic rules, manual dry-run evaluation, explained condition results, a proposed-action review queue, explicit approve/reject decisions, duplicate detection and retained audit. Approval records intent only; no unattended action, external write, financial mutation, destructive action, email/calendar mutation, script execution or AI automation is enabled.

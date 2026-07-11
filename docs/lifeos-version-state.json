@@ -1,27 +1,18 @@
-﻿{
-    "currentVersion":  "v5.0.0-beta.1",
-    "currentRelease":  "v5 integration release checkpoint",
-    "currentScreenshotGroup":  26,
-    "currentScreenshotGroupName":  "v5 integration release checkpoint",
-    "currentScreenshotGroupComplete":  true,
-    "v5IntegrationBetaCheckpoint":  true,
-    "connectorLanes":  [
-                           "Manual CSV / JSON intake",
-                           "Local ICS calendar intake",
-                           "Google Calendar read-only",
-                           "Local Email Radar import",
-                           "Gmail read-only"
-                       ],
-    "calendarScope":  "calendar.readonly",
-    "gmailScope":  "gmail.readonly",
-    "manualOnly":  true,
-    "readOnly":  true,
-    "humanReviewRequired":  true,
-    "automaticExternalMutation":  false,
-    "automaticLifeOsMutation":  false,
-    "backgroundConnectorWork":  false,
-    "evidenceRetainedAfterDisconnect":  true,
-    "releaseValidationMatrix":  "docs/integrations/v5-release-validation-matrix.json",
-    "screenshotEvidenceComplete":  true,
-    "nextLane":  "Complete Group 26 screenshot proof. Group 27 and v6 have not started."
+{
+  "currentVersion": "v6.0.0-alpha.1",
+  "currentRelease": "Controlled automation foundation",
+  "currentScreenshotGroup": 27,
+  "currentScreenshotGroupName": "Controlled automation foundation",
+  "lane": "v6.x controlled automation and hardening",
+  "status": "Pack 1 product/code prepared; screenshot evidence pending",
+  "safety": {
+    "manualEvaluationOnly": true,
+    "dryRunOnly": true,
+    "explicitApprovalRequired": true,
+    "approvalExecutes": false,
+    "unattendedActionsEnabled": false,
+    "externalWritesEnabled": false,
+    "aiEnabled": false
+  },
+  "next": "Apply Pack 1, validate, capture approved Group 27 screenshots, then return for Pack 2."
 }

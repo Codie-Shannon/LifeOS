@@ -1,4 +1,4 @@
-﻿# LifeOS Documentation
+# LifeOS Documentation
 
 ## Authoritative current documents
 
@@ -35,3 +35,10 @@ Group 26 has not started.
 Current-state documents describe only the current product state. Historical release notes and screenshot groups remain unchanged as evidence. Credentials, local token caches, private communication data, generated backups, and temporary screenshot plans must not be committed.
 
 - [Group 26 — v5 integration release checkpoint](docs/screenshot-groups/group-26-v5-integration-release-checkpoint/README.md)
+
+
+## Current v6 documentation
+
+- [Controlled automation foundation](automation/v6-automation-foundation.md)
+- [Automation safety policy](automation/v6-safety-policy.md)
+- [Group 27 release notes](release-notes/v6.0-alpha-group-27.md)

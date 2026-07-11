@@ -1,38 +1,21 @@
-﻿# LifeOS Current Status
+# LifeOS current status
 
-## Current release
+LifeOS Desktop `v6.0.0-alpha.1` — Controlled automation foundation.
 
-LifeOS Desktop `v5.0.0-beta.1` — v5 integration release checkpoint.
+## Current milestone
 
-## Group 26 status
+Screenshot Group 27 introduces the first v6 safety spine:
 
-Screenshot Group 26 is complete.
+- rules disabled by default
+- deterministic local triggers and conditions
+- reviewed/trusted state requirement
+- manual dry-run evaluation
+- explained pass/fail condition results
+- explicit proposed action, target, risk and permissions
+- approve/reject decisions retained without execution
+- duplicate-proposal detection
+- blocked external, communication, calendar, financial, destructive and script actions
+- local JSON persistence with backup recovery
+- no background worker, scheduler, timer, startup execution, automatic retry or AI dependency
 
-LifeOS now presents local CSV/JSON/ICS intake, Google Calendar, local Email Radar evidence, Gmail, Integration Inbox and Email Radar as one coherent manual, read-only and review-first integration system.
-
-## Verified release state
-
-- 97 tests passed
-- 0 failed
-- 0 skipped
-- Release build passed
-- `git diff --check` passed
-- five connector lanes visible
-- two authenticated provider lanes
-- all active lanes read-only
-- all active lanes manual only
-- human review required
-- 11 release-validation checks passing
-- disconnect and cache clear retain imported evidence
-- no automatic external mutation
-- no automatic LifeOS operational mutation
-
-## Evidence
-
-See:
-
-`docs/screenshot-groups/group-26-v5-integration-release-checkpoint/`
-
-## Next boundary
-
-Group 27 and v6 have not started.
+Approval records valid intent only. Execution remains disabled in `v6.0.0-alpha.1`. Group 28 has not started.

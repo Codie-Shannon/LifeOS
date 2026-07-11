@@ -1,4 +1,4 @@
-﻿# LifeOS Version History
+# LifeOS Version History
 
 ## v5.0.0-alpha.5 â€” Authenticated Read-Only Gmail Connector
 
@@ -113,3 +113,8 @@ v5 integration release checkpoint.
 - privacy-safe screenshot proof
 - 97 tests passed
 - Release build passed
+
+
+## v6.0.0-alpha.1 — Group 27
+
+Controlled automation foundation: disabled-by-default deterministic rules, manual dry-run evaluation, explained proposals, explicit approval/rejection without execution, duplicate detection, persistence, audit and blocked high-risk capabilities.

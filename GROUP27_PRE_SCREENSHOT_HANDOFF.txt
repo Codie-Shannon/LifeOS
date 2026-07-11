@@ -1,0 +1,10 @@
+LIFEOS GROUP 27 PRE-SCREENSHOT HANDOFF
+
+Version: v6.0.0-alpha.1
+Group: 27 — Controlled automation foundation
+
+Pack 1 adds disabled-by-default deterministic rules, reviewed/trusted source evaluation, manual dry-run explanations, proposal review, approval/rejection without execution, duplicate detection, policy blocking, local persistence and retained audit.
+
+Before screenshots: run tests, Release build, git diff --check, push product commits, launch LifeOS, perform GROUP27_MANUAL_TESTS.md with fictional data only.
+
+Group 28 has not started.

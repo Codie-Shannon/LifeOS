@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace LifeOS.Core.Automation;
 
 public enum AutomationTriggerType
@@ -54,8 +56,25 @@ public enum AutomationActionType
 
 public enum AutomationRiskLevel { Informational, Low, Medium, High, Critical }
 public enum AutomationApprovalMode { AlwaysRequireApproval, ApprovalRequiredAboveLowRisk, AdvisoryOnly, ExecutionBlocked }
-public enum AutomationExecutionMode { Disabled, DryRunOnly, ApprovalRequired, BlockedByPolicy }
-public enum AutomationProposalState { Proposed, NeedsReview, Approved, Rejected, Expired, Blocked, DuplicateSuspected, Cancelled }
+public enum AutomationExecutionMode { Disabled, DryRunOnly, ApprovalRequired, GuardedInternal, BlockedByPolicy }
+public enum AutomationProposalState
+{
+    Proposed,
+    NeedsReview,
+    Approved,
+    ApprovedNotExecuted,
+    ExecutionPreviewReady,
+    Executing,
+    Executed,
+    ExecutionFailed,
+    Undone,
+    Stale,
+    Expired,
+    Rejected,
+    Blocked,
+    DuplicateSuspected,
+    Cancelled
+}
 public enum AutomationTrustState { Untrusted, Reviewed, Trusted }
 public enum AutomationCapability
 {
@@ -66,12 +85,16 @@ public enum AutomationCapability
     ProposeWorkPipelineUpdate,
     ProposeTaskAgendaDraft,
     ProposeEvidenceReviewRequest,
+    ExecuteReversibleInternalAction,
     ExternalWrite,
     DestructiveAction,
     FinancialAction,
     CommunicationAction,
     CalendarMutation,
-    ScriptExecution
+    MailboxMutation,
+    ScriptExecution,
+    ProcessExecution,
+    AiDecision
 }
 
 public sealed record AutomationCondition(
@@ -134,6 +157,7 @@ public sealed record AutomationEvaluation
     public required string RuleSnapshot { get; init; }
     public required IReadOnlyList<string> SourceItemIds { get; init; }
     public required IReadOnlyList<AutomationTrustState> SourceTrustStates { get; init; }
+    public required string SourceSnapshotHash { get; init; }
     public DateTimeOffset EvaluatedAt { get; init; } = DateTimeOffset.UtcNow;
     public required AutomationTriggerType Trigger { get; init; }
     public required IReadOnlyList<AutomationConditionResult> ConditionResults { get; init; }
@@ -155,8 +179,11 @@ public sealed record AutomationProposal
     public string ProposalId { get; init; } = Guid.NewGuid().ToString("N");
     public required string EvaluationId { get; init; }
     public required string RuleId { get; init; }
+    public required int RuleRevision { get; init; }
     public required string RuleName { get; init; }
     public required string SourceItemId { get; init; }
+    public required AutomationTrustState SourceTrustState { get; init; }
+    public required string SourceSnapshotHash { get; init; }
     public required AutomationActionType ActionType { get; init; }
     public required string ActionSummary { get; init; }
     public required string Target { get; init; }
@@ -166,9 +193,69 @@ public sealed record AutomationProposal
     public AutomationProposalState State { get; init; } = AutomationProposalState.NeedsReview;
     public string? PriorProposalId { get; init; }
     public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? ExpiresAt { get; init; } = DateTimeOffset.UtcNow.AddDays(14);
     public DateTimeOffset? DecisionAt { get; init; }
     public string DecisionReason { get; init; } = string.Empty;
     public bool OperationalActionExecuted { get; init; }
+    public string? ExecutionId { get; init; }
+}
+
+public sealed record AutomationExecutionSettings
+{
+    public bool ExecutionPaused { get; init; } = true;
+    public DateTimeOffset UpdatedAt { get; init; } = DateTimeOffset.UtcNow;
+}
+
+public sealed record AutomationInternalItem
+{
+    public required string ItemId { get; init; }
+    public required string Module { get; init; }
+    public required string Title { get; init; }
+    public string NextAction { get; init; } = string.Empty;
+    public string ReviewState { get; init; } = "NeedsReview";
+    public List<string> ReviewNotes { get; init; } = [];
+    public int Version { get; init; } = 1;
+    public DateTimeOffset UpdatedAt { get; init; } = DateTimeOffset.UtcNow;
+}
+
+public sealed record AutomationEligibilityResult(bool Eligible, IReadOnlyList<string> Checks, IReadOnlyList<string> Blockers);
+
+public sealed record AutomationExecutionPreview
+{
+    public string PreviewId { get; init; } = Guid.NewGuid().ToString("N");
+    public required string ProposalId { get; init; }
+    public required string ExactAction { get; init; }
+    public required string ExactTarget { get; init; }
+    public required string BeforeSnapshot { get; init; }
+    public required string ProposedAfterSnapshot { get; init; }
+    public required bool Reversible { get; init; }
+    public required AutomationRiskLevel Risk { get; init; }
+    public required IReadOnlyList<string> PolicyChecks { get; init; }
+    public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
+}
+
+public sealed record AutomationExecutionResult
+{
+    public string ExecutionId { get; init; } = Guid.NewGuid().ToString("N");
+    public required string ProposalId { get; init; }
+    public required string RuleId { get; init; }
+    public required int RuleRevision { get; init; }
+    public required AutomationActionType ActionType { get; init; }
+    public required string TargetModule { get; init; }
+    public required string TargetItemId { get; init; }
+    public required IReadOnlyList<string> SourceReferences { get; init; }
+    public required DateTimeOffset ApprovedAt { get; init; }
+    public required DateTimeOffset FinalConfirmedAt { get; init; }
+    public required DateTimeOffset ExecutedAt { get; init; }
+    public required string BeforeSnapshot { get; init; }
+    public required string AfterSnapshot { get; init; }
+    public string ExecutorIdentity { get; init; } = "Local user via guarded LifeOS boundary";
+    public required bool Succeeded { get; init; }
+    public string SanitizedError { get; init; } = string.Empty;
+    public required bool Reversible { get; init; }
+    public bool UndoAvailable { get; init; }
+    public DateTimeOffset? UndoneAt { get; init; }
+    public string ExecutionKey { get; init; } = string.Empty;
 }
 
 public sealed record AutomationAuditEntry(
@@ -181,8 +268,12 @@ public sealed record AutomationAuditEntry(
 
 public sealed record AutomationStoreSnapshot
 {
+    public AutomationExecutionSettings Settings { get; init; } = new();
     public List<AutomationRule> Rules { get; init; } = [];
     public List<AutomationEvaluation> Evaluations { get; init; } = [];
     public List<AutomationProposal> Proposals { get; init; } = [];
+    public List<AutomationExecutionPreview> Previews { get; init; } = [];
+    public List<AutomationExecutionResult> Executions { get; init; } = [];
+    public List<AutomationInternalItem> InternalItems { get; init; } = [];
     public List<AutomationAuditEntry> Audit { get; init; } = [];
 }

@@ -2,21 +2,21 @@
 
 ## Authoritative current documents
 
-- `current-status.md` â€” completed Group 27 state and safety boundary.
-- `lifeos-version-state.json` â€” machine-readable `v6.0.0-alpha.1` state.
-- `version-history.md` â€” consolidated milestone history.
-- `release-notes/v6.0-alpha-group-27.md` â€” Group 27 release record.
-- `automation/v6-automation-foundation.md` â€” deterministic automation architecture.
-- `automation/v6-safety-policy.md` â€” current allowed and blocked capability policy.
-- `screenshot-groups/group-27-controlled-automation-foundation/README.md` â€” current screenshot evidence.
+- `current-status.md` — completed Group 27 state and safety boundary.
+- `lifeos-version-state.json` — machine-readable `v6.0.0-alpha.2` state.
+- `version-history.md` — consolidated milestone history.
+- `release-notes/v6.0-alpha-group-27.md` — Group 27 release record.
+- `automation/v6-automation-foundation.md` — deterministic automation architecture.
+- `automation/v6-safety-policy.md` — current allowed and blocked capability policy.
+- `screenshot-groups/group-27-controlled-automation-foundation/README.md` — current screenshot evidence.
 
 ## Screenshot groups
 
-Groups 01â€“09 cover the v1â€“v3.9 offline operating-system foundation.
+Groups 01–09 cover the v1–v3.9 offline operating-system foundation.
 
-Groups 10â€“19 cover the complete v4 spine.
+Groups 10–19 cover the complete v4 spine.
 
-Groups 20â€“26 cover the v5 integration lane, ending at the manual, read-only and review-first beta checkpoint.
+Groups 20–26 cover the v5 integration lane, ending at the manual, read-only and review-first beta checkpoint.
 
 Group 27 is the current completed screenshot boundary. It proves disabled-by-default deterministic rules, manual dry-run evaluation, reviewed/trusted inputs, explained conditions, explicit action/risk/permission details, proposal review, approval without execution, duplicate detection, blocked high-risk external communication, persistence and retained audit.
 

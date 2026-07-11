@@ -12,7 +12,14 @@ public static class AutomationPolicy
         AutomationActionType.ExternalWrite
     ];
 
+    private static readonly HashSet<AutomationActionType> ExecutableActions =
+    [
+        AutomationActionType.ProposeReviewNote
+    ];
+
     public static bool IsBlocked(AutomationActionType action) => BlockedActions.Contains(action);
+    public static bool IsExecutable(AutomationActionType action) => ExecutableActions.Contains(action);
+    public static bool IsReversible(AutomationActionType action) => action == AutomationActionType.ProposeReviewNote;
 
     public static AutomationRiskLevel ClassifyRisk(AutomationActionType action) => action switch
     {
@@ -36,22 +43,8 @@ public static class AutomationPolicy
     public static AutomationExecutionMode ResolveExecutionMode(AutomationRule rule)
     {
         if (!rule.IsEnabled) return AutomationExecutionMode.Disabled;
-        return IsBlocked(rule.ProposedActionType)
-            ? AutomationExecutionMode.BlockedByPolicy
-            : AutomationExecutionMode.DryRunOnly;
-    }
-
-    public static IReadOnlyList<string> Validate(AutomationRule rule)
-    {
-        var errors = new List<string>();
-        if (string.IsNullOrWhiteSpace(rule.RuleId)) errors.Add("Rule ID is required.");
-        if (string.IsNullOrWhiteSpace(rule.Name)) errors.Add("Rule name is required.");
-        if (rule.Conditions.Count == 0) errors.Add("At least one deterministic condition is required.");
-        if (string.IsNullOrWhiteSpace(rule.ProposedActionSummary)) errors.Add("Proposed action summary is required.");
-        if (string.IsNullOrWhiteSpace(rule.TargetModule)) errors.Add("Target module is required.");
-        if (rule.ApprovalMode is not AutomationApprovalMode.AlwaysRequireApproval and not AutomationApprovalMode.ExecutionBlocked)
-            errors.Add("Group 27 rules must always require approval or remain blocked.");
-        return errors;
+        if (IsBlocked(rule.ProposedActionType)) return AutomationExecutionMode.BlockedByPolicy;
+        return IsExecutable(rule.ProposedActionType) ? AutomationExecutionMode.GuardedInternal : AutomationExecutionMode.ApprovalRequired;
     }
 
     public static bool CapabilityAllowed(AutomationCapability capability) => capability is
@@ -61,5 +54,18 @@ public static class AutomationPolicy
         AutomationCapability.ProposeFollowUp or
         AutomationCapability.ProposeWorkPipelineUpdate or
         AutomationCapability.ProposeTaskAgendaDraft or
-        AutomationCapability.ProposeEvidenceReviewRequest;
+        AutomationCapability.ProposeEvidenceReviewRequest or
+        AutomationCapability.ExecuteReversibleInternalAction;
+
+    public static IReadOnlyList<string> Validate(AutomationRule rule)
+    {
+        var errors = new List<string>();
+        if (string.IsNullOrWhiteSpace(rule.Name)) errors.Add("Rule name is required.");
+        if (rule.Conditions.Count == 0) errors.Add("At least one deterministic condition is required.");
+        if (string.IsNullOrWhiteSpace(rule.ProposedActionSummary)) errors.Add("Proposed action summary is required.");
+        if (string.IsNullOrWhiteSpace(rule.TargetModule)) errors.Add("Target module is required.");
+        if (rule.RequestedCapabilities.Any(x => !CapabilityAllowed(x)) && !IsBlocked(rule.ProposedActionType))
+            errors.Add("Rule requests a capability that is not allowed by policy.");
+        return errors;
+    }
 }

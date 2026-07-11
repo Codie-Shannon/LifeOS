@@ -15,16 +15,15 @@ public static class AutomationStorage
         try
         {
             if (!File.Exists(FilePath)) return ResetToDemoData();
-            return JsonSerializer.Deserialize<AutomationStoreSnapshot>(File.ReadAllText(FilePath), Options)
-                   ?? ResetToDemoData();
+            var loaded = JsonSerializer.Deserialize<AutomationStoreSnapshot>(File.ReadAllText(FilePath), Options);
+            return Normalize(loaded ?? AutomationDemoData.Create());
         }
         catch
         {
             try
             {
                 if (File.Exists(BackupPath))
-                    return JsonSerializer.Deserialize<AutomationStoreSnapshot>(File.ReadAllText(BackupPath), Options)
-                           ?? AutomationDemoData.Create();
+                    return Normalize(JsonSerializer.Deserialize<AutomationStoreSnapshot>(File.ReadAllText(BackupPath), Options) ?? AutomationDemoData.Create());
             }
             catch { }
             return AutomationDemoData.Create();
@@ -45,5 +44,14 @@ public static class AutomationStorage
         var snapshot = AutomationDemoData.Create();
         Save(snapshot);
         return snapshot;
+    }
+
+    private static AutomationStoreSnapshot Normalize(AutomationStoreSnapshot snapshot)
+    {
+        if (snapshot.InternalItems.Count == 0) return AutomationDemoData.Create();
+        var proposals = snapshot.Proposals.Select(x => x.State == AutomationProposalState.Approved
+            ? x with { State = AutomationProposalState.ApprovedNotExecuted }
+            : x).ToList();
+        return snapshot with { Settings = snapshot.Settings ?? new(), Proposals = proposals };
     }
 }

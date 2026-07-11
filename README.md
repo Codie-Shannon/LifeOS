@@ -4,11 +4,9 @@ LifeOS is a local-first personal operating system for turning life, work, money,
 
 ## Current build
 
-**LifeOS Desktop v6.0.0-alpha.1 â€” Controlled automation foundation**
+**LifeOS Desktop v6.0.0-alpha.2 — Guarded internal automation**
 
-Screenshot Group 27 is complete. LifeOS now includes a visible, deterministic automation safety spine built around reviewed or trusted local state, manual dry-run evaluation, explained condition results, explicit proposed actions, risk and capability policy, human approval or rejection, duplicate detection, retained audit, and local persistence.
-
-Approval records valid intent only. It does not execute an operational change in `v6.0.0-alpha.1`.
+Group 28 product code adds a persisted execution pause, separate approval and final confirmation, immediate eligibility revalidation, one typed Low-risk reversible internal review-note action, before/after snapshots, idempotency, audit and explicit Undo. Screenshot evidence is pending. No unattended, external, communication, calendar, financial, destructive, script, process, plugin or AI execution is enabled.
 
 ## Controlled automation flow
 
@@ -46,10 +44,10 @@ LifeOS does not run rules in the background, schedule automation, execute at sta
 
 ## Current screenshot evidence
 
-- [Group 27 â€” Controlled automation foundation](docs/screenshot-groups/group-27-controlled-automation-foundation/README.md)
-- [Group 26 â€” v5 integration release checkpoint](docs/screenshot-groups/group-26-v5-integration-release-checkpoint/README.md)
-- [Group 25 â€” Authenticated read-only Gmail connector](docs/screenshot-groups/group-25-read-only-gmail-connector/README.md)
-- [Group 24 â€” Email Radar foundation](docs/screenshot-groups/group-24-email-radar-foundation/README.md)
+- [Group 27 — Controlled automation foundation](docs/screenshot-groups/group-27-controlled-automation-foundation/README.md)
+- [Group 26 — v5 integration release checkpoint](docs/screenshot-groups/group-26-v5-integration-release-checkpoint/README.md)
+- [Group 25 — Authenticated read-only Gmail connector](docs/screenshot-groups/group-25-read-only-gmail-connector/README.md)
+- [Group 24 — Email Radar foundation](docs/screenshot-groups/group-24-email-radar-foundation/README.md)
 
 ## Build and test
 
@@ -62,10 +60,10 @@ The verified Group 27 regression result is **112 passed, 0 failed, 0 skipped**. 
 
 ## Repository shape
 
-- `LifeOS.Desktop/` â€” WPF desktop application.
-- `LifeOS.Shared/` â€” local storage and shared services.
-- `src/LifeOS.Core/` â€” domain models, deterministic rules and policy.
-- `docs/` â€” current state, release notes, architecture and screenshot evidence.
+- `LifeOS.Desktop/` — WPF desktop application.
+- `LifeOS.Shared/` — local storage and shared services.
+- `src/LifeOS.Core/` — domain models, deterministic rules and policy.
+- `docs/` — current state, release notes, architecture and screenshot evidence.
 
 ## Local storage
 

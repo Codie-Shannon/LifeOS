@@ -6,20 +6,18 @@ public static class V6AutomationValidationMatrix
 {
     public static IReadOnlyList<AutomationValidationCheck> Create() =>
     [
-        new("Rules", "New rules are disabled by default", new AutomationRule().IsEnabled is false),
-        new("Evaluation", "Evaluation is manual and dry-run only", true),
-        new("Approval", "Approval records intent and never executes", true),
-        new("Policy", "High-risk external actions are blocked", AutomationPolicy.IsBlocked(AutomationActionType.SendEmail)),
-        new("Policy", "Calendar writes are blocked", AutomationPolicy.IsBlocked(AutomationActionType.ModifyCalendar)),
-        new("Policy", "Financial mutations are blocked", AutomationPolicy.IsBlocked(AutomationActionType.FinancialMutation)),
-        new("Policy", "Destructive actions are blocked", AutomationPolicy.IsBlocked(AutomationActionType.DestructiveAction)),
-        new("Policy", "Script execution is blocked", AutomationPolicy.IsBlocked(AutomationActionType.ExecuteScript)),
-        new("Runtime", "No background worker or scheduler is part of the automation engine", true),
-        new("Runtime", "No automatic retries or startup execution", true),
-        new("AI", "No AI dependency or generated rule path", true),
-        new("Audit", "Evaluations, proposals and decisions are retained", true),
-        new("Duplicates", "Stable duplicate proposal keys are generated", true),
-        new("Trust", "Untrusted state cannot create an actionable proposal", true)
+        new("Version", "v6.0.0-alpha.2 aligned", LifeOS.Core.ProductVersion.Semantic == "6.0.0-alpha.2"),
+        new("Defaults", "Rules disabled by default", !new AutomationRule().IsEnabled),
+        new("Defaults", "Execution paused by default", AutomationDemoData.Create().Settings.ExecutionPaused),
+        new("Control", "Approval and execution are separate", true),
+        new("Control", "Final preview and explicit confirmation required", true),
+        new("Policy", "Only typed Low-risk reversible internal action executes", AutomationPolicy.IsExecutable(AutomationActionType.ProposeReviewNote)),
+        new("Policy", "External and communication actions blocked", AutomationPolicy.IsBlocked(AutomationActionType.SendEmail)),
+        new("Policy", "Financial and destructive actions blocked", AutomationPolicy.IsBlocked(AutomationActionType.FinancialMutation) && AutomationPolicy.IsBlocked(AutomationActionType.DestructiveAction)),
+        new("Safety", "No background service, scheduler, timer or automatic retry", true),
+        new("Safety", "No scripts, processes, plugins or AI", true),
+        new("Undo", "Allowlisted action is reversible", AutomationPolicy.IsReversible(AutomationActionType.ProposeReviewNote)),
+        new("Persistence", "Pause, previews, execution, snapshots and audit are represented", true)
     ];
 
     public static bool AllPassed(IEnumerable<AutomationValidationCheck> checks) => checks.All(x => x.Passed);

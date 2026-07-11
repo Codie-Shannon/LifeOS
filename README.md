@@ -6,48 +6,46 @@ LifeOS is a local-first personal operating system for turning life, work, money,
 
 **LifeOS Desktop v6.0.0-alpha.2 — Guarded internal automation**
 
-Group 28 product code adds a persisted execution pause, separate approval and final confirmation, immediate eligibility revalidation, one typed Low-risk reversible internal review-note action, before/after snapshots, idempotency, audit and explicit Undo. Screenshot evidence is pending. No unattended, external, communication, calendar, financial, destructive, script, process, plugin or AI execution is enabled.
+Screenshot Group 28 is complete. LifeOS now supports one deliberately narrow, approval-gated and reversible internal execution path. Approval never executes. The user must separately open a final before/after preview and explicitly confirm execution. Eligibility is recalculated immediately before execution, stale state fails closed, successful execution retains before/after evidence, and explicit Undo restores the prior fictional internal state when safe.
 
-## Controlled automation flow
+## Guarded execution flow
 
 ```text
 reviewed or trusted LifeOS state
--> deterministic manual rule evaluation
--> explained condition results
--> proposed action with target, risk and permissions
--> explicit human approval or rejection
--> retained audit and provenance
--> operational execution remains disabled
+-> deterministic manual evaluation
+-> proposal
+-> explicit approval
+-> ApprovedNotExecuted
+-> immediate eligibility revalidation
+-> final before/after preview
+-> explicit final confirmation
+-> typed reversible internal mutation
+-> persisted result and audit
+-> optional explicit Undo
 ```
 
 ## Current capability
 
-- Four safe fictional demonstration rules.
-- Rules disabled by default.
-- Manual dry-run evaluation only.
-- Deterministic trigger and condition checks.
-- Expected and actual values shown with pass/fail results.
-- Reviewed/trusted source-state requirement.
-- Explicit proposed action, target module, risk and approval policy.
-- Capability policy showing allowed, approval-required and blocked permissions.
-- Proposed-action review queue.
-- Explicit approve/reject decisions.
-- Approval without operational execution.
-- Stable duplicate-proposal detection and prior-proposal linkage.
-- High-risk communication and external-write actions blocked by policy.
-- Retained inert automation audit.
-- Local JSON persistence with backup recovery.
-
-## Safety boundary
-
-LifeOS does not run rules in the background, schedule automation, execute at startup, retry automatically, create Follow-Ups automatically, mutate Work Pipeline automatically, send email, modify Gmail, change calendars, move money, alter trusted payment state, delete evidence or operational records, run scripts, launch arbitrary processes, call arbitrary URLs, execute plugins, or use AI to generate or decide rules.
+- Rules remain disabled by default.
+- Evaluation remains manual.
+- Global guarded execution starts paused.
+- Dry-run and approval remain available while execution is paused.
+- Approval remains separate from execution.
+- One typed Low-risk reversible internal review-note handler is allowlisted.
+- Final execution preview shows the exact action, target, before state, proposed after state, risk, reversibility and policy checks.
+- Eligibility is recalculated immediately before execution.
+- Source-state changes mark the proposal stale and require reevaluation.
+- Successful execution retains before/after snapshots and exposes Undo.
+- Undo requires explicit user action, restores the exact prior internal state and retains execution history.
+- Duplicate, stale, expired, unapproved, unsupported, high-risk and blocked-capability proposals cannot execute.
+- Communication, external-write, mailbox, calendar, financial, destructive, script, process, plugin and AI capabilities remain blocked.
+- No unattended execution, background worker, scheduler, timer, startup execution or automatic retry exists.
 
 ## Current screenshot evidence
 
+- [Group 28 — Guarded internal automation](docs/screenshot-groups/group-28-guarded-internal-automation/README.md)
 - [Group 27 — Controlled automation foundation](docs/screenshot-groups/group-27-controlled-automation-foundation/README.md)
 - [Group 26 — v5 integration release checkpoint](docs/screenshot-groups/group-26-v5-integration-release-checkpoint/README.md)
-- [Group 25 — Authenticated read-only Gmail connector](docs/screenshot-groups/group-25-read-only-gmail-connector/README.md)
-- [Group 24 — Email Radar foundation](docs/screenshot-groups/group-24-email-radar-foundation/README.md)
 
 ## Build and test
 
@@ -56,19 +54,12 @@ dotnet test .\LifeOS.slnx
 dotnet build .\LifeOS.slnx -c Release
 ```
 
-The verified Group 27 regression result is **112 passed, 0 failed, 0 skipped**. The Release build and `git diff --check` passed.
+The verified Group 28 result is **116 passed, 0 failed, 0 skipped**. The Release build, `git diff --check`, guarded-execution validation, push synchronization and clean-tree checks passed.
 
-## Repository shape
+## Safety boundary
 
-- `LifeOS.Desktop/` — WPF desktop application.
-- `LifeOS.Shared/` — local storage and shared services.
-- `src/LifeOS.Core/` — domain models, deterministic rules and policy.
-- `docs/` — current state, release notes, architecture and screenshot evidence.
-
-## Local storage
-
-LifeOS stores local state under `%LOCALAPPDATA%\LifeOS`. Automation storage contains inert rule, evaluation, proposal, decision and audit data only. It does not store executable scripts, provider secrets or arbitrary dynamic expressions.
+Only the allowlisted fictional/internal review-note proof action may execute. No active Follow-Up is created automatically. No Work Pipeline operational next action is changed automatically. No external, communication, mailbox, calendar, financial, destructive, script, process, plugin or AI action may execute.
 
 ## Next lane
 
-Return control to the LifeOS Master Roadmap chat. Group 28 has not started.
+Return control to the LifeOS Master Roadmap chat. Group 29 has not started.

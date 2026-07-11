@@ -2,13 +2,12 @@
 
 ## Authoritative current documents
 
-- `current-status.md` — completed Group 27 state and safety boundary.
+- `current-status.md` — completed Group 28 state and guarded-execution boundary.
 - `lifeos-version-state.json` — machine-readable `v6.0.0-alpha.2` state.
 - `version-history.md` — consolidated milestone history.
-- `release-notes/v6.0-alpha-group-27.md` — Group 27 release record.
-- `automation/v6-automation-foundation.md` — deterministic automation architecture.
-- `automation/v6-safety-policy.md` — current allowed and blocked capability policy.
-- `screenshot-groups/group-27-controlled-automation-foundation/README.md` — current screenshot evidence.
+- `release-notes/v6.0-alpha-group-28.md` — Group 28 final release record.
+- `automation/v6-guarded-internal-execution.md` — guarded execution architecture.
+- `screenshot-groups/group-28-guarded-internal-automation/README.md` — current screenshot evidence.
 
 ## Screenshot groups
 
@@ -16,11 +15,13 @@ Groups 01–09 cover the v1–v3.9 offline operating-system foundation.
 
 Groups 10–19 cover the complete v4 spine.
 
-Groups 20–26 cover the v5 integration lane, ending at the manual, read-only and review-first beta checkpoint.
+Groups 20–26 cover the v5 integration lane.
 
-Group 27 is the current completed screenshot boundary. It proves disabled-by-default deterministic rules, manual dry-run evaluation, reviewed/trusted inputs, explained conditions, explicit action/risk/permission details, proposal review, approval without execution, duplicate detection, blocked high-risk external communication, persistence and retained audit.
+Group 27 introduced deterministic dry-run automation proposals, explicit review, duplicate handling, risk/capability policy and approval without execution.
 
-Group 28 has not started.
+Group 28 is the current completed screenshot boundary. It proves a persisted execution pause, approval separated from execution, immediate eligibility revalidation, final before/after preview, explicit final confirmation, one typed Low-risk reversible internal action, before/after persistence, idempotent execution, explicit Undo, stale-state blocking and continued high-risk/external blocking.
+
+Group 29 has not started.
 
 ## Documentation rule
 

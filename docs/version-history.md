@@ -132,6 +132,23 @@ Controlled automation foundation.
 - Verified 112 passing tests, a successful Release build and `git diff --check`.
 - Kept background workers, scheduling, timers, startup execution, automatic retry, operational mutation, scripts, plugins and AI inactive.
 
-## v6.0.0-alpha.2 — Group 28 product phase
 
-Guarded internal automation with a persisted global execution pause, separate approval and final confirmation, one typed Low-risk reversible internal review-note action, immediate stale-state validation, before/after snapshots, idempotency, audit and explicit Undo. Screenshot evidence pending.
+## v6.0.0-alpha.2 — Group 28
+
+Guarded internal automation.
+
+- Added a persisted global execution gate that starts paused.
+- Kept dry-run evaluation and approval available while final execution is paused.
+- Preserved the approval boundary: approval records intent and remains `ApprovedNotExecuted`.
+- Added a separate final execution preview and explicit final confirmation.
+- Added immediate eligibility revalidation before execution.
+- Added one typed allowlisted Low-risk reversible internal review-note handler.
+- Retained exact before and after snapshots, execution identity, timestamps, source references and audit.
+- Added idempotent duplicate-execution prevention.
+- Added explicit Undo with exact prior-state restoration and retained history.
+- Added stale-source detection that blocks execution and requires reevaluation.
+- Kept Medium Follow-Up draft proposals proposal-only.
+- Kept High-risk communication and external-write actions blocked by policy.
+- Added seven privacy-safe fictional screenshot proofs.
+- Verified 116 passing tests, a successful Release build, `git diff --check`, guarded-execution validation, synchronized push and clean working tree.
+- Kept background workers, scheduling, timers, startup execution, automatic retries, external mutation, scripts, processes, plugins and AI inactive.

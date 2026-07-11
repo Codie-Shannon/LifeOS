@@ -4,9 +4,9 @@ LifeOS is a local-first personal operating system for turning life, work, money,
 
 ## Current build
 
-**LifeOS Desktop v5.0.0-alpha.5 — Authenticated read-only Gmail connector**
+**LifeOS Desktop v5.0.0-beta.1 — v5 integration release checkpoint**
 
-Screenshot Group 25 is complete. LifeOS now includes one private/testing-mode authenticated Gmail connector using only `gmail.readonly`. Searches are explicit, profile-bound, date-bounded, result-capped, previewed before retrieval, and manually confirmed.
+Screenshot Group 26 Pack 1 is active. LifeOS now includes one private/testing-mode authenticated Gmail connector using only `gmail.readonly`. Searches are explicit, profile-bound, date-bounded, result-capped, previewed before retrieval, and manually confirmed.
 
 Gmail results normalize into the existing provider-neutral Email Radar communication-evidence model. They remain untrusted, pass through duplicate detection and deterministic candidate matching, require explicit confirm/reject review, and only confirmed evidence enters the communication timeline.
 
@@ -75,3 +75,6 @@ LifeOS stores local state under `%LOCALAPPDATA%\LifeOS`. Provider credentials an
 ## Next lane
 
 Return control to the LifeOS Master / Roadmap chat. Group 26 has not started.
+
+- [v5 integration overview](docs/integrations/v5-integration-overview.md)
+- [v5 release validation matrix](docs/integrations/v5-release-validation-matrix.json)

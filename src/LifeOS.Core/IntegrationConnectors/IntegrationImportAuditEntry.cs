@@ -2,6 +2,8 @@ namespace LifeOS.Core.IntegrationConnectors;
 
 public sealed class IntegrationImportAuditEntry
 {
+    public string Action { get; init; } = "manual-import";
+    public string Summary { get; init; } = string.Empty;
     public Guid Id { get; init; } = Guid.NewGuid();
     public string ConnectorKey { get; init; } = string.Empty;
     public string FileKind { get; init; } = string.Empty;

@@ -41,6 +41,37 @@ public static class IntegrationImportAudit
         };
     }
 
+    public static IntegrationImportAuditEntry CreateConnectorLifecycleEntry(
+        string connectorKey,
+        string action,
+        string summary,
+        int receivedCount = 0,
+        int duplicateCount = 0,
+        int skippedCount = 0)
+    {
+        if (string.IsNullOrWhiteSpace(connectorKey)) throw new ArgumentException("Connector key is required.", nameof(connectorKey));
+        if (string.IsNullOrWhiteSpace(action)) throw new ArgumentException("Lifecycle action is required.", nameof(action));
+
+        var safeSummary = summary?.Trim() ?? string.Empty;
+        if (safeSummary.Length > 320) safeSummary = safeSummary[..320] + "…";
+
+        return new IntegrationImportAuditEntry
+        {
+            ConnectorKey = connectorKey.Trim(),
+            Action = action.Trim(),
+            Summary = safeSummary,
+            FileKind = "CONNECTOR-LIFECYCLE",
+            SourceFilePath = "local://connector-lifecycle",
+            SourceFileName = action.Trim(),
+            FileSha256 = HashContent($"{connectorKey}|{action}|{safeSummary}"),
+            ImportedCount = receivedCount,
+            DuplicateSuspectedCount = duplicateCount,
+            SkippedRowCount = skippedCount,
+            TotalRowsSeen = receivedCount + skippedCount,
+            ImportedAt = DateTime.Now
+        };
+    }
+
     private static string HashContent(string content)
     {
         var bytes = Encoding.UTF8.GetBytes(content);

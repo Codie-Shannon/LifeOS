@@ -1,6 +1,7 @@
 using LifeOS.Core.IntegrationConnectors;
 using LifeOS.Core.IntegrationConnectors.GoogleCalendar;
 using LifeOS.Core.IntegrationInbox;
+using LifeOS.Shared.IntegrationConnectors.GoogleCalendar;
 using Xunit;
 
 namespace LifeOS.Core.Tests;
@@ -106,4 +107,44 @@ public sealed class GoogleCalendarConnectorTests
         public Task<IReadOnlyList<ExternalCalendarEvent>> GetEventsAsync(CalendarRefreshRange range, CancellationToken cancellationToken = default)
             => throw new HttpRequestException("Provider unavailable.");
     }
+
+    [Fact]
+    public void Lifecycle_store_sanitizes_secret_bearing_error_text()
+    {
+        var sanitized = GoogleCalendarLifecycleStore.SanitizeError(new InvalidOperationException(
+            "token refresh failed client_secret=super-secret access_token=ya29.private https://oauth2.googleapis.com/token"));
+        Assert.DoesNotContain("super-secret", sanitized, StringComparison.Ordinal);
+        Assert.DoesNotContain("ya29.private", sanitized, StringComparison.Ordinal);
+        Assert.DoesNotContain("oauth2.googleapis.com", sanitized, StringComparison.Ordinal);
+    }
+
+    [Theory]
+    [InlineData("401 unauthorized", GoogleCalendarLifecycleState.AuthenticationExpired)]
+    [InlineData("invalid_grant access revoked", GoogleCalendarLifecycleState.AccessRevoked)]
+    [InlineData("network unavailable", GoogleCalendarLifecycleState.RefreshFailed)]
+    public void Lifecycle_failure_classification_is_explicit(string message, GoogleCalendarLifecycleState expected)
+    {
+        Assert.Equal(expected, GoogleCalendarLifecycleStore.ClassifyFailure(new InvalidOperationException(message)));
+    }
+
+    [Fact]
+    public void Lifecycle_snapshot_defaults_to_manual_recovery_without_automation()
+    {
+        var snapshot = new GoogleCalendarLifecycleSnapshot();
+        Assert.Null(snapshot.LastRefreshAttemptAt);
+        Assert.Null(snapshot.LastSuccessfulRefreshAt);
+        Assert.Equal("No connector action has been recorded yet.", snapshot.LastResultSummary);
+    }
+
+    [Fact]
+    public void Lifecycle_audit_entry_is_sanitized_and_does_not_create_preview_links()
+    {
+        var entry = IntegrationImportAudit.CreateConnectorLifecycleEntry(
+            "google-calendar", "refresh-failure", "Sanitized provider failure.");
+        Assert.Equal("CONNECTOR-LIFECYCLE", entry.FileKind);
+        Assert.Empty(entry.PreviewIds);
+        Assert.Equal(0, entry.ImportedCount);
+        Assert.Equal("refresh-failure", entry.Action);
+    }
+
 }

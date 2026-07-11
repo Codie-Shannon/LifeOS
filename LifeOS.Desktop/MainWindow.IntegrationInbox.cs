@@ -99,7 +99,7 @@ public partial class MainWindow
 
         root.Children.Add(CreateInfoPanel(
             "v5.0-alpha boundary",
-            "Google Calendar is the only live provider boundary in Group 22. It is read-only, manually refreshed, date-bounded, and review-first. No Gmail, Outlook, Microsoft Calendar, Xero, SharePoint, Drive, OCR provider, banking provider, background polling, automatic item creation, automatic updates, or AI actions are active."));
+            "Google Calendar remains the only live provider boundary in Group 23. It is read-only, manually refreshed, date-bounded, and review-first. No Gmail, Outlook, Microsoft Calendar, Xero, SharePoint, Drive, OCR provider, banking provider, background polling, automatic item creation, automatic updates, or AI actions are active."));
 
         root.Children.Add(CreateInfoPanel(
             "Active connector state",
@@ -263,7 +263,7 @@ public partial class MainWindow
         var auditStack = new StackPanel();
         auditStack.Children.Add(new TextBlock
         {
-            Text = "Manual import audit trail",
+            Text = "Integration import and connector lifecycle audit",
             Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
             FontSize = 20,
             FontWeight = FontWeights.Bold
@@ -281,7 +281,7 @@ public partial class MainWindow
         {
             auditStack.Children.Add(new TextBlock
             {
-                Text = "No manual import audit entries yet.",
+                Text = "No integration audit entries yet.",
                 Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184))
             });
         }
@@ -289,13 +289,17 @@ public partial class MainWindow
         {
             foreach (var audit in audits)
             {
-                auditStack.Children.Add(CreateInfoPanel(
-                    $"{audit.ConnectorKey} - {audit.SourceFileName}",
-                    $"Imported: {audit.ImportedCount} - Duplicates suspected: {audit.DuplicateSuspectedCount} - Skipped rows: {audit.SkippedRowCount} - Rows seen: {audit.TotalRowsSeen}\n" +
-                    $"File kind: {audit.FileKind} - Imported at: {audit.ImportedAt:g}\n" +
-                    $"Source file: {audit.SourceFilePath}\nSHA-256: {audit.FileSha256}\n" +
-                    $"Preview IDs: {string.Join(", ", audit.PreviewIds.Take(3))}" +
-                    (audit.Errors.Count > 0 ? $"\nFirst error: Row {audit.Errors[0].RowNumber}: {audit.Errors[0].Message}" : "")));
+                var title = string.IsNullOrWhiteSpace(audit.Action) || audit.Action == "manual-import"
+                    ? $"{audit.ConnectorKey} - {audit.SourceFileName}"
+                    : $"{audit.ConnectorKey} - {audit.Action}";
+                var details = audit.FileKind == "CONNECTOR-LIFECYCLE"
+                    ? $"{audit.Summary}\nRecorded at: {audit.ImportedAt:g} - Received: {audit.ImportedCount} - Duplicates: {audit.DuplicateSuspectedCount} - Skipped: {audit.SkippedRowCount}"
+                    : $"Imported: {audit.ImportedCount} - Duplicates suspected: {audit.DuplicateSuspectedCount} - Skipped rows: {audit.SkippedRowCount} - Rows seen: {audit.TotalRowsSeen}\n" +
+                      $"File kind: {audit.FileKind} - Imported at: {audit.ImportedAt:g}\n" +
+                      $"Source file: {audit.SourceFilePath}\nSHA-256: {audit.FileSha256}\n" +
+                      $"Preview IDs: {string.Join(", ", audit.PreviewIds.Take(3))}" +
+                      (audit.Errors.Count > 0 ? $"\nFirst error: Row {audit.Errors[0].RowNumber}: {audit.Errors[0].Message}" : "");
+                auditStack.Children.Add(CreateInfoPanel(title, details));
             }
         }
 
@@ -347,34 +351,72 @@ public partial class MainWindow
     private void AddGoogleCalendarConnectorPanel(Panel root)
     {
         GoogleCalendarConfigurationStore.EnsureTemplate();
-        var connected = GoogleOAuthTokenStore.Exists;
+        var lifecycle = GoogleCalendarLifecycleStore.Load();
+        var configurationPresent = GoogleCalendarLifecycleStore.ConfigurationPresent();
+        var tokenPresent = GoogleOAuthTokenStore.Exists;
+
         var panel = CreatePanel();
         panel.Margin = new Thickness(0, 16, 0, 0);
         var stack = new StackPanel();
         stack.Children.Add(new TextBlock
         {
-            Text = "Read-only Google Calendar connector",
+            Text = "Read-only Google Calendar connector lifecycle",
             Foreground = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
             FontSize = 20,
             FontWeight = FontWeights.Bold
         });
+
+        var range = lifecycle.LastRangeFrom.HasValue && lifecycle.LastRangeTo.HasValue
+            ? $"{lifecycle.LastRangeFrom:g} to {lifecycle.LastRangeTo:g}"
+            : "No bounded range recorded";
+        var lastError = string.IsNullOrWhiteSpace(lifecycle.LastSanitizedError) ? "None" : lifecycle.LastSanitizedError;
+
         stack.Children.Add(new TextBlock
         {
-            Text = $"Status: {(connected ? "Connected locally" : "Disconnected / configuration required")}\n" +
-                   "Scope: calendar.readonly only. Refresh: manual only. Maximum range: 31 days.\n" +
-                   "Fetched events enter as untrusted Integration Inbox previews. No external event or LifeOS module is changed automatically.\n" +
-                   $"Local configuration: {GoogleCalendarConfigurationStore.FilePath}",
+            Text =
+                $"State: {FormatLifecycleState(lifecycle.State)}\n" +
+                $"Configuration: {(configurationPresent ? "Present and valid" : "Missing or invalid")} - Local token cache: {(tokenPresent ? "Present" : "Missing")}\n" +
+                "Permission: calendar.readonly only - Refresh mode: manual only - Maximum range: 31 days.\n" +
+                $"Last selected range: {range}\n" +
+                $"Last refresh attempt: {FormatLifecycleTimestamp(lifecycle.LastRefreshAttemptAt)} - Last successful refresh: {FormatLifecycleTimestamp(lifecycle.LastSuccessfulRefreshAt)}\n" +
+                $"Last result: {lifecycle.LastResultSummary}\n" +
+                $"Received: {lifecycle.LastReceivedCount} - Duplicate-suspected: {lifecycle.LastDuplicateCount} - Skipped/malformed: {lifecycle.LastSkippedCount}\n" +
+                $"Sanitized last error: {lastError}\n" +
+                "Disconnect removes local authorization. Clearing local connector cache removes token/lifecycle state only. Imported Integration Inbox evidence remains until separately reviewed or deleted.",
             Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
             Margin = new Thickness(0, 8, 0, 12),
             TextWrapping = TextWrapping.Wrap
         });
+
         stack.Children.Add(CreateEvidenceActionButton("Open local connector configuration", OpenGoogleCalendarConfiguration));
-        stack.Children.Add(CreateEvidenceActionButton("Connect read-only Google Calendar", ConnectGoogleCalendar));
+        stack.Children.Add(CreateEvidenceActionButton(tokenPresent ? "Reconnect Google Calendar" : "Connect read-only Google Calendar", ConnectGoogleCalendar));
         stack.Children.Add(CreateEvidenceActionButton("Manual bounded calendar refresh", RefreshGoogleCalendar));
-        stack.Children.Add(CreateEvidenceActionButton("Disconnect and delete local token cache", DisconnectGoogleCalendar));
+        stack.Children.Add(CreateEvidenceActionButton("Retry last bounded refresh", RetryGoogleCalendarRefresh));
+        stack.Children.Add(CreateEvidenceActionButton("Disconnect local authorization", DisconnectGoogleCalendar));
+        stack.Children.Add(CreateEvidenceActionButton("Clear local connector cache", ClearGoogleCalendarConnectorCache));
         panel.Child = stack;
         root.Children.Add(panel);
     }
+
+    private static string FormatLifecycleState(GoogleCalendarLifecycleState state) => state switch
+    {
+        GoogleCalendarLifecycleState.ConfigurationMissing => "Configuration missing",
+        GoogleCalendarLifecycleState.ConfiguredDisconnected => "Configured but disconnected",
+        GoogleCalendarLifecycleState.ConnectedLocally => "Connected locally",
+        GoogleCalendarLifecycleState.RefreshInProgress => "Refresh in progress",
+        GoogleCalendarLifecycleState.RefreshSucceeded => "Refresh succeeded",
+        GoogleCalendarLifecycleState.RefreshEmpty => "Refresh returned no events",
+        GoogleCalendarLifecycleState.RefreshPartial => "Refresh partially succeeded",
+        GoogleCalendarLifecycleState.RefreshFailed => "Refresh failed",
+        GoogleCalendarLifecycleState.AuthenticationExpired => "Authentication expired - reconnect required",
+        GoogleCalendarLifecycleState.AccessRevoked => "Access revoked - reconnect required",
+        GoogleCalendarLifecycleState.TokenCacheMissing => "Local token cache missing - reconnect required",
+        GoogleCalendarLifecycleState.Disconnected => "Disconnected",
+        GoogleCalendarLifecycleState.LocalCacheCleared => "Local connector cache cleared",
+        _ => state.ToString()
+    };
+
+    private static string FormatLifecycleTimestamp(DateTimeOffset? value) => value?.ToString("g") ?? "Never";
 
     private void OpenGoogleCalendarConfiguration()
     {
@@ -384,6 +426,13 @@ public partial class MainWindow
 
     private async void ConnectGoogleCalendar()
     {
+        var lifecycle = GoogleCalendarLifecycleStore.Load();
+        lifecycle.LastConnectionAttemptAt = DateTimeOffset.Now;
+        lifecycle.LastResultSummary = "Explicit connection attempt started.";
+        lifecycle.LastSanitizedError = string.Empty;
+        GoogleCalendarLifecycleStore.Save(lifecycle);
+        AppendGoogleCalendarLifecycleAudit("connection-attempt", "Explicit read-only connection attempt started.");
+
         try
         {
             var configuration = GoogleCalendarConfigurationStore.Load();
@@ -392,12 +441,24 @@ public partial class MainWindow
             using var httpClient = new HttpClient();
             var client = new GoogleOAuthPkceClient(httpClient, configuration);
             await client.ConnectAsync();
+            lifecycle.State = GoogleCalendarLifecycleState.ConnectedLocally;
+            lifecycle.LastConnectedAt = DateTimeOffset.Now;
+            lifecycle.LastResultSummary = "Connected locally with read-only authorization. Refresh remains manual.";
+            lifecycle.LastSanitizedError = string.Empty;
+            GoogleCalendarLifecycleStore.Save(lifecycle);
+            AppendGoogleCalendarLifecycleAudit("connection-success", lifecycle.LastResultSummary);
             MessageBox.Show("Google Calendar connected locally with read-only scope. Refresh remains manual.", "LifeOS", MessageBoxButton.OK, MessageBoxImage.Information);
             ShowIntegrationInboxPage();
         }
-        catch (Exception ex) when (ex is InvalidOperationException or IOException or TimeoutException or HttpRequestException or PlatformNotSupportedException)
+        catch (Exception ex) when (ex is InvalidOperationException or IOException or TimeoutException or HttpRequestException or PlatformNotSupportedException or System.Text.Json.JsonException)
         {
-            MessageBox.Show(ex.Message, "Google Calendar connection", MessageBoxButton.OK, MessageBoxImage.Warning);
+            lifecycle.State = GoogleCalendarLifecycleStore.ClassifyFailure(ex);
+            lifecycle.LastResultSummary = "Connection failed. Review the sanitized error and reconnect manually.";
+            lifecycle.LastSanitizedError = GoogleCalendarLifecycleStore.SanitizeError(ex);
+            GoogleCalendarLifecycleStore.Save(lifecycle);
+            AppendGoogleCalendarLifecycleAudit("connection-failure", lifecycle.LastSanitizedError);
+            MessageBox.Show(lifecycle.LastSanitizedError, "Google Calendar connection", MessageBoxButton.OK, MessageBoxImage.Warning);
+            ShowIntegrationInboxPage();
         }
     }
 
@@ -405,12 +466,39 @@ public partial class MainWindow
     {
         var rangeDialog = new CalendarRefreshRangeDialog { Owner = this };
         if (rangeDialog.ShowDialog() != true) return;
+        await RefreshGoogleCalendarRange(rangeDialog.SelectedRange, false);
+    }
 
+    private async void RetryGoogleCalendarRefresh()
+    {
+        var lifecycle = GoogleCalendarLifecycleStore.Load();
+        if (!lifecycle.LastRangeFrom.HasValue || !lifecycle.LastRangeTo.HasValue)
+        {
+            MessageBox.Show("No previous bounded range is available. Choose Manual bounded calendar refresh first.", "Google Calendar retry", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        await RefreshGoogleCalendarRange(new CalendarRefreshRange(lifecycle.LastRangeFrom.Value, lifecycle.LastRangeTo.Value), true);
+    }
+
+    private async Task RefreshGoogleCalendarRange(CalendarRefreshRange range, bool isRetry)
+    {
+        var lifecycle = GoogleCalendarLifecycleStore.Load();
         try
         {
-            var range = rangeDialog.SelectedRange;
             range.Validate(DateTimeOffset.Now);
-            if (!ConfirmRiskyAction("Refresh Google Calendar previews?", $"Read events from {range.From:d} through {range.To:d}? Results remain untrusted previews and no calendar or LifeOS module will be changed.")) return;
+            var action = isRetry ? "Retry the last bounded Google Calendar refresh?" : "Refresh Google Calendar previews?";
+            if (!ConfirmRiskyAction(action, $"Read events from {range.From:d} through {range.To:d}? Results remain untrusted previews and no calendar or LifeOS module will be changed.")) return;
+
+            lifecycle.State = GoogleCalendarLifecycleState.RefreshInProgress;
+            lifecycle.LastRefreshAttemptAt = DateTimeOffset.Now;
+            lifecycle.LastRangeFrom = range.From;
+            lifecycle.LastRangeTo = range.To;
+            lifecycle.LastResultSummary = isRetry ? "Manual retry in progress." : "Manual bounded refresh in progress.";
+            lifecycle.LastSanitizedError = string.Empty;
+            GoogleCalendarLifecycleStore.Save(lifecycle);
+            AppendGoogleCalendarLifecycleAudit(isRetry ? "refresh-retry-attempt" : "refresh-attempt", lifecycle.LastResultSummary);
+            ShowIntegrationInboxPage();
 
             var configuration = GoogleCalendarConfigurationStore.Load();
             configuration.Validate();
@@ -431,21 +519,67 @@ public partial class MainWindow
                 "API-READ-ONLY",
                 string.Join("\n", result.Previews.Select(x => x.DuplicateKey))));
 
+            lifecycle.LastReceivedCount = result.Previews.Count;
+            lifecycle.LastDuplicateCount = duplicateCount;
+            lifecycle.LastSkippedCount = result.Errors.Count;
+            lifecycle.LastSuccessfulRefreshAt = DateTimeOffset.Now;
+            lifecycle.LastSanitizedError = string.Empty;
+            lifecycle.State = result.Previews.Count == 0 && result.Errors.Count == 0
+                ? GoogleCalendarLifecycleState.RefreshEmpty
+                : result.Errors.Count > 0
+                    ? GoogleCalendarLifecycleState.RefreshPartial
+                    : GoogleCalendarLifecycleState.RefreshSucceeded;
+            lifecycle.LastResultSummary = lifecycle.State switch
+            {
+                GoogleCalendarLifecycleState.RefreshEmpty => "Manual refresh succeeded and returned no events.",
+                GoogleCalendarLifecycleState.RefreshPartial => "Manual refresh partially succeeded; malformed events were skipped.",
+                _ => "Manual refresh succeeded and created review-first previews."
+            };
+            GoogleCalendarLifecycleStore.Save(lifecycle);
+            AppendGoogleCalendarLifecycleAudit(lifecycle.State == GoogleCalendarLifecycleState.RefreshEmpty ? "refresh-empty" : lifecycle.State == GoogleCalendarLifecycleState.RefreshPartial ? "refresh-partial" : "refresh-success", lifecycle.LastResultSummary, result.Previews.Count, duplicateCount, result.Errors.Count);
+
             MessageBox.Show($"Received {result.Previews.Count} read-only calendar preview(s).\nDuplicate-suspected: {duplicateCount}.\nSkipped malformed events: {result.Errors.Count}.", "Google Calendar manual refresh", MessageBoxButton.OK, MessageBoxImage.Information);
             ShowIntegrationInboxPage();
         }
-        catch (Exception ex) when (ex is InvalidOperationException or ArgumentException or HttpRequestException or IOException or PlatformNotSupportedException)
+        catch (Exception ex) when (ex is InvalidOperationException or ArgumentException or HttpRequestException or IOException or PlatformNotSupportedException or System.Text.Json.JsonException)
         {
-            MessageBox.Show(ex.Message, "Google Calendar refresh", MessageBoxButton.OK, MessageBoxImage.Warning);
+            lifecycle.State = GoogleCalendarLifecycleStore.ClassifyFailure(ex);
+            lifecycle.LastResultSummary = "Manual refresh failed. No automatic retry was attempted.";
+            lifecycle.LastSanitizedError = GoogleCalendarLifecycleStore.SanitizeError(ex);
+            GoogleCalendarLifecycleStore.Save(lifecycle);
+            AppendGoogleCalendarLifecycleAudit("refresh-failure", lifecycle.LastSanitizedError);
+            MessageBox.Show(lifecycle.LastSanitizedError, "Google Calendar refresh", MessageBoxButton.OK, MessageBoxImage.Warning);
+            ShowIntegrationInboxPage();
         }
     }
 
     private void DisconnectGoogleCalendar()
     {
-        if (!ConfirmRiskyAction("Disconnect Google Calendar?", "This deletes the local encrypted token cache. Existing Integration Inbox previews remain for provenance and review.")) return;
+        if (!ConfirmRiskyAction("Disconnect Google Calendar?", "This deletes local authorization only. Existing Integration Inbox previews remain for provenance and review.")) return;
         GoogleCalendarConnectorCache.Disconnect();
-        MessageBox.Show("Google Calendar disconnected. Local token cache deleted. Existing previews were retained.", "LifeOS", MessageBoxButton.OK, MessageBoxImage.Information);
+        var lifecycle = GoogleCalendarLifecycleStore.Load();
+        lifecycle.State = GoogleCalendarLifecycleState.Disconnected;
+        lifecycle.LastDisconnectAt = DateTimeOffset.Now;
+        lifecycle.LastResultSummary = "Disconnected. Local authorization was removed; imported previews were retained.";
+        lifecycle.LastSanitizedError = string.Empty;
+        GoogleCalendarLifecycleStore.Save(lifecycle);
+        AppendGoogleCalendarLifecycleAudit("disconnect", lifecycle.LastResultSummary);
+        MessageBox.Show("Google Calendar disconnected. Local authorization deleted. Existing previews were retained.", "LifeOS", MessageBoxButton.OK, MessageBoxImage.Information);
         ShowIntegrationInboxPage();
+    }
+
+    private void ClearGoogleCalendarConnectorCache()
+    {
+        if (!ConfirmRiskyAction("Clear local Google Calendar connector cache?", "This removes the local token and lifecycle metadata. It does not delete imported Integration Inbox evidence or Google Calendar events.")) return;
+        GoogleCalendarConnectorCache.ClearLocalConnectorCache();
+        AppendGoogleCalendarLifecycleAudit("local-cache-cleared", "Local token and lifecycle cache cleared. Imported previews retained.");
+        MessageBox.Show("Local connector cache cleared. Imported Integration Inbox previews were retained.", "LifeOS", MessageBoxButton.OK, MessageBoxImage.Information);
+        ShowIntegrationInboxPage();
+    }
+
+    private static void AppendGoogleCalendarLifecycleAudit(string action, string summary, int received = 0, int duplicates = 0, int skipped = 0)
+    {
+        IntegrationImportAuditStorage.Append(IntegrationImportAudit.CreateConnectorLifecycleEntry("google-calendar", action, summary, received, duplicates, skipped));
     }
 
     private void ResetIntegrationInboxDemo()

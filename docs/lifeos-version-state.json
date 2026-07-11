@@ -1,9 +1,9 @@
 {
   "currentVersion": "v5.0-alpha",
-  "currentRelease": "First Live Read-Only Connector",
-  "currentScreenshotGroup": 22,
-  "currentScreenshotGroupName": "Google Calendar Read-Only Connector",
-  "currentScreenshotGroupComplete": true,
+  "currentRelease": "Google Calendar Connector Lifecycle",
+  "currentScreenshotGroup": 23,
+  "currentScreenshotGroupName": "Connector Lifecycle Hardening and Diagnostics",
+  "currentScreenshotGroupComplete": false,
   "v4SpineComplete": true,
   "connectorFoundationActive": true,
   "activeLocalConnectorFormats": [
@@ -23,7 +23,11 @@
   "disconnectDeletesLocalTokenCache": true,
   "buildCommand": "dotnet build .\\LifeOS.slnx -c Release",
   "testCommand": "dotnet test .\\LifeOS.slnx",
-  "boundary": "Google Calendar uses explicit connection, calendar.readonly, manual bounded refresh, untrusted Integration Inbox previews, duplicate detection, provenance, audit history, human review, explicit disconnect, and local token-cache deletion. No calendar write, background polling, automatic acceptance, linking, or module mutation is active.",
-  "nextLane": "Return to Master Roadmap. Group 23 has not started.",
-  "tag": "v5.0-alpha"
+  "boundary": "Google Calendar remains read-only, manually connected, manually refreshed, date-bounded, review-first, diagnosable, and recoverable. No scheduled refresh, background polling, automatic retry/reconnect, write access, second provider, or automatic LifeOS mutation is active.",
+  "nextLane": "Complete Group 23 screenshots and documentation. Group 24 has not started.",
+  "tag": "v5.0-alpha",
+  "connectorLifecycleModelActive": true,
+  "manualReconnectOnly": true,
+  "manualRetryOnly": true,
+  "lifecycleStatusPersistence": "Non-secret local metadata only"
 }

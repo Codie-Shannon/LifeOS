@@ -1,8 +1,8 @@
 {
-  "currentVersion": "v5.0.0-alpha.4",
-  "currentRelease": "Email Radar foundation",
+  "currentVersion": "v5.0.0-alpha.5",
+  "currentRelease": "Authenticated read-only Gmail connector",
   "currentScreenshotGroup": 24,
-  "currentScreenshotGroupName": "Email Radar foundation and formal version alignment",
+  "currentScreenshotGroupName": "Authenticated read-only Gmail connector and formal version alignment",
   "currentScreenshotGroupComplete": true,
   "v4SpineComplete": true,
   "connectorFoundationActive": true,
@@ -37,5 +37,5 @@
   "screenshotEvidenceComplete": true,
   "boundary": "Email Radar uses local/imported inert communication evidence only. No mailbox connection, send/write action, background scanning, AI interpretation, automatic follow-up, or automatic LifeOS state mutation is active.",
   "nextLane": "Return to Master Roadmap. Group 25 has not started.",
-  "tag": "v5.0.0-alpha.4"
+  "tag": "v5.0.0-alpha.5"
 }

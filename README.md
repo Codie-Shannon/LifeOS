@@ -4,9 +4,9 @@ LifeOS is a local-first personal operating system for turning life, work, money,
 
 ## Current build
 
-**LifeOS Desktop v5.0.0-alpha.4 — Email Radar foundation**
+**LifeOS Desktop v5.0.0-alpha.5 — Authenticated read-only Gmail connector**
 
-Group 24 is complete. LifeOS now includes a provider-neutral local/imported Email Radar foundation with user-guided profiles, inert JSON/CSV evidence, deterministic explained candidate matching, explicit confirm/reject review, confirmed-only communication timelines, and review-first waiting-on suggestions.
+Group 24 is complete. LifeOS now includes a provider-neutral local/imported Authenticated read-only Gmail connector with user-guided profiles, inert JSON/CSV evidence, deterministic explained candidate matching, explicit confirm/reject review, confirmed-only communication timelines, and review-first waiting-on suggestions.
 
 Google Calendar remains the first authenticated read-only connector. Refresh is explicit, manual, date-bounded, review-first, and unable to write to Google Calendar or mutate LifeOS modules automatically.
 
@@ -40,7 +40,7 @@ LifeOS does not currently provide Gmail, Outlook, Graph, IMAP, POP3, mailbox sca
 
 ## Current screenshot evidence
 
-- [Group 24 — Email Radar foundation](docs/screenshot-groups/group-24-email-radar-foundation/README.md)
+- [Group 24 — Authenticated read-only Gmail connector](docs/screenshot-groups/group-24-email-radar-foundation/README.md)
 - [Group 23 — Connector lifecycle](docs/screenshot-groups/group-23-connector-lifecycle/README.md)
 - `docs/release-notes/v5.0-alpha-group-24.md`
 - `docs/current-status.md`

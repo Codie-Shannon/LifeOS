@@ -2,7 +2,7 @@
 
 ## Current release
 
-LifeOS Desktop `v5.0.0-alpha.4` — Email Radar foundation.
+LifeOS Desktop `v5.0.0-alpha.5` — Authenticated read-only Gmail connector.
 
 ## Completed checkpoint
 
@@ -16,7 +16,7 @@ LifeOS now provides user-guided Email Radar profiles, safe local JSON/CSV commun
 - Release build succeeded
 - product commits pushed to `main`
 - screenshot evidence captured with fictional data only
-- formal application version aligned to `v5.0.0-alpha.4`
+- formal application version aligned to `v5.0.0-alpha.5`
 
 ## Trust boundary
 

@@ -1,0 +1,22 @@
+[
+  {
+    "externalReference": "demo-message-001",
+    "threadReference": "demo-thread-001",
+    "sentAt": "2026-07-02T09:15:00+12:00",
+    "sender": "morgan@harbour-workshop.example.invalid",
+    "recipients": "owner@example.invalid",
+    "subject": "Workshop update and proof",
+    "text": "The fictional workshop proof is ready for review. This sample contains no real client information.",
+    "hasAttachments": true
+  },
+  {
+    "externalReference": "demo-message-002",
+    "threadReference": "demo-thread-001",
+    "sentAt": "2026-07-03T14:30:00+12:00",
+    "sender": "owner@example.invalid",
+    "recipients": "morgan@harbour-workshop.example.invalid",
+    "subject": "Re: Workshop update and proof",
+    "text": "Thanks. I reviewed the fictional update and sent the requested status note.",
+    "hasAttachments": false
+  }
+]

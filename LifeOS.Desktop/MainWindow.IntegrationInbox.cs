@@ -20,16 +20,16 @@ public partial class MainWindow
         var summary = IntegrationInboxCalculator.Calculate(_integrationInboxItems);
         var readiness = IntegrationReadinessMatrix.Create();
 
-        SetHeader("Integration Inbox", $"Integration Inbox - v5.0-alpha - {summary.NeedsReview} review - {summary.DuplicateSuspected} duplicate");
+        SetHeader("Integration Inbox", $"Integration Inbox - v5.0.0-alpha.4 - {summary.NeedsReview} review - {summary.DuplicateSuspected} duplicate");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateInfoPanel(
             "Connector foundation",
-            "v5.0-alpha imports local CSV, JSON, and ICS files and exposes one narrow Google Calendar read-only connector. Every preview keeps source provenance, trust, duplicate state, suggested target, confirmation state, and audit history. No imported record can update LifeOS automatically."));
+            "v5.0.0-alpha.4 imports local CSV, JSON, and ICS files and exposes one narrow Google Calendar read-only connector. Every preview keeps source provenance, trust, duplicate state, suggested target, confirmation state, and audit history. No imported record can update LifeOS automatically."));
 
         var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
-        metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v5.0-alpha"));
+        metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v5.0.0-alpha.4"));
         metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.NeedsReview.ToString(), "Review"));
         metricsPanel.Children.Add(CreateDashboardCard("Suspected", summary.DuplicateSuspected.ToString(), "Duplicate"));
         metricsPanel.Children.Add(CreateDashboardCard("Manual gate", summary.Untrusted.ToString(), "Untrusted"));
@@ -40,7 +40,7 @@ public partial class MainWindow
         root.Children.Add(metricsPanel);
 
         root.Children.Add(CreateInfoPanel(
-            "v5.0-alpha connector rule",
+            "v5.0.0-alpha.4 connector rule",
             "- External records enter as read-only previews, never trusted items.\n" +
             "- Source evidence and provenance stay attached.\n" +
             "- Duplicate suspicion blocks acceptance.\n" +
@@ -94,11 +94,11 @@ public partial class MainWindow
             "Accepted previews may later be handed to Item State, Payment Calendar, Work Pipeline, Evidence Vault, Bills / Payments, Follow-Ups, or Search / Knowledge. The target module remains authoritative and must validate its own rules."));
 
         root.Children.Add(CreateInfoPanel(
-            "v5.0-alpha audit and provenance contract",
+            "v5.0.0-alpha.4 audit and provenance contract",
             "Every preview keeps a local ID, source type, source label, external reference, duplicate key, source evidence, review note, trust state, status, suggested target, timestamps, and optional link reference."));
 
         root.Children.Add(CreateInfoPanel(
-            "v5.0-alpha boundary",
+            "v5.0.0-alpha.4 boundary",
             "Google Calendar remains the only live provider boundary in Group 23. It is read-only, manually refreshed, date-bounded, and review-first. No Gmail, Outlook, Microsoft Calendar, Xero, SharePoint, Drive, OCR provider, banking provider, background polling, automatic item creation, automatic updates, or AI actions are active."));
 
         root.Children.Add(CreateInfoPanel(
@@ -321,13 +321,13 @@ public partial class MainWindow
             switch (target)
             {
                 case IntegrationPreviewStatus.Accepted:
-                    IntegrationInboxReviewEngine.Accept(item, "Accepted through local v5.0-alpha review control.");
+                    IntegrationInboxReviewEngine.Accept(item, "Accepted through local v5.0.0-alpha.4 review control.");
                     break;
                 case IntegrationPreviewStatus.Deferred:
-                    IntegrationInboxReviewEngine.Defer(item, "Deferred through local v5.0-alpha review control.");
+                    IntegrationInboxReviewEngine.Defer(item, "Deferred through local v5.0.0-alpha.4 review control.");
                     break;
                 case IntegrationPreviewStatus.Rejected:
-                    IntegrationInboxReviewEngine.Reject(item, "Rejected through local v5.0-alpha review control.");
+                    IntegrationInboxReviewEngine.Reject(item, "Rejected through local v5.0.0-alpha.4 review control.");
                     break;
                 case IntegrationPreviewStatus.Linked:
                     if (item.Status != IntegrationPreviewStatus.Accepted)

@@ -1,0 +1,3 @@
+externalReference,threadReference,sentAt,sender,recipients,subject,text,hasAttachments
+demo-csv-001,demo-thread-002,2026-07-04T10:00:00+12:00,taylor@northline-repairs.example.invalid,owner@example.invalid,Repair update and access,"The fictional access update is ready for review.",false
+demo-csv-002,demo-thread-002,2026-07-05T11:30:00+12:00,owner@example.invalid,taylor@northline-repairs.example.invalid,Re: Repair update and access,"Thanks. This is a safe fictional reply.",false

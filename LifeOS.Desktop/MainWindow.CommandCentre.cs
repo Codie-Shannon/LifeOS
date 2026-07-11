@@ -336,13 +336,13 @@ public partial class MainWindow
             pressureSignals,
             _commandCentrePressurePolicy);
 
-        SetHeader("Command Centre", $"Unified Command Centre • v5.0-alpha • {pressureEngineSummary.PressureLabel}");
+        SetHeader("Command Centre", $"Unified Command Centre • v5.0.0-alpha.4 • {pressureEngineSummary.PressureLabel}");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateHeroPanel(
             "LifeOS Command Centre",
-            "v5.0-alpha adds reviewed local CSV, JSON, and ICS connector previews to the ranked pressure engine without allowing external data to change LifeOS automatically."));
+            "v5.0.0-alpha.4 adds reviewed local CSV, JSON, and ICS connector previews to the ranked pressure engine without allowing external data to change LifeOS automatically."));
 
         var metricsPanel = new WrapPanel
         {
@@ -387,7 +387,7 @@ public partial class MainWindow
         metricsPanel.Children.Add(CreateDashboardCard("Protected", pressureEngineSummary.ProtectedSignals.ToString(), "Contained"));
         metricsPanel.Children.Add(CreateDashboardCard("Pressure money", FormatMoney(pressureEngineSummary.MoneyUnderPressure), "Not safe"));
         metricsPanel.Children.Add(CreateDashboardCard("Suppressed", pressureEngineSummary.SuppressedSignals.ToString(), "Safety"));
-        metricsPanel.Children.Add(CreateDashboardCard("Integration previews", integrationInboxSummary.Total.ToString(), "v5.0-alpha"));
+        metricsPanel.Children.Add(CreateDashboardCard("Integration previews", integrationInboxSummary.Total.ToString(), "v5.0.0-alpha.4"));
         metricsPanel.Children.Add(CreateDashboardCard("Integration review", integrationInboxSummary.NeedsReview.ToString(), "Manual gate"));
         metricsPanel.Children.Add(CreateDashboardCard("Preview conflicts", integrationInboxSummary.DuplicateSuspected.ToString(), "Duplicate"));
         metricsPanel.Children.Add(CreateDashboardCard("Imported value", FormatMoney(integrationInboxSummary.PreviewMoney), "Not safe"));
@@ -653,7 +653,7 @@ public partial class MainWindow
 
         var pressureNextPanel = CreateInfoPanel(
             "Connector foundation",
-            "v5.0-alpha can rank manually reviewed local CSV, JSON, and ICS previews while confirmation gates, duplicate detection, and audit history keep external data contained.");
+            "v5.0.0-alpha.4 can rank manually reviewed local CSV, JSON, and ICS previews while confirmation gates, duplicate detection, and audit history keep external data contained.");
         pressureNextPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(pressureNextPanel);
 

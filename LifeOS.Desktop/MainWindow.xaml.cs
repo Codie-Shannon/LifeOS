@@ -253,6 +253,8 @@ public partial class MainWindow : Window
     private void ReceiptEvidenceNavButton_Click(object sender, RoutedEventArgs e) => ShowReceiptEvidencePage();
     private void IntegrationInboxNavButton_Click(object sender, RoutedEventArgs e) => ShowIntegrationInboxPage();
 
+    private void EmailRadarNavButton_Click(object sender, RoutedEventArgs e) => ShowEmailRadarPage();
+
     private void DailyOperatingFlowNavButton_Click(object sender, RoutedEventArgs e) => ShowDailyOperatingFlowPage();
 
     private void DailyStateNavButton_Click(object sender, RoutedEventArgs e) => ShowDailyStatePage();

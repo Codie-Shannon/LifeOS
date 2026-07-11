@@ -1,10 +1,10 @@
-# LifeOS
+﻿# LifeOS
 
 LifeOS is a local-first personal operating system for turning life, work, money, evidence, follow-ups, projects, relationships, and pressure into visible state.
 
 ## Current build
 
-**LifeOS Desktop v5.0.0-beta.1 — v5 integration release checkpoint**
+**LifeOS Desktop v5.0.0-beta.1 â€” v5 integration release checkpoint**
 
 Screenshot Group 26 Pack 1 is active. LifeOS now includes one private/testing-mode authenticated Gmail connector using only `gmail.readonly`. Searches are explicit, profile-bound, date-bounded, result-capped, previewed before retrieval, and manually confirmed.
 
@@ -46,9 +46,9 @@ LifeOS does not send, draft, reply, forward, archive, trash, delete, label, star
 
 ## Current screenshot evidence
 
-- [Group 25 — Authenticated read-only Gmail connector](docs/screenshot-groups/group-25-read-only-gmail-connector/README.md)
-- [Group 24 — Email Radar foundation](docs/screenshot-groups/group-24-email-radar-foundation/README.md)
-- [Group 23 — Connector lifecycle](docs/screenshot-groups/group-23-connector-lifecycle/README.md)
+- [Group 25 â€” Authenticated read-only Gmail connector](docs/screenshot-groups/group-25-read-only-gmail-connector/README.md)
+- [Group 24 â€” Email Radar foundation](docs/screenshot-groups/group-24-email-radar-foundation/README.md)
+- [Group 23 â€” Connector lifecycle](docs/screenshot-groups/group-23-connector-lifecycle/README.md)
 - `docs/release-notes/v5.0-alpha-group-25.md`
 - `docs/current-status.md`
 
@@ -63,10 +63,10 @@ The verified Group 25 regression result is **91 passed, 0 failed, 0 skipped**.
 
 ## Repository shape
 
-- `LifeOS.Desktop/` — WPF desktop application.
-- `LifeOS.Shared/` — local storage and shared connector services.
-- `src/LifeOS.Core/` — domain models, rules, connector intake, and Email Radar logic.
-- `docs/` — release notes, screenshot evidence, integration contracts, and current-state documentation.
+- `LifeOS.Desktop/` â€” WPF desktop application.
+- `LifeOS.Shared/` â€” local storage and shared connector services.
+- `src/LifeOS.Core/` â€” domain models, rules, connector intake, and Email Radar logic.
+- `docs/` â€” release notes, screenshot evidence, integration contracts, and current-state documentation.
 
 ## Local storage and connector configuration
 
@@ -78,3 +78,5 @@ Return control to the LifeOS Master / Roadmap chat. Group 26 has not started.
 
 - [v5 integration overview](docs/integrations/v5-integration-overview.md)
 - [v5 release validation matrix](docs/integrations/v5-release-validation-matrix.json)
+
+- [Group 26 — v5 integration release checkpoint](docs/screenshot-groups/group-26-v5-integration-release-checkpoint/README.md)

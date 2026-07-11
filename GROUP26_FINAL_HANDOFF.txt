@@ -1,0 +1,39 @@
+LIFEOS GROUP 26 FINAL HANDOFF
+
+Version:
+v5.0.0-beta.1
+
+Group:
+26 — v5 integration release checkpoint
+
+Expected Pack 1 final HEAD before Pack 2:
+e5814ab9e64906bf10edceb7e7a55d19b73bcc23
+
+Product state:
+- unified five-lane integration readiness
+- local CSV/JSON intake
+- local ICS calendar intake
+- Google Calendar read-only
+- local Email Radar import
+- Gmail read-only
+- Integration Inbox review gate
+- Email Radar deterministic candidate review
+- confirmed-only communication timeline
+- disconnect/cache retained evidence
+- 11 release-validation checks passing
+- no automatic external mutation
+- no automatic LifeOS operational mutation
+
+Verification:
+97 tests passed
+0 failed
+0 skipped
+Release build passed
+git diff checks passed
+
+Screenshot evidence:
+docs/screenshot-groups/group-26-v5-integration-release-checkpoint/
+
+Pack 2 closes Group 26, marks screenshot evidence complete, updates current documentation, commits the final evidence, pushes, verifies HEAD == origin/main and requires a clean working tree.
+
+Group 27 and v6 have not started.

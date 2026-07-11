@@ -1,6 +1,6 @@
-# LifeOS Version History
+﻿# LifeOS Version History
 
-## v5.0.0-alpha.5 — Authenticated Read-Only Gmail Connector
+## v5.0.0-alpha.5 â€” Authenticated Read-Only Gmail Connector
 
 - Added one private/testing-mode authenticated Gmail connector using exact `gmail.readonly`.
 - Added explicit browser authorization and connected/disconnected/cache-cleared lifecycle states.
@@ -13,7 +13,7 @@
 - Kept sending, drafts, mailbox mutation, attachments, active HTML, remote content, background scanning, scheduled searches, automatic Follow-Ups, automatic Work Pipeline mutation, Outlook, IMAP/POP3, and AI interpretation inactive.
 - Verified 91 passing tests and a successful Release build.
 
-## v5.0.0-alpha.4 — Email Radar Foundation
+## v5.0.0-alpha.4 â€” Email Radar Foundation
 
 - Centralized formal version metadata and aligned visible/current-state surfaces.
 - Added user-guided Email Radar profiles.
@@ -101,3 +101,15 @@
 ## v1.x - Foundation
 
 - Established local-first storage, daily flow, evidence, relationships, paid work, settings, safety, and theme foundations.
+## v5.0.0-beta.1 — Group 26
+
+v5 integration release checkpoint.
+
+- unified five-lane integration readiness
+- manual, read-only and review-first connector model
+- Google Calendar and Gmail read-only lifecycle alignment
+- retained evidence after disconnect/cache clear
+- release-validation matrix
+- privacy-safe screenshot proof
+- 97 tests passed
+- Release build passed

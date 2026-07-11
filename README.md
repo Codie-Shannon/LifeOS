@@ -91,3 +91,13 @@ GitHub Actions runs restore, Release build, and `dotnet test` on pushes and pull
 ## Next lane
 
 Return to Master Roadmap after the completed Group 22 checkpoint. Group 23 has not started.
+
+<!-- GROUP23_CONNECTOR_LIFECYCLE_START -->
+## v5.0-alpha â€” Google Calendar connector lifecycle
+
+Group 23 hardens the first live read-only Google Calendar connector with visible lifecycle state, last-attempt and last-success metrics, result counts, sanitized failures, explicit reconnect/retry, disconnect, and local cache clearing.
+
+Refresh remains manual and bounded to 31 days. Imported events remain review-first Integration Inbox previews. Disconnect and cache clearing do not delete retained Integration Inbox evidence.
+
+[View Group 23 connector lifecycle evidence](docs/screenshot-groups/group-23-connector-lifecycle/README.md)
+<!-- GROUP23_CONNECTOR_LIFECYCLE_END -->

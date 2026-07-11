@@ -12,7 +12,7 @@ Google Calendar connection remains explicit and requests only `calendar.readonly
 
 ## Current product checkpoint
 
-Group 23 product checkpoint — Google Calendar connector lifecycle hardening.
+Group 23 product checkpoint â€” Google Calendar connector lifecycle hardening.
 
 Implemented before screenshot finalization:
 
@@ -40,3 +40,13 @@ Google client configuration and OAuth tokens remain local to the user profile an
 ## Next checkpoint
 
 Run Group 23 validation, capture only approved lifecycle screenshots, then finalize screenshot/docs Pack 2. Group 24 has not started.
+
+<!-- GROUP23_CONNECTOR_LIFECYCLE_START -->
+## Group 23 complete â€” connector lifecycle hardening
+
+The Google Calendar read-only connector now exposes configuration, connection, token-cache and refresh lifecycle state. It records the last selected range, last attempt, last successful refresh, received/duplicate/skipped counts and a sanitized last error.
+
+Manual recovery controls include reconnect, retry last bounded refresh, disconnect local authorization and clear local connector cache. Imported Integration Inbox evidence remains after disconnect and cache clearing.
+
+Verified visible states include successful connection, successful refresh, empty result, sanitized network failure, disconnected/reconnect state and final cache-cleared state. No scheduled refresh, background polling, automatic retry, automatic reconnect, second provider, calendar write, Email Radar or Group 24 work is active.
+<!-- GROUP23_CONNECTOR_LIFECYCLE_END -->

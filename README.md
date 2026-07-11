@@ -6,13 +6,9 @@ LifeOS is a local-first personal operating system for turning life, work, money,
 
 **LifeOS Desktop v5.0.0-alpha.4 — Email Radar foundation**
 
-The v4 operating spine remains complete. v5.0.0-alpha.4 adds a local/imported Email Radar foundation with explainable candidate matching and mandatory confirmation while retaining the guarded connector work from Groups 21–23.
+Group 24 is complete. LifeOS now includes a provider-neutral local/imported Email Radar foundation with user-guided profiles, inert JSON/CSV evidence, deterministic explained candidate matching, explicit confirm/reject review, confirmed-only communication timelines, and review-first waiting-on suggestions.
 
-Google Calendar uses explicit connection, `calendar.readonly`, manual bounded refresh, untrusted Integration Inbox previews, duplicate protection, provenance, audit history, human review, and explicit disconnect. It does not write to Google Calendar or automatically update LifeOS modules.
-
-## Current operating rule
-
-Everything important becomes an item. Every item has state. Every state affects pressure. Every pressure signal feeds the Command Centre.
+Google Calendar remains the first authenticated read-only connector. Refresh is explicit, manual, date-bounded, review-first, and unable to write to Google Calendar or mutate LifeOS modules automatically.
 
 ## Integration safety flow
 
@@ -25,79 +21,50 @@ external record
 -> trusted LifeOS state
 ```
 
-Connectors must not write directly to Money, Agenda, Work Pipeline, Evidence, Follow-Ups, or Command Centre. Imported or expected money is visible for planning but never safe money until reviewed and confirmed.
+Email Radar follows the same rule: imported evidence remains untrusted, candidate matches require confirmation, and communication suggestions do not create Follow-Ups or change Work Pipeline state automatically.
 
-## Current connector capability
+## Current capability
 
 - Local CSV, JSON, and ICS preview imports.
-- Google Calendar read-only OAuth connection.
-- Manual refresh only.
-- User-confirmed date range, capped at 31 days.
-- Existing Integration Inbox intake and review engine.
-- Stable external references and duplicate keys.
-- Duplicate-suspected repeated refresh handling.
-- Provenance and audit history.
-- Explicit disconnect and local token-cache deletion.
+- Google Calendar read-only OAuth connection with manual bounded refresh.
+- Local/imported Email Radar profiles and communication evidence.
+- Deterministic candidate matching with visible reasons.
+- Explicit confirm/reject review and duplicate suspicion.
+- Confirmed-only communication timeline.
+- Review-first waiting-on/follow-up suggestions.
+- Provenance and audit retention.
 
 ## Safety boundary
 
-LifeOS does not currently provide calendar writes, Gmail or Outlook scanning, bank feeds, background synchronization, scheduled refresh, automatic preview acceptance, automatic module creation, money movement, email sending, or AI actions.
-
-External data remains untrusted by default. Acceptance and target-module handoff remain separate deliberate actions.
+LifeOS does not currently provide Gmail, Outlook, Graph, IMAP, POP3, mailbox scanning, email sending, inbox mutation, calendar writes, background synchronization, scheduled refresh, automatic Follow-Up creation, automatic Work Pipeline mutation, or AI inbox interpretation.
 
 ## Current screenshot evidence
 
-- `docs/screenshot-groups/group-22-google-calendar-read-only/`
-- `docs/release-notes/v5.0-alpha.md`
+- [Group 24 — Email Radar foundation](docs/screenshot-groups/group-24-email-radar-foundation/README.md)
+- [Group 23 — Connector lifecycle](docs/screenshot-groups/group-23-connector-lifecycle/README.md)
+- `docs/release-notes/v5.0-alpha-group-24.md`
 - `docs/current-status.md`
 
-## Build
-
-```powershell
-dotnet build .\LifeOS.slnx -c Release
-```
-
-## Test
+## Build and test
 
 ```powershell
 dotnet test .\LifeOS.slnx
+dotnet build .\LifeOS.slnx -c Release
 ```
 
-The core regression suite lives in `tests/LifeOS.Core.Tests/` and covers Integration Inbox intake, duplicate handling, bounded calendar retrieval, provider mapping, audit creation, no automatic acceptance/linking, money safety, pressure ranking, week boundaries, receipt evidence, payment calendar, money profile, and weekly close-out.
+The verified Group 24 regression result is **80 passed, 0 failed, 0 skipped**.
 
 ## Repository shape
 
-- `LifeOS.Desktop/` - WPF desktop application.
-- `LifeOS.Shared/` - local storage, demo data, and shared services.
-- `src/LifeOS.Core/` - domain models, rules, connector intake, and calculators.
-- `src/LifeOS.Modules.Timer/` - timer module.
-- `src/LifeOS.TimerAgent/` - timer agent utility.
-- `docs/` - release notes, screenshot evidence, manifests, and current-state documentation.
+- `LifeOS.Desktop/` — WPF desktop application.
+- `LifeOS.Shared/` — local storage and shared services.
+- `src/LifeOS.Core/` — domain models, rules, connector intake, and Email Radar logic.
+- `docs/` — release notes, screenshot evidence, integration contracts, and current-state documentation.
 
 ## Local storage and connector configuration
 
-LifeOS stores local state under:
-
-```text
-%LOCALAPPDATA%\LifeOS
-```
-
-Google connector configuration and protected OAuth tokens remain in the local user profile and are not committed. Disconnect deletes the local token cache while preserving imported review evidence.
-
-## CI
-
-GitHub Actions runs restore, Release build, and `dotnet test` on pushes and pull requests to `main`.
+LifeOS stores local state under `%LOCALAPPDATA%\LifeOS`. Provider credentials and protected OAuth tokens remain local and are not committed.
 
 ## Next lane
 
-Return to Master Roadmap after the completed Group 22 checkpoint. Group 23 has not started.
-
-<!-- GROUP23_CONNECTOR_LIFECYCLE_START -->
-## v5.0-alpha â€” Google Calendar connector lifecycle
-
-Group 23 hardens the first live read-only Google Calendar connector with visible lifecycle state, last-attempt and last-success metrics, result counts, sanitized failures, explicit reconnect/retry, disconnect, and local cache clearing.
-
-Refresh remains manual and bounded to 31 days. Imported events remain review-first Integration Inbox previews. Disconnect and cache clearing do not delete retained Integration Inbox evidence.
-
-[View Group 23 connector lifecycle evidence](docs/screenshot-groups/group-23-connector-lifecycle/README.md)
-<!-- GROUP23_CONNECTOR_LIFECYCLE_END -->
+Return control to the LifeOS Master / Roadmap chat. Group 25 has not started.

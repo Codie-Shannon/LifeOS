@@ -3,7 +3,7 @@
   "currentRelease": "Email Radar foundation",
   "currentScreenshotGroup": 24,
   "currentScreenshotGroupName": "Email Radar foundation and formal version alignment",
-  "currentScreenshotGroupComplete": false,
+  "currentScreenshotGroupComplete": true,
   "v4SpineComplete": true,
   "connectorFoundationActive": true,
   "activeLocalConnectorFormats": [
@@ -12,24 +12,12 @@
     "ICS"
   ],
   "firstLiveReadOnlyConnector": "Google Calendar",
-  "liveProviderVerification": "Verified against a real Google test account with safe sample events",
-  "oauthScope": "https://www.googleapis.com/auth/calendar.readonly",
   "manualRefreshOnly": true,
   "maximumCalendarRefreshDays": 31,
   "reviewFirstIntake": true,
   "automaticExternalMutation": false,
   "automaticLifeOSMutation": false,
   "backgroundPolling": false,
-  "disconnectDeletesLocalTokenCache": true,
-  "buildCommand": "dotnet build .\\LifeOS.slnx -c Release",
-  "testCommand": "dotnet test .\\LifeOS.slnx",
-  "boundary": "Email Radar uses local/imported inert communication evidence only. Candidate matches are deterministic, explained, and untrusted until user confirmation. No mailbox connection, send/write action, background scanning, AI interpretation, automatic follow-up, or automatic LifeOS state mutation is active.",
-  "nextLane": "Complete Group 24 product validation and capture the planned screenshot evidence. Group 25 has not started.",
-  "tag": "v5.0.0-alpha.4",
-  "connectorLifecycleModelActive": true,
-  "manualReconnectOnly": true,
-  "manualRetryOnly": true,
-  "lifecycleStatusPersistence": "Non-secret local metadata only",
   "emailRadarFoundationActive": true,
   "emailRadarEvidenceModes": [
     "Local JSON",
@@ -37,5 +25,17 @@
   ],
   "mailboxConnected": false,
   "deterministicCandidateMatching": true,
-  "candidateConfirmationRequired": true
+  "candidateConfirmationRequired": true,
+  "confirmedTimelineOnly": true,
+  "verifiedTestResult": {
+    "total": 80,
+    "passed": 80,
+    "failed": 0,
+    "skipped": 0
+  },
+  "releaseBuild": "passed",
+  "screenshotEvidenceComplete": true,
+  "boundary": "Email Radar uses local/imported inert communication evidence only. No mailbox connection, send/write action, background scanning, AI interpretation, automatic follow-up, or automatic LifeOS state mutation is active.",
+  "nextLane": "Return to Master Roadmap. Group 25 has not started.",
+  "tag": "v5.0.0-alpha.4"
 }

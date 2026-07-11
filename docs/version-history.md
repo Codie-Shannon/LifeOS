@@ -1,5 +1,16 @@
 # LifeOS Version History
 
+## v5.0.0-alpha.4 — Email Radar Foundation
+
+- Centralized formal version metadata and aligned visible/current-state surfaces.
+- Added user-guided Email Radar profiles.
+- Added safe local JSON/CSV communication evidence preview and confirmation.
+- Added deterministic candidate matching with visible reasons.
+- Added explicit confirm/reject review and duplicate suspicion.
+- Added confirmed-only communication timelines and review-first waiting-on suggestions.
+- Kept Gmail, Outlook, mailbox scanning, sending, background work, AI interpretation, automatic Follow-Ups, and automatic Work Pipeline mutation inactive.
+- Verified 80 passing tests and a successful Release build.
+
 ## v5.0-alpha - Connector Foundation and First Live Read-Only Connector
 
 - Activated local CSV, JSON, and ICS imports into read-only Integration Inbox previews.

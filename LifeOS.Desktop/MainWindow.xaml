@@ -291,7 +291,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v6.0.0-alpha.1 unifies local imports, Google Calendar, Gmail, Integration Inbox, and Email Radar into one manual, read-only, review-first integration checkpoint."
+                <TextBlock Text="LifeOS Desktop v6.0.0-alpha.1 adds controlled, deterministic automation evaluation with explicit approval and no operational execution."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

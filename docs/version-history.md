@@ -1,6 +1,6 @@
 # LifeOS Version History
 
-## v5.0.0-alpha.5 â€” Authenticated Read-Only Gmail Connector
+## v5.0.0-alpha.5 Ã¢â‚¬â€ Authenticated Read-Only Gmail Connector
 
 - Added one private/testing-mode authenticated Gmail connector using exact `gmail.readonly`.
 - Added explicit browser authorization and connected/disconnected/cache-cleared lifecycle states.
@@ -13,7 +13,7 @@
 - Kept sending, drafts, mailbox mutation, attachments, active HTML, remote content, background scanning, scheduled searches, automatic Follow-Ups, automatic Work Pipeline mutation, Outlook, IMAP/POP3, and AI interpretation inactive.
 - Verified 91 passing tests and a successful Release build.
 
-## v5.0.0-alpha.4 â€” Email Radar Foundation
+## v5.0.0-alpha.4 Ã¢â‚¬â€ Email Radar Foundation
 
 - Centralized formal version metadata and aligned visible/current-state surfaces.
 - Added user-guided Email Radar profiles.
@@ -101,7 +101,7 @@
 ## v1.x - Foundation
 
 - Established local-first storage, daily flow, evidence, relationships, paid work, settings, safety, and theme foundations.
-## v5.0.0-beta.1 — Group 26
+## v5.0.0-beta.1 â€” Group 26
 
 v5 integration release checkpoint.
 
@@ -114,7 +114,20 @@ v5 integration release checkpoint.
 - 97 tests passed
 - Release build passed
 
+## v6.0.0-alpha.1 â€” Group 27
 
-## v6.0.0-alpha.1 — Group 27
+Controlled automation foundation.
 
-Controlled automation foundation: disabled-by-default deterministic rules, manual dry-run evaluation, explained proposals, explicit approval/rejection without execution, duplicate detection, persistence, audit and blocked high-risk capabilities.
+- Added provider-neutral automation rules disabled by default.
+- Added deterministic local triggers and conditions.
+- Required reviewed or trusted LifeOS state for current rule evaluation.
+- Added manual dry-run evaluation with visible expected/actual pass-fail explanations.
+- Added explicit proposed action, target, risk, approval and capability policy.
+- Added proposal review with explicit approve/reject decisions.
+- Kept approval separate from execution; approved proposals remain `executed: No`.
+- Added stable duplicate-proposal detection and prior-proposal linkage.
+- Blocked high-risk communication, external-write, financial, destructive, calendar and script capabilities.
+- Added retained inert audit and local JSON persistence with backup recovery.
+- Added seven privacy-safe fictional screenshot proofs.
+- Verified 112 passing tests, a successful Release build and `git diff --check`.
+- Kept background workers, scheduling, timers, startup execution, automatic retry, operational mutation, scripts, plugins and AI inactive.

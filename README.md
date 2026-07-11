@@ -4,53 +4,52 @@ LifeOS is a local-first personal operating system for turning life, work, money,
 
 ## Current build
 
-**LifeOS Desktop v6.0.0-alpha.1 — Controlled automation foundation**
+**LifeOS Desktop v6.0.0-alpha.1 â€” Controlled automation foundation**
 
-Screenshot Group 26 Pack 1 is active. LifeOS now includes one private/testing-mode authenticated Gmail connector using only `gmail.readonly`. Searches are explicit, profile-bound, date-bounded, result-capped, previewed before retrieval, and manually confirmed.
+Screenshot Group 27 is complete. LifeOS now includes a visible, deterministic automation safety spine built around reviewed or trusted local state, manual dry-run evaluation, explained condition results, explicit proposed actions, risk and capability policy, human approval or rejection, duplicate detection, retained audit, and local persistence.
 
-Gmail results normalize into the existing provider-neutral Email Radar communication-evidence model. They remain untrusted, pass through duplicate detection and deterministic candidate matching, require explicit confirm/reject review, and only confirmed evidence enters the communication timeline.
+Approval records valid intent only. It does not execute an operational change in `v6.0.0-alpha.1`.
 
-## Integration safety flow
+## Controlled automation flow
 
 ```text
-authenticated Gmail result
--> untrusted provider-neutral communication evidence
--> duplicate detection and deterministic candidate
--> source-backed review
--> explicit confirm or reject
--> confirmed communication timeline
--> review-first suggestion
--> optional explicit later handoff to trusted LifeOS state
+reviewed or trusted LifeOS state
+-> deterministic manual rule evaluation
+-> explained condition results
+-> proposed action with target, risk and permissions
+-> explicit human approval or rejection
+-> retained audit and provenance
+-> operational execution remains disabled
 ```
 
 ## Current capability
 
-- Local CSV, JSON, and ICS preview imports.
-- Google Calendar read-only OAuth connection with manual bounded refresh.
-- Provider-neutral Email Radar profiles and communication evidence.
-- One authenticated Gmail account in private/testing mode.
-- Manual Gmail search only, bounded to 31 days.
-- Default result cap 25; hard maximum 100.
-- Visible generated Gmail query and reviewable noise exclusions.
-- Exact `gmail.readonly` scope; no modify/send scope.
-- Safe inert snippets, message/thread references, provenance, audit, and duplicate handling.
-- Deterministic candidate matching with visible reasons.
-- Explicit confirm/reject review.
-- Confirmed-only communication timeline.
-- Review-first waiting-on/follow-up suggestions.
-- Disconnect and local connector-cache clearing while imported evidence remains retained.
+- Four safe fictional demonstration rules.
+- Rules disabled by default.
+- Manual dry-run evaluation only.
+- Deterministic trigger and condition checks.
+- Expected and actual values shown with pass/fail results.
+- Reviewed/trusted source-state requirement.
+- Explicit proposed action, target module, risk and approval policy.
+- Capability policy showing allowed, approval-required and blocked permissions.
+- Proposed-action review queue.
+- Explicit approve/reject decisions.
+- Approval without operational execution.
+- Stable duplicate-proposal detection and prior-proposal linkage.
+- High-risk communication and external-write actions blocked by policy.
+- Retained inert automation audit.
+- Local JSON persistence with backup recovery.
 
 ## Safety boundary
 
-LifeOS does not send, draft, reply, forward, archive, trash, delete, label, star, or mark Gmail messages read/unread. It does not download attachments, render active HTML, load remote images, scan the mailbox in the background, schedule searches, use Gmail push/history monitoring, create Follow-Ups automatically, mutate Work Pipeline automatically, or perform AI email interpretation.
+LifeOS does not run rules in the background, schedule automation, execute at startup, retry automatically, create Follow-Ups automatically, mutate Work Pipeline automatically, send email, modify Gmail, change calendars, move money, alter trusted payment state, delete evidence or operational records, run scripts, launch arbitrary processes, call arbitrary URLs, execute plugins, or use AI to generate or decide rules.
 
 ## Current screenshot evidence
 
+- [Group 27 â€” Controlled automation foundation](docs/screenshot-groups/group-27-controlled-automation-foundation/README.md)
+- [Group 26 â€” v5 integration release checkpoint](docs/screenshot-groups/group-26-v5-integration-release-checkpoint/README.md)
 - [Group 25 â€” Authenticated read-only Gmail connector](docs/screenshot-groups/group-25-read-only-gmail-connector/README.md)
 - [Group 24 â€” Email Radar foundation](docs/screenshot-groups/group-24-email-radar-foundation/README.md)
-- [Group 23 â€” Connector lifecycle](docs/screenshot-groups/group-23-connector-lifecycle/README.md)
-- `docs/release-notes/v5.0-alpha-group-25.md`
-- `docs/current-status.md`
 
 ## Build and test
 
@@ -59,29 +58,19 @@ dotnet test .\LifeOS.slnx
 dotnet build .\LifeOS.slnx -c Release
 ```
 
-The verified Group 25 regression result is **91 passed, 0 failed, 0 skipped**.
+The verified Group 27 regression result is **112 passed, 0 failed, 0 skipped**. The Release build and `git diff --check` passed.
 
 ## Repository shape
 
 - `LifeOS.Desktop/` â€” WPF desktop application.
-- `LifeOS.Shared/` â€” local storage and shared connector services.
-- `src/LifeOS.Core/` â€” domain models, rules, connector intake, and Email Radar logic.
-- `docs/` â€” release notes, screenshot evidence, integration contracts, and current-state documentation.
+- `LifeOS.Shared/` â€” local storage and shared services.
+- `src/LifeOS.Core/` â€” domain models, deterministic rules and policy.
+- `docs/` â€” current state, release notes, architecture and screenshot evidence.
 
-## Local storage and connector configuration
+## Local storage
 
-LifeOS stores local state under `%LOCALAPPDATA%\LifeOS`. Provider credentials and protected OAuth tokens remain local and are not committed.
+LifeOS stores local state under `%LOCALAPPDATA%\LifeOS`. Automation storage contains inert rule, evaluation, proposal, decision and audit data only. It does not store executable scripts, provider secrets or arbitrary dynamic expressions.
 
 ## Next lane
 
-Return control to the LifeOS Master / Roadmap chat. Group 26 has not started.
-
-- [v5 integration overview](docs/integrations/v5-integration-overview.md)
-- [v5 release validation matrix](docs/integrations/v5-release-validation-matrix.json)
-
-- [Group 26 — v5 integration release checkpoint](docs/screenshot-groups/group-26-v5-integration-release-checkpoint/README.md)
-
-
-## v6 controlled automation foundation
-
-Group 27 adds disabled-by-default deterministic rules, manual dry-run evaluation, explained condition results, a proposed-action review queue, explicit approve/reject decisions, duplicate detection and retained audit. Approval records intent only; no unattended action, external write, financial mutation, destructive action, email/calendar mutation, script execution or AI automation is enabled.
+Return control to the LifeOS Master Roadmap chat. Group 28 has not started.

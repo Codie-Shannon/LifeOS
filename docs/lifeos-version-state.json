@@ -4,7 +4,15 @@
   "currentScreenshotGroup": 27,
   "currentScreenshotGroupName": "Controlled automation foundation",
   "lane": "v6.x controlled automation and hardening",
-  "status": "Pack 1 product/code prepared; screenshot evidence pending",
+  "status": "Complete",
+  "verification": {
+    "testsPassed": 112,
+    "testsFailed": 0,
+    "testsSkipped": 0,
+    "releaseBuildPassed": true,
+    "gitDiffCheckPassed": true,
+    "screenshotCount": 7
+  },
   "safety": {
     "manualEvaluationOnly": true,
     "dryRunOnly": true,
@@ -12,7 +20,12 @@
     "approvalExecutes": false,
     "unattendedActionsEnabled": false,
     "externalWritesEnabled": false,
+    "financialMutationEnabled": false,
+    "destructiveActionsEnabled": false,
+    "communicationMutationEnabled": false,
+    "calendarMutationEnabled": false,
+    "scriptExecutionEnabled": false,
     "aiEnabled": false
   },
-  "next": "Apply Pack 1, validate, capture approved Group 27 screenshots, then return for Pack 2."
+  "next": "Return to the LifeOS Master Roadmap for the Group 28 bucket. Group 28 has not started."
 }

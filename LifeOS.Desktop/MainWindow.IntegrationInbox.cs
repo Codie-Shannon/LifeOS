@@ -20,16 +20,18 @@ public partial class MainWindow
         var summary = IntegrationInboxCalculator.Calculate(_integrationInboxItems);
         var readiness = IntegrationReadinessMatrix.Create();
 
-        SetHeader("Integration Inbox", $"Integration Inbox - v5.0.0-alpha.4 - {summary.NeedsReview} review - {summary.DuplicateSuspected} duplicate");
+        SetHeader("Integration Inbox", $"{LifeOS.Core.ProductVersion.Display} • {LifeOS.Core.ProductVersion.ReleaseName} • {summary.NeedsReview} review • {summary.DuplicateSuspected} duplicate");
 
         var root = new StackPanel();
 
         root.Children.Add(CreateInfoPanel(
-            "Connector foundation",
-            "v5.0.0-alpha.4 imports local CSV, JSON, and ICS files and exposes one narrow Google Calendar read-only connector. Every preview keeps source provenance, trust, duplicate state, suggested target, confirmation state, and audit history. No imported record can update LifeOS automatically."));
+            "v5 integration release checkpoint",
+            "Calendar, Gmail, local imports, Integration Inbox, and Email Radar now present one coherent manual, read-only and review-first integration system. Authentication never implies trust, and no connector changes an external system or LifeOS operational module automatically."));
+
+        AddV5IntegrationReadinessSummary(root);
 
         var metricsPanel = new WrapPanel { Margin = new Thickness(0, 22, 0, 0) };
-        metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v5.0.0-alpha.4"));
+        metricsPanel.Children.Add(CreateDashboardCard("Engine", "Active", "v5.0.0-beta.1"));
         metricsPanel.Children.Add(CreateDashboardCard("Needs review", summary.NeedsReview.ToString(), "Review"));
         metricsPanel.Children.Add(CreateDashboardCard("Suspected", summary.DuplicateSuspected.ToString(), "Duplicate"));
         metricsPanel.Children.Add(CreateDashboardCard("Manual gate", summary.Untrusted.ToString(), "Untrusted"));
@@ -40,7 +42,7 @@ public partial class MainWindow
         root.Children.Add(metricsPanel);
 
         root.Children.Add(CreateInfoPanel(
-            "v5.0.0-alpha.4 connector rule",
+            "v5.0.0-beta.1 connector rule",
             "- External records enter as read-only previews, never trusted items.\n" +
             "- Source evidence and provenance stay attached.\n" +
             "- Duplicate suspicion blocks acceptance.\n" +
@@ -94,16 +96,16 @@ public partial class MainWindow
             "Accepted previews may later be handed to Item State, Payment Calendar, Work Pipeline, Evidence Vault, Bills / Payments, Follow-Ups, or Search / Knowledge. The target module remains authoritative and must validate its own rules."));
 
         root.Children.Add(CreateInfoPanel(
-            "v5.0.0-alpha.4 audit and provenance contract",
+            "v5.0.0-beta.1 audit and provenance contract",
             "Every preview keeps a local ID, source type, source label, external reference, duplicate key, source evidence, review note, trust state, status, suggested target, timestamps, and optional link reference."));
 
         root.Children.Add(CreateInfoPanel(
-            "v5.0.0-alpha.4 boundary",
-            "Google Calendar remains the only live provider boundary in Group 23. It is read-only, manually refreshed, date-bounded, and review-first. No Gmail, Outlook, Microsoft Calendar, Xero, SharePoint, Drive, OCR provider, banking provider, background polling, automatic item creation, automatic updates, or AI actions are active."));
+            "v5.0.0-beta.1 boundary",
+            "Google Calendar and Gmail are the two authenticated provider boundaries. Both remain read-only, manually triggered, bounded, review-first, locally configured, and unable to mutate external systems or LifeOS operational modules automatically."));
 
         root.Children.Add(CreateInfoPanel(
             "Active connector state",
-            "Local CSV, JSON, and ICS connectors remain active. Google Calendar can be configured locally and connected with the minimum calendar.readonly scope. Imports require confirmation, remain read-only previews, expose duplicate suspicion, preserve audit history, and require deliberate human review before any later handoff."));
+            "Local CSV, JSON, ICS and communication-evidence imports remain active. Google Calendar uses calendar.readonly and Gmail uses gmail.readonly. Authenticated and imported records retain provenance, duplicate suspicion, audit history and human-review gates. Disconnect and cache clear retain imported evidence."));
 
         root.Children.Add(CreateInfoPanel(
             "Local Integration Inbox file",
@@ -321,13 +323,13 @@ public partial class MainWindow
             switch (target)
             {
                 case IntegrationPreviewStatus.Accepted:
-                    IntegrationInboxReviewEngine.Accept(item, "Accepted through local v5.0.0-alpha.4 review control.");
+                    IntegrationInboxReviewEngine.Accept(item, "Accepted through local v5.0.0-beta.1 review control.");
                     break;
                 case IntegrationPreviewStatus.Deferred:
-                    IntegrationInboxReviewEngine.Defer(item, "Deferred through local v5.0.0-alpha.4 review control.");
+                    IntegrationInboxReviewEngine.Defer(item, "Deferred through local v5.0.0-beta.1 review control.");
                     break;
                 case IntegrationPreviewStatus.Rejected:
-                    IntegrationInboxReviewEngine.Reject(item, "Rejected through local v5.0.0-alpha.4 review control.");
+                    IntegrationInboxReviewEngine.Reject(item, "Rejected through local v5.0.0-beta.1 review control.");
                     break;
                 case IntegrationPreviewStatus.Linked:
                     if (item.Status != IntegrationPreviewStatus.Accepted)

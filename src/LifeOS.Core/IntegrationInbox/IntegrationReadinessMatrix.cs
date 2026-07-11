@@ -4,11 +4,11 @@ public static class IntegrationReadinessMatrix
 {
     public static IReadOnlyList<IntegrationReadinessItem> Create() =>
     [
-        new() { Connector = "Gmail / Outlook", Capability = "Email thread previews", CurrentState = "Local contract ready", RequiredBeforeV5 = "OAuth, scoped read, profile rules, user confirmation", ContractReady = true },
-        new() { Connector = "Google / Outlook Calendar", Capability = "Event previews", CurrentState = "Local contract ready", RequiredBeforeV5 = "OAuth, date mapping, duplicate rules", ContractReady = true },
-        new() { Connector = "Xero / accounting", Capability = "Invoice and bill previews", CurrentState = "Local contract ready", RequiredBeforeV5 = "OAuth, tenant selection, money trust rules", ContractReady = true },
-        new() { Connector = "SharePoint / Drive", Capability = "File metadata previews", CurrentState = "Local contract ready", RequiredBeforeV5 = "OAuth, source links, file permission checks", ContractReady = true },
-        new() { Connector = "Receipt OCR", Capability = "Receipt field candidates", CurrentState = "Review contract ready", RequiredBeforeV5 = "OCR provider, source-image retention, confidence mapping", ContractReady = true },
-        new() { Connector = "Banking", Capability = "Transaction previews", CurrentState = "Deferred", RequiredBeforeV5 = "Provider decision, legal/security review, strict read-only design", ContractReady = false },
+        new() { Connector = "Manual CSV / JSON intake", Capability = "Read-only preview intake", CurrentState = "Active - local import only", RequiredBeforeV5 = "Explicit preview and confirmation", ContractReady = true, LiveConnectionActive = false },
+        new() { Connector = "Local ICS calendar intake", Capability = "Read-only calendar previews", CurrentState = "Active - local import only", RequiredBeforeV5 = "Bounded local file import and duplicate rules", ContractReady = true, LiveConnectionActive = false },
+        new() { Connector = "Google Calendar", Capability = "Authenticated event previews", CurrentState = "Active - manual bounded refresh", RequiredBeforeV5 = "calendar.readonly, explicit connection, review gate", ContractReady = true, LiveConnectionActive = true },
+        new() { Connector = "Local Email Radar import", Capability = "Provider-neutral communication evidence", CurrentState = "Active - JSON / CSV import", RequiredBeforeV5 = "Confirmation, duplicate detection, candidate review", ContractReady = true, LiveConnectionActive = false },
+        new() { Connector = "Gmail", Capability = "Authenticated communication evidence", CurrentState = "Active - manual profile-bound bounded search", RequiredBeforeV5 = "gmail.readonly, explicit retrieval confirmation, candidate review", ContractReady = true, LiveConnectionActive = true },
+        new() { Connector = "Outlook / Microsoft Graph", Capability = "Email and calendar", CurrentState = "Not active", RequiredBeforeV5 = "Separate future provider decision", ContractReady = false, LiveConnectionActive = false }
     ];
 }

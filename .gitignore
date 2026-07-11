@@ -480,3 +480,12 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# LifeOS local connector credentials, protected tokens, lifecycle caches and private evidence
+**/connectors/**/configuration.json
+**/connectors/**/token*.json
+**/connectors/**/lifecycle.json
+**/connectors/**/cache*.json
+**/connectors/**/oauth*.json
+**/connectors/**/credentials*.json
+**/connectors/**/private-evidence/**

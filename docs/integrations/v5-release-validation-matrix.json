@@ -1,0 +1,52 @@
+{
+  "release": "v5.0.0-beta.1",
+  "group": 26,
+  "status": "pack-1-product-validation",
+  "checks": [
+    {
+      "area": "version",
+      "check": "authoritative/current version surfaces agree",
+      "expected": "v5.0.0-beta.1"
+    },
+    {
+      "area": "calendar",
+      "check": "read-only manual bounded review-first",
+      "expected": "calendar.readonly"
+    },
+    {
+      "area": "gmail",
+      "check": "read-only profile-bound capped explicit confirmation",
+      "expected": "gmail.readonly"
+    },
+    {
+      "area": "evidence",
+      "check": "disconnect and cache clear retain evidence",
+      "expected": true
+    },
+    {
+      "area": "global-safety",
+      "check": "automatic external mutation",
+      "expected": false
+    },
+    {
+      "area": "global-safety",
+      "check": "automatic LifeOS operational mutation",
+      "expected": false
+    },
+    {
+      "area": "runtime",
+      "check": "background or scheduled connector work",
+      "expected": false
+    },
+    {
+      "area": "content",
+      "check": "active HTML, remote images or attachment downloads",
+      "expected": false
+    },
+    {
+      "area": "repository",
+      "check": "tests/build/diff/sync/clean",
+      "expected": "validated by runner"
+    }
+  ]
+}

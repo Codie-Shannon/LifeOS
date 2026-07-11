@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,9 +27,9 @@ public partial class MainWindow
         var timeline = profile is null ? [] : EmailRadarService.BuildTimeline(profile, records, ["owner@example.invalid"]).ToList();
         var suggestion = profile is null ? new CommunicationSuggestion(CommunicationSuggestionKind.InsufficientEvidence, "Insufficient evidence", "Create an active profile first.") : EmailRadarService.Suggest(profile, records, ["owner@example.invalid"]);
 
-        SetHeader("Email Radar", $"{ProductVersion.Display} â€¢ {ProductVersion.ReleaseName}");
+        SetHeader("Email Radar", $"{ProductVersion.Display} • {ProductVersion.ReleaseName}");
         var root = new StackPanel();
-        root.Children.Add(EmailRadarPanel("Authenticated Gmail read-only", "Manual bounded search only. Gmail messages enter Email Radar as untrusted evidence. Candidate confirmation remains required. No mailbox or LifeOS state changes automatically.", "#7C2D12"));
+        root.Children.Add(EmailRadarPanel("v5 integration review boundary", "Gmail remains read-only and manually bounded. Local communication imports and authenticated Gmail evidence use the same provider-neutral candidate review, duplicate, provenance and confirmed-only timeline rules. No mailbox or LifeOS state changes automatically.", "#7C2D12"));
         root.Children.Add(BuildGmailConnectorPanel(profile));
 
         var metrics = new WrapPanel { Margin = new Thickness(0, 18, 0, 0) };
@@ -47,13 +47,13 @@ public partial class MainWindow
 
         if (profile is not null)
         {
-            root.Children.Add(EmailRadarPanel("Active profile", $"{profile.Name} â€¢ {profile.RelatedLabel}\nAddresses: {string.Join(", ", profile.EmailAddresses)}\nSubject phrases: {string.Join(", ", profile.SubjectPhrases)}\nKeywords: {string.Join(", ", profile.Keywords)}\nExclude terms: {string.Join(", ", profile.ExcludeTerms)}\nFollow-up interval: {profile.FollowUpDays} days", "#1E3A5F"));
+            root.Children.Add(EmailRadarPanel("Active profile", $"{profile.Name} • {profile.RelatedLabel}\nAddresses: {string.Join(", ", profile.EmailAddresses)}\nSubject phrases: {string.Join(", ", profile.SubjectPhrases)}\nKeywords: {string.Join(", ", profile.Keywords)}\nExclude terms: {string.Join(", ", profile.ExcludeTerms)}\nFollow-up interval: {profile.FollowUpDays} days", "#1E3A5F"));
             root.Children.Add(EmailRadarPanel("Review-first suggestion", $"{suggestion.Label}\n{suggestion.Explanation}\nSuggested only. Requires review. No Follow-Up or Work Pipeline record was created.", "#3F3F46"));
         }
 
         foreach (var candidate in candidates.Take(8))
         {
-            var panel = EmailRadarPanel($"{candidate.Record.ReviewState}: {candidate.Record.Subject}", $"{candidate.Record.SentAt:g} â€¢ {candidate.Record.Sender}\nScore: {candidate.Score}\n{string.Join("\n", candidate.Reasons.Select(x => "â€¢ " + x))}\nSource: {candidate.Record.Provenance}", candidate.Record.ReviewState == CommunicationReviewState.DuplicateSuspected ? "#7F1D1D" : "#1E293B");
+            var panel = EmailRadarPanel($"{candidate.Record.ReviewState}: {candidate.Record.Subject}", $"{candidate.Record.SentAt:g} • {candidate.Record.Sender}\nScore: {candidate.Score}\n{string.Join("\n", candidate.Reasons.Select(x => "• " + x))}\nSource: {candidate.Record.Provenance}", candidate.Record.ReviewState == CommunicationReviewState.DuplicateSuspected ? "#7F1D1D" : "#1E293B");
             var actions = new WrapPanel { Margin = new Thickness(0, 8, 0, 0) };
             actions.Children.Add(EmailRadarButton("Confirm match", (_, _) => ReviewEmailRadarMatch(profile!, candidate.Record, true)));
             actions.Children.Add(EmailRadarButton("Reject match", (_, _) => ReviewEmailRadarMatch(profile!, candidate.Record, false)));
@@ -63,7 +63,7 @@ public partial class MainWindow
 
         if (timeline.Count > 0)
         {
-            root.Children.Add(EmailRadarPanel("Confirmed communication timeline", string.Join("\n\n", timeline.Select(x => $"{x.SentAt:g} â€¢ {x.Direction}\n{x.Subject}\n{x.Snippet}\n{x.Provenance}")), "#14532D"));
+            root.Children.Add(EmailRadarPanel("Confirmed communication timeline", string.Join("\n\n", timeline.Select(x => $"{x.SentAt:g} • {x.Direction}\n{x.Subject}\n{x.Snippet}\n{x.Provenance}")), "#14532D"));
         }
         MainContentControl.Content = root;
     }

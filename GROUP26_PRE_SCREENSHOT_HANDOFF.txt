@@ -1,0 +1,24 @@
+LIFEOS GROUP 26 PRE-SCREENSHOT HANDOFF
+
+Target version: v5.0.0-beta.1
+Group: 26 — v5 integration release checkpoint
+Expected base HEAD: e493fd4753ff2850f0cdd3d351ab0106a1af097d
+
+Pack 1 adds:
+- unified five-lane integration readiness
+- actual current connector matrix
+- global manual/read-only/review-first statement
+- cross-connector retention clarity
+- sanitized lifecycle summary handling
+- v5 integration overview
+- release-validation matrix
+- precise local connector secret/cache ignore rules
+- beta version alignment
+- release-hardening tests
+- incremental WPF readiness panel
+
+Run the included apply script. It must pass tests, Release build and git diff check, create logical product commits, push, verify HEAD == origin/main and finish clean.
+
+After Pack 1, perform GROUP26_MANUAL_RELEASE_CHECK.md and return only privacy-safe screenshots.
+
+GROUP 27 AND V6 HAVE NOT STARTED.

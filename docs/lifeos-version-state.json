@@ -1,23 +1,17 @@
 {
-  "currentVersion": "v6.0.0-alpha.1",
-  "currentRelease": "Controlled automation foundation",
-  "currentScreenshotGroup": 27,
-  "currentScreenshotGroupName": "Controlled automation foundation",
+  "currentVersion": "v6.0.0-alpha.2",
+  "currentRelease": "Guarded internal automation",
+  "currentScreenshotGroup": 28,
+  "currentScreenshotGroupName": "Guarded approval queue and controlled internal execution",
   "lane": "v6.x controlled automation and hardening",
-  "status": "Complete",
-  "verification": {
-    "testsPassed": 112,
-    "testsFailed": 0,
-    "testsSkipped": 0,
-    "releaseBuildPassed": true,
-    "gitDiffCheckPassed": true,
-    "screenshotCount": 7
-  },
+  "status": "Product phase complete; screenshot evidence pending",
   "safety": {
     "manualEvaluationOnly": true,
-    "dryRunOnly": true,
-    "explicitApprovalRequired": true,
+    "executionPausedByDefault": true,
     "approvalExecutes": false,
+    "finalConfirmationRequired": true,
+    "allowlistedInternalExecution": true,
+    "undoSupported": true,
     "unattendedActionsEnabled": false,
     "externalWritesEnabled": false,
     "financialMutationEnabled": false,
@@ -27,5 +21,5 @@
     "scriptExecutionEnabled": false,
     "aiEnabled": false
   },
-  "next": "Return to the LifeOS Master Roadmap for the Group 28 bucket. Group 28 has not started."
+  "next": "Complete fictional manual verification and capture Group 28 screenshots. Group 29 has not started."
 }

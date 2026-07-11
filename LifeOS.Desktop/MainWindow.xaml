@@ -56,10 +56,10 @@
                         Padding="14"
                         Margin="0,12,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v6.0.0-alpha.1"
+                        <TextBlock Text="Desktop v6.0.0-alpha.2"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="Controlled automation foundation. Dry-run evaluation and explicit approval only. No unattended actions are enabled."
+                        <TextBlock Text="Guarded internal automation. Explicit approval and final confirmation required. Only reversible internal actions may execute; no unattended or external actions are enabled."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -291,7 +291,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v6.0.0-alpha.1 adds controlled, deterministic automation evaluation with explicit approval and no operational execution."
+                <TextBlock Text="LifeOS Desktop v6.0.0-alpha.2 adds guarded, approval-gated execution for allowlisted reversible internal actions with explicit Undo."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

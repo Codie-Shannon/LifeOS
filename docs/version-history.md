@@ -1,6 +1,6 @@
 # LifeOS Version History
 
-## v5.0.0-alpha.5 Ã¢â‚¬â€ Authenticated Read-Only Gmail Connector
+## v5.0.0-alpha.5 â€” Authenticated Read-Only Gmail Connector
 
 - Added one private/testing-mode authenticated Gmail connector using exact `gmail.readonly`.
 - Added explicit browser authorization and connected/disconnected/cache-cleared lifecycle states.
@@ -13,7 +13,7 @@
 - Kept sending, drafts, mailbox mutation, attachments, active HTML, remote content, background scanning, scheduled searches, automatic Follow-Ups, automatic Work Pipeline mutation, Outlook, IMAP/POP3, and AI interpretation inactive.
 - Verified 91 passing tests and a successful Release build.
 
-## v5.0.0-alpha.4 Ã¢â‚¬â€ Email Radar Foundation
+## v5.0.0-alpha.4 â€” Email Radar Foundation
 
 - Centralized formal version metadata and aligned visible/current-state surfaces.
 - Added user-guided Email Radar profiles.
@@ -101,7 +101,7 @@
 ## v1.x - Foundation
 
 - Established local-first storage, daily flow, evidence, relationships, paid work, settings, safety, and theme foundations.
-## v5.0.0-beta.1 â€” Group 26
+## v5.0.0-beta.1 — Group 26
 
 v5 integration release checkpoint.
 
@@ -114,7 +114,7 @@ v5 integration release checkpoint.
 - 97 tests passed
 - Release build passed
 
-## v6.0.0-alpha.1 â€” Group 27
+## v6.0.0-alpha.1 — Group 27
 
 Controlled automation foundation.
 
@@ -131,3 +131,7 @@ Controlled automation foundation.
 - Added seven privacy-safe fictional screenshot proofs.
 - Verified 112 passing tests, a successful Release build and `git diff --check`.
 - Kept background workers, scheduling, timers, startup execution, automatic retry, operational mutation, scripts, plugins and AI inactive.
+
+## v6.0.0-alpha.2 — Group 28 product phase
+
+Guarded internal automation with a persisted global execution pause, separate approval and final confirmation, one typed Low-risk reversible internal review-note action, immediate stale-state validation, before/after snapshots, idempotency, audit and explicit Undo. Screenshot evidence pending.

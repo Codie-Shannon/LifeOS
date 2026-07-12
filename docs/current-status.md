@@ -4,20 +4,25 @@
 
 - Version: **v6.0.0-beta.1**
 - Group: **31 — v6 controlled automation release checkpoint**
-- State: Pack 1 implementation ready for runner validation and screenshot proof.
+- State: **Complete, evidenced, validated and pushed**
 
 ## Release checkpoint
 
-LifeOS now exposes one persisted-state Automation Readiness view across the v5-to-v6 trust, proposal, approval, guarded execution, orchestration, failure, recovery, rollback and audit path. The v6 store uses explicit schema handling, backup-before-migration and fail-closed malformed-state recovery.
+LifeOS now presents one persisted-state Automation Readiness view across the v5-to-v6 trust, proposal, approval, guarded execution, orchestration, failure, recovery, rollback and audit path. The v6 store uses explicit schema handling, backup-before-migration and fail-closed malformed-state recovery.
 
-## Safety boundary
+## Verified release boundary
 
-Execution remains manual, foreground-only, typed, Low-risk, internal, reversible and explicitly confirmed. Emergency Stop and the normal pause remain distinct. No unattended runtime, automatic continuation, automatic retry, external write, communication, calendar, financial, destructive, script, process, plugin or AI execution is enabled.
+Approval remains separate from execution. Only typed, Low-risk, internal and reversible actions can reach final confirmation. Due orchestration does not auto-start or auto-continue. Emergency Stop persists across restart, blocks execution and preserves evidence. Failures remain scoped to the affected run and step. Retry, cancellation and rollback remain explicit.
 
-## Verification state
+No unattended runtime, automatic continuation, automatic retry, external write, communication, calendar, financial, destructive, script, process, plugin or AI execution is enabled.
 
-Group 30 is complete at 129 tests and commit `285636d2f31fe8bda9e060a25b0300c6d`. Group 31 tests, Release build, repository hygiene, Gitleaks, screenshot evidence and final synchronization are pending the Pack 1/Pack 2 runners.
+## Evidence and validation
+
+- Eight approved Group 31 screenshots committed.
+- Manual release verification completed.
+- Automated tests, Release build, Git diff, repository hygiene and full-history Gitleaks validation are enforced by the Pack 2 runner.
+- A verified presentation defect was bounded: blocked execution-preview eligibility now produces visible feedback while remaining fail-closed and audited.
 
 ## Next
 
-Execute Group 31 only. Mobile Companion, full Mobile, website and v7 have not started.
+Return to the LifeOS Master Roadmap. Group 31 is closed. Mobile Companion, full Mobile, website and v7 have not started.

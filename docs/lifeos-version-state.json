@@ -4,7 +4,7 @@
     "currentScreenshotGroup":  31,
     "currentScreenshotGroupName":  "v6 controlled automation release checkpoint",
     "lane":  "v6.x controlled automation beta checkpoint",
-    "status":  "Group 31 Pack 1 applied; screenshot and manual release evidence pending",
+    "status":  "Screenshot Group 31 complete",
     "verification":  {
                          "baselineTestsPassed":  129,
                          "testsPassed":  133,
@@ -13,7 +13,7 @@
                          "gitDiffCheckPassed":  true,
                          "repositoryHygienePassed":  true,
                          "gitleaksHistoryScan":  "passed full history",
-                         "screenshotCount":  0
+                         "screenshotCount":  8
                      },
     "safety":  {
                    "manualEvaluationOnly":  true,
@@ -34,5 +34,5 @@
                    "pluginExecutionEnabled":  false,
                    "aiEnabled":  false
                },
-    "next":  "Complete Group 31 evidence and return to the LifeOS Master Roadmap. Mobile Companion and v7 have not started."
+    "next":  "Return to the LifeOS Master Roadmap. Group 31 is closed. Mobile Companion and v7 have not started."
 }

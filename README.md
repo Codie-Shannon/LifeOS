@@ -28,3 +28,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\validation\Test-
 ```
 
 Group 31 has not started.
+
+## v6.0.0-beta.1 release checkpoint
+
+Screenshot Group 31 is complete. The controlled automation beta checkpoint is evidenced with eight screenshots and manual verification covering approval/execution separation, reversible internal execution, one-step orchestration, failure containment, recovery controls and Emergency Stop persistence. No unattended or external execution is enabled.

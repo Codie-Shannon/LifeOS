@@ -287,6 +287,7 @@ public partial class MainWindow
         {
             _automationStore.Proposals[index] = proposal with { State = ex.Message.Contains("changed", StringComparison.OrdinalIgnoreCase) ? AutomationProposalState.Stale : proposal.State };
             AddAutomationAudit("execution-eligibility-failed", proposalId, ex.Message);
+            MessageBox.Show(ex.Message, "Execution preview blocked", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         SaveAutomation(); ShowAutomationCentrePage();
     }

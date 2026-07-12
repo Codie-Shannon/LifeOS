@@ -110,6 +110,8 @@ public static class OrchestrationService
         AutomationHealthService.EnsureExecutionAllowed(store);
         var run = store.OrchestrationRuns[ri];
         if (run.Status != OrchestrationRunStatus.RecoveryRequired) throw new InvalidOperationException("The run does not require recovery.");
+        var step = CurrentStep(store, run);
+        EnsureDependencies(store, run, step);
         var si = store.OrchestrationStepRuns.FindIndex(x => x.RunId == runId && x.StepId == run.CurrentStepId);
         var sr = store.OrchestrationStepRuns[si];
         if (sr.Status != OrchestrationStepStatus.Failed) throw new InvalidOperationException("The current step is not failed.");

@@ -187,6 +187,25 @@ public sealed class AutomationFoundationTests
         Assert.Equal(1, store.OrchestrationStepRuns.Single(x => x.StepId == "weekly-note").RetryCount);
     }
 
+
+    [Fact]
+    public void ExplicitRetry_IsBlocked_WhenRequiredDependencyWasRolledBack()
+    {
+        var (store, run) = StartedOrchestration();
+        OrchestrationService.PreviewCurrentStep(store, run.RunId);
+        OrchestrationService.ConfirmCurrentStep(store, run.RunId);
+        OrchestrationService.PreviewCurrentStep(store, run.RunId);
+        OrchestrationService.ConfirmCurrentStep(store, run.RunId, injectSafeFailure: true);
+        OrchestrationService.RollBackCompleted(store, run.RunId);
+
+        var error = Assert.Throws<InvalidOperationException>(() => OrchestrationService.RetryFailedStep(store, run.RunId));
+
+        Assert.Equal("A required dependency has not succeeded.", error.Message);
+        Assert.Equal(OrchestrationRunStatus.RecoveryRequired, store.OrchestrationRuns.Single().Status);
+        Assert.Equal(OrchestrationStepStatus.Failed, store.OrchestrationStepRuns.Single(x => x.StepId == "weekly-flag").Status);
+        Assert.Equal(0, store.OrchestrationStepRuns.Single(x => x.StepId == "weekly-flag").RetryCount);
+    }
+
     [Fact]
     public void CancelRemaining_PreservesCompletedCheckpoint_AndRollbackRestoresIt()
     {

@@ -6,18 +6,17 @@ LifeOS is a local-first personal operating system for turning life, work, money,
 
 **LifeOS Desktop v6.0.0-alpha.4 — Automation hardening and emergency controls**
 
-Screenshot Group 29 remains the completed evidence baseline. Group 30 Pack 1 adds the implementation and manual-verification foundation for persisted automation health, exact-scope incident recovery and a distinct fail-closed Emergency Stop. Group 30 screenshot evidence is not complete until Pack 2 is run.
+Screenshot Group 30 is complete after the Pack 2 finalization runner passes and pushes the approved evidence. The release adds persisted automation health, exact-scope recovery visibility, a separate fail-closed Emergency Stop, explicit dependency-safe retry and reverse-order rollback review.
 
-## Group 30 safety boundary
+## Evidence
 
-- Automation remains manual and foreground-only.
-- The normal guarded-execution pause and Emergency Stop are separate persisted controls.
-- Emergency Stop blocks direct internal execution and every orchestration start, step, retry and rollback boundary.
-- Reset requires explicit confirmation, leaves guarded execution paused and never resumes proposals or runs.
-- Failures create sanitized incidents scoped to the exact proposal, run or step.
-- Retry remains explicit; no retry loop or self-healing mutation exists.
-- Rollback review is reverse ordered and stops on the first mismatch or failure.
-- External writes, communication, mailbox, calendar, financial, destructive, script, process, plugin and AI actions remain blocked.
+- [Group 30 — Automation hardening and emergency controls](docs/screenshot-groups/group-30-automation-hardening/README.md)
+- [Group 29 — Controlled orchestration and recovery](docs/screenshot-groups/group-29-controlled-orchestration/README.md)
+- [Group 28 — Guarded internal automation](docs/screenshot-groups/group-28-guarded-internal-automation/README.md)
+
+## Safety boundary
+
+Automation remains manual, explicit, foreground-only, typed, Low-risk and reversible. No unattended execution, background worker, OS scheduler, service, startup execution, automatic continuation, automatic retry loop, external write, communication mutation, financial/destructive mutation, arbitrary script/process/plugin execution or AI-controlled action is enabled.
 
 ## Build and validation
 
@@ -28,4 +27,4 @@ git diff --check
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\tools\validation\Test-RepositoryHygiene.ps1 -RepoPath C:\Projects\LifeOS
 ```
 
-The exact Group 30 test count and Release-build result must be recorded by the Pack 1 runner. Group 31 has not started.
+Group 31 has not started.

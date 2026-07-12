@@ -435,7 +435,11 @@ public partial class MainWindow
     private void PreviewOrchestrationStep(string runId)
     {
         try { var preview = OrchestrationService.PreviewCurrentStep(_automationStore, runId); AddAutomationAudit("step-preview-opened", preview.StepRunId, "Exact before/after preview opened. No mutation occurred."); }
-        catch (InvalidOperationException ex) { AddAutomationAudit("step-preview-blocked", runId, ex.Message); }
+        catch (InvalidOperationException ex)
+        {
+            AddAutomationAudit("step-preview-blocked", runId, ex.Message);
+            MessageBox.Show(ex.Message, "Preview blocked", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
         SaveAutomation(); ShowAutomationCentrePage();
     }
 
@@ -467,7 +471,11 @@ public partial class MainWindow
     private void RetryOrchestrationStep(string runId)
     {
         try { OrchestrationService.RetryFailedStep(_automationStore, runId); AddAutomationAudit("step-retry-requested", runId, "Explicit retry selected; step returned to paused review state."); }
-        catch (InvalidOperationException ex) { AddAutomationAudit("step-retry-blocked", runId, ex.Message); }
+        catch (InvalidOperationException ex)
+        {
+            AddAutomationAudit("step-retry-blocked", runId, ex.Message);
+            MessageBox.Show(ex.Message, "Retry blocked", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
         SaveAutomation(); ShowAutomationCentrePage();
     }
 

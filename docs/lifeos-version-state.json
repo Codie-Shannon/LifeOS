@@ -1,28 +1,28 @@
 {
-  "currentVersion": "v6.0.0-alpha.3",
-  "currentRelease": "Controlled orchestration and recovery",
-  "currentScreenshotGroup": 28,
-  "currentScreenshotGroupName": "Guarded approval queue and controlled internal execution",
+  "currentVersion": "v6.0.0-alpha.4",
+  "currentRelease": "Automation hardening and emergency controls",
+  "currentScreenshotGroup": 30,
+  "currentScreenshotGroupName": "Automation hardening, observability and emergency controls",
   "lane": "v6.x controlled automation and hardening",
-  "status": "Complete",
+  "status": "Pack 1 ready for repository validation and screenshot proof",
+  "baselineHead": "5a94885b6a36bb94dd9c94246ef280cafd012fb7",
   "verification": {
-    "testsPassed": "116",
+    "testsPassed": "record exact runner result",
     "testsFailed": 0,
-    "testsSkipped": 0,
-    "releaseBuildPassed": true,
-    "gitDiffCheckPassed": true,
-    "guardedExecutionValidationPassed": true,
-    "screenshotCount": 7
+    "releaseBuildPassed": false,
+    "gitDiffCheckPassed": false,
+    "repositoryHygienePassed": false,
+    "gitleaksHistoryScan": "runner attempts when installed; report prerequisite otherwise",
+    "screenshotCount": 0
   },
   "safety": {
     "manualEvaluationOnly": true,
+    "foregroundOnly": true,
     "executionPausedByDefault": true,
-    "approvalExecutes": false,
-    "finalConfirmationRequired": true,
-    "allowlistedInternalExecution": true,
-    "undoSupported": true,
-    "staleExecutionBlocked": true,
-    "duplicateExecutionBlocked": true,
+    "emergencyStopDistinct": true,
+    "emergencyStopFailClosed": true,
+    "resetAutoResumes": false,
+    "automaticRetryEnabled": false,
     "unattendedActionsEnabled": false,
     "externalWritesEnabled": false,
     "financialMutationEnabled": false,
@@ -32,5 +32,5 @@
     "scriptExecutionEnabled": false,
     "aiEnabled": false
   },
-  "next": "Return to the LifeOS Master Roadmap for the Group 29 bucket. Group 29 has not started."
+  "next": "Run Group 30 Pack 1, manually verify, capture 6-8 screenshots, then produce Pack 2. Group 31 has not started."
 }

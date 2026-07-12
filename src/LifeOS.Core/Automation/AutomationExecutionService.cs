@@ -28,6 +28,7 @@ public static class AutomationExecutionService
     public static AutomationExecutionResult Execute(AutomationStoreSnapshot store, AutomationProposal proposal, AutomationRule rule,
         AutomationSourceSnapshot currentSource, DateTimeOffset? now = null)
     {
+        AutomationHealthService.EnsureExecutionAllowed(store);
         var time = now ?? DateTimeOffset.UtcNow;
         var eligibility = AutomationExecutionPolicy.Check(store, proposal, rule, currentSource, time);
         if (!eligibility.Eligible) throw new InvalidOperationException(string.Join(" ", eligibility.Blockers));
@@ -64,6 +65,7 @@ public static class AutomationExecutionService
 
     public static AutomationExecutionResult Undo(AutomationStoreSnapshot store, AutomationExecutionResult execution, DateTimeOffset? now = null)
     {
+        AutomationHealthService.EnsureExecutionAllowed(store);
         if (!execution.Succeeded || !execution.UndoAvailable || execution.UndoneAt is not null)
             throw new InvalidOperationException("Undo is not available for this execution.");
         var before = JsonSerializer.Deserialize<AutomationInternalItem>(execution.BeforeSnapshot) ?? throw new InvalidOperationException("Before snapshot is invalid.");

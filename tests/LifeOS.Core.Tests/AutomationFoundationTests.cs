@@ -9,9 +9,9 @@ public sealed class AutomationFoundationTests
     [Fact]
     public void ProductVersion_IsAlignedForGroup29()
     {
-        Assert.Equal("6.0.0-alpha.3", LifeOS.Core.ProductVersion.Semantic);
-        Assert.Equal("v6.0.0-alpha.3", LifeOS.Core.ProductVersion.Display);
-        Assert.Equal("Controlled orchestration and recovery", LifeOS.Core.ProductVersion.ReleaseName);
+        Assert.Equal("6.0.0-alpha.4", LifeOS.Core.ProductVersion.Semantic);
+        Assert.Equal("v6.0.0-alpha.4", LifeOS.Core.ProductVersion.Display);
+        Assert.Equal("Automation hardening and emergency controls", LifeOS.Core.ProductVersion.ReleaseName);
     }
 
     [Fact] public void NewRule_IsDisabledByDefault() => Assert.False(new AutomationRule().IsEnabled);
@@ -233,5 +233,57 @@ public sealed class AutomationFoundationTests
         var proposal = AutomationEngine.CreateProposal(rule, evaluation, [])!;
         proposal = AutomationEngine.Decide(proposal, true, "approved", DateTimeOffset.Parse("2026-07-12T00:30:00Z"));
         return (store, rule, proposal, source);
+    }
+
+    [Fact]
+    public void EmergencyStop_DefaultsInactive_PersistsAndBlocksAllExecutionBoundaries()
+    {
+        var (store, rule, proposal, source) = ApprovedScenario(); store = store with { Settings = new() { ExecutionPaused = false } };
+        AutomationHealthService.ActivateEmergencyStop(store, "test", "confirmed");
+        Assert.True(store.EmergencyStop.IsActive);
+        Assert.Throws<InvalidOperationException>(() => AutomationExecutionService.Execute(store, proposal, rule, source));
+        var plan = store.OrchestrationPlans.Single() with { IsEnabled = true }; store.OrchestrationPlans[0] = plan;
+        var occurrence = OrchestrationService.EnsureOccurrence(store, plan, DateTimeOffset.Parse("2026-07-12T09:00:00+12:00"))!;
+        Assert.Throws<InvalidOperationException>(() => OrchestrationService.Start(store, plan, occurrence));
+    }
+
+    [Fact]
+    public void EmergencyStopReset_RequiresConfirmation_AndNeverResumesExecution()
+    {
+        var store = AutomationDemoData.Create() with { Settings = new() { ExecutionPaused = false } };
+        AutomationHealthService.ActivateEmergencyStop(store, "test", "activate");
+        Assert.Throws<InvalidOperationException>(() => AutomationHealthService.ResetEmergencyStop(store, ""));
+        AutomationHealthService.ResetEmergencyStop(store, "reset");
+        Assert.False(store.EmergencyStop.IsActive); Assert.True(store.Settings.ExecutionPaused);
+    }
+
+    [Fact]
+    public void ControlledFailure_CreatesScopedIncident_WithoutContaminatingUnrelatedWork()
+    {
+        var (store, run) = StartedOrchestration(); OrchestrationService.PreviewCurrentStep(store, run.RunId);
+        OrchestrationService.ConfirmCurrentStep(store, run.RunId, injectSafeFailure: true);
+        var incident = Assert.Single(store.Incidents);
+        Assert.Equal(run.RunId, incident.RunId); Assert.Equal("weekly-note", incident.StepId);
+        Assert.DoesNotContain(store.Rules, x => x.RuleId != "missing-next-action" && x.IsEnabled);
+    }
+
+    [Fact]
+    public void RollbackPreview_IsExactReverseSequence()
+    {
+        var (store, run) = StartedOrchestration();
+        OrchestrationService.PreviewCurrentStep(store, run.RunId); OrchestrationService.ConfirmCurrentStep(store, run.RunId);
+        OrchestrationService.PreviewCurrentStep(store, run.RunId); OrchestrationService.ConfirmCurrentStep(store, run.RunId);
+        var preview = AutomationHealthService.PreviewRollback(store, run.RunId);
+        Assert.Equal(["weekly-flag", "weekly-note"], preview.Select(x => x.StepId).ToArray());
+    }
+
+    [Fact]
+    public void HealthAndDiagnostics_AreDerivedFromPersistedState_AndSanitized()
+    {
+        var store = AutomationDemoData.Create();
+        AutomationHealthService.RecordIncident(store, "Proposal", "p1", "safe failure", "no mutation", ["review"]);
+        var health = AutomationHealthService.Derive(store); var diagnostic = AutomationHealthService.CreateSanitizedDiagnosticSummary(store);
+        Assert.Equal(AutomationHealthStatus.RecoveryRequired, health.Status); Assert.Equal(1, health.UnresolvedIncidents);
+        Assert.DoesNotContain("AppData", diagnostic, StringComparison.OrdinalIgnoreCase); Assert.DoesNotContain("oauth", diagnostic, StringComparison.OrdinalIgnoreCase);
     }
 }

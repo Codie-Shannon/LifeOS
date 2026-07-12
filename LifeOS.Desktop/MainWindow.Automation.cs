@@ -16,10 +16,11 @@ public partial class MainWindow
         _automationStore = AutomationStorage.Load();
         var selected = _automationStore.Rules.FirstOrDefault(x => x.RuleId == _selectedAutomationRuleId) ?? _automationStore.Rules.FirstOrDefault();
         _selectedAutomationRuleId = selected?.RuleId;
-        SetHeader("Automation Centre", "v6.0.0-alpha.3 • controlled orchestration and recovery • no unattended execution");
+        SetHeader("Automation Centre", "v6.0.0-alpha.4 • automation hardening and emergency controls • no unattended execution");
         var root = new StackPanel();
-        root.Children.Add(CreateHeroPanel("Controlled orchestration and recovery",
+        root.Children.Add(CreateHeroPanel("Automation hardening and emergency controls",
             "Due work is queued for explicit review. Every executable step requires guarded confirmation. No unattended execution is enabled."));
+        root.Children.Add(CreateAutomationHealthPanel());
         root.Children.Add(CreateAutomationExecutionGate());
         root.Children.Add(CreateOrchestrationOverview());
 
@@ -35,6 +36,39 @@ public partial class MainWindow
         root.Children.Add(CreateAutomationInternalStatePanel());
         root.Children.Add(CreateAutomationAuditPanel());
         MainContentControl.Content = root;
+    }
+
+    private Border CreateAutomationHealthPanel()
+    {
+        var health = AutomationHealthService.Derive(_automationStore);
+        var panel = CreatePanel(); panel.Margin = new Thickness(0, 16, 0, 0);
+        var stack = new StackPanel();
+        stack.Children.Add(AutomationHeading($"Automation health • {health.Status}", $"{health.ActiveGlobalGate} • {health.UnresolvedIncidents} unresolved incident(s) • no unattended execution"));
+        stack.Children.Add(AutomationLine("Metrics", $"Review {health.PendingReview} • Approved {health.ApprovedNotExecuted} • Due {health.Due} • Paused {health.Paused} • Recovery {health.RecoveryRequired} • Failed {health.Failed} • Stale {health.Stale} • Blocked {health.Blocked}"));
+        var stop = CreateActionButton(health.EmergencyStopActive ? "Reset Emergency Stop" : "Activate Emergency Stop", health.EmergencyStopActive ? Color.FromRgb(21, 94, 117) : Color.FromRgb(153, 27, 27), Colors.White);
+        stop.Margin = new Thickness(0, 12, 0, 0); stop.Click += (_, _) => ToggleAutomationEmergencyStop(); stack.Children.Add(stop);
+        var diagnostics = CreateActionButton("Copy sanitized diagnostics", Color.FromRgb(51, 65, 85), Color.FromRgb(226, 232, 240));
+        diagnostics.Margin = new Thickness(0, 8, 0, 0); diagnostics.Click += (_, _) => { Clipboard.SetText(AutomationHealthService.CreateSanitizedDiagnosticSummary(_automationStore)); MessageBox.Show("Sanitized automation diagnostics copied.", "LifeOS"); }; stack.Children.Add(diagnostics);
+        foreach (var incident in _automationStore.Incidents.Where(x => x.Status == AutomationIncidentStatus.Open).OrderByDescending(x => x.CreatedAt).Take(5))
+            stack.Children.Add(AutomationLine("Recovery", $"{incident.ScopeType}:{incident.ScopeId} • {incident.SanitizedReason} • checkpoint: {incident.LastSafeCheckpoint}"));
+        panel.Child = stack; return panel;
+    }
+
+    private void ToggleAutomationEmergencyStop()
+    {
+        if (_automationStore.EmergencyStop.IsActive)
+        {
+            if (MessageBox.Show("Reset Emergency Stop? Guarded execution will remain paused and every proposal/run still requires individual review.", "Confirm reset", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
+            AutomationHealthService.ResetEmergencyStop(_automationStore, "explicit-ui-reset");
+            AddAutomationAudit("emergency-stop-reset", "global", "Emergency Stop reset explicitly; guarded execution remains paused and no work resumed.");
+        }
+        else
+        {
+            if (MessageBox.Show("Activate Emergency Stop now? All internal execution and orchestration steps will fail closed while review and evidence remain available.", "Confirm Emergency Stop", MessageBoxButton.YesNo, MessageBoxImage.Stop) != MessageBoxResult.Yes) return;
+            AutomationHealthService.ActivateEmergencyStop(_automationStore, "Explicit local emergency stop", "explicit-ui-activation");
+            AddAutomationAudit("emergency-stop-activated", "global", "Emergency Stop activated; all internal execution paths blocked fail-closed.");
+        }
+        SaveAutomation(); ShowAutomationCentrePage();
     }
 
     private Border CreateAutomationExecutionGate()
@@ -256,6 +290,7 @@ public partial class MainWindow
         catch (InvalidOperationException ex)
         {
             _automationStore.Proposals[index] = proposal with { State = ex.Message.Contains("changed", StringComparison.OrdinalIgnoreCase) ? AutomationProposalState.Stale : AutomationProposalState.ExecutionFailed };
+            if (_automationStore.Proposals[index].State == AutomationProposalState.ExecutionFailed) AutomationHealthService.RecordIncident(_automationStore, "Proposal", proposalId, ex.Message, "No successful mutation was recorded; review the retained preview and current target state.", ["Revalidate and explicitly retry if idempotent", "Cancel proposal", "Review prior execution evidence"]);
             AddAutomationAudit("execution-failed", proposalId, ex.Message);
         }
         SaveAutomation(); ShowAutomationCentrePage();
@@ -440,20 +475,21 @@ public partial class MainWindow
     {
         try
         {
+            var preview = AutomationHealthService.PreviewRollback(_automationStore, runId);
+            if (preview.Count == 0) throw new InvalidOperationException("No completed reversible steps are available for rollback.");
+            var restoreSummary = string.Join("\n", preview.Select(x => $"• {x.StepId}: restore retained before-checkpoint"));
+            if (MessageBox.Show($"Rollback will restore these steps in exact reverse order:\n\n{restoreSummary}\n\nContinue?", "Confirm rollback", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
             OrchestrationService.RollBackCompleted(_automationStore, runId);
-            AddAutomationAudit(
-                "rollback-completed",
-                runId,
-                "Completed reversible orchestration steps were restored in reverse order.");
+            AddAutomationAudit("rollback-succeeded", runId, "Completed reversible steps restored in exact reverse order; history retained.");
         }
         catch (InvalidOperationException ex)
         {
+            AutomationHealthService.RecordIncident(_automationStore, "Rollback", runId, ex.Message, "Rollback stopped at the last successfully restored checkpoint; all step history retained.", ["Review current target state", "Resolve mismatch", "Retry rollback explicitly"], runId);
             AddAutomationAudit("rollback-failed", runId, ex.Message);
         }
-
-        SaveAutomation();
-        ShowAutomationCentrePage();
+        SaveAutomation(); ShowAutomationCentrePage();
     }
+
     private void CancelOrchestration(string runId)
     {
         OrchestrationService.CancelRemaining(_automationStore, runId); AddAutomationAudit("remaining-steps-cancelled", runId, "Future work cancelled; completed checkpoints retained."); SaveAutomation(); ShowAutomationCentrePage();

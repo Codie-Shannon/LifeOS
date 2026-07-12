@@ -370,9 +370,60 @@ public sealed record AutomationAuditEntry(
     string Summary,
     string SourceReference);
 
+
+public enum AutomationHealthStatus { Healthy, AttentionRequired, RecoveryRequired, Paused, EmergencyStopped }
+public enum AutomationIncidentStatus { Open, Resolved, Cancelled }
+
+public sealed record AutomationEmergencyStopState
+{
+    public bool IsActive { get; init; }
+    public DateTimeOffset? ActivatedAt { get; init; }
+    public DateTimeOffset? ResetAt { get; init; }
+    public string Reason { get; init; } = string.Empty;
+    public string ConfirmationReference { get; init; } = string.Empty;
+}
+
+public sealed record AutomationIncident
+{
+    public string IncidentId { get; init; } = Guid.NewGuid().ToString("N");
+    public required string ScopeType { get; init; }
+    public required string ScopeId { get; init; }
+    public string? RunId { get; init; }
+    public string? StepId { get; init; }
+    public required string SanitizedReason { get; init; }
+    public required string LastSafeCheckpoint { get; init; }
+    public IReadOnlyList<string> RecoveryOptions { get; init; } = [];
+    public AutomationIncidentStatus Status { get; init; } = AutomationIncidentStatus.Open;
+    public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? ResolvedAt { get; init; }
+}
+
+public sealed record AutomationHealthSummary
+{
+    public AutomationHealthStatus Status { get; init; }
+    public int PendingReview { get; init; }
+    public int ApprovedNotExecuted { get; init; }
+    public int Due { get; init; }
+    public int Paused { get; init; }
+    public int RecoveryRequired { get; init; }
+    public int Failed { get; init; }
+    public int Stale { get; init; }
+    public int Blocked { get; init; }
+    public int Executed { get; init; }
+    public int Undone { get; init; }
+    public int RolledBack { get; init; }
+    public int UnresolvedIncidents { get; init; }
+    public DateTimeOffset? LastSuccessfulExecution { get; init; }
+    public DateTimeOffset? LastFailure { get; init; }
+    public string ActiveGlobalGate { get; init; } = string.Empty;
+    public bool EmergencyStopActive { get; init; }
+}
+
 public sealed record AutomationStoreSnapshot
 {
-    public AutomationExecutionSettings Settings { get; init; } = new();
+    public AutomationExecutionSettings Settings { get; set; } = new();
+    public AutomationEmergencyStopState EmergencyStop { get; set; } = new();
+    public List<AutomationIncident> Incidents { get; init; } = [];
     public List<AutomationRule> Rules { get; init; } = [];
     public List<AutomationEvaluation> Evaluations { get; init; } = [];
     public List<AutomationProposal> Proposals { get; init; } = [];

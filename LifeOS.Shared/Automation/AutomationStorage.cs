@@ -87,6 +87,8 @@ public static class AutomationStorage
         return snapshot with
         {
             Settings = snapshot.Settings ?? new(),
+            EmergencyStop = snapshot.EmergencyStop ?? new(),
+            Incidents = snapshot.Incidents ?? [],
             Proposals = proposals,
             OrchestrationRuns = runs,
             OrchestrationPlans = plans,

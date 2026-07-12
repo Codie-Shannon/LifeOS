@@ -31,6 +31,7 @@ public static class OrchestrationService
 
     public static OrchestrationRun Start(AutomationStoreSnapshot store, OrchestrationPlan plan, OrchestrationOccurrence occurrence, DateTimeOffset? now = null)
     {
+        AutomationHealthService.EnsureExecutionAllowed(store);
         if (!plan.IsEnabled) throw new InvalidOperationException("The orchestration plan is disabled.");
         if (store.Settings.ExecutionPaused) throw new InvalidOperationException("Global guarded execution is paused.");
         if (occurrence.PlanRevision != plan.CurrentRevision) throw new InvalidOperationException("Plan revision changed; review the occurrence again.");
@@ -64,6 +65,7 @@ public static class OrchestrationService
 
     public static OrchestrationStepRun ConfirmCurrentStep(AutomationStoreSnapshot store, string runId, DateTimeOffset? now = null, bool injectSafeFailure = false)
     {
+        AutomationHealthService.EnsureExecutionAllowed(store);
         if (store.Settings.ExecutionPaused) throw new InvalidOperationException("Global guarded execution is paused.");
         var runIndex = store.OrchestrationRuns.FindIndex(x => x.RunId == runId);
         var run = store.OrchestrationRuns[runIndex];
@@ -79,6 +81,7 @@ public static class OrchestrationService
             var failed = stepRun with { Status = OrchestrationStepStatus.Failed, FailedAt = time, Error = "Controlled fictional failure; no operational mutation occurred." };
             store.OrchestrationStepRuns[srIndex] = failed;
             store.OrchestrationRuns[runIndex] = run with { Status = OrchestrationRunStatus.RecoveryRequired, PausedAt = time, FailureSummary = failed.Error };
+            AutomationHealthService.RecordIncident(store, "OrchestrationStep", step.StepId, failed.Error, string.IsNullOrWhiteSpace(stepRun.BeforeSnapshot) ? "No mutation occurred; target remained at pre-execution state." : stepRun.BeforeSnapshot, ["Explicit retry after idempotency review", "Cancel remaining steps", "Review rollback"], run.RunId, step.StepId);
             return failed;
         }
         var itemIndex = store.InternalItems.FindIndex(x => x.ItemId == step.TargetItemId && x.Module == step.TargetModule);
@@ -104,6 +107,7 @@ public static class OrchestrationService
     public static void RetryFailedStep(AutomationStoreSnapshot store, string runId)
     {
         var ri = store.OrchestrationRuns.FindIndex(x => x.RunId == runId);
+        AutomationHealthService.EnsureExecutionAllowed(store);
         var run = store.OrchestrationRuns[ri];
         if (run.Status != OrchestrationRunStatus.RecoveryRequired) throw new InvalidOperationException("The run does not require recovery.");
         var si = store.OrchestrationStepRuns.FindIndex(x => x.RunId == runId && x.StepId == run.CurrentStepId);
@@ -132,8 +136,9 @@ public static class OrchestrationService
 
     public static void RollBackCompleted(AutomationStoreSnapshot store, string runId)
     {
-        var completed = store.OrchestrationStepRuns.Where(x => x.RunId == runId && x.Status == OrchestrationStepStatus.Succeeded && x.UndoAvailable).ToList();
-        foreach (var sr in completed.AsEnumerable().Reverse())
+        AutomationHealthService.EnsureExecutionAllowed(store);
+        var completed = AutomationHealthService.PreviewRollback(store, runId);
+        foreach (var sr in completed)
         {
             var step = store.OrchestrationSteps.Single(x => x.StepId == sr.StepId);
             var after = JsonSerializer.Deserialize<AutomationInternalItem>(sr.ActualAfterSnapshot)!;

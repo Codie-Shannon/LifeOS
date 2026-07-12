@@ -1,54 +1,29 @@
 # LifeOS current status
 
-LifeOS Desktop `v6.0.0-alpha.3` — Controlled orchestration and recovery.
+LifeOS Desktop `v6.0.0-alpha.4` — Automation hardening and emergency controls.
 
 ## Current milestone
 
-Screenshot Group 28 is complete.
+Screenshot Group 29 is complete. Group 30 Pack 1 is ready for validation and manual screenshot proof; Group 30 is not complete until Pack 2 commits the approved evidence.
 
-LifeOS now provides:
+## Group 30 implementation state
 
-- a persisted global guarded-execution pause that starts paused
-- manual dry-run and proposal review while execution is paused
-- approval that records intent without executing
-- a separate final execution preview and explicit final confirmation
-- immediate source/target/rule/policy revalidation before execution
-- one typed Low-risk reversible internal review-note action
-- exact before/after snapshots
-- persisted execution result and audit
-- idempotent duplicate-execution prevention
-- explicit Undo with prior-state restoration
-- stale-source blocking and required reevaluation
-- retained blocked High-risk communication/external-write proposals
+- provider-neutral automation health is derived from persisted rules, proposals, executions, occurrences, runs, step runs and incidents
+- health states include Healthy, AttentionRequired, RecoveryRequired, Paused and EmergencyStopped
+- a distinct persisted Emergency Stop fails closed across internal execution and orchestration boundaries
+- Emergency Stop activation and reset require explicit confirmation and retain audit/evidence
+- reset leaves guarded execution paused and never automatically resumes work
+- controlled failures create sanitized incidents scoped to the exact run and step with a last-safe checkpoint and explicit recovery choices
+- retry remains explicit and is never automatic
+- rollback review is reverse ordered and stops on the first state mismatch or failure
+- sanitized diagnostics expose counters and operational state without secrets, raw connector payloads or private local paths
 
-## Verified safety boundary
+## Safety boundary
 
-Only an allowlisted reversible internal proof action may execute. External writes, communication, mailbox, calendar, financial, destructive, script, process, plugin and AI actions remain blocked.
+No background worker, Windows Task Scheduler integration, service, startup execution, due-triggered execution, automatic continuation, automatic retry, self-healing mutation, external write, email/calendar/financial/destructive mutation, arbitrary script/process/plugin execution or AI decision has been introduced.
 
-There is no background worker, scheduler, timer-triggered execution, startup execution, unattended execution, automatic approval, timeout execution or automatic retry.
+## Verification state
 
-## Verification
+The Pack 1 runner must record the authoritative test count, Release-build result, repository-hygiene result, `git diff --check`, branch synchronization and clean-tree state. A complete Gitleaks history scan is attempted when Gitleaks is installed; otherwise that prerequisite remains explicitly unresolved.
 
-- Tests: 116 passed, 0 failed, 0 skipped
-- Release build: passed
-- `git diff --check`: passed
-- Guarded-execution safety validation: passed
-- Screenshot evidence: 7 approved fictional-data screenshots
-- Group 29: not started
-
-
-## Group 29 — Controlled orchestration and recovery
-
-Schedules now create review intent only. Due occurrences enter a visible queue, runs require explicit Start, and every Low-risk reversible internal step requires its own exact preview and confirmation. Progress pauses between steps; failure recovery is explicit and persisted. No unattended execution or external writes are enabled.
-
-<!-- GROUP29 START -->
-## Screenshot Group 29 complete
-
-LifeOS is at `v6.0.0-alpha.3` with controlled orchestration and recoverable, step-by-step internal execution.
-
-Approved evidence proves deterministic due review, explicit Start, exact per-step preview and confirmation, persisted checkpoints, no automatic continuation, controlled failure, explicit recovery, rollback, and blocked High-risk external communication.
-
-The safety boundary remains unchanged: no unattended execution, background worker, OS scheduler, timer-triggered mutation, automatic retry, external write, financial/destructive mutation, arbitrary script/process/plugin execution, or AI-controlled action.
-
-Group 30 has not started.
-<!-- GROUP29 END -->
+Group 31 has not started.

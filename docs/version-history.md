@@ -170,3 +170,9 @@ Schedules now create review intent only. Due occurrences enter a visible queue, 
 - eight approved fictional-data screenshots
 - no unattended execution or external writes
 <!-- GROUP29 END -->
+
+## v6.0.0-alpha.4 — Screenshot Group 30
+- Automation hardening, persisted health and sanitized incident visibility.
+- Distinct fail-closed Emergency Stop with explicit reset and no automatic resume.
+- Exact-scope failure containment, explicit retry and reverse-order rollback review.
+- Manual, foreground-only controlled automation remains mandatory.

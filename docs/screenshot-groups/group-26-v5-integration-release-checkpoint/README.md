@@ -1,4 +1,4 @@
-﻿# Group 26 â€” v5 integration release checkpoint
+# Group 26 â€” v5 integration release checkpoint
 
 **Version:** `v5.0.0-beta.1`
 **Status:** Complete
@@ -24,7 +24,6 @@ Group 26 closes the v5 integration lane as a beta checkpoint. The evidence shows
 - Two authenticated Google provider lanes are active.
 - Every active lane is read-only.
 - Every active lane is manually triggered.
-- Human review is required before trusted handoff.
 - The release-validation matrix reports 11 passing checks.
 - Google Calendar remains `calendar.readonly`, manual, bounded and retention-safe.
 - Gmail remains `gmail.readonly`, profile-bound, manually confirmed and retention-safe.

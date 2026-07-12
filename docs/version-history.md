@@ -37,7 +37,6 @@
 ## v4.9 - Integration Inbox + v5 Readiness
 
 - Added review-first integration previews.
-- Added provenance, duplicate suspicion, explicit review states, and manual handoff contracts.
 - Added source lanes and v5 connector-readiness matrix.
 - Completed the v4 operating spine.
 

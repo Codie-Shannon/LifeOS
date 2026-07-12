@@ -1,6 +1,0 @@
-LifeOS Group 25 Pack 1 — pre-screenshot handoff
-Version: v5.0.0-alpha.5
-Scope: one authenticated read-only Gmail connector feeding provider-neutral Email Radar.
-Search rules: active profile required; explicit 7-day default bounded range; 31-day maximum; 25 default cap; 100 hard cap; visible query; suggested noise exclusions; manual confirmation.
-Safety: gmail.readonly only; no mailbox mutation, sending, attachments, HTML rendering, remote images, background scan, automatic Follow-Up, Work Pipeline mutation, Outlook, IMAP/POP, AI, or Group 26.
-Run tests/build, configure private Google OAuth locally, verify bounded manual search, then capture approved screenshots.

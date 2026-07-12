@@ -8,7 +8,6 @@ This pack turns the temporary integration master list into an enforceable connec
 
 All connectors use the same path:
 
-External source -> connector definition -> connector implementation -> `IntegrationPreviewDraft` -> `IntegrationPreviewIntake.CreatePreview` -> Integration Inbox review -> explicit target-module handoff.
 
 Connectors do not directly mutate LifeOS modules or external systems. They create reviewable previews.
 

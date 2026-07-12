@@ -6,9 +6,7 @@
 2. LifeOS stores a read-only `IntegrationPreviewItem` with provenance.
 3. Duplicate and trust rules run locally.
 4. The user accepts, rejects, or defers the preview.
-5. Accepted previews remain inert until an explicit target-module handoff.
 6. The target module validates its own rules.
-7. Every handoff is auditable and reversible where possible.
 
 ## Code contract
 
@@ -16,7 +14,6 @@
 - Intake-created previews must be read-only, untrusted, and require human review.
 - Every preview requires a source label, external reference, title, and deterministic duplicate key.
 - Acceptance is blocked for duplicate-suspected, untrusted, or source-evidence-free previews.
-- Linking is allowed only after acceptance and still represents an explicit handoff boundary.
 
 ## Prohibited by default
 

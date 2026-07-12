@@ -50,5 +50,3 @@ Group 20 proves the first real v5 connector path: a local CSV/JSON file can be s
 This checkpoint proves the v5 connector foundation only. It does not activate Gmail, Outlook, Google Calendar, Microsoft Calendar, Xero, SharePoint, Drive, OCR providers, banking providers, BNPL providers, OAuth, live polling, automatic item creation, automatic updates, or AI actions.
 
 ## Next lane
-
-The next v5 connector should reuse the same path: external source -> connector -> `IntegrationPreviewDraft` -> Integration Inbox review -> explicit handoff.

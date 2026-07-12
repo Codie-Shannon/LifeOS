@@ -8,7 +8,6 @@ This file captures the broad integration surface LifeOS may eventually support. 
 
 All integrations feed the same review path by default:
 
-External source -> connector -> normalized draft -> provenance and confidence -> Integration Inbox -> user review -> explicit handoff -> LifeOS state change.
 
 No connector should silently create, modify, delete, send, pay, archive, or close external or LifeOS records. Money, health, legal, tax, account, and client-facing actions require extra review.
 

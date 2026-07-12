@@ -10,7 +10,6 @@ v5.0 should prove the real integration path without OAuth, live polling, or exte
 
 Manual CSV/JSON import, followed by local `.ics` calendar import.
 
-This is the safest first connector because it exercises the same intake, provenance, duplicate, review, and handoff rules that later Gmail, Outlook, calendar, accounting, file, OCR, and banking connectors must obey.
 
 The `.ics` connector proves calendar-shaped data without OAuth or live Google/Outlook access.
 
@@ -55,7 +54,6 @@ The current implementation accepts `title`, `name`, `subject`, `description`, or
 - Missing source label, external reference, or title is rejected by intake.
 - Duplicate key is deterministic for repeated imports.
 - Duplicate-suspected previews cannot be accepted.
-- Accepted previews remain inert until explicit handoff.
 - Imported money appears as preview value only and never safe money.
 - Reject/defer paths preserve audit notes.
 

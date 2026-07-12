@@ -1,7 +1,0 @@
-LIFEOS GROUP 23 — PRE-SCREENSHOT HANDOFF
-
-Scope: v5.0-alpha Google Calendar connector lifecycle hardening.
-
-Implemented: lifecycle state persistence, visible configuration/token state, last refresh metrics, sanitized errors, explicit reconnect/retry/disconnect/cache-clear actions, and existing audit-trail extension.
-
-Validation must be completed by the Pack 1 runner on C:\Projects\LifeOS. No live provider failure state is falsely claimed as verified. Group 24 has not started.

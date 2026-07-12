@@ -29,7 +29,6 @@ The captured application truthfully presents local CSV, JSON, and ICS imports as
 
 ## Safety boundary
 
-External data remains untrusted by default. Imported records cannot update LifeOS target modules automatically. Accepted previews still require a separate deliberate handoff, and target modules remain authoritative.
 
 ## Completion boundary
 

@@ -18,7 +18,6 @@ Google Calendar event
 -> duplicate check and audit record
 -> untrusted Integration Inbox preview
 -> deliberate human review
--> separate manual handoff only
 ```
 
 ## Verified live behavior
@@ -38,7 +37,6 @@ Google Calendar event
 
 ## Screenshot set
 
-1. `screenshots/01-connector-foundation-metrics.png` - v5.0-alpha connector foundation, review, duplicate, trust, reviewed, handoff, money-safety, and contract-readiness signals.
 2. `screenshots/02-connector-safety-rules.png` - review-first connector rules and the read-only Google Calendar control surface.
 3. `screenshots/03-readonly-connect-confirmation.png` - explicit confirmation that LifeOS requests only calendar read access and cannot edit events.
 4. `screenshots/04-google-calendar-connection-success.png` - successful local read-only Google Calendar connection with manual refresh retained.
@@ -69,7 +67,6 @@ Group 22 does not provide:
 - automatic Agenda or LifeOS item creation
 - AI summarisation or autonomous action
 
-External events remain untrusted until reviewed. Acceptance and target-module handoff remain separate deliberate actions.
 
 ## Completion boundary
 

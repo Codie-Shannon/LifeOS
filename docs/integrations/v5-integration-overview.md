@@ -14,7 +14,6 @@ external provider record
 -> source-backed human review
 -> explicit confirmation
 -> confirmed timeline or accepted preview
--> optional explicit handoff
 -> trusted LifeOS state
 ```
 

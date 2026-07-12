@@ -24,7 +24,24 @@ public static class AutomationDemoData
                 new(AutomationConditionType.PaymentStateEquals, "PaymentState", "Overdue", "Fictional invoice is overdue."),
                 AutomationActionType.SendEmail, "Propose sending an overdue invoice email", "ExternalCommunication", "example-invoice-004")
         };
-        return new() { Settings = new() { ExecutionPaused = true }, Rules = rules, InternalItems = items };
+        var plan = new OrchestrationPlan
+        {
+            PlanId = "weekly-project-hygiene",
+            Name = "Weekly project hygiene review",
+            Description = "Fictional local plan. Due work is queued for explicit review and never executes automatically.",
+            IsEnabled = false,
+            ScheduleDefinition = new() { Type = OrchestrationScheduleType.WeeklyReviewDay, WeeklyReviewDay = DayOfWeek.Sunday },
+            SourceItemIds = ["example-project-002"],
+            RiskLevel = AutomationRiskLevel.Low,
+            ExecutionMode = AutomationExecutionMode.GuardedInternal
+        };
+        var steps = new List<OrchestrationStep>
+        {
+            new() { StepId = "weekly-note", PlanId = plan.PlanId, Sequence = 1, Name = "Add internal review note", ActionType = AutomationActionType.AddInternalReviewNote, TargetModule = "WorkPipeline", TargetItemId = "example-project-002", RequiredCapabilities = [AutomationCapability.ReadTrustedLifeOsState, AutomationCapability.ProposeInternalReviewAction, AutomationCapability.ExecuteReversibleInternalAction] },
+            new() { StepId = "weekly-flag", PlanId = plan.PlanId, Sequence = 2, Name = "Flag fictional item for attention", ActionType = AutomationActionType.FlagInternalItemForAttention, TargetModule = "WorkPipeline", TargetItemId = "example-project-002", RequiredCapabilities = [AutomationCapability.ReadTrustedLifeOsState, AutomationCapability.ProposeInternalReviewAction, AutomationCapability.ExecuteReversibleInternalAction], DependsOnStepIds = ["weekly-note"] },
+            new() { StepId = "weekly-agenda", PlanId = plan.PlanId, Sequence = 3, Name = "Create internal draft agenda item", ActionType = AutomationActionType.CreateInternalDraftAgendaItem, TargetModule = "WorkPipeline", TargetItemId = "example-project-002", RequiredCapabilities = [AutomationCapability.ReadTrustedLifeOsState, AutomationCapability.ProposeTaskAgendaDraft, AutomationCapability.ExecuteReversibleInternalAction], DependsOnStepIds = ["weekly-flag"], IsOptional = true }
+        };
+        return new() { Settings = new() { ExecutionPaused = true }, Rules = rules, InternalItems = items, OrchestrationPlans = [plan], OrchestrationSteps = steps };
     }
 
     public static AutomationSourceSnapshot SourceFor(AutomationRule rule, AutomationStoreSnapshot? store = null)
@@ -64,7 +81,7 @@ public static class AutomationDemoData
         ApprovalMode = AutomationPolicy.IsBlocked(action) ? AutomationApprovalMode.ExecutionBlocked : AutomationApprovalMode.AlwaysRequireApproval,
         ExecutionMode = AutomationExecutionMode.Disabled,
         RequestedCapabilities = CapabilitiesFor(action),
-        Notes = "Approval does not execute. Final preview and explicit confirmation are required in v6.0.0-alpha.2."
+        Notes = "Approval does not execute. Final preview and explicit confirmation are required in v6.0.0-alpha.3."
     };
 
     private static IReadOnlyList<AutomationCapability> CapabilitiesFor(AutomationActionType action) => action switch

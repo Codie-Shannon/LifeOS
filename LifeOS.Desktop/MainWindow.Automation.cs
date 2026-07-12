@@ -16,11 +16,12 @@ public partial class MainWindow
         _automationStore = AutomationStorage.Load();
         var selected = _automationStore.Rules.FirstOrDefault(x => x.RuleId == _selectedAutomationRuleId) ?? _automationStore.Rules.FirstOrDefault();
         _selectedAutomationRuleId = selected?.RuleId;
-        SetHeader("Automation Centre", "v6.0.0-alpha.2 • guarded internal automation • approval and final confirmation required");
+        SetHeader("Automation Centre", "v6.0.0-alpha.3 • controlled orchestration and recovery • no unattended execution");
         var root = new StackPanel();
-        root.Children.Add(CreateHeroPanel("Guarded internal automation",
-            "Explicit approval and final confirmation are required. Only allowlisted Low-risk reversible internal actions may execute. No unattended or external actions are enabled."));
+        root.Children.Add(CreateHeroPanel("Controlled orchestration and recovery",
+            "Due work is queued for explicit review. Every executable step requires guarded confirmation. No unattended execution is enabled."));
         root.Children.Add(CreateAutomationExecutionGate());
+        root.Children.Add(CreateOrchestrationOverview());
 
         var metrics = new WrapPanel { Margin = new Thickness(0, 18, 0, 0) };
         metrics.Children.Add(CreateDashboardCard("Rules", _automationStore.Rules.Count.ToString(), "Disabled by default"));
@@ -304,4 +305,114 @@ public partial class MainWindow
     private void SaveAutomation() => AutomationStorage.Save(_automationStore);
     private static StackPanel AutomationHeading(string title, string body) { var stack = new StackPanel { Margin = new Thickness(0, 4, 0, 8) }; stack.Children.Add(new TextBlock { Text = title, Foreground = new SolidColorBrush(Color.FromRgb(226, 232, 240)), FontSize = 20, FontWeight = FontWeights.Bold, TextWrapping = TextWrapping.Wrap }); stack.Children.Add(new TextBlock { Text = body, Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)), FontSize = 13, Margin = new Thickness(0, 5, 0, 0), TextWrapping = TextWrapping.Wrap }); return stack; }
     private static TextBlock AutomationLine(string label, string value) => new() { Text = $"{label}: {value}", Foreground = new SolidColorBrush(Color.FromRgb(203, 213, 225)), FontSize = 13, Margin = new Thickness(0, 5, 0, 0), TextWrapping = TextWrapping.Wrap };
+
+    private Border CreateOrchestrationOverview()
+    {
+        var panel = CreatePanel(); panel.Margin = new Thickness(0, 16, 0, 0);
+        var stack = new StackPanel();
+        stack.Children.Add(AutomationHeading("Due Work queue", "A schedule decides when work should be reviewed. It never starts or executes a plan."));
+        foreach (var plan in _automationStore.OrchestrationPlans)
+        {
+            var occurrence = _automationStore.OrchestrationOccurrences.LastOrDefault(x => x.PlanId == plan.PlanId);
+            var run = occurrence is null ? null : _automationStore.OrchestrationRuns.LastOrDefault(x => x.OccurrenceId == occurrence.OccurrenceId);
+            stack.Children.Add(AutomationLine("Plan", $"{plan.Name} • {(plan.IsEnabled ? "Enabled" : "Disabled by default")} • revision {plan.CurrentRevision}"));
+            stack.Children.Add(AutomationLine("Schedule", $"{plan.ScheduleDefinition.Type} • next review {(OrchestrationService.CalculateDue(plan, DateTimeOffset.Now)?.ToString("yyyy-MM-dd") ?? "manual only")}"));
+            stack.Children.Add(AutomationLine("Due occurrence", occurrence is null ? "Not created" : $"{occurrence.DueState} • {occurrence.DueAt:yyyy-MM-dd}"));
+            stack.Children.Add(AutomationLine("Run", run is null ? "Not started — explicit Start required" : $"{run.Status} • current step {run.CurrentStepId ?? "complete"}"));
+            stack.Children.Add(AutomationLine("Safety", "One typed reversible internal step at a time • pause between steps • no automatic retry or continuation"));
+            var buttons = new WrapPanel { Margin = new Thickness(0, 10, 0, 0) };
+            var enable = CreateActionButton(plan.IsEnabled ? "Disable plan" : "Enable fictional plan", Color.FromRgb(30, 64, 175), Colors.White);
+            enable.Click += (_, _) => ToggleOrchestrationPlan(plan.PlanId); buttons.Children.Add(enable);
+            var due = CreateActionButton("Calculate due review", Color.FromRgb(51, 65, 85), Color.FromRgb(226, 232, 240));
+            due.Click += (_, _) => CalculateOrchestrationDue(plan.PlanId); buttons.Children.Add(due);
+            if (occurrence is not null && run is null)
+            {
+                var start = CreateActionButton("Start orchestration", Color.FromRgb(21, 94, 117), Colors.White);
+                start.Click += (_, _) => StartOrchestration(plan.PlanId, occurrence.OccurrenceId); buttons.Children.Add(start);
+            }
+            if (run is not null && run.Status is OrchestrationRunStatus.Paused or OrchestrationRunStatus.RecoveryRequired)
+            {
+                var preview = CreateActionButton("Preview current step", Color.FromRgb(51, 65, 85), Color.FromRgb(226, 232, 240));
+                preview.Click += (_, _) => PreviewOrchestrationStep(run.RunId); buttons.Children.Add(preview);
+                var stepRun = run.CurrentStepId is null ? null : _automationStore.OrchestrationStepRuns.LastOrDefault(x => x.RunId == run.RunId && x.StepId == run.CurrentStepId);
+                if (stepRun?.Status == OrchestrationStepStatus.PreviewReady)
+                {
+                    var confirm = CreateActionButton("Confirm this step only", Color.FromRgb(21, 128, 61), Colors.White);
+                    confirm.Click += (_, _) => ConfirmOrchestrationStep(run.RunId); buttons.Children.Add(confirm);
+                }
+                if (run.Status == OrchestrationRunStatus.RecoveryRequired)
+                {
+                    var retry = CreateActionButton("Explicit retry", Color.FromRgb(180, 83, 9), Colors.White);
+                    retry.Click += (_, _) => RetryOrchestrationStep(run.RunId); buttons.Children.Add(retry);
+                    var cancel = CreateActionButton("Cancel remaining", Color.FromRgb(127, 29, 29), Colors.White);
+                    cancel.Click += (_, _) => CancelOrchestration(run.RunId); buttons.Children.Add(cancel);
+                }
+            }
+            stack.Children.Add(buttons);
+            if (run is not null)
+            {
+                foreach (var step in _automationStore.OrchestrationSteps.Where(x => x.PlanId == plan.PlanId).OrderBy(x => x.Sequence))
+                {
+                    var sr = _automationStore.OrchestrationStepRuns.LastOrDefault(x => x.RunId == run.RunId && x.StepId == step.StepId);
+                    stack.Children.Add(AutomationLine($"Step {step.Sequence}", $"{step.Name} • {sr?.Status.ToString() ?? "Pending"} • {step.RiskLevel} • reversible {step.IsReversible}"));
+                    if (sr?.Status == OrchestrationStepStatus.PreviewReady)
+                    {
+                        stack.Children.Add(AutomationLine("Before", sr.BeforeSnapshot));
+                        stack.Children.Add(AutomationLine("Proposed after", sr.ProposedAfterSnapshot));
+                    }
+                }
+            }
+        }
+        stack.Children.Add(AutomationLine("Blocked proof", "High-risk overdue-invoice email • ExternalCommunication • blocked from execution"));
+        panel.Child = stack; return panel;
+    }
+
+    private void ToggleOrchestrationPlan(string planId)
+    {
+        var i = _automationStore.OrchestrationPlans.FindIndex(x => x.PlanId == planId);
+        var plan = _automationStore.OrchestrationPlans[i];
+        _automationStore.OrchestrationPlans[i] = plan with { IsEnabled = !plan.IsEnabled, CurrentRevision = plan.CurrentRevision + 1, UpdatedAt = DateTimeOffset.UtcNow };
+        AddAutomationAudit(plan.IsEnabled ? "plan-disabled" : "plan-enabled", planId, "User explicitly changed fictional orchestration plan state."); SaveAutomation(); ShowAutomationCentrePage();
+    }
+
+    private void CalculateOrchestrationDue(string planId)
+    {
+        var plan = _automationStore.OrchestrationPlans.Single(x => x.PlanId == planId);
+        var occurrence = OrchestrationService.EnsureOccurrence(_automationStore, plan, DateTimeOffset.Now);
+        AddAutomationAudit("schedule-calculated", planId, occurrence is null ? "Plan disabled or manual-only; no occurrence created." : $"Occurrence {occurrence.OccurrenceKey} exposed for review; no execution occurred."); SaveAutomation(); ShowAutomationCentrePage();
+    }
+
+    private void StartOrchestration(string planId, string occurrenceId)
+    {
+        try { var run = OrchestrationService.Start(_automationStore, _automationStore.OrchestrationPlans.Single(x => x.PlanId == planId), _automationStore.OrchestrationOccurrences.Single(x => x.OccurrenceId == occurrenceId)); AddAutomationAudit("run-started", run.RunId, "Explicit Start created a persisted run paused before its first step."); }
+        catch (InvalidOperationException ex) { AddAutomationAudit("run-start-blocked", planId, ex.Message); }
+        SaveAutomation(); ShowAutomationCentrePage();
+    }
+
+    private void PreviewOrchestrationStep(string runId)
+    {
+        try { var preview = OrchestrationService.PreviewCurrentStep(_automationStore, runId); AddAutomationAudit("step-preview-opened", preview.StepRunId, "Exact before/after preview opened. No mutation occurred."); }
+        catch (InvalidOperationException ex) { AddAutomationAudit("step-preview-blocked", runId, ex.Message); }
+        SaveAutomation(); ShowAutomationCentrePage();
+    }
+
+    private void ConfirmOrchestrationStep(string runId)
+    {
+        try { var result = OrchestrationService.ConfirmCurrentStep(_automationStore, runId); AddAutomationAudit("step-succeeded", result.StepRunId, "One typed reversible internal step executed; checkpoint persisted; progression paused."); }
+        catch (InvalidOperationException ex) { AddAutomationAudit("step-failed", runId, ex.Message); }
+        SaveAutomation(); ShowAutomationCentrePage();
+    }
+
+    private void RetryOrchestrationStep(string runId)
+    {
+        try { OrchestrationService.RetryFailedStep(_automationStore, runId); AddAutomationAudit("step-retry-requested", runId, "Explicit retry selected; step returned to paused review state."); }
+        catch (InvalidOperationException ex) { AddAutomationAudit("step-retry-blocked", runId, ex.Message); }
+        SaveAutomation(); ShowAutomationCentrePage();
+    }
+
+    private void CancelOrchestration(string runId)
+    {
+        OrchestrationService.CancelRemaining(_automationStore, runId); AddAutomationAudit("remaining-steps-cancelled", runId, "Future work cancelled; completed checkpoints retained."); SaveAutomation(); ShowAutomationCentrePage();
+    }
+
 }

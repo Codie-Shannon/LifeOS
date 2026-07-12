@@ -42,6 +42,9 @@ public enum AutomationActionType
     ProposeWorkPipelineNextAction,
     ProposeReviewNote,
     ProposeReviewQueueItem,
+    AddInternalReviewNote,
+    FlagInternalItemForAttention,
+    CreateInternalDraftAgendaItem,
     ProposeInternalReviewState,
     ProposeAttentionFlag,
     ProposeAgendaTaskDraft,
@@ -213,7 +216,9 @@ public sealed record AutomationInternalItem
     public required string Title { get; init; }
     public string NextAction { get; init; } = string.Empty;
     public string ReviewState { get; init; } = "NeedsReview";
+    public bool AttentionFlagged { get; init; }
     public List<string> ReviewNotes { get; init; } = [];
+    public List<string> DraftAgendaItems { get; init; } = [];
     public int Version { get; init; } = 1;
     public DateTimeOffset UpdatedAt { get; init; } = DateTimeOffset.UtcNow;
 }
@@ -258,6 +263,105 @@ public sealed record AutomationExecutionResult
     public string ExecutionKey { get; init; } = string.Empty;
 }
 
+
+public enum OrchestrationScheduleType { ManualOnly, OneTimeReviewDate, WeeklyReviewDay }
+public enum OrchestrationDueState { Upcoming, Due, Overdue, Completed, Snoozed }
+public enum OrchestrationRunStatus { Preview, Paused, InProgress, RecoveryRequired, Completed, Cancelled, RollingBack }
+public enum OrchestrationStepStatus { Pending, PreviewReady, Executing, Succeeded, Failed, Skipped, Cancelled, RolledBack, Blocked }
+public enum OrchestrationFailurePolicy { PauseAndReview, CancelRemaining, AllowExplicitRetry, AllowExplicitSkip, RequireRollbackReview }
+
+public sealed record OrchestrationScheduleDefinition
+{
+    public OrchestrationScheduleType Type { get; init; } = OrchestrationScheduleType.ManualOnly;
+    public DateTimeOffset? OneTimeReviewAt { get; init; }
+    public DayOfWeek? WeeklyReviewDay { get; init; }
+}
+
+public sealed record OrchestrationPlan
+{
+    public string PlanId { get; init; } = Guid.NewGuid().ToString("N");
+    public string Name { get; init; } = "New orchestration plan";
+    public string Description { get; init; } = string.Empty;
+    public bool IsEnabled { get; init; }
+    public OrchestrationScheduleDefinition ScheduleDefinition { get; init; } = new();
+    public IReadOnlyList<string> SourceItemIds { get; init; } = [];
+    public AutomationTrustState SourceTrustRequirement { get; init; } = AutomationTrustState.Reviewed;
+    public AutomationRiskLevel RiskLevel { get; init; } = AutomationRiskLevel.Low;
+    public AutomationApprovalMode ApprovalMode { get; init; } = AutomationApprovalMode.AlwaysRequireApproval;
+    public AutomationExecutionMode ExecutionMode { get; init; } = AutomationExecutionMode.GuardedInternal;
+    public int CurrentRevision { get; init; } = 1;
+    public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset UpdatedAt { get; init; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? LastCalculatedDueAt { get; init; }
+}
+
+public sealed record OrchestrationStep
+{
+    public string StepId { get; init; } = Guid.NewGuid().ToString("N");
+    public required string PlanId { get; init; }
+    public int Sequence { get; init; }
+    public required string Name { get; init; }
+    public string Description { get; init; } = string.Empty;
+    public required AutomationActionType ActionType { get; init; }
+    public required string TargetModule { get; init; }
+    public required string TargetItemId { get; init; }
+    public IReadOnlyList<AutomationCapability> RequiredCapabilities { get; init; } = [];
+    public AutomationRiskLevel RiskLevel { get; init; } = AutomationRiskLevel.Low;
+    public bool IsReversible { get; init; } = true;
+    public bool IsOptional { get; init; }
+    public OrchestrationFailurePolicy FailurePolicy { get; init; } = OrchestrationFailurePolicy.PauseAndReview;
+    public IReadOnlyList<string> DependsOnStepIds { get; init; } = [];
+}
+
+public sealed record OrchestrationOccurrence
+{
+    public string OccurrenceId { get; init; } = Guid.NewGuid().ToString("N");
+    public required string OccurrenceKey { get; init; }
+    public required string PlanId { get; init; }
+    public int PlanRevision { get; init; }
+    public required DateTimeOffset OriginalDueAt { get; init; }
+    public required DateTimeOffset DueAt { get; init; }
+    public OrchestrationDueState DueState { get; init; }
+    public DateTimeOffset? SnoozedUntil { get; init; }
+    public string SnoozeReason { get; init; } = string.Empty;
+    public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? CompletedAt { get; init; }
+}
+
+public sealed record OrchestrationRun
+{
+    public string RunId { get; init; } = Guid.NewGuid().ToString("N");
+    public required string PlanId { get; init; }
+    public int PlanRevision { get; init; }
+    public required string OccurrenceId { get; init; }
+    public OrchestrationRunStatus Status { get; init; } = OrchestrationRunStatus.Paused;
+    public string? CurrentStepId { get; init; }
+    public DateTimeOffset StartedAt { get; init; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? PausedAt { get; init; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? CompletedAt { get; init; }
+    public DateTimeOffset? CancelledAt { get; init; }
+    public string FailureSummary { get; init; } = string.Empty;
+    public string SourceSnapshot { get; init; } = string.Empty;
+}
+
+public sealed record OrchestrationStepRun
+{
+    public string StepRunId { get; init; } = Guid.NewGuid().ToString("N");
+    public required string RunId { get; init; }
+    public required string StepId { get; init; }
+    public OrchestrationStepStatus Status { get; init; } = OrchestrationStepStatus.Pending;
+    public string BeforeSnapshot { get; init; } = string.Empty;
+    public string ProposedAfterSnapshot { get; init; } = string.Empty;
+    public string ActualAfterSnapshot { get; init; } = string.Empty;
+    public DateTimeOffset? StartedAt { get; init; }
+    public DateTimeOffset? CompletedAt { get; init; }
+    public DateTimeOffset? FailedAt { get; init; }
+    public string Error { get; init; } = string.Empty;
+    public bool UndoAvailable { get; init; }
+    public int RetryCount { get; init; }
+    public string ExecutionKey { get; init; } = string.Empty;
+}
+
 public sealed record AutomationAuditEntry(
     string AuditId,
     DateTimeOffset OccurredAt,
@@ -276,4 +380,9 @@ public sealed record AutomationStoreSnapshot
     public List<AutomationExecutionResult> Executions { get; init; } = [];
     public List<AutomationInternalItem> InternalItems { get; init; } = [];
     public List<AutomationAuditEntry> Audit { get; init; } = [];
+    public List<OrchestrationPlan> OrchestrationPlans { get; init; } = [];
+    public List<OrchestrationStep> OrchestrationSteps { get; init; } = [];
+    public List<OrchestrationOccurrence> OrchestrationOccurrences { get; init; } = [];
+    public List<OrchestrationRun> OrchestrationRuns { get; init; } = [];
+    public List<OrchestrationStepRun> OrchestrationStepRuns { get; init; } = [];
 }

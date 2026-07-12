@@ -52,6 +52,9 @@ public static class AutomationStorage
         var proposals = snapshot.Proposals.Select(x => x.State == AutomationProposalState.Approved
             ? x with { State = AutomationProposalState.ApprovedNotExecuted }
             : x).ToList();
-        return snapshot with { Settings = snapshot.Settings ?? new(), Proposals = proposals };
+        var runs = snapshot.OrchestrationRuns.Select(x => x.Status is OrchestrationRunStatus.InProgress or OrchestrationRunStatus.RollingBack
+            ? x with { Status = OrchestrationRunStatus.Paused, PausedAt = DateTimeOffset.UtcNow }
+            : x).ToList();
+        return snapshot with { Settings = snapshot.Settings ?? new(), Proposals = proposals, OrchestrationRuns = runs };
     }
 }

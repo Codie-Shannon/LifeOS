@@ -7,11 +7,11 @@ namespace LifeOS.Core.Tests;
 public sealed class AutomationFoundationTests
 {
     [Fact]
-    public void ProductVersion_IsAlignedForGroup28()
+    public void ProductVersion_IsAlignedForGroup29()
     {
-        Assert.Equal("6.0.0-alpha.2", LifeOS.Core.ProductVersion.Semantic);
-        Assert.Equal("v6.0.0-alpha.2", LifeOS.Core.ProductVersion.Display);
-        Assert.Equal("Guarded internal automation", LifeOS.Core.ProductVersion.ReleaseName);
+        Assert.Equal("6.0.0-alpha.3", LifeOS.Core.ProductVersion.Semantic);
+        Assert.Equal("v6.0.0-alpha.3", LifeOS.Core.ProductVersion.Display);
+        Assert.Equal("Controlled orchestration and recovery", LifeOS.Core.ProductVersion.ReleaseName);
     }
 
     [Fact] public void NewRule_IsDisabledByDefault() => Assert.False(new AutomationRule().IsEnabled);
@@ -128,6 +128,91 @@ public sealed class AutomationFoundationTests
         var snapshot = AutomationDemoData.Create();
         Assert.True(snapshot.Settings.ExecutionPaused);
         Assert.NotEmpty(snapshot.InternalItems);
+    }
+
+    [Fact]
+    public void Group29Plan_IsDisabledByDefault_AndDueDoesNotExecute()
+    {
+        var store = AutomationDemoData.Create();
+        var plan = store.OrchestrationPlans.Single();
+        Assert.False(plan.IsEnabled);
+        Assert.Null(OrchestrationService.EnsureOccurrence(store, plan, DateTimeOffset.Parse("2026-07-12T09:00:00+12:00")));
+        Assert.Empty(store.OrchestrationRuns);
+    }
+
+    [Fact]
+    public void WeeklySchedule_CreatesSingularDueOccurrence()
+    {
+        var store = AutomationDemoData.Create(); var plan = store.OrchestrationPlans.Single() with { IsEnabled = true };
+        store.OrchestrationPlans[0] = plan;
+        var now = DateTimeOffset.Parse("2026-07-12T09:00:00+12:00");
+        var first = OrchestrationService.EnsureOccurrence(store, plan, now);
+        var second = OrchestrationService.EnsureOccurrence(store, plan, now);
+        Assert.NotNull(first); Assert.Equal(first!.OccurrenceId, second!.OccurrenceId); Assert.Single(store.OrchestrationOccurrences); Assert.Empty(store.OrchestrationRuns);
+    }
+
+    [Fact]
+    public void ExplicitStart_CreatesPausedRunBeforeFirstStep()
+    {
+        var store = AutomationDemoData.Create() with { Settings = new() { ExecutionPaused = false } };
+        var plan = store.OrchestrationPlans.Single() with { IsEnabled = true }; store.OrchestrationPlans[0] = plan;
+        var occurrence = OrchestrationService.EnsureOccurrence(store, plan, DateTimeOffset.Parse("2026-07-12T09:00:00+12:00"))!;
+        var run = OrchestrationService.Start(store, plan, occurrence);
+        Assert.Equal(OrchestrationRunStatus.Paused, run.Status); Assert.Equal("weekly-note", run.CurrentStepId);
+        Assert.All(store.OrchestrationStepRuns, x => Assert.Equal(OrchestrationStepStatus.Pending, x.Status));
+    }
+
+    [Fact]
+    public void StepRequiresPreview_ExecutesOneAtATime_AndPauses()
+    {
+        var (store, run) = StartedOrchestration();
+        Assert.Throws<InvalidOperationException>(() => OrchestrationService.ConfirmCurrentStep(store, run.RunId));
+        OrchestrationService.PreviewCurrentStep(store, run.RunId);
+        OrchestrationService.ConfirmCurrentStep(store, run.RunId);
+        var updated = store.OrchestrationRuns.Single();
+        Assert.Equal(OrchestrationRunStatus.Paused, updated.Status); Assert.Equal("weekly-flag", updated.CurrentStepId);
+        Assert.Equal(OrchestrationStepStatus.Succeeded, store.OrchestrationStepRuns.Single(x => x.StepId == "weekly-note").Status);
+        Assert.Equal(OrchestrationStepStatus.Pending, store.OrchestrationStepRuns.Single(x => x.StepId == "weekly-flag").Status);
+    }
+
+    [Fact]
+    public void ControlledFailure_Pauses_AndRequiresExplicitRetry()
+    {
+        var (store, run) = StartedOrchestration(); OrchestrationService.PreviewCurrentStep(store, run.RunId);
+        OrchestrationService.ConfirmCurrentStep(store, run.RunId, injectSafeFailure: true);
+        Assert.Equal(OrchestrationRunStatus.RecoveryRequired, store.OrchestrationRuns.Single().Status);
+        Assert.Equal(0, store.OrchestrationStepRuns.Single(x => x.StepId == "weekly-note").RetryCount);
+        OrchestrationService.RetryFailedStep(store, run.RunId);
+        Assert.Equal(OrchestrationRunStatus.Paused, store.OrchestrationRuns.Single().Status);
+        Assert.Equal(1, store.OrchestrationStepRuns.Single(x => x.StepId == "weekly-note").RetryCount);
+    }
+
+    [Fact]
+    public void CancelRemaining_PreservesCompletedCheckpoint_AndRollbackRestoresIt()
+    {
+        var (store, run) = StartedOrchestration(); OrchestrationService.PreviewCurrentStep(store, run.RunId); OrchestrationService.ConfirmCurrentStep(store, run.RunId);
+        OrchestrationService.CancelRemaining(store, run.RunId);
+        Assert.Single(store.InternalItems.Single(x => x.ItemId == "example-project-002").ReviewNotes);
+        OrchestrationService.RollBackCompleted(store, run.RunId);
+        Assert.Empty(store.InternalItems.Single(x => x.ItemId == "example-project-002").ReviewNotes);
+    }
+
+    [Fact]
+    public void BlockedExternalStep_CannotStart()
+    {
+        var store = AutomationDemoData.Create() with { Settings = new() { ExecutionPaused = false } };
+        var plan = store.OrchestrationPlans.Single() with { IsEnabled = true }; store.OrchestrationPlans[0] = plan;
+        store.OrchestrationSteps.Add(new() { PlanId = plan.PlanId, Sequence = 99, Name = "Blocked email", ActionType = AutomationActionType.SendEmail, TargetModule = "ExternalCommunication", TargetItemId = "example-invoice-004", RiskLevel = AutomationRiskLevel.High, IsReversible = false, RequiredCapabilities = [AutomationCapability.CommunicationAction, AutomationCapability.ExternalWrite] });
+        var occurrence = OrchestrationService.EnsureOccurrence(store, plan, DateTimeOffset.Parse("2026-07-12T09:00:00+12:00"))!;
+        Assert.Throws<InvalidOperationException>(() => OrchestrationService.Start(store, plan, occurrence));
+    }
+
+    private static (AutomationStoreSnapshot Store, OrchestrationRun Run) StartedOrchestration()
+    {
+        var store = AutomationDemoData.Create() with { Settings = new() { ExecutionPaused = false } };
+        var plan = store.OrchestrationPlans.Single() with { IsEnabled = true }; store.OrchestrationPlans[0] = plan;
+        var occurrence = OrchestrationService.EnsureOccurrence(store, plan, DateTimeOffset.Parse("2026-07-12T09:00:00+12:00"))!;
+        return (store, OrchestrationService.Start(store, plan, occurrence));
     }
 
     private static AutomationProposal CreateApprovedCandidate() => new()

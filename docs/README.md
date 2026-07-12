@@ -31,3 +31,13 @@ Current-state documents describe only the current product state. Historical rele
 ## Group 29 — Controlled orchestration and recovery
 
 Schedules now create review intent only. Due occurrences enter a visible queue, runs require explicit Start, and every Low-risk reversible internal step requires its own exact preview and confirmation. Progress pauses between steps; failure recovery is explicit and persisted. No unattended execution or external writes are enabled.
+
+<!-- GROUP29 START -->
+## v6 controlled orchestration
+
+Screenshot Group 29 is complete at `v6.0.0-alpha.3`.
+
+Due work is queued for explicit review. Runs require explicit Start, and every typed reversible internal step requires its own exact preview and confirmation. Execution pauses between steps, failures stop for explicit recovery, and High-risk or external actions remain blocked.
+
+Evidence: `docs/screenshot-groups/group-29-controlled-orchestration/README.md`
+<!-- GROUP29 END -->

@@ -157,3 +157,17 @@ Controlled orchestration and recovery.
 ## Group 29 — Controlled orchestration and recovery
 
 Schedules now create review intent only. Due occurrences enter a visible queue, runs require explicit Start, and every Low-risk reversible internal step requires its own exact preview and confirmation. Progress pauses between steps; failure recovery is explicit and persisted. No unattended execution or external writes are enabled.
+
+<!-- GROUP29 START -->
+## v6.0.0-alpha.3 — Screenshot Group 29
+
+- controlled orchestration plans and ordered internal steps
+- deterministic Manual-only, one-time and weekly review scheduling
+- singular due occurrences
+- explicit Start and per-step confirmation
+- checkpoints and restart-safe paused recovery
+- explicit retry, cancellation and run-scoped rollback
+- migration from Group 28 local automation state
+- eight approved fictional-data screenshots
+- no unattended execution or external writes
+<!-- GROUP29 END -->

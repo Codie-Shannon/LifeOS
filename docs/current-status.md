@@ -40,3 +40,15 @@ There is no background worker, scheduler, timer-triggered execution, startup exe
 ## Group 29 — Controlled orchestration and recovery
 
 Schedules now create review intent only. Due occurrences enter a visible queue, runs require explicit Start, and every Low-risk reversible internal step requires its own exact preview and confirmation. Progress pauses between steps; failure recovery is explicit and persisted. No unattended execution or external writes are enabled.
+
+<!-- GROUP29 START -->
+## Screenshot Group 29 complete
+
+LifeOS is at `v6.0.0-alpha.3` with controlled orchestration and recoverable, step-by-step internal execution.
+
+Approved evidence proves deterministic due review, explicit Start, exact per-step preview and confirmation, persisted checkpoints, no automatic continuation, controlled failure, explicit recovery, rollback, and blocked High-risk external communication.
+
+The safety boundary remains unchanged: no unattended execution, background worker, OS scheduler, timer-triggered mutation, automatic retry, external write, financial/destructive mutation, arbitrary script/process/plugin execution, or AI-controlled action.
+
+Group 30 has not started.
+<!-- GROUP29 END -->

@@ -3,7 +3,7 @@
 ## Authoritative current documents
 
 - `current-status.md` — current Group 30 Pack 1 implementation and safety boundary.
-- `lifeos-version-state.json` — machine-readable `v6.0.0-alpha.4` state.
+- `lifeos-version-state.json` — machine-readable `v6.0.0-beta.1` state.
 - `version-history.md` — consolidated milestone history.
 - `release-notes/v6.0-alpha-group-30.md` — Group 30 implementation record.
 - `automation/v6-automation-hardening.md` — emergency-stop, health, incident and recovery architecture.

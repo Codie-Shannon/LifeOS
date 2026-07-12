@@ -176,3 +176,8 @@ Schedules now create review intent only. Due occurrences enter a visible queue, 
 - Distinct fail-closed Emergency Stop with explicit reset and no automatic resume.
 - Exact-scope failure containment, explicit retry and reverse-order rollback review.
 - Manual, foreground-only controlled automation remains mandatory.
+
+
+## v6.0.0-beta.1 — Group 31
+
+Controlled automation release checkpoint: persisted readiness, v6 store migration and malformed-state recovery hardening, restart safety validation and beta release evidence. No automation-surface expansion.

@@ -1,12 +1,12 @@
 <Project>
   <PropertyGroup>
-    <Version>6.0.0-alpha.4</Version>
+    <Version>6.0.0-beta.1</Version>
     <VersionPrefix>6.0.0</VersionPrefix>
-    <VersionSuffix>alpha.4</VersionSuffix>
+    <VersionSuffix>beta.1</VersionSuffix>
     <AssemblyVersion>6.0.0.0</AssemblyVersion>
-    <FileVersion>6.0.4.0</FileVersion>
-    <InformationalVersion>6.0.0-alpha.4</InformationalVersion>
-    <LifeOSDisplayVersion>v6.0.0-alpha.4</LifeOSDisplayVersion>
-    <LifeOSReleaseName>Automation hardening and emergency controls</LifeOSReleaseName>
+    <FileVersion>6.0.1.0</FileVersion>
+    <InformationalVersion>6.0.0-beta.1</InformationalVersion>
+    <LifeOSDisplayVersion>v6.0.0-beta.1</LifeOSDisplayVersion>
+    <LifeOSReleaseName>Controlled automation release checkpoint</LifeOSReleaseName>
   </PropertyGroup>
 </Project>

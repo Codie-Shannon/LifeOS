@@ -1,18 +1,19 @@
 {
-    "currentVersion":  "v6.0.0-alpha.4",
-    "currentRelease":  "Automation hardening and emergency controls",
-    "currentScreenshotGroup":  30,
-    "currentScreenshotGroupName":  "Automation hardening, observability and emergency controls",
-    "lane":  "v6.x controlled automation and hardening",
-    "status":  "Screenshot Group 30 complete",
+    "currentVersion":  "v6.0.0-beta.1",
+    "currentRelease":  "Controlled automation release checkpoint",
+    "currentScreenshotGroup":  31,
+    "currentScreenshotGroupName":  "v6 controlled automation release checkpoint",
+    "lane":  "v6.x controlled automation beta checkpoint",
+    "status":  "Group 31 Pack 1 applied; screenshot and manual release evidence pending",
     "verification":  {
-                         "testsPassed":  129,
+                         "baselineTestsPassed":  129,
+                         "testsPassed":  133,
                          "testsFailed":  0,
                          "releaseBuildPassed":  true,
                          "gitDiffCheckPassed":  true,
                          "repositoryHygienePassed":  true,
-                         "gitleaksHistoryScan":  "not installed; full-history secret clearance remains unresolved",
-                         "screenshotCount":  8
+                         "gitleaksHistoryScan":  "passed full history",
+                         "screenshotCount":  0
                      },
     "safety":  {
                    "manualEvaluationOnly":  true,
@@ -29,7 +30,9 @@
                    "communicationMutationEnabled":  false,
                    "calendarMutationEnabled":  false,
                    "scriptExecutionEnabled":  false,
+                   "processExecutionEnabled":  false,
+                   "pluginExecutionEnabled":  false,
                    "aiEnabled":  false
                },
-    "next":  "Return to the LifeOS Master Roadmap after Group 30 finalization. Group 31 has not started."
+    "next":  "Complete Group 31 evidence and return to the LifeOS Master Roadmap. Mobile Companion and v7 have not started."
 }

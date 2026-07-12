@@ -81,7 +81,7 @@ public static class AutomationDemoData
         ApprovalMode = AutomationPolicy.IsBlocked(action) ? AutomationApprovalMode.ExecutionBlocked : AutomationApprovalMode.AlwaysRequireApproval,
         ExecutionMode = AutomationExecutionMode.Disabled,
         RequestedCapabilities = CapabilitiesFor(action),
-        Notes = "Approval does not execute. Final preview and explicit confirmation are required in v6.0.0-alpha.4."
+        Notes = "Approval does not execute. Final preview and explicit confirmation are required in v6.0.0-beta.1."
     };
 
     private static IReadOnlyList<AutomationCapability> CapabilitiesFor(AutomationActionType action) => action switch

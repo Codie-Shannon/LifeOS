@@ -9,9 +9,9 @@ public sealed class AutomationFoundationTests
     [Fact]
     public void ProductVersion_IsAlignedForGroup29()
     {
-        Assert.Equal("6.0.0-alpha.4", LifeOS.Core.ProductVersion.Semantic);
-        Assert.Equal("v6.0.0-alpha.4", LifeOS.Core.ProductVersion.Display);
-        Assert.Equal("Automation hardening and emergency controls", LifeOS.Core.ProductVersion.ReleaseName);
+        Assert.Equal("6.0.0-beta.1", LifeOS.Core.ProductVersion.Semantic);
+        Assert.Equal("v6.0.0-beta.1", LifeOS.Core.ProductVersion.Display);
+        Assert.Equal("Controlled automation release checkpoint", LifeOS.Core.ProductVersion.ReleaseName);
     }
 
     [Fact] public void NewRule_IsDisabledByDefault() => Assert.False(new AutomationRule().IsEnabled);
@@ -304,5 +304,64 @@ public sealed class AutomationFoundationTests
         var health = AutomationHealthService.Derive(store); var diagnostic = AutomationHealthService.CreateSanitizedDiagnosticSummary(store);
         Assert.Equal(AutomationHealthStatus.RecoveryRequired, health.Status); Assert.Equal(1, health.UnresolvedIncidents);
         Assert.DoesNotContain("AppData", diagnostic, StringComparison.OrdinalIgnoreCase); Assert.DoesNotContain("oauth", diagnostic, StringComparison.OrdinalIgnoreCase);
+    }
+}
+
+public sealed class AutomationReleaseReadinessTests
+{
+    [Fact]
+    public void Beta_readiness_passes_for_safe_fresh_store()
+    {
+        var store = AutomationDemoData.Create() with
+        {
+            SchemaVersion = AutomationReleaseReadinessService.CurrentSchemaVersion,
+            Settings = new() { ExecutionPaused = true }
+        };
+
+        var result = AutomationReleaseReadinessService.Evaluate(store, "6.0.0-beta.1", "Controlled automation release checkpoint");
+
+        Assert.Equal(AutomationReadinessState.Ready, result.State);
+        Assert.Equal(0, result.Failed);
+        Assert.All(result.Checks, check => Assert.True(check.Passed, check.Area));
+    }
+
+    [Fact]
+    public void Readiness_fails_closed_for_unknown_or_old_schema()
+    {
+        var store = AutomationDemoData.Create() with { SchemaVersion = 30 };
+
+        var result = AutomationReleaseReadinessService.Evaluate(store, "6.0.0-beta.1", "Controlled automation release checkpoint");
+
+        Assert.NotEqual(AutomationReadinessState.Ready, result.State);
+        Assert.Contains(result.Checks, x => x.Area == "Store schema" && !x.Passed);
+    }
+
+    [Fact]
+    public void Emergency_stop_is_part_of_persisted_readiness()
+    {
+        var store = AutomationDemoData.Create() with
+        {
+            SchemaVersion = AutomationReleaseReadinessService.CurrentSchemaVersion,
+            EmergencyStop = new() { IsActive = true, ActivatedAt = DateTimeOffset.UtcNow, Reason = "test" }
+        };
+
+        var result = AutomationReleaseReadinessService.Evaluate(store, "6.0.0-beta.1", "Controlled automation release checkpoint");
+
+        Assert.Contains(result.Checks, x => x.Area == "Emergency Stop" && x.Passed && x.Evidence == "Active");
+    }
+
+    [Fact]
+    public void Partial_execution_is_not_beta_ready()
+    {
+        var store = AutomationDemoData.Create() with
+        {
+            SchemaVersion = AutomationReleaseReadinessService.CurrentSchemaVersion,
+            OrchestrationRuns = [new OrchestrationRun { PlanId = "weekly-review", PlanRevision = 1, OccurrenceId = "occ", Status = OrchestrationRunStatus.InProgress }]
+        };
+
+        var result = AutomationReleaseReadinessService.Evaluate(store, "6.0.0-beta.1", "Controlled automation release checkpoint");
+
+        Assert.Contains(result.Checks, x => x.Area == "One-step orchestration" && !x.Passed);
+        Assert.Contains(result.Checks, x => x.Area == "Restart safety" && !x.Passed);
     }
 }

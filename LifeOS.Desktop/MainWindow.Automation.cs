@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using LifeOS.Core;
 using LifeOS.Core.Automation;
 using LifeOS.Shared.Automation;
 
@@ -16,10 +17,11 @@ public partial class MainWindow
         _automationStore = AutomationStorage.Load();
         var selected = _automationStore.Rules.FirstOrDefault(x => x.RuleId == _selectedAutomationRuleId) ?? _automationStore.Rules.FirstOrDefault();
         _selectedAutomationRuleId = selected?.RuleId;
-        SetHeader("Automation Centre", "v6.0.0-alpha.4 • automation hardening and emergency controls • no unattended execution");
+        SetHeader("Automation Centre", $"{ProductVersion.Display} • controlled automation release checkpoint • no unattended or external execution");
         var root = new StackPanel();
-        root.Children.Add(CreateHeroPanel("Automation hardening and emergency controls",
-            "Due work is queued for explicit review. Every executable step requires guarded confirmation. No unattended execution is enabled."));
+        root.Children.Add(CreateHeroPanel("Controlled automation release checkpoint",
+            "Reviewed, guarded and recoverable internal automation. No unattended or external execution is enabled."));
+        root.Children.Add(CreateAutomationReleaseReadinessPanel());
         root.Children.Add(CreateAutomationHealthPanel());
         root.Children.Add(CreateAutomationExecutionGate());
         root.Children.Add(CreateOrchestrationOverview());
@@ -36,6 +38,20 @@ public partial class MainWindow
         root.Children.Add(CreateAutomationInternalStatePanel());
         root.Children.Add(CreateAutomationAuditPanel());
         MainContentControl.Content = root;
+    }
+
+    private Border CreateAutomationReleaseReadinessPanel()
+    {
+        var readiness = AutomationReleaseReadinessService.Evaluate(_automationStore, ProductVersion.Semantic, ProductVersion.ReleaseName);
+        var panel = CreatePanel(); panel.Margin = new Thickness(0, 16, 0, 0);
+        var stack = new StackPanel();
+        stack.Children.Add(AutomationHeading($"v6 Automation Readiness • {readiness.State}",
+            $"{readiness.Passed}/{readiness.Checks.Count} persisted-state checks passed • schema {_automationStore.SchemaVersion} • {AutomationStorage.LastLoadStatus}"));
+        stack.Children.Add(AutomationLine("Release checkpoint", $"{ProductVersion.Display} • {ProductVersion.ReleaseName}"));
+        foreach (var check in readiness.Checks)
+            stack.Children.Add(AutomationLine(check.Passed ? "PASS" : "REVIEW", $"{check.Area} • {check.Summary} • {check.Evidence}"));
+        stack.Children.Add(AutomationLine("Runtime boundary", "Foreground-only • no automatic continuation or retry • no external, financial, destructive, script, process, plugin or AI execution"));
+        panel.Child = stack; return panel;
     }
 
     private Border CreateAutomationHealthPanel()

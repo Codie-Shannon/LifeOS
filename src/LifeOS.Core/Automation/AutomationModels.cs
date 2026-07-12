@@ -419,8 +419,31 @@ public sealed record AutomationHealthSummary
     public bool EmergencyStopActive { get; init; }
 }
 
+
+public enum AutomationReadinessState { Ready, AttentionRequired, RecoveryRequired, Blocked }
+
+public sealed record AutomationReadinessCheck(
+    string Area,
+    bool Passed,
+    string Summary,
+    string Evidence);
+
+public sealed record AutomationReleaseReadiness
+{
+    public AutomationReadinessState State { get; init; }
+    public int Passed { get; init; }
+    public int Failed { get; init; }
+    public IReadOnlyList<AutomationReadinessCheck> Checks { get; init; } = [];
+    public string Version { get; init; } = string.Empty;
+    public string ReleaseName { get; init; } = string.Empty;
+    public DateTimeOffset EvaluatedAt { get; init; } = DateTimeOffset.UtcNow;
+}
+
 public sealed record AutomationStoreSnapshot
 {
+    public int SchemaVersion { get; init; } = 31;
+    public int StoreRevision { get; init; } = 1;
+    public DateTimeOffset LastNormalizedAt { get; init; } = DateTimeOffset.UtcNow;
     public AutomationExecutionSettings Settings { get; set; } = new();
     public AutomationEmergencyStopState EmergencyStop { get; set; } = new();
     public List<AutomationIncident> Incidents { get; init; } = [];

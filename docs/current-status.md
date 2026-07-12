@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS Desktop `v6.0.0-alpha.2` — Guarded internal automation.
+LifeOS Desktop `v6.0.0-alpha.3` — Controlled orchestration and recovery.
 
 ## Current milestone
 
@@ -35,3 +35,8 @@ There is no background worker, scheduler, timer-triggered execution, startup exe
 - Guarded-execution safety validation: passed
 - Screenshot evidence: 7 approved fictional-data screenshots
 - Group 29: not started
+
+
+## Group 29 — Controlled orchestration and recovery
+
+Schedules now create review intent only. Due occurrences enter a visible queue, runs require explicit Start, and every Low-risk reversible internal step requires its own exact preview and confirmation. Progress pauses between steps; failure recovery is explicit and persisted. No unattended execution or external writes are enabled.

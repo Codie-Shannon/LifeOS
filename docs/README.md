@@ -3,7 +3,7 @@
 ## Authoritative current documents
 
 - `current-status.md` — completed Group 28 state and guarded-execution boundary.
-- `lifeos-version-state.json` — machine-readable `v6.0.0-alpha.2` state.
+- `lifeos-version-state.json` — machine-readable `v6.0.0-alpha.3` state.
 - `version-history.md` — consolidated milestone history.
 - `release-notes/v6.0-alpha-group-28.md` — Group 28 final release record.
 - `automation/v6-guarded-internal-execution.md` — guarded execution architecture.
@@ -26,3 +26,8 @@ Group 29 has not started.
 ## Documentation rule
 
 Current-state documents describe only the current product state. Historical release notes and screenshot groups remain unchanged as evidence. Credentials, local token caches, private communication data, generated backups and temporary screenshot plans must not be committed.
+
+
+## Group 29 — Controlled orchestration and recovery
+
+Schedules now create review intent only. Due occurrences enter a visible queue, runs require explicit Start, and every Low-risk reversible internal step requires its own exact preview and confirmation. Progress pauses between steps; failure recovery is explicit and persisted. No unattended execution or external writes are enabled.

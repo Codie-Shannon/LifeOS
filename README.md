@@ -4,7 +4,7 @@ LifeOS is a local-first personal operating system for turning life, work, money,
 
 ## Current build
 
-**LifeOS Desktop v6.0.0-alpha.2 — Guarded internal automation**
+**LifeOS Desktop v6.0.0-alpha.3 — Controlled orchestration and recovery**
 
 Screenshot Group 28 is complete. LifeOS now supports one deliberately narrow, approval-gated and reversible internal execution path. Approval never executes. The user must separately open a final before/after preview and explicitly confirm execution. Eligibility is recalculated immediately before execution, stale state fails closed, successful execution retains before/after evidence, and explicit Undo restores the prior fictional internal state when safe.
 
@@ -43,7 +43,7 @@ reviewed or trusted LifeOS state
 
 ## Current screenshot evidence
 
-- [Group 28 — Guarded internal automation](docs/screenshot-groups/group-28-guarded-internal-automation/README.md)
+- [Group 28 — Controlled orchestration and recovery](docs/screenshot-groups/group-28-guarded-internal-automation/README.md)
 - [Group 27 — Controlled automation foundation](docs/screenshot-groups/group-27-controlled-automation-foundation/README.md)
 - [Group 26 — v5 integration release checkpoint](docs/screenshot-groups/group-26-v5-integration-release-checkpoint/README.md)
 
@@ -63,3 +63,8 @@ Only the allowlisted fictional/internal review-note proof action may execute. No
 ## Next lane
 
 Return control to the LifeOS Master Roadmap chat. Group 29 has not started.
+
+
+## Group 29 — Controlled orchestration and recovery
+
+Schedules now create review intent only. Due occurrences enter a visible queue, runs require explicit Start, and every Low-risk reversible internal step requires its own exact preview and confirmation. Progress pauses between steps; failure recovery is explicit and persisted. No unattended execution or external writes are enabled.

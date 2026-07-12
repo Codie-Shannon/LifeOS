@@ -133,9 +133,9 @@ Controlled automation foundation.
 - Kept background workers, scheduling, timers, startup execution, automatic retry, operational mutation, scripts, plugins and AI inactive.
 
 
-## v6.0.0-alpha.2 — Group 28
+## v6.0.0-alpha.3 — Group 28
 
-Guarded internal automation.
+Controlled orchestration and recovery.
 
 - Added a persisted global execution gate that starts paused.
 - Kept dry-run evaluation and approval available while final execution is paused.
@@ -152,3 +152,8 @@ Guarded internal automation.
 - Added seven privacy-safe fictional screenshot proofs.
 - Verified 116 passing tests, a successful Release build, `git diff --check`, guarded-execution validation, synchronized push and clean working tree.
 - Kept background workers, scheduling, timers, startup execution, automatic retries, external mutation, scripts, processes, plugins and AI inactive.
+
+
+## Group 29 — Controlled orchestration and recovery
+
+Schedules now create review intent only. Due occurrences enter a visible queue, runs require explicit Start, and every Low-risk reversible internal step requires its own exact preview and confirmation. Progress pauses between steps; failure recovery is explicit and persisted. No unattended execution or external writes are enabled.

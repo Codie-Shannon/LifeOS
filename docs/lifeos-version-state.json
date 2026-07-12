@@ -1,6 +1,6 @@
 {
-  "currentVersion": "v6.0.0-alpha.2",
-  "currentRelease": "Guarded internal automation",
+  "currentVersion": "v6.0.0-alpha.3",
+  "currentRelease": "Controlled orchestration and recovery",
   "currentScreenshotGroup": 28,
   "currentScreenshotGroupName": "Guarded approval queue and controlled internal execution",
   "lane": "v6.x controlled automation and hardening",

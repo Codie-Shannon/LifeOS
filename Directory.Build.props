@@ -1,12 +1,12 @@
 <Project>
   <PropertyGroup>
-    <Version>6.0.0-alpha.2</Version>
+    <Version>6.0.0-alpha.3</Version>
     <VersionPrefix>6.0.0</VersionPrefix>
-    <VersionSuffix>alpha.2</VersionSuffix>
+    <VersionSuffix>alpha.3</VersionSuffix>
     <AssemblyVersion>6.0.0.0</AssemblyVersion>
-    <FileVersion>6.0.2.0</FileVersion>
-    <InformationalVersion>6.0.0-alpha.2</InformationalVersion>
-    <LifeOSDisplayVersion>v6.0.0-alpha.2</LifeOSDisplayVersion>
-    <LifeOSReleaseName>Guarded internal automation</LifeOSReleaseName>
+    <FileVersion>6.0.3.0</FileVersion>
+    <InformationalVersion>6.0.0-alpha.3</InformationalVersion>
+    <LifeOSDisplayVersion>v6.0.0-alpha.3</LifeOSDisplayVersion>
+    <LifeOSReleaseName>Controlled orchestration and recovery</LifeOSReleaseName>
   </PropertyGroup>
 </Project>

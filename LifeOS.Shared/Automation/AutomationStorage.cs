@@ -48,13 +48,49 @@ public static class AutomationStorage
 
     private static AutomationStoreSnapshot Normalize(AutomationStoreSnapshot snapshot)
     {
-        if (snapshot.InternalItems.Count == 0) return AutomationDemoData.Create();
-        var proposals = snapshot.Proposals.Select(x => x.State == AutomationProposalState.Approved
-            ? x with { State = AutomationProposalState.ApprovedNotExecuted }
-            : x).ToList();
-        var runs = snapshot.OrchestrationRuns.Select(x => x.Status is OrchestrationRunStatus.InProgress or OrchestrationRunStatus.RollingBack
-            ? x with { Status = OrchestrationRunStatus.Paused, PausedAt = DateTimeOffset.UtcNow }
-            : x).ToList();
-        return snapshot with { Settings = snapshot.Settings ?? new(), Proposals = proposals, OrchestrationRuns = runs };
+        if (snapshot.InternalItems.Count == 0)
+            return AutomationDemoData.Create();
+
+        var demo = AutomationDemoData.Create();
+
+        var proposals = snapshot.Proposals
+            .Select(x => x.State == AutomationProposalState.Approved
+                ? x with { State = AutomationProposalState.ApprovedNotExecuted }
+                : x)
+            .ToList();
+
+        var runs = snapshot.OrchestrationRuns
+            .Select(x => x.Status is OrchestrationRunStatus.InProgress or OrchestrationRunStatus.RollingBack
+                ? x with
+                {
+                    Status = OrchestrationRunStatus.Paused,
+                    PausedAt = DateTimeOffset.UtcNow
+                }
+                : x)
+            .ToList();
+
+        var plans = snapshot.OrchestrationPlans.ToList();
+        var steps = snapshot.OrchestrationSteps.ToList();
+
+        foreach (var demoPlan in demo.OrchestrationPlans)
+        {
+            if (plans.All(x => x.PlanId != demoPlan.PlanId))
+                plans.Add(demoPlan);
+        }
+
+        foreach (var demoStep in demo.OrchestrationSteps)
+        {
+            if (steps.All(x => x.StepId != demoStep.StepId))
+                steps.Add(demoStep);
+        }
+
+        return snapshot with
+        {
+            Settings = snapshot.Settings ?? new(),
+            Proposals = proposals,
+            OrchestrationRuns = runs,
+            OrchestrationPlans = plans,
+            OrchestrationSteps = steps
+        };
     }
 }

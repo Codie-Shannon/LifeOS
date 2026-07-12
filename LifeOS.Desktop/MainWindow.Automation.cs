@@ -339,6 +339,10 @@ public partial class MainWindow
                 {
                     var confirm = CreateActionButton("Confirm this step only", Color.FromRgb(21, 128, 61), Colors.White);
                     confirm.Click += (_, _) => ConfirmOrchestrationStep(run.RunId); buttons.Children.Add(confirm);
+
+                    var fail = CreateActionButton("Inject controlled fictional failure", Color.FromRgb(180, 83, 9), Colors.White);
+                    fail.Click += (_, _) => ConfirmOrchestrationStep(run.RunId, injectSafeFailure: true);
+                    buttons.Children.Add(fail);
                 }
                 if (run.Status == OrchestrationRunStatus.RecoveryRequired)
                 {
@@ -346,6 +350,10 @@ public partial class MainWindow
                     retry.Click += (_, _) => RetryOrchestrationStep(run.RunId); buttons.Children.Add(retry);
                     var cancel = CreateActionButton("Cancel remaining", Color.FromRgb(127, 29, 29), Colors.White);
                     cancel.Click += (_, _) => CancelOrchestration(run.RunId); buttons.Children.Add(cancel);
+
+                    var rollback = CreateActionButton("Roll back completed steps", Color.FromRgb(88, 28, 135), Colors.White);
+                    rollback.Click += (_, _) => RollBackOrchestration(run.RunId);
+                    buttons.Children.Add(rollback);
                 }
             }
             stack.Children.Add(buttons);
@@ -396,11 +404,29 @@ public partial class MainWindow
         SaveAutomation(); ShowAutomationCentrePage();
     }
 
-    private void ConfirmOrchestrationStep(string runId)
+    private void ConfirmOrchestrationStep(string runId, bool injectSafeFailure = false)
     {
-        try { var result = OrchestrationService.ConfirmCurrentStep(_automationStore, runId); AddAutomationAudit("step-succeeded", result.StepRunId, "One typed reversible internal step executed; checkpoint persisted; progression paused."); }
-        catch (InvalidOperationException ex) { AddAutomationAudit("step-failed", runId, ex.Message); }
-        SaveAutomation(); ShowAutomationCentrePage();
+        try
+        {
+            var result = OrchestrationService.ConfirmCurrentStep(
+                _automationStore,
+                runId,
+                injectSafeFailure: injectSafeFailure);
+
+            AddAutomationAudit(
+                injectSafeFailure ? "step-controlled-failure" : "step-succeeded",
+                result.StepRunId,
+                injectSafeFailure
+                    ? "Controlled fictional failure injected; no operational mutation occurred and explicit recovery is required."
+                    : "One typed reversible internal step executed; checkpoint persisted; progression paused.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            AddAutomationAudit("step-failed", runId, ex.Message);
+        }
+
+        SaveAutomation();
+        ShowAutomationCentrePage();
     }
 
     private void RetryOrchestrationStep(string runId)
@@ -410,6 +436,24 @@ public partial class MainWindow
         SaveAutomation(); ShowAutomationCentrePage();
     }
 
+    private void RollBackOrchestration(string runId)
+    {
+        try
+        {
+            OrchestrationService.RollBackCompleted(_automationStore, runId);
+            AddAutomationAudit(
+                "rollback-completed",
+                runId,
+                "Completed reversible orchestration steps were restored in reverse order.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            AddAutomationAudit("rollback-failed", runId, ex.Message);
+        }
+
+        SaveAutomation();
+        ShowAutomationCentrePage();
+    }
     private void CancelOrchestration(string runId)
     {
         OrchestrationService.CancelRemaining(_automationStore, runId); AddAutomationAudit("remaining-steps-cancelled", runId, "Future work cancelled; completed checkpoints retained."); SaveAutomation(); ShowAutomationCentrePage();

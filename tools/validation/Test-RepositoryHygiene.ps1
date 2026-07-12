@@ -19,7 +19,7 @@ $handoffs = @(
     Get-ChildItem $RepoPath -Recurse -Force -File -ErrorAction SilentlyContinue |
     Where-Object {
         $_.Name -match "(?i)handoff" -or
-        $_.Name -match "(?i)pre[_ -]?screenshot"
+        $_.Name -match "(?i)pre[_ -]?screenshot" -or $_.Name -match "(?i)context[_ -]?drop"
     }
 )
 
@@ -90,3 +90,4 @@ if ($failed) { exit 1 }
 
 Write-Host "Repository hygiene validation passed." -ForegroundColor Green
 exit 0
+

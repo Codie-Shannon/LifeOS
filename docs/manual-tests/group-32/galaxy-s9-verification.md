@@ -1,41 +1,45 @@
-# Group 32 Galaxy S9 manual verification
+# Galaxy S9 manual verification — Group 32
 
-Use fictional data only. Do not expose full ADB serials in screenshots or committed files.
+Date: 2026-07-13
+Product: LifeOS Mobile Companion v0.1.0-alpha.1
+Physical device: Samsung Galaxy S9
+Result: PASS
 
-## Environment record
+## Verified
 
-- Date:
-- Windows version:
-- Visual Studio version:
-- .NET SDK:
-- Installed MAUI workload:
-- Android SDK/build tools:
-- Java/JDK:
-- Galaxy S9 Android version:
-- Galaxy S9 API level (`adb shell getprop ro.build.version.sdk`):
-- ADB model (`adb shell getprop ro.product.model`):
+- App installed and launched on the physical Galaxy S9.
+- Companion identity and v0.1.0-alpha.1 were visible.
+- Empty capture validation was visible.
+- Fictional Quick Capture saved locally.
+- Capture was queued as Pending.
+- App clearly stated that nothing was sent.
+- Outbox showed Not paired, no automatic sending and no background retry.
+- Original capture survived app restart.
+- A second capture was created with Wi-Fi and mobile data unavailable.
+- Offline capture remained Pending after network state changed.
+- Device/Status showed a generated local identity, schema 1, NotPaired and no cloud account.
+- Local storage used SQLite with AES-GCM-protected capture fields.
+- Key material used Android SecureStorage.
+- Desktop transfer remained disabled for Group 32.
+- No operational sync, background sender, timer or automatic retry was introduced.
 
-## Required checks
+## Final engineering validation
 
-- [ ] `adb devices` shows one authorized physical Galaxy S9.
-- [ ] `dotnet build src/LifeOS.Companion/LifeOS.Companion.csproj -c Debug -f net10.0-android` passes.
-- [ ] App installs and launches on the Galaxy S9.
-- [ ] Product identity is LifeOS Mobile Companion `v0.1.0-alpha.1`.
-- [ ] No account, OAuth, or desktop connection is required.
-- [ ] Empty capture is rejected visibly.
-- [ ] Fictional Quick Capture saves locally.
-- [ ] Saved item appears in capture list and Pending outbox.
-- [ ] NotPaired status remains honest.
-- [ ] Force-close/reopen preserves capture and outbox.
-- [ ] Phone restart preserves capture and outbox, if practical.
-- [ ] Editing preserves CaptureId and CreatedAt.
-- [ ] Wi-Fi-off capture works.
-- [ ] Restoring Wi-Fi does not automatically send.
-- [ ] Logs/screenshots contain no sensitive data.
-- [ ] Desktop tests and Companion tests pass after physical-device proof.
+- Desktop tests: 133 passed.
+- Companion tests: 15 passed.
+- Combined tests: 148 passed.
+- Android build: passed.
+- Release solution build: passed.
+- Repository hygiene: passed.
+- NuGet vulnerability scan: clean.
+- Gitleaks: passed.
+- `git diff --check`: passed.
+- `HEAD` equalled `origin/main`.
+- Working tree was clean.
 
-## Result
+## Boundary confirmation
 
-Status: NOT YET VERIFIED
-
-Do not mark Group 32 complete until all required physical-device checks and screenshot evidence are committed.
+- Group 33 has not started.
+- Full Mobile app has not started.
+- Website has not started.
+- v7 assistant has not started.

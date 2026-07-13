@@ -202,8 +202,70 @@ public sealed class SQLiteCompanionStore : ICompanionStore
     public async Task<IReadOnlyList<GlanceSnapshot>> GetGlanceAsync(CancellationToken cancellationToken=default)
     { EnsureInitialized(); cancellationToken.ThrowIfCancellationRequested(); var rows=await _database.Table<GlanceCacheEntity>().ToListAsync(); var list=new List<GlanceSnapshot>(); foreach(var row in rows){try{var v=System.Text.Json.JsonSerializer.Deserialize<GlanceSnapshot>(_protector.Unprotect(row.PayloadProtected));if(v is not null)list.Add(v);}catch{throw new CompanionStoreException("Cached glance data is malformed. Captures were not deleted. Clear glance cache and refresh explicitly.",new InvalidDataException("Malformed protected glance payload."));}} return list; }
     public async Task ClearGlanceCacheAsync(CancellationToken cancellationToken=default){EnsureInitialized();cancellationToken.ThrowIfCancellationRequested();await _database.DeleteAllAsync<GlanceCacheEntity>();}
-    public async Task SaveConflictAsync(CaptureConflict c,CancellationToken cancellationToken=default){EnsureInitialized();cancellationToken.ThrowIfCancellationRequested();await _database.InsertOrReplaceAsync(new ConflictEntity{ConflictId=c.ConflictId,CaptureId=c.CaptureId,PhoneContentHash=c.PhoneContentHash,DesktopContentHash=c.DesktopContentHash,DetectedAtUtc=c.DetectedAtUtc.ToString("O"),Resolved=c.Resolved,Resolution=c.Resolution is null?null:(int)c.Resolution,ResolvedAtUtc=c.ResolvedAtUtc?.ToString("O")});}
-    public async Task<IReadOnlyList<CaptureConflict>> GetConflictsAsync(CancellationToken cancellationToken=default){EnsureInitialized();var rows=await _database.Table<ConflictEntity>().OrderByDescending(x=>x.DetectedAtUtc).ToListAsync();return rows.Select(x=>new CaptureConflict(x.ConflictId,x.CaptureId,x.PhoneContentHash,x.DesktopContentHash,DateTimeOffset.Parse(x.DetectedAtUtc),x.Resolved,x.Resolution is null?null:(ConflictResolutionChoice)x.Resolution, string.IsNullOrWhiteSpace(x.ResolvedAtUtc)?null:DateTimeOffset.Parse(x.ResolvedAtUtc))).ToList();}
+    public async Task SaveConflictAsync(CaptureConflict c,CancellationToken cancellationToken=default)
+    {
+        EnsureInitialized();
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var existing = await _database.Table<ConflictEntity>()
+            .Where(x => x.CaptureId == c.CaptureId && !x.Resolved)
+            .OrderBy(x => x.DetectedAtUtc)
+            .ToListAsync();
+
+        if (existing.Count > 0)
+        {
+            foreach (var duplicate in existing.Skip(1))
+                await _database.DeleteAsync(duplicate);
+            return;
+        }
+
+        await _database.InsertAsync(new ConflictEntity
+        {
+            ConflictId = c.ConflictId,
+            CaptureId = c.CaptureId,
+            PhoneContentHash = c.PhoneContentHash,
+            DesktopContentHash = c.DesktopContentHash,
+            DetectedAtUtc = c.DetectedAtUtc.ToString("O"),
+            Resolved = c.Resolved,
+            Resolution = c.Resolution is null ? null : (int)c.Resolution,
+            ResolvedAtUtc = c.ResolvedAtUtc?.ToString("O")
+        });
+    }
+
+    public async Task<IReadOnlyList<CaptureConflict>> GetConflictsAsync(CancellationToken cancellationToken=default)
+    {
+        EnsureInitialized();
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var rows = await _database.Table<ConflictEntity>()
+            .OrderByDescending(x => x.DetectedAtUtc)
+            .ToListAsync();
+
+        var duplicateRows = rows
+            .Where(x => !x.Resolved)
+            .GroupBy(x => x.CaptureId, StringComparer.Ordinal)
+            .SelectMany(group => group.OrderBy(x => x.DetectedAtUtc).Skip(1))
+            .ToList();
+
+        foreach (var duplicate in duplicateRows)
+            await _database.DeleteAsync(duplicate);
+
+        if (duplicateRows.Count > 0)
+            rows = await _database.Table<ConflictEntity>()
+                .OrderByDescending(x => x.DetectedAtUtc)
+                .ToListAsync();
+
+        return rows.Select(x => new CaptureConflict(
+            x.ConflictId,
+            x.CaptureId,
+            x.PhoneContentHash,
+            x.DesktopContentHash,
+            DateTimeOffset.Parse(x.DetectedAtUtc),
+            x.Resolved,
+            x.Resolution is null ? null : (ConflictResolutionChoice)x.Resolution,
+            string.IsNullOrWhiteSpace(x.ResolvedAtUtc) ? null : DateTimeOffset.Parse(x.ResolvedAtUtc)))
+            .ToList();
+    }
     public async Task ResolveConflictAsync(string conflictId,ConflictResolutionChoice choice,CancellationToken cancellationToken=default){EnsureInitialized();var row=await _database.FindAsync<ConflictEntity>(conflictId)??throw new InvalidOperationException("Conflict not found.");if(choice==ConflictResolutionChoice.Cancel)return;row.Resolved=true;row.Resolution=(int)choice;row.ResolvedAtUtc=DateTimeOffset.UtcNow.ToString("O");await _database.RunInTransactionAsync(c=>{c.Update(row);c.Insert(new ConflictAuditEntity{AuditId=Guid.NewGuid().ToString("N"),ConflictId=conflictId,Choice=(int)choice,AtUtc=DateTimeOffset.UtcNow.ToString("O"),Detail="Explicit phone-side conflict resolution."});});}
     public async Task<LocalDataSummary> GetLocalDataSummaryAsync(bool paired,CancellationToken cancellationToken=default){var captures=await GetCapturesAsync(cancellationToken);var glances=await GetGlanceAsync(cancellationToken);var conflicts=await GetConflictsAsync(cancellationToken);return new(captures.Count,captures.Count(x=>x.DeliveryState==DeliveryState.Pending),captures.Count(x=>x.DeliveryState==DeliveryState.Failed),captures.Count(x=>x.DeliveryState==DeliveryState.Delivered),paired,glances.Count,conflicts.Count(x=>!x.Resolved));}
     public async Task SetStateValueAsync(string key,string value,CancellationToken cancellationToken=default){EnsureInitialized();cancellationToken.ThrowIfCancellationRequested();await SetStateAsync(key,value);}

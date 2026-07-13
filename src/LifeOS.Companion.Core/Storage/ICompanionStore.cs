@@ -1,7 +1,5 @@
 using LifeOS.Companion.Core.Models;
-
 namespace LifeOS.Companion.Core.Storage;
-
 public interface ICompanionStore
 {
     Task InitializeAsync(CancellationToken cancellationToken = default);
@@ -10,5 +8,7 @@ public interface ICompanionStore
     Task<IReadOnlyList<QuickCapture>> GetCapturesAsync(CancellationToken cancellationToken = default);
     Task<IReadOnlyList<QuickCapture>> GetOutboxAsync(CancellationToken cancellationToken = default);
     Task SavePendingCaptureAsync(QuickCapture capture, CancellationToken cancellationToken = default);
+    Task UpdateDeliveryStateAsync(string captureId, DeliveryState state, CancellationToken cancellationToken = default);
+    Task NormalizeStaleSendingAsync(CancellationToken cancellationToken = default);
     Task DeleteDraftAsync(string captureId, CancellationToken cancellationToken = default);
 }

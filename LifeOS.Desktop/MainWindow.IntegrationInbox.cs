@@ -24,7 +24,9 @@ public partial class MainWindow
 
         var root = new StackPanel();
 
-        root.Children.Add(CreateInfoPanel(
+                AddMobileCompanionPanel(root);
+
+root.Children.Add(CreateInfoPanel(
             "v5 integration release checkpoint",
             "Calendar, Gmail, local imports, Integration Inbox, and Email Radar now present one coherent manual, read-only and review-first integration system. Authentication never implies trust, and no connector changes an external system or LifeOS operational module automatically."));
 

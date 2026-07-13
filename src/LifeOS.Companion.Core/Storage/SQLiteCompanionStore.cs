@@ -28,7 +28,7 @@ public sealed class SQLiteCompanionStore : ICompanionStore
             _sqliteInitialized = true;
         }
     }
-    public const int CurrentSchemaVersion = 1;
+    public const int CurrentSchemaVersion = 2;
     private readonly SQLiteAsyncConnection _database;
     private readonly IFieldProtector _protector;
     private bool _initialized;
@@ -151,6 +151,34 @@ public sealed class SQLiteCompanionStore : ICompanionStore
                 connection.Update(existing);
             }
         });
+    }
+
+
+    public async Task UpdateDeliveryStateAsync(string captureId, DeliveryState state, CancellationToken cancellationToken = default)
+    {
+        EnsureInitialized();
+        cancellationToken.ThrowIfCancellationRequested();
+        var capture = await _database.FindAsync<CaptureEntity>(captureId) ?? throw new InvalidOperationException("Capture not found.");
+        capture.DeliveryState = (int)state;
+        capture.UpdatedAtUtc = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture);
+        await _database.RunInTransactionAsync(connection =>
+        {
+            connection.Update(capture);
+            var outbox = connection.Find<OutboxEntity>(captureId);
+            if (outbox is not null)
+            {
+                outbox.DeliveryState = (int)state;
+                connection.Update(outbox);
+            }
+        });
+    }
+
+    public async Task NormalizeStaleSendingAsync(CancellationToken cancellationToken = default)
+    {
+        EnsureInitialized();
+        cancellationToken.ThrowIfCancellationRequested();
+        var rows = await _database.Table<CaptureEntity>().Where(x => x.DeliveryState == (int)DeliveryState.Sending).ToListAsync();
+        foreach (var row in rows) await UpdateDeliveryStateAsync(row.CaptureId, DeliveryState.Pending, cancellationToken);
     }
 
     public async Task DeleteDraftAsync(string captureId, CancellationToken cancellationToken = default)

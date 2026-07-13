@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-  <application android:allowBackup="false" android:fullBackupContent="false" android:usesCleartextTraffic="false" android:label="LifeOS Companion" />
+  <application android:allowBackup="false" android:fullBackupContent="false" android:usesCleartextTraffic="true" android:label="LifeOS Companion" />
   <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

@@ -44,7 +44,7 @@ public sealed class HomePage : ContentPage
                 Children =
                 {
                     new Label { Text = "LifeOS Mobile Companion", FontSize = 24, FontAttributes = FontAttributes.Bold },
-                    new Label { Text = "v0.1.0-alpha.1 · Local-first · No cloud account" },
+                    new Label { Text = "v0.1.0-alpha.2 · Local-first · No cloud account" },
                     _title, _body, _category, _validation, save, clear,
                     new Label { Text = "Saved locally", FontSize = 20, FontAttributes = FontAttributes.Bold, Margin = new Thickness(0, 12, 0, 0) },
                     _list

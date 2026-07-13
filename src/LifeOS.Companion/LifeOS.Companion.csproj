@@ -9,11 +9,11 @@
     <Nullable>enable</Nullable>
     <ApplicationTitle>LifeOS Companion</ApplicationTitle>
     <ApplicationId>nz.itssuperbeast.lifeos.companion</ApplicationId>
-    <ApplicationDisplayVersion>0.1.0-alpha.1</ApplicationDisplayVersion>
-    <ApplicationVersion>1</ApplicationVersion>
-    <Version>0.1.0-alpha.1</Version>
+    <ApplicationDisplayVersion>0.1.0-alpha.2</ApplicationDisplayVersion>
+    <ApplicationVersion>2</ApplicationVersion>
+    <Version>0.1.0-alpha.2</Version>
     <VersionPrefix>0.1.0</VersionPrefix>
-    <VersionSuffix>alpha.1</VersionSuffix>
+    <VersionSuffix>alpha.2</VersionSuffix>
     <SupportedOSPlatformVersion>26.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion>26.0</TargetPlatformMinVersion>
   </PropertyGroup>

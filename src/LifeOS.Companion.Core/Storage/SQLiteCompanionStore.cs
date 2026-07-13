@@ -1,5 +1,6 @@
-using System.Globalization;
+﻿using System.Globalization;
 using LifeOS.Companion.Core.Models;
+using System.IO;
 using LifeOS.Companion.Core.Security;
 using SQLite;
 
@@ -28,7 +29,7 @@ public sealed class SQLiteCompanionStore : ICompanionStore
             _sqliteInitialized = true;
         }
     }
-    public const int CurrentSchemaVersion = 2;
+    public const int CurrentSchemaVersion = 3;
     private readonly SQLiteAsyncConnection _database;
     private readonly IFieldProtector _protector;
     private bool _initialized;
@@ -51,6 +52,9 @@ public sealed class SQLiteCompanionStore : ICompanionStore
             await _database.CreateTableAsync<AppStateEntity>();
             await _database.CreateTableAsync<CaptureEntity>();
             await _database.CreateTableAsync<OutboxEntity>();
+            await _database.CreateTableAsync<GlanceCacheEntity>();
+            await _database.CreateTableAsync<ConflictEntity>();
+            await _database.CreateTableAsync<ConflictAuditEntity>();
             var revision = await _database.Table<SchemaRevisionEntity>().OrderByDescending(x => x.Revision).FirstOrDefaultAsync();
             if (revision is null)
             {
@@ -192,6 +196,19 @@ public sealed class SQLiteCompanionStore : ICompanionStore
         await _database.DeleteAsync(capture);
     }
 
+
+    public async Task SaveGlanceAsync(GlanceSnapshot snapshot,CancellationToken cancellationToken=default)
+    { EnsureInitialized(); cancellationToken.ThrowIfCancellationRequested(); var json=System.Text.Json.JsonSerializer.Serialize(snapshot); await _database.InsertOrReplaceAsync(new GlanceCacheEntity{Kind=(int)snapshot.Kind,PayloadProtected=_protector.Protect(json),UpdatedAtUtc=snapshot.UpdatedAtUtc.ToString("O",CultureInfo.InvariantCulture)}); }
+    public async Task<IReadOnlyList<GlanceSnapshot>> GetGlanceAsync(CancellationToken cancellationToken=default)
+    { EnsureInitialized(); cancellationToken.ThrowIfCancellationRequested(); var rows=await _database.Table<GlanceCacheEntity>().ToListAsync(); var list=new List<GlanceSnapshot>(); foreach(var row in rows){try{var v=System.Text.Json.JsonSerializer.Deserialize<GlanceSnapshot>(_protector.Unprotect(row.PayloadProtected));if(v is not null)list.Add(v);}catch{throw new CompanionStoreException("Cached glance data is malformed. Captures were not deleted. Clear glance cache and refresh explicitly.",new InvalidDataException("Malformed protected glance payload."));}} return list; }
+    public async Task ClearGlanceCacheAsync(CancellationToken cancellationToken=default){EnsureInitialized();cancellationToken.ThrowIfCancellationRequested();await _database.DeleteAllAsync<GlanceCacheEntity>();}
+    public async Task SaveConflictAsync(CaptureConflict c,CancellationToken cancellationToken=default){EnsureInitialized();cancellationToken.ThrowIfCancellationRequested();await _database.InsertOrReplaceAsync(new ConflictEntity{ConflictId=c.ConflictId,CaptureId=c.CaptureId,PhoneContentHash=c.PhoneContentHash,DesktopContentHash=c.DesktopContentHash,DetectedAtUtc=c.DetectedAtUtc.ToString("O"),Resolved=c.Resolved,Resolution=c.Resolution is null?null:(int)c.Resolution,ResolvedAtUtc=c.ResolvedAtUtc?.ToString("O")});}
+    public async Task<IReadOnlyList<CaptureConflict>> GetConflictsAsync(CancellationToken cancellationToken=default){EnsureInitialized();var rows=await _database.Table<ConflictEntity>().OrderByDescending(x=>x.DetectedAtUtc).ToListAsync();return rows.Select(x=>new CaptureConflict(x.ConflictId,x.CaptureId,x.PhoneContentHash,x.DesktopContentHash,DateTimeOffset.Parse(x.DetectedAtUtc),x.Resolved,x.Resolution is null?null:(ConflictResolutionChoice)x.Resolution, string.IsNullOrWhiteSpace(x.ResolvedAtUtc)?null:DateTimeOffset.Parse(x.ResolvedAtUtc))).ToList();}
+    public async Task ResolveConflictAsync(string conflictId,ConflictResolutionChoice choice,CancellationToken cancellationToken=default){EnsureInitialized();var row=await _database.FindAsync<ConflictEntity>(conflictId)??throw new InvalidOperationException("Conflict not found.");if(choice==ConflictResolutionChoice.Cancel)return;row.Resolved=true;row.Resolution=(int)choice;row.ResolvedAtUtc=DateTimeOffset.UtcNow.ToString("O");await _database.RunInTransactionAsync(c=>{c.Update(row);c.Insert(new ConflictAuditEntity{AuditId=Guid.NewGuid().ToString("N"),ConflictId=conflictId,Choice=(int)choice,AtUtc=DateTimeOffset.UtcNow.ToString("O"),Detail="Explicit phone-side conflict resolution."});});}
+    public async Task<LocalDataSummary> GetLocalDataSummaryAsync(bool paired,CancellationToken cancellationToken=default){var captures=await GetCapturesAsync(cancellationToken);var glances=await GetGlanceAsync(cancellationToken);var conflicts=await GetConflictsAsync(cancellationToken);return new(captures.Count,captures.Count(x=>x.DeliveryState==DeliveryState.Pending),captures.Count(x=>x.DeliveryState==DeliveryState.Failed),captures.Count(x=>x.DeliveryState==DeliveryState.Delivered),paired,glances.Count,conflicts.Count(x=>!x.Resolved));}
+    public async Task SetStateValueAsync(string key,string value,CancellationToken cancellationToken=default){EnsureInitialized();cancellationToken.ThrowIfCancellationRequested();await SetStateAsync(key,value);}
+    public async Task<string?> GetStateValueAsync(string key,CancellationToken cancellationToken=default){EnsureInitialized();cancellationToken.ThrowIfCancellationRequested();return await GetStateAsync(key);}
+
     private CaptureEntity ToEntity(QuickCapture capture) => new()
     {
         CaptureId = capture.CaptureId,
@@ -239,3 +256,7 @@ public sealed class CompanionStoreException : Exception
 {
     public CompanionStoreException(string message, Exception innerException) : base(message, innerException) { }
 }
+
+public sealed class GlanceCacheEntity { [PrimaryKey] public int Kind{get;set;} public byte[] PayloadProtected{get;set;}=Array.Empty<byte>(); public string UpdatedAtUtc{get;set;}=""; }
+public sealed class ConflictEntity { [PrimaryKey] public string ConflictId{get;set;}=""; public string CaptureId{get;set;}=""; public string PhoneContentHash{get;set;}=""; public string DesktopContentHash{get;set;}=""; public string DetectedAtUtc{get;set;}=""; public bool Resolved{get;set;} public int? Resolution{get;set;} public string? ResolvedAtUtc{get;set;} }
+public sealed class ConflictAuditEntity { [PrimaryKey] public string AuditId{get;set;}=""; public string ConflictId{get;set;}=""; public int Choice{get;set;} public string AtUtc{get;set;}=""; public string Detail{get;set;}=""; }

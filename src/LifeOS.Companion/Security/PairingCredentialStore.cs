@@ -85,6 +85,7 @@ public sealed class PairingCredentialStore
         }
     }
 
+    public Task ResetAsync(){Revoke();return Task.CompletedTask;}
     public void Revoke()
     {
         _processCredential = null;

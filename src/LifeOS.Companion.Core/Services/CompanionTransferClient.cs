@@ -50,5 +50,8 @@ public sealed class CompanionTransferClient
         return (await response.Content.ReadFromJsonAsync<TransferAcknowledgement>(Json, ct))!;
     }
 
+    public async Task<IReadOnlyList<LifeOS.Companion.Core.Models.GlanceSnapshot>> GetGlanceAsync(PairingCredential credential,CancellationToken ct=default)
+    { using var request=new HttpRequestMessage(HttpMethod.Get,Normalize(credential.Endpoint,"/glance")); var timestamp=DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();var nonce=Guid.NewGuid().ToString("N");var body="";request.Headers.Add("X-LifeOS-Timestamp",timestamp);request.Headers.Add("X-LifeOS-Nonce",nonce);request.Headers.Add("X-LifeOS-Pairing",credential.PairingId);request.Headers.Add("X-LifeOS-Signature",CompanionAuthenticator.CreateSignature(credential.SecretBase64,timestamp,nonce,body));var response=await _http.SendAsync(request,ct);response.EnsureSuccessStatusCode();var result=await response.Content.ReadFromJsonAsync<GlanceResponse>(Json,ct);return result?.Snapshots??[];}
+
     private static string Normalize(string endpoint, string path) => endpoint.TrimEnd('/') + path;
 }

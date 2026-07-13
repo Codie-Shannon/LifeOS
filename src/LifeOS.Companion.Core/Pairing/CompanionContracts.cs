@@ -30,7 +30,7 @@ public sealed record CaptureTransfer(
     string IdempotencyKey);
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum TransferResult { AcceptedForReview, Duplicate, RejectedByPolicy, Invalid }
+public enum TransferResult { AcceptedForReview, Duplicate, Conflict, RejectedByPolicy, Invalid }
 
 public sealed record TransferAcknowledgement(
     string ProtocolVersion,
@@ -39,3 +39,5 @@ public sealed record TransferAcknowledgement(
     string DesktopIntakeId,
     DateTimeOffset PersistedAtUtc,
     TransferResult Result);
+
+public sealed record GlanceResponse(string ProtocolVersion, IReadOnlyList<LifeOS.Companion.Core.Models.GlanceSnapshot> Snapshots);

@@ -1,15 +1,4 @@
-using LifeOS.Companion.Core.Services;
-using LifeOS.Companion.Core.Storage;
-using LifeOS.Companion.Security;
-using LifeOS.Companion.Views;
+using LifeOS.Companion.Core.Services;using LifeOS.Companion.Core.Storage;using LifeOS.Companion.Security;using LifeOS.Companion.Services;using LifeOS.Companion.Views;
 namespace LifeOS.Companion;
-public sealed class CompanionShell : Shell
-{
- public CompanionShell(ICompanionStore store,CaptureService captureService,PairingCredentialStore credentials,CompanionTransferClient client)
- { Title="LifeOS Companion"; Items.Add(new TabBar { Items={
-  new ShellContent {Title="Capture",Route="capture",Content=new HomePage(store,captureService)},
-  new ShellContent {Title="Outbox",Route="outbox",Content=new OutboxPage(store,credentials,client)},
-  new ShellContent {Title="Pair",Route="pair",Content=new PairDevicePage(store,credentials,client)},
-  new ShellContent {Title="Device",Route="device",Content=new DeviceStatusPage(store)},
-  new ShellContent {Title="Settings",Route="settings",Content=new SettingsPage(store)} } }); }
-}
+public sealed class CompanionShell:Shell
+{public CompanionShell(ICompanionStore store,CaptureService captureService,PairingCredentialStore credentials,CompanionTransferClient client,CompanionNotificationService notifications){Title="LifeOS Companion";Items.Add(new TabBar{Items={new ShellContent{Title="Capture",Route="capture",Content=new HomePage(store,captureService)},new ShellContent{Title="Outbox",Route="outbox",Content=new OutboxPage(store,credentials,client)},new ShellContent{Title="Glance",Route="glance",Content=new GlanceContentPage(store,credentials,client)},new ShellContent{Title="Conflicts",Route="conflicts",Content=new ConflictsPage(store)},new ShellContent{Title="Pair",Route="pair",Content=new PairDevicePage(store,credentials,client)},new ShellContent{Title="Beta",Route="beta",Content=new BetaReadinessPage(store,credentials)},new ShellContent{Title="Settings",Route="settings",Content=new SettingsPage(store,credentials,notifications)}}});}}

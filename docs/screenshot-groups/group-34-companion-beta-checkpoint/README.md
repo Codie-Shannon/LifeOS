@@ -1,12 +1,14 @@
-# Group 34 screenshot plan — exactly 8 final PNG files
+# Group 34 Companion beta checkpoint screenshots
 
-1. `01-companion-beta-overview.png` — v0.1.0-beta.1, paired state, health, no background sync.
-2. `02-read-only-glance.png` — Agenda or Work glance with source, last updated and read-only wording.
-3. `03-private-notification.png` — privacy-safe notification and opt-in setting.
-4. `04-offline-no-auto-send.png` — disconnected/offline state after reconnect, with no automatic send.
-5. `05-manual-retry-recovery.png` — failed transfer, explicit Retry and successful recovery.
-6. `06-changed-content-conflict.png` — explicit changed-content conflict choices.
-7. `07-pairing-reset-pending-retained.png` — pairing reset/revocation while Pending capture remains.
-8. `08-final-beta-validation.png` — tests/builds/scans, accessibility/privacy and clean repository.
+Exactly eight approved screenshots are stored in this directory.
 
-Do not add placeholders or repeat Group 33 screenshots. Pack 2 finalization must reject any count other than eight.
+1. `01-companion-beta-overview.jpg` - Companion v0.1.0-beta.1, paired state, health summary, no cloud account, and no background sync.
+2. `02-read-only-glance.jpg` - Current Agenda and Waiting-on/Work glance data with source, last-updated time, and read-only wording.
+3. `03-privacy-safe-notification.jpg` - Generic LifeOS review notification with no capture or client content exposed.
+4. `04-offline-disconnected-state.jpg` - Explicit Desktop unavailable and STALE / OFFLINE glance state. The private LAN endpoint is redacted before commit.
+5. `05-failed-transfer-manual-retry-recovery.jpg` - The test capture is Delivered after explicit manual recovery and verified Desktop acknowledgement.
+6. `06-changed-content-conflict.jpg` - A single unresolved changed-content conflict with explicit resolution choices.
+7. `07-pairing-reset-pending-retained.jpg` - Pending capture retained after pairing reset verification.
+8. `08-final-beta-validation.png` - Final tests, builds, scans, privacy/accessibility checks, clean repository, and HEAD/origin parity.
+
+No pairing secrets, device identifiers, private network endpoints, databases, notification dumps, APK/AAB files, or context-drop files are included.

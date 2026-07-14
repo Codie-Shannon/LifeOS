@@ -265,7 +265,7 @@
                                    FontSize="28"
                                    FontWeight="Bold"/>
                         <TextBlock x:Name="PageSubtitleTextBlock"
-                                   Text="Work, income, proof command centre • Desktop v1.4"
+                                   Text="Work, income, proof command centre â€¢ Desktop v1.4"
                                    Foreground="#94A3B8"
                                    FontSize="14"
                                    Margin="0,4,0,0"/>
@@ -296,7 +296,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v7.0.0-alpha.1 adds controlled orchestration, explicit step confirmation, persisted checkpoints and recoverable execution without unattended actions."
+                <TextBlock Text="LifeOS Desktop v7.0.0-alpha.1 adds a source-backed, read-only assistant foundation with approved local sources, visible uncertainty and no autonomous execution."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

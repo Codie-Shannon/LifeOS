@@ -4,18 +4,19 @@
 
 LifeOS is a safety-first platform built around a Windows desktop command centre, a lightweight Android Companion, guarded automation and a source-backed read-only Assistant.
 
-> **Current checkpoint:** LifeOS Desktop `v7.0.0-alpha.2`
+> **Current checkpoint:** LifeOS Desktop `v7.0.0-beta.1` — v7 complete and closed at beta
 
-![LifeOS v7 source-backed Assistant](docs/screenshot-groups/group-36-v7-source-expansion-answer-quality/02-cross-source-answer-claim-mapping.png)
+![LifeOS v7 beta release checkpoint](docs/screenshot-groups/group-39-v7-beta-release-checkpoint/01-v7-beta-release-overview.png)
 
 ## Product status
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | `v7.0.0-alpha.2` — active flagship platform |
+| **LifeOS Desktop** | `v7.0.0-beta.1` — v7 beta complete and closed |
 | **LifeOS Mobile Companion** | `v0.1.0-beta.1` — beta complete and closed |
 | **LifeOS Mobile** | Separate future full mobile application — not started |
 | **LifeOS Website** | Planned public documentation and product site — not started |
+| **LifeOS v8** | Not started |
 
 The Mobile Companion and the future full Mobile application are separate products. They may share contracts and libraries, but they retain different scope, UX and release tracks.
 
@@ -30,6 +31,9 @@ The Mobile Companion and the future full Mobile application are separate product
 - review-first integrations
 - guarded, reversible internal automation
 - source-backed Assistant answers
+- review-only planning blocks
+- controlled review transfer
+- explicit user-controlled durable memory
 
 ```text
 Important information becomes visible state.
@@ -40,7 +44,7 @@ Actions remain reviewable and controlled.
 
 ## v7 read-only Assistant
 
-The Assistant answers questions from approved local LifeOS sources without gaining an execution path.
+The v7 Assistant answers questions from approved local LifeOS sources without gaining an execution path.
 
 It can:
 
@@ -52,18 +56,20 @@ It can:
 - separate facts, inferences, uncertainty and missing data
 - flag stale or conflicting records
 - disclose records selected, excluded and considered
-- return a non-executing suggestion for review
+- generate structured review-only plans
+- transfer confirmed plan payloads into a review queue only
+- use explicit, scoped and revocable memory after user confirmation
 
 It cannot:
 
 - send email or messages
 - create or change calendar items
-- mutate projects, tasks, money or other LifeOS state
+- mutate projects, tasks, money or other trusted LifeOS state
 - approve, confirm or continue orchestration
 - launch scripts, processes, plugins or hidden tools
 - perform external web search or connector writes
 - run autonomously or in the background
-- convert AI output directly into trusted LifeOS state
+- convert AI output directly into trusted operational state
 
 ```text
 question
@@ -73,11 +79,14 @@ question
 -> rank evidence
 -> detect conflicts, staleness and gaps
 -> answer with provenance and uncertainty
+-> optionally build a review-only plan
+-> optionally transfer one confirmed review artifact
+-> optionally use explicit user-confirmed memory
 ```
 
-### Approved source registry
+## Approved Assistant sources
 
-The current registry includes:
+The current source registry includes:
 
 - Command Centre
 - Follow-Ups
@@ -96,6 +105,41 @@ The current registry includes:
 
 Each source is permission-controlled and can be enabled or disabled independently.
 
+## Review-only planning
+
+The Assistant can assemble structured plans from reusable blocks:
+
+- Goal
+- Evidence
+- Constraint
+- Step
+- Dependency
+- Risk
+- Decision
+- Verification
+- Handoff
+
+Plans remain **Review-only** and **Executable: No**.
+
+A controlled transfer can create one review artifact only after payload preview, target selection and explicit user confirmation. It cannot create or mutate tasks, projects, Follow-Ups, payments, calendar items, email, automation or orchestration state.
+
+## Explicit durable memory
+
+Assistant memory is:
+
+- created only after exact preview and explicit confirmation
+- scoped to Global, Workspace, Project, Relationship or Session-limited use
+- classified by type and sensitivity
+- auditable and locally protected
+- visible in the Memory workspace
+- editable through auditable revisions
+- expirable, revocable and deletable
+- disclosed separately from direct source evidence
+
+Current trusted LifeOS records outrank conflicting memory. Expired, revoked and deleted memory is excluded from retrieval.
+
+There is no automatic retention, hidden profiling or latent user model.
+
 ## Safety model
 
 LifeOS is local-first, review-first and fail-closed.
@@ -109,7 +153,7 @@ LifeOS is local-first, review-first and fail-closed.
 - Emergency Stop remains authoritative
 - external, destructive, communication, financial, script and autonomous AI actions remain blocked
 
-The Assistant cannot bypass existing review, approval, final-confirmation, orchestration or Emergency Stop boundaries.
+The Assistant cannot bypass review, approval, final-confirmation, orchestration or Emergency Stop boundaries.
 
 ## Mobile Companion
 
@@ -131,26 +175,33 @@ Current beta capabilities:
 - no cloud account
 - no background sync or automatic sending
 
-## Verification
+## v7 beta verification
 
-The Group 36 checkpoint completed with:
+The Group 39 checkpoint completed with:
 
-- **156/156 Core/Desktop tests passed**
-- Companion tests passed
+- **187 Core/Desktop tests passed**
+- **34 Companion tests passed**
 - Desktop Release build passed
 - Android Release build passed
-- NuGet vulnerability scan reported no vulnerable packages
-- Gitleaks found no leaks
+- NuGet vulnerability scan passed
+- Gitleaks full-history scan passed across 280 commits with no leaks found
 - `git diff --check` passed
 - repository hygiene passed
+- manual end-to-end Assistant beta flow passed
+- review-only planning and controlled transfer passed
+- explicit memory use, revocation and exclusion passed
+- mutation, execution and tool refusal passed
 - exactly 8 fictional-data screenshot proofs committed
 - `HEAD` synchronized with `origin/main`
 - clean working tree
 
 ## Evidence
 
-### Current v7 checkpoint
+### v7 beta release
 
+- [Group 39 — v7 beta release checkpoint](docs/screenshot-groups/group-39-v7-beta-release-checkpoint/)
+- [Group 38 — memory permissions and safety](docs/screenshot-groups/group-38-v7-memory-permissions-safety/)
+- [Group 37 — review-only planning and review transfer](docs/screenshot-groups/group-37-v7-review-only-planning-review-transfer/)
 - [Group 36 — source expansion and answer quality](docs/screenshot-groups/group-36-v7-source-expansion-answer-quality/)
 - [Group 35 — Assistant foundation and safety boundary](docs/screenshot-groups/group-35-v7-assistant-foundation/)
 
@@ -160,7 +211,7 @@ The Group 36 checkpoint completed with:
 
 ### Automation release
 
-- [Group 31 — v6 controlled automation beta checkpoint](docs/screenshot-groups/group-31-v6-release-checkpoint/)
+- [Group 31 — v6 controlled automation beta checkpoint](docs/screenshot-groups/group-31-v6-automation-release-checkpoint/)
 
 All public screenshot demonstrations use fictional records. **Northstar Systems** and **Project Zephyr Quill** are demonstration identities only.
 
@@ -196,9 +247,9 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS is under active alpha development.
+LifeOS v7 is complete and closed at `v7.0.0-beta.1`.
 
-The current v7 lane improves the Assistant while preserving its strict read-only boundary. Group 37 has not started. Durable Assistant memory, autonomous tools, the full Mobile application and the public Website have not started.
+The Website, documentation extraction, full Mobile application, Group 40 and v8 UI restructuring have not started. Autonomous tools, background Assistant work, external AI actions and operational mutation remain outside the product boundary.
 
 ## Technology
 

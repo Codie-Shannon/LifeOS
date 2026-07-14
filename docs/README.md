@@ -6,9 +6,9 @@ This directory is the durable source of truth for LifeOS status, release history
 
 - [`current-status.md`](current-status.md) — current Desktop, Companion and roadmap state.
 - [`lifeos-version-state.json`](lifeos-version-state.json) — machine-readable version and boundary state.
-- [`release-notes/v7.0-alpha-group-36.md`](release-notes/v7.0-alpha-group-36.md) — current Group 36 release record.
-- [`screenshot-groups/group-36-v7-source-expansion-answer-quality/`](screenshot-groups/group-36-v7-source-expansion-answer-quality/) — current screenshot evidence.
-- [`manual-tests/group-36/`](manual-tests/group-36/) — current manual verification.
+- [`release-notes/v7.0-beta-group-39.md`](release-notes/v7.0-beta-group-39.md) — v7 beta closure record.
+- [`screenshot-groups/group-39-v7-beta-release-checkpoint/`](screenshot-groups/group-39-v7-beta-release-checkpoint/) — current screenshot evidence.
+- [`manual-tests/group-39/`](manual-tests/group-39/) — current manual verification.
 - [`version-history.md`](version-history.md) — consolidated milestone history.
 - [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — broader roadmap.
 
@@ -16,20 +16,37 @@ This directory is the durable source of truth for LifeOS status, release history
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | `v7.0.0-alpha.2` |
+| LifeOS Desktop | `v7.0.0-beta.1`, complete and closed |
 | Mobile Companion | `v0.1.0-beta.1`, complete and closed |
 | Full Mobile | Not started |
 | Website | Not started |
-| Group 37 | Not started |
+| Group 40 / v8 | Not started |
 
-The v7 Assistant remains read-only. It has expanded approved local sources, bounded intent-aware retrieval, explainable ranking, cross-source provenance, conflict/stale/missing-data warnings and no memory, tools, execution or external writes.
+The complete v7 Assistant lane is now closed at beta.
+
+It includes:
+
+- approved-source retrieval
+- bounded intent classification
+- explainable ranking and provenance
+- stale, conflict, missing-data and uncertainty handling
+- review-only planning blocks
+- controlled review transfer
+- explicit user-confirmed durable memory
+- expiry, revocation, deletion and audit
+- no tools, execution, background autonomy or external writes
+
+Plans remain `Review-only` and `Executable: No`. Memory cannot authorize action, and trusted current records outrank conflicting memory.
 
 ## Recent screenshot groups
 
-- [`Group 36 — v7 source expansion and answer quality`](screenshot-groups/group-36-v7-source-expansion-answer-quality/)
-- [`Group 35 — v7 Assistant foundation`](screenshot-groups/group-35-v7-assistant-foundation/)
+- [`Group 39 — v7 beta release checkpoint`](screenshot-groups/group-39-v7-beta-release-checkpoint/)
+- [`Group 38 — memory permissions and safety`](screenshot-groups/group-38-v7-memory-permissions-safety/)
+- [`Group 37 — review-only planning and review transfer`](screenshot-groups/group-37-v7-review-only-planning-review-transfer/)
+- [`Group 36 — source expansion and answer quality`](screenshot-groups/group-36-v7-source-expansion-answer-quality/)
+- [`Group 35 — Assistant foundation`](screenshot-groups/group-35-v7-assistant-foundation/)
 - [`Group 34 — Mobile Companion beta checkpoint`](screenshot-groups/group-34-companion-beta-checkpoint/)
-- [`Group 31 — v6 controlled automation beta checkpoint`](screenshot-groups/group-31-v6-release-checkpoint/)
+- [`Group 31 — v6 controlled automation beta checkpoint`](screenshot-groups/group-31-v6-automation-release-checkpoint/)
 
 ## Documentation organization
 

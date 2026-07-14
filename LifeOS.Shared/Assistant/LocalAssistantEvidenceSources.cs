@@ -37,6 +37,11 @@ public static class LocalAssistantEvidenceSources
             string question,
             int maximumRecords)
         {
+            if (IsUnsupportedDemoQuestion(question))
+            {
+                return [];
+            }
+
             if (IsNorthstarDemoQuestion(question))
             {
                 return NorthstarFollowUpRecords()
@@ -91,6 +96,11 @@ public static class LocalAssistantEvidenceSources
             string question,
             int maximumRecords)
         {
+            if (IsUnsupportedDemoQuestion(question))
+            {
+                return [];
+            }
+
             if (IsNorthstarDemoQuestion(question))
             {
                 return NorthstarWorkPipelineRecords()
@@ -159,6 +169,11 @@ public static class LocalAssistantEvidenceSources
             string question,
             int maximumRecords)
         {
+            if (IsUnsupportedDemoQuestion(question))
+            {
+                return [];
+            }
+
             if (IsNorthstarDemoQuestion(question))
             {
                 return sourceType switch
@@ -225,6 +240,11 @@ public static class LocalAssistantEvidenceSources
                 : [];
         }
     }
+
+    private static bool IsUnsupportedDemoQuestion(string question) =>
+        question.Contains(
+            "Zephyr Quill",
+            StringComparison.OrdinalIgnoreCase);
 
     private static bool IsNorthstarDemoQuestion(string question) =>
         question.Contains(

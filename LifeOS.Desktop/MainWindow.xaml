@@ -56,10 +56,10 @@
                         Padding="14"
                         Margin="0,12,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v7.0.0-alpha.4"
+                        <TextBlock Text="Desktop v7.0.0-beta.1"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="Expanded read-only sources with bounded ranking, visible conflicts, staleness warnings and explainable evidence selection."
+                        <TextBlock Text="v7 beta: source-backed Assistant, review-only planning, controlled review transfer and explicit user-controlled memory."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -301,7 +301,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v7.0.0-alpha.4 expands approved read-only sources, evidence ranking, conflict detection and answer explanations without memory, tools or execution."
+                <TextBlock Text="LifeOS Desktop v7.0.0-beta.1 expands approved read-only sources, evidence ranking, conflict detection and answer explanations without memory, tools or execution."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

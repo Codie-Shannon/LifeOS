@@ -24,7 +24,7 @@ public partial class MainWindow
     private void ShowAssistantPage()
     {
         PageTitleTextBlock.Text = "Assistant planning";
-        PageSubtitleTextBlock.Text = "Review-only planning blocks • explicit memory controls • Desktop v7.0.0-alpha.4";
+        PageSubtitleTextBlock.Text = "Complete v7 beta flow • source-backed • review-only • Desktop v7.0.0-beta.1";
         CurrentSectionTextBlock.Text = "Current section: Assistant planning";
         var root = new StackPanel();
         root.Children.Add(CreateAssistantBoundaryCard());
@@ -42,7 +42,7 @@ public partial class MainWindow
         var panel = CreatePanel(); panel.BorderBrush = new SolidColorBrush(Color.FromRgb(56,189,248));
         panel.Child = new StackPanel { Children =
         {
-            new TextBlock { Text="REVIEW-ONLY • EXECUTABLE: NO", Foreground=new SolidColorBrush(Color.FromRgb(125,211,252)), FontWeight=FontWeights.Bold, FontSize=13 },
+            new TextBlock { Text="V7 BETA • READ-ONLY • NON-AUTONOMOUS • EXECUTABLE: NO", Foreground=new SolidColorBrush(Color.FromRgb(125,211,252)), FontWeight=FontWeights.Bold, FontSize=13 },
             new TextBlock { Text="Source-backed answers can become editable planning blocks and one controlled review artifact — never operational state.", Foreground=new SolidColorBrush(Color.FromRgb(226,232,240)), FontSize=17, FontWeight=FontWeights.SemiBold, TextWrapping=TextWrapping.Wrap, Margin=new Thickness(0,8,0,0) },
             new TextBlock { Text="No tasks, projects, Follow-Ups, payments, calendar items, emails, automations, orchestration runs, tools, scripts or external writes. Durable context is available only through explicit Memory review and confirmation.", Foreground=new SolidColorBrush(Color.FromRgb(148,163,184)), TextWrapping=TextWrapping.Wrap, Margin=new Thickness(0,8,0,0) }
         }}; return panel;
@@ -107,7 +107,7 @@ public partial class MainWindow
         var target=new ComboBox { Width=260, HorizontalAlignment=HorizontalAlignment.Left, Margin=new Thickness(0,16,0,0), ItemsSource=Enum.GetValues<PlanningReviewSurface>(), SelectedIndex=0 };
         stack.Children.Add(new TextBlock { Text="Target review surface", Foreground=new SolidColorBrush(Color.FromRgb(125,211,252)), FontWeight=FontWeights.Bold, Margin=new Thickness(0,16,0,0) }); stack.Children.Add(target);
         var controls=new StackPanel { Orientation=Orientation.Horizontal, Margin=new Thickness(0,12,0,0) };
-        var preview=new Button { Content="Preview handoff", Padding=new Thickness(12,8,12,8), Margin=new Thickness(0,0,8,0) };
+        var preview=new Button { Content="Preview controlled review transfer", Padding=new Thickness(12,8,12,8), Margin=new Thickness(0,0,8,0) };
         var cancel=new Button { Content="Cancel", Padding=new Thickness(12,8,12,8) };
         preview.Click += (_,_) => ShowHandoffPreview(plan,(PlanningReviewSurface)(target.SelectedItem??PlanningReviewSurface.AssistantReviewQueue));
         cancel.Click += (_,_) => { _currentPlan=null; ShowAssistantPage(); };

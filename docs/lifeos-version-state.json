@@ -1,12 +1,20 @@
 {
-  "desktopVersion": "7.0.0-alpha.4",
-  "desktopReleaseName": "Explicit durable context and memory safety",
-  "desktopGroup": 38,
+  "desktopVersion": "7.0.0-beta.1",
+  "desktopReleaseName": "v7 Assistant beta release checkpoint",
+  "desktopGroup": 39,
+  "desktopStatus": "beta-release-checkpoint",
   "companionVersion": "0.1.0-beta.1",
   "companionStatus": "complete-and-closed",
+  "assistantMode": "source-backed-read-only-foreground-only",
+  "planningMode": "review-only-executable-no",
+  "reviewTransferMode": "controlled-review-artifacts-only",
   "memoryMode": "explicit-user-confirmed-local-protected",
   "automaticRetention": false,
   "toolsEnabled": false,
   "executionEnabled": false,
+  "externalWritesEnabled": false,
+  "websiteStarted": false,
+  "fullMobileStarted": false,
+  "v8Started": false,
   "nextGroupStarted": false
 }

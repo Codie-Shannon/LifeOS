@@ -30,8 +30,8 @@ public sealed class PlanningReviewTransferService(IPlanningReviewArtifactStore s
         ArgumentNullException.ThrowIfNull(preview);
         if (!userConfirmed) throw new InvalidOperationException("Explicit human confirmation is required.");
         if (preview.Executable) throw new InvalidOperationException("Executable planning payloads are forbidden.");
-        if (_store.Items.Any(i => i.PlanId == preview.PlanId && i.Target == preview.Target))
-            throw new InvalidOperationException("This plan has already been handed to the selected review surface.");
+        var existing = _store.Items.FirstOrDefault(i => i.PlanId == preview.PlanId && i.Target == preview.Target);
+        if (existing is not null) return existing;
         var artifact = new PlanningReviewArtifact(Guid.NewGuid(), preview.PlanId, preview.Target, now ?? DateTimeOffset.Now,
             preview.OriginalQuestion, preview.Blocks, preview.Assumptions, preview.MissingData, preview.Conflicts, preview.Provenance);
         _store.Add(artifact);

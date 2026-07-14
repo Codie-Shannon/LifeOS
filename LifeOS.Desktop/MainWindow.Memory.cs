@@ -31,7 +31,7 @@ public partial class MainWindow
     private void ShowMemoryPage()
     {
         PageTitleTextBlock.Text = "Assistant memory";
-        PageSubtitleTextBlock.Text = "Explicit durable context • permission-controlled • Desktop v7.0.0-alpha.4";
+        PageSubtitleTextBlock.Text = "Explicit durable context • user-controlled • Desktop v7.0.0-beta.1";
         CurrentSectionTextBlock.Text = "Current section: Assistant memory";
         var root = new StackPanel();
         root.Children.Add(CreateMemoryBoundaryCard());

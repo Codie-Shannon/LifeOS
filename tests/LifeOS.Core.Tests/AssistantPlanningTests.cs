@@ -1,4 +1,4 @@
-using LifeOS.Core.Assistant;
+﻿using LifeOS.Core.Assistant;
 using LifeOS.Core.AssistantPlanning;
 using Xunit;
 
@@ -57,7 +57,9 @@ public sealed class AssistantPlanningTests
     {
         var plan=Build(Response()); var store=new SessionPlanningReviewArtifactStore(); var service=new PlanningReviewTransferService(store); var preview=service.Preview(plan,PlanningReviewSurface.WeeklyCloseOutReview,Now);
         var artifact=service.Confirm(preview,true,Now); Assert.Single(store.Items); Assert.Equal("ReviewOnly",artifact.Status); Assert.False(artifact.Executable);
-        Assert.Throws<InvalidOperationException>(()=>service.Confirm(preview,true,Now));
+        var duplicate=service.Confirm(preview,true,Now);
+        Assert.Single(store.Items);
+        Assert.Equal(artifact.ArtifactId,duplicate.ArtifactId);
     }
 
     [Fact] public void Cancellation_creates_no_partial_state()

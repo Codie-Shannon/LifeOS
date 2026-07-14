@@ -181,3 +181,13 @@ Schedules now create review intent only. Due occurrences enter a visible queue, 
 ## v6.0.0-beta.1 — Group 31
 
 Controlled automation release checkpoint: persisted readiness, v6 store migration and malformed-state recovery hardening, restart safety validation and beta release evidence. No automation-surface expansion.
+
+## v7.0.0-beta.1 — Group 39
+
+v7 Assistant beta release checkpoint.
+
+- Unified source-backed answers, explainable ranking, review-only planning, controlled review transfer and explicit scoped memory into one coherent beta flow.
+- Re-proved no mutation, execution, autonomous tools, background work or external writes.
+- Advanced Desktop release identity to `v7.0.0-beta.1`; Companion remains separate at `v0.1.0-beta.1`.
+- Added full regression, security, hygiene and exact eight-screenshot release evidence gates.
+- Kept Website, full Mobile, v8 and Group 40 unstarted.

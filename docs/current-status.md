@@ -1,7 +1,7 @@
 # LifeOS current status
 
-LifeOS Desktop is advancing to `v7.0.0-alpha.4` for Group 38 explicit durable Assistant context and memory safety. Memory is created only through an exact preview, explicit scope/sensitivity choices and human confirmation. Every item is inspectable, auditable, editable, expirable, revocable and deletable.
+LifeOS Desktop is at `v7.0.0-beta.1`, the v7 Assistant beta release checkpoint. The complete v7 lane is coherent end to end: approved-source retrieval, ranked evidence and provenance, uncertainty/conflict handling, review-only planning, controlled review transfer and explicit scoped memory.
 
-Current trusted LifeOS records outrank conflicting memory. Expired, revoked and deleted memory is excluded from retrieval immediately. Answers disclose any permitted memory separately from direct source evidence.
+Assistant remains read-only, foreground-only and non-autonomous. Plans remain `Review-only` and `Executable: No`. Controlled transfer can create review artifacts only. Memory requires exact preview and explicit confirmation, is disclosed separately from direct evidence, cannot authorize action, and can be revoked or deleted. Current trusted records outrank conflicting memory.
 
-No automatic retention, hidden profiling, autonomous tools, background planning, direct plan conversion, execution or external memory writes are introduced. Companion remains `v0.1.0-beta.1` complete and closed. Group 39, full Mobile, Website and v8 remain unstarted.
+No external AI action, tool execution, scripts, plugins, background work, operational mutation or external writes exist. Companion remains separate, complete and closed at `v0.1.0-beta.1`. Website, full Mobile, Group 40 and v8 remain unstarted.

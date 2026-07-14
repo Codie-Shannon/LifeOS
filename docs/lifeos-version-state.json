@@ -1,13 +1,17 @@
 {
-  "desktopVersion": "7.0.0-alpha.2",
-  "desktopReleaseName": "Source expansion and answer-quality hardening",
-  "activeGroup": 36,
+  "desktopVersion": "7.0.0-alpha.3",
+  "desktopReleaseName": "Review-only planning blocks and controlled handoff",
+  "activeGroup": 37,
   "companionVersion": "0.1.0-beta.1",
   "companionStatus": "complete and closed",
-  "group37Started": false,
+  "group37Started": true,
+  "group37Complete": false,
+  "group38Started": false,
   "fullMobileStarted": false,
   "websiteStarted": false,
   "assistantDurableMemory": false,
   "assistantTools": false,
-  "assistantExecution": false
+  "assistantExecution": false,
+  "assistantPlanningReviewOnly": true,
+  "assistantControlledReviewHandoff": true
 }

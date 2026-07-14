@@ -1,0 +1,19 @@
+﻿Group 39 Pack 2 final validation
+Timestamp: 2026-07-14T21:45:56.3549429+12:00
+Pack 1 baseline: 087230f60576c0de37490cc143cb0ed3baa93c43
+Desktop release: v7.0.0-beta.1
+Companion release: v0.1.0-beta.1 unchanged and closed
+Core/Desktop tests passed: 187
+Companion tests passed: 34
+Desktop Release build: PASS
+Android Release build: PASS
+Repository hygiene: PASS
+NuGet vulnerability scan: PASS
+Gitleaks full-history scan: PASS
+git diff --check: PASS
+Approved screenshots: 8
+Manual end-to-end Assistant beta flow: PASS
+Review-only plan and controlled transfer: PASS
+Explicit memory use, revocation and exclusion: PASS
+Mutation, execution and tool refusal: PASS
+Website, full Mobile, v8 and Group 40 implementation: ABSENT

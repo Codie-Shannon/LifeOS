@@ -1,6 +1,6 @@
 # Group 39 screenshot evidence
 
-Exactly eight approved PNG screenshots, all using fictional data:
+Exactly eight approved PNG screenshots using fictional data only:
 
 1. `01-v7-beta-release-overview-read-only-boundary.png`
 2. `02-cross-source-answer-ranking-provenance-uncertainty.png`
@@ -11,4 +11,6 @@ Exactly eight approved PNG screenshots, all using fictional data:
 7. `07-mutation-execution-tool-request-refused.png`
 8. `08-final-beta-validation-clean-sync.png`
 
-Do not place real client, relationship, financial, email, calendar, token, secret or private memory data in this folder.
+The evidence proves the v7 beta identity, source-backed cross-source answers, review-only planning, controlled review transfer, explicit scoped memory, memory exclusion after revocation, refusal of mutation/execution/tool requests, and the final automated validation pass.
+
+No real client, relationship, financial, email, calendar, token, secret or private-memory data is included.

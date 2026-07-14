@@ -56,7 +56,7 @@
                         Padding="14"
                         Margin="0,12,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v7.0.0-alpha.3"
+                        <TextBlock Text="Desktop v7.0.0-alpha.4"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
                         <TextBlock Text="Expanded read-only sources with bounded ranking, visible conflicts, staleness warnings and explainable evidence selection."
@@ -75,6 +75,11 @@
                                 Content="Assistant"
                                 Style="{StaticResource NavButtonStyle}"
                                 Click="AssistantNavButton_Click"/>
+
+                        <Button x:Name="MemoryNavButton"
+                                Content="Memory"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="MemoryNavButton_Click"/>
 
                         <Button x:Name="CommandCentreNavButton"
                                 Content="Command Centre"
@@ -296,7 +301,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v7.0.0-alpha.3 expands approved read-only sources, evidence ranking, conflict detection and answer explanations without memory, tools or execution."
+                <TextBlock Text="LifeOS Desktop v7.0.0-alpha.4 expands approved read-only sources, evidence ranking, conflict detection and answer explanations without memory, tools or execution."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

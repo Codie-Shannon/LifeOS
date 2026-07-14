@@ -1,17 +1,12 @@
 {
-  "desktopVersion": "7.0.0-alpha.3",
-  "desktopReleaseName": "Review-only planning blocks and controlled handoff",
-  "activeGroup": 37,
+  "desktopVersion": "7.0.0-alpha.4",
+  "desktopReleaseName": "Explicit durable context and memory safety",
+  "desktopGroup": 38,
   "companionVersion": "0.1.0-beta.1",
-  "companionStatus": "complete and closed",
-  "group37Started": true,
-  "group37Complete": false,
-  "group38Started": false,
-  "fullMobileStarted": false,
-  "websiteStarted": false,
-  "assistantDurableMemory": false,
-  "assistantTools": false,
-  "assistantExecution": false,
-  "assistantPlanningReviewOnly": true,
-  "assistantControlledReviewHandoff": true
+  "companionStatus": "complete-and-closed",
+  "memoryMode": "explicit-user-confirmed-local-protected",
+  "automaticRetention": false,
+  "toolsEnabled": false,
+  "executionEnabled": false,
+  "nextGroupStarted": false
 }

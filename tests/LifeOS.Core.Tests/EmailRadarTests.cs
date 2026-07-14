@@ -10,7 +10,7 @@ public sealed class EmailRadarTests
     private static EmailRadarProfile Profile() => new() { Name="Harbour Workshop", RelatedLabel="Harbour Workshop", EmailAddresses=["morgan@harbour-workshop.example.invalid"], SubjectPhrases=["Workshop update"], Keywords=["proof","invoice"], ExcludeTerms=["newsletter"], FollowUpDays=7 };
     private static ImportedCommunicationRecord Record(string sender="morgan@harbour-workshop.example.invalid", string subject="Workshop update and proof", int days=-2) { var r=new ImportedCommunicationRecord{SourceKind="test",SentAt=DateTimeOffset.Now.AddDays(days),Sender=sender,Recipients=["owner@example.invalid"],Subject=subject,Text="Proof and invoice update",Provenance="test#1"}; r.DuplicateKey=CommunicationImportService.BuildDuplicateKey(r); return r; }
 
-    [Fact] public void ProductVersion_IsGroup31BetaReleaseCheckpoint() => Assert.Equal("v7.0.0-alpha.3", ProductVersion.Display);
+    [Fact] public void ProductVersion_IsGroup31BetaReleaseCheckpoint() => Assert.Equal("v7.0.0-alpha.4", ProductVersion.Display);
     [Fact] public void Profile_Validates() => Profile().Validate();
     [Fact] public void Profile_RequiresName() { var p=Profile(); p.Name=""; Assert.Throws<ArgumentException>(p.Validate); }
     [Fact] public void Profile_RejectsInvalidDateRange() { var p=Profile(); p.DateFrom=DateTimeOffset.Now; p.DateTo=DateTimeOffset.Now.AddDays(-1); Assert.Throws<ArgumentException>(p.Validate); }

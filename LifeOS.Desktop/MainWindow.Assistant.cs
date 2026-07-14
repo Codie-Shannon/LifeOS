@@ -1,5 +1,6 @@
 using LifeOS.Core.Assistant;
 using LifeOS.Core.AssistantPlanning;
+using LifeOS.Core.AssistantMemory;
 using LifeOS.Shared.Assistant;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,7 +24,7 @@ public partial class MainWindow
     private void ShowAssistantPage()
     {
         PageTitleTextBlock.Text = "Assistant planning";
-        PageSubtitleTextBlock.Text = "Review-only planning blocks • controlled review handoff • Desktop v7.0.0-alpha.3";
+        PageSubtitleTextBlock.Text = "Review-only planning blocks • explicit memory controls • Desktop v7.0.0-alpha.4";
         CurrentSectionTextBlock.Text = "Current section: Assistant planning";
         var root = new StackPanel();
         root.Children.Add(CreateAssistantBoundaryCard());
@@ -43,7 +44,7 @@ public partial class MainWindow
         {
             new TextBlock { Text="REVIEW-ONLY • EXECUTABLE: NO", Foreground=new SolidColorBrush(Color.FromRgb(125,211,252)), FontWeight=FontWeights.Bold, FontSize=13 },
             new TextBlock { Text="Source-backed answers can become editable planning blocks and one controlled review artifact — never operational state.", Foreground=new SolidColorBrush(Color.FromRgb(226,232,240)), FontSize=17, FontWeight=FontWeights.SemiBold, TextWrapping=TextWrapping.Wrap, Margin=new Thickness(0,8,0,0) },
-            new TextBlock { Text="No tasks, projects, Follow-Ups, payments, calendar items, emails, automations, orchestration runs, tools, scripts, durable memory or external writes.", Foreground=new SolidColorBrush(Color.FromRgb(148,163,184)), TextWrapping=TextWrapping.Wrap, Margin=new Thickness(0,8,0,0) }
+            new TextBlock { Text="No tasks, projects, Follow-Ups, payments, calendar items, emails, automations, orchestration runs, tools, scripts or external writes. Durable context is available only through explicit Memory review and confirmation.", Foreground=new SolidColorBrush(Color.FromRgb(148,163,184)), TextWrapping=TextWrapping.Wrap, Margin=new Thickness(0,8,0,0) }
         }}; return panel;
     }
 
@@ -85,6 +86,12 @@ public partial class MainWindow
         stack.Children.Add(Section("Facts / assumptions / gaps / conflicts",string.Join("\n",response.Statements.Select(s=>$"• {s.Kind}: {s.Text}"))));
         stack.Children.Add(Section("Confidence",$"{response.Confidence}\nReason: {response.ConfidenceReason}"));
         stack.Children.Add(Section("Safety boundary",response.SafetyBoundary));
+        var question=_assistantQuestionTextBox?.Text ?? string.Empty;
+        var memories=GetDisclosedMemories(question);
+        stack.Children.Add(Section("Memory used (separate from direct evidence)", memories.Count==0 ? "None — no relevant permitted Active memory was used." : string.Join("\n", memories.Select(m=>$"• {m.Disclosure}\n  Statement: {m.Memory.Statement}"))));
+        var remember=new Button { Content="Remember through explicit review...", IsEnabled=!response.Refused, Margin=new Thickness(0,14,8,0), Padding=new Thickness(12,8,12,8), HorizontalAlignment=HorizontalAlignment.Left };
+        remember.Click += (_,_) => PrepareMemoryFromAssistant(response.Answer, question);
+        stack.Children.Add(remember);
         var build=new Button { Content="Build review-only plan", IsEnabled=!response.Refused && response.SourcesUsed.Count>0, Margin=new Thickness(0,14,0,0), Padding=new Thickness(12,8,12,8), HorizontalAlignment=HorizontalAlignment.Left };
         build.Click += (_,_) => { if(_assistantQuestionTextBox is not null) { _currentPlan=_planningService.Build(new PlanningRequest(_assistantQuestionTextBox.Text,response)); ShowAssistantPage(); } };
         stack.Children.Add(build); card.Child=stack; return card;

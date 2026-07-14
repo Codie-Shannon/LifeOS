@@ -9,9 +9,9 @@ public sealed class AutomationFoundationTests
     [Fact]
     public void ProductVersion_IsAlignedForGroup29()
     {
-        Assert.Equal("7.0.0-alpha.3", LifeOS.Core.ProductVersion.Semantic);
-        Assert.Equal("v7.0.0-alpha.3", LifeOS.Core.ProductVersion.Display);
-        Assert.Equal("Review-only planning blocks and controlled handoff", LifeOS.Core.ProductVersion.ReleaseName);
+        Assert.Equal("7.0.0-alpha.4", LifeOS.Core.ProductVersion.Semantic);
+        Assert.Equal("v7.0.0-alpha.4", LifeOS.Core.ProductVersion.Display);
+        Assert.Equal("Explicit durable context and memory safety", LifeOS.Core.ProductVersion.ReleaseName);
     }
 
     [Fact] public void NewRule_IsDisabledByDefault() => Assert.False(new AutomationRule().IsEnabled);

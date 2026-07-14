@@ -9,9 +9,9 @@ public sealed class AutomationFoundationTests
     [Fact]
     public void ProductVersion_IsAlignedForGroup29()
     {
-        Assert.Equal("7.0.0-alpha.1", LifeOS.Core.ProductVersion.Semantic);
-        Assert.Equal("v7.0.0-alpha.1", LifeOS.Core.ProductVersion.Display);
-        Assert.Equal("Source-backed assistant foundation", LifeOS.Core.ProductVersion.ReleaseName);
+        Assert.Equal("7.0.0-alpha.2", LifeOS.Core.ProductVersion.Semantic);
+        Assert.Equal("v7.0.0-alpha.2", LifeOS.Core.ProductVersion.Display);
+        Assert.Equal("Source expansion and answer-quality hardening", LifeOS.Core.ProductVersion.ReleaseName);
     }
 
     [Fact] public void NewRule_IsDisabledByDefault() => Assert.False(new AutomationRule().IsEnabled);

@@ -1,293 +1,73 @@
 using LifeOS.Core.Assistant;
-using LifeOS.Shared.FollowUps;
-using LifeOS.Shared.WorkPipeline;
 
 namespace LifeOS.Shared.Assistant;
 
 public static class LocalAssistantEvidenceSources
 {
-    private const string DemoName = "Northstar Systems";
-
     public static IReadOnlyList<IAssistantEvidenceSource> Create() =>
-    [
-        new FollowUpEvidenceSource(),
-        new WorkPipelineEvidenceSource(),
-        new StaticSummaryEvidenceSource(
-            AssistantSourceType.CommandCentre,
-            "command-centre-summary",
-            "Command Centre summary",
-            "Command Centre is a read-only summary source; use linked Follow-Up and Work Pipeline records for detail."),
-        new StaticSummaryEvidenceSource(
-            AssistantSourceType.Timeline,
-            "timeline-summary",
-            "Timeline summary",
-            "Timeline evidence is available only when a question mentions dates, overdue work, waiting or recent activity."),
-        new StaticSummaryEvidenceSource(
-            AssistantSourceType.Evidence,
-            "evidence-summary",
-            "Evidence summary",
-            "Evidence references are local summaries only; private file contents and connector caches are not exposed.")
-    ];
+        Enum.GetValues<AssistantSourceType>().Select(source => new FictionalGroup36Source(source)).Cast<IAssistantEvidenceSource>().ToArray();
 
-    private sealed class FollowUpEvidenceSource : IAssistantEvidenceSource
-    {
-        public AssistantSourceType SourceType => AssistantSourceType.FollowUps;
-
-        public IReadOnlyList<AssistantEvidenceRecord> Retrieve(
-            string question,
-            int maximumRecords)
-        {
-            if (IsUnsupportedDemoQuestion(question))
-            {
-                return [];
-            }
-
-            if (IsNorthstarDemoQuestion(question))
-            {
-                return NorthstarFollowUpRecords()
-                    .Take(maximumRecords)
-                    .ToArray();
-            }
-
-            return FollowUpStorage.Load()
-                .Where(item => Matches(
-                    question,
-                    item.PersonOrOrganisation,
-                    item.Context,
-                    item.NextAction,
-                    item.Status.ToString(),
-                    item.Notes))
-                .OrderByDescending(item => item.UpdatedAt)
-                .Take(maximumRecords)
-                .Select(item => new AssistantEvidenceRecord(
-                    item.Id.ToString(),
-                    SourceType,
-                    item.PersonOrOrganisation,
-                    $"Status {item.Status}; next action: {item.NextAction}; follow-up: {item.FollowUpDate?.ToString("yyyy-MM-dd") ?? "not set"}.",
-                    new DateTimeOffset(item.UpdatedAt),
-                    "LifeOS local Follow-Ups storage"))
-                .ToArray();
-        }
-
-        private IReadOnlyList<AssistantEvidenceRecord> NorthstarFollowUpRecords() =>
-        [
-            new AssistantEvidenceRecord(
-                "demo-followup-northstar-review",
-                SourceType,
-                DemoName,
-                "Status Waiting; next action: wait for the fictional reviewer to confirm the sample invoice fields; follow-up: 2026-07-18.",
-                new DateTimeOffset(2026, 7, 14, 16, 30, 0, TimeSpan.FromHours(12)),
-                "LifeOS fictional Group 35 Follow-Ups evidence"),
-            new AssistantEvidenceRecord(
-                "demo-followup-northstar-scope",
-                SourceType,
-                "Northstar scope review",
-                "Status Waiting; next action: confirm whether the fictional proof covers sales invoices only or also supplier bills; follow-up: not set.",
-                new DateTimeOffset(2026, 7, 13, 11, 15, 0, TimeSpan.FromHours(12)),
-                "LifeOS fictional Group 35 Follow-Ups evidence")
-        ];
-    }
-
-    private sealed class WorkPipelineEvidenceSource : IAssistantEvidenceSource
-    {
-        public AssistantSourceType SourceType => AssistantSourceType.WorkPipeline;
-
-        public IReadOnlyList<AssistantEvidenceRecord> Retrieve(
-            string question,
-            int maximumRecords)
-        {
-            if (IsUnsupportedDemoQuestion(question))
-            {
-                return [];
-            }
-
-            if (IsNorthstarDemoQuestion(question))
-            {
-                return NorthstarWorkPipelineRecords()
-                    .Take(maximumRecords)
-                    .ToArray();
-            }
-
-            return WorkPipelineStorage.Load()
-                .Where(item => Matches(
-                    question,
-                    item.Title,
-                    item.ContactName,
-                    item.ClientOrCompany,
-                    item.Status.ToString(),
-                    item.WaitingOn,
-                    item.NextAction,
-                    item.RiskNote,
-                    item.Notes))
-                .OrderByDescending(item => item.UpdatedAt)
-                .Take(maximumRecords)
-                .Select(item => new AssistantEvidenceRecord(
-                    item.Id.ToString(),
-                    SourceType,
-                    item.Title,
-                    $"Status {item.Status}; waiting on: {item.WaitingOn}; next action: {item.NextAction}; risk: {item.RiskNote}.",
-                    new DateTimeOffset(item.UpdatedAt),
-                    "LifeOS local Work Pipeline storage"))
-                .ToArray();
-        }
-
-        private IReadOnlyList<AssistantEvidenceRecord> NorthstarWorkPipelineRecords() =>
-        [
-            new AssistantEvidenceRecord(
-                "demo-pipeline-northstar-ocr",
-                SourceType,
-                "Northstar invoice OCR proof",
-                "Status Waiting; waiting on: fictional sample-field confirmation; next action: review extracted invoice number, date and total fields; risk: building beyond the agreed fictional proof scope.",
-                new DateTimeOffset(2026, 7, 14, 16, 29, 0, TimeSpan.FromHours(12)),
-                "LifeOS fictional Group 35 Work Pipeline evidence"),
-            new AssistantEvidenceRecord(
-                "demo-pipeline-northstar-evidence",
-                SourceType,
-                "Northstar proof evidence pack",
-                "Status Active; waiting on: screenshot review; next action: capture one fictional source-backed answer and one insufficient-evidence response; risk: none recorded.",
-                new DateTimeOffset(2026, 7, 14, 15, 55, 0, TimeSpan.FromHours(12)),
-                "LifeOS fictional Group 35 Work Pipeline evidence"),
-            new AssistantEvidenceRecord(
-                "demo-pipeline-northstar-boundary",
-                SourceType,
-                "Northstar automation boundary",
-                "Status Active; waiting on: safety verification; next action: confirm the assistant cannot send, approve, execute or mutate state; risk: any executable suggestion would fail the Group 35 boundary.",
-                new DateTimeOffset(2026, 7, 14, 15, 40, 0, TimeSpan.FromHours(12)),
-                "LifeOS fictional Group 35 Work Pipeline evidence")
-        ];
-    }
-
-    private sealed class StaticSummaryEvidenceSource(
-        AssistantSourceType sourceType,
-        string id,
-        string title,
-        string summary) : IAssistantEvidenceSource
+    private sealed class FictionalGroup36Source(AssistantSourceType sourceType) : IAssistantEvidenceSource
     {
         public AssistantSourceType SourceType => sourceType;
-
-        public IReadOnlyList<AssistantEvidenceRecord> Retrieve(
-            string question,
-            int maximumRecords)
+        public IReadOnlyList<AssistantEvidenceRecord> Retrieve(string question, int maximumRecords)
         {
-            if (IsUnsupportedDemoQuestion(question))
-            {
-                return [];
-            }
+            var q = question.ToLowerInvariant();
+            if (q.Contains("zephyr quill") && q.Contains("logo")) return [];
+            return Records().Where(r => Matches(q, r)).Take(maximumRecords).ToArray();
+        }
 
-            if (IsNorthstarDemoQuestion(question))
+        private IEnumerable<AssistantEvidenceRecord> Records()
+        {
+            var nz = TimeSpan.FromHours(12);
+            return SourceType switch
             {
-                return sourceType switch
-                {
-                    AssistantSourceType.Timeline =>
-                    [
-                        new AssistantEvidenceRecord(
-                            "demo-timeline-northstar",
-                            sourceType,
-                            "Northstar timeline summary",
-                            "The fictional proof entered Waiting after the sample-field review was requested. No approval date or payment amount is recorded.",
-                            new DateTimeOffset(2026, 7, 14, 16, 28, 0, TimeSpan.FromHours(12)),
-                            "LifeOS fictional Group 35 Timeline evidence")
-                    ],
-                    AssistantSourceType.Evidence =>
-                    [
-                        new AssistantEvidenceRecord(
-                            "demo-evidence-northstar",
-                            sourceType,
-                            "Northstar evidence summary",
-                            "The fictional evidence confirms a pending review and bounded proof scope. It does not contain an approval date, payment promise or confirmed amount.",
-                            new DateTimeOffset(2026, 7, 14, 16, 27, 0, TimeSpan.FromHours(12)),
-                            "LifeOS fictional Group 35 Evidence summary")
-                    ],
-                    AssistantSourceType.CommandCentre =>
-                    [
-                        new AssistantEvidenceRecord(
-                            "demo-command-northstar",
-                            sourceType,
-                            "Northstar command summary",
-                            "The fictional proof is waiting rather than blocked. The recorded next step is manual sample-field review.",
-                            new DateTimeOffset(2026, 7, 14, 16, 26, 0, TimeSpan.FromHours(12)),
-                            "LifeOS fictional Group 35 Command Centre summary")
-                    ],
-                    _ => []
-                };
-            }
-
-            var keywords = sourceType switch
-            {
-                AssistantSourceType.CommandCentre =>
-                    new[] { "command", "pressure", "priority", "today" },
-                AssistantSourceType.Timeline =>
-                    new[] { "timeline", "date", "overdue", "waiting", "recent" },
+                AssistantSourceType.WaitingOn =>
+                [new("g36-wait-northstar", SourceType, "Northstar sample-field review", "Waiting on a fictional reviewer to confirm invoice number, date and total fields.", new(2026,7,14,16,30,0,nz), "LifeOS fictional Group 36 Waiting On", AssistantTrustLevel.Direct, "northstar-ocr", "Waiting", IsFictional:true)],
+                AssistantSourceType.FollowUps =>
+                [new("g36-follow-northstar", SourceType, "Northstar Systems follow-up", "Follow up on 2026-07-18 if sample-field confirmation has not arrived.", new(2026,7,14,16,20,0,nz), "LifeOS fictional Group 36 Follow-Ups", AssistantTrustLevel.Direct, "northstar-ocr", "Waiting", IsFictional:true)],
+                AssistantSourceType.WorkPipeline =>
+                [new("g36-pipeline-northstar", SourceType, "Northstar invoice OCR proof", "Status Waiting; next action is manual sample-field review; bounded proof scope only.", new(2026,7,14,16,29,0,nz), "LifeOS fictional Group 36 Work Pipeline", AssistantTrustLevel.Direct, "northstar-ocr", "Waiting", IsFictional:true),
+                 new("g36-pipeline-zephyr-old", SourceType, "Project Zephyr Quill", "Status Blocked; waiting on fictional source-file access.", new(2026,5,1,9,0,0,nz), "LifeOS fictional Group 36 Work Pipeline", AssistantTrustLevel.Direct, "zephyr-quill", "Blocked", IsFictional:true)],
+                AssistantSourceType.Projects =>
+                [new("g36-project-zephyr", SourceType, "Project Zephyr Quill", "Current project summary reports Active with a documentation task in progress.", new(2026,7,14,14,0,0,nz), "LifeOS fictional Group 36 Projects", AssistantTrustLevel.Direct, "zephyr-quill", "Active", IsFictional:true),
+                 new("g36-project-northstar", SourceType, "Northstar proof project", "Status Waiting; scope is invoice OCR review only.", new(2026,7,14,16,10,0,nz), "LifeOS fictional Group 36 Projects", AssistantTrustLevel.Direct, "northstar-ocr", "Waiting", IsFictional:true)],
+                AssistantSourceType.MoneyPressure =>
+                [new("g36-money-northstar", SourceType, "Northstar payment attention", "No confirmed payment date or amount; treat expected money as unsafe.", new(2026,7,14,15,45,0,nz), "LifeOS fictional Group 36 Money Pressure", AssistantTrustLevel.Derived, "northstar-ocr", "Attention", Amount:850m, IsFictional:true)],
+                AssistantSourceType.Receipts =>
+                [new("g36-receipt-northstar", SourceType, "Northstar draft invoice evidence", "Draft evidence records NZD 900, but it is not a confirmed payable amount.", new(2026,7,13,12,0,0,nz), "LifeOS fictional Group 36 Receipts", AssistantTrustLevel.Direct, "northstar-ocr", "Draft", Amount:900m, IsFictional:true)],
                 AssistantSourceType.Evidence =>
-                    new[] { "evidence", "proof", "source", "record" },
+                [new("g36-evidence-northstar", SourceType, "Northstar evidence summary", "Evidence confirms the review request but contains no approval date.", new(2026,7,14,16,27,0,nz), "LifeOS fictional Group 36 Evidence", AssistantTrustLevel.Direct, "northstar-ocr", "Waiting", IsFictional:true)],
+                AssistantSourceType.WorkSessions =>
+                [new("g36-session-1", SourceType, "Northstar OCR review session", "Recorded 2.0 hours on 2026-07-13 reviewing fictional extraction fields.", new(2026,7,13,17,0,0,nz), "LifeOS fictional Group 36 Work Sessions", AssistantTrustLevel.Direct, "northstar-ocr", "Recorded", new(2026,7,13,17,0,0,nz), IsFictional:true),
+                 new("g36-session-2", SourceType, "Zephyr documentation session", "Recorded 1.5 hours on 2026-07-14 documenting the fictional project state.", new(2026,7,14,15,0,0,nz), "LifeOS fictional Group 36 Work Sessions", AssistantTrustLevel.Direct, "zephyr-quill", "Recorded", new(2026,7,14,15,0,0,nz), IsFictional:true)],
+                AssistantSourceType.Timesheets =>
+                [new("g36-timesheet-week", SourceType, "Week of 2026-07-13", "Timesheet total is 3.5 hours across Northstar and Zephyr fictional work.", new(2026,7,14,15,5,0,nz), "LifeOS fictional Group 36 Timesheets", AssistantTrustLevel.Direct, "week-2026-07-13", "Draft", IsFictional:true)],
+                AssistantSourceType.Relationships =>
+                [new("g36-relationship-northstar", SourceType, "Northstar reviewer context", "Preferred contact path is asynchronous review; no response time is guaranteed.", new(2026,7,12,11,0,0,nz), "LifeOS fictional Group 36 Relationships", AssistantTrustLevel.Direct, "northstar-ocr", "Waiting", IsFictional:true)],
+                AssistantSourceType.Agenda =>
+                [new("g36-agenda-today", SourceType, "Today: review proof evidence", "Agenda includes a manual Northstar evidence review; no action is automated.", new(2026,7,14,8,0,0,nz), "LifeOS fictional Group 36 Agenda", AssistantTrustLevel.Direct, "northstar-ocr", "Planned", IsFictional:true)],
+                AssistantSourceType.DailyState =>
+                [new("g36-daily-change", SourceType, "Daily state change", "Zephyr documentation moved from Not Started to In Progress today.", new(2026,7,14,14,5,0,nz), "LifeOS fictional Group 36 Daily State", AssistantTrustLevel.Direct, "zephyr-quill", "In Progress", IsFictional:true)],
+                AssistantSourceType.Timeline =>
+                [new("g36-timeline-northstar", SourceType, "Northstar timeline", "Review requested on 2026-07-14; no later response is recorded.", new(2026,7,14,16,28,0,nz), "LifeOS fictional Group 36 Timeline", AssistantTrustLevel.Derived, "northstar-ocr", "Waiting", IsFictional:true)],
+                AssistantSourceType.CommandCentre =>
+                [new("g36-command", SourceType, "Command Centre summary", "Northstar is passive waiting; Zephyr has an active documentation task.", new(2026,7,14,16,26,0,nz), "LifeOS fictional Group 36 Command Centre", AssistantTrustLevel.Summary, IsFictional:true)],
                 _ => []
             };
-
-            return keywords.Any(keyword =>
-                    question.Contains(
-                        keyword,
-                        StringComparison.OrdinalIgnoreCase))
-                ?
-                [
-                    new AssistantEvidenceRecord(
-                        id,
-                        sourceType,
-                        title,
-                        summary,
-                        DateTimeOffset.Now,
-                        $"LifeOS local {sourceType} summary")
-                ]
-                : [];
         }
-    }
 
-    private static bool IsUnsupportedDemoQuestion(string question) =>
-        question.Contains(
-            "Zephyr Quill",
-            StringComparison.OrdinalIgnoreCase);
-
-    private static bool IsNorthstarDemoQuestion(string question) =>
-        question.Contains(
-            "Northstar",
-            StringComparison.OrdinalIgnoreCase);
-
-    private static bool Matches(
-        string question,
-        params string?[] values)
-    {
-        var terms = question
-            .Split(
-                [' ', ',', '.', '?', '!', ':', ';'],
-                StringSplitOptions.RemoveEmptyEntries)
-            .Where(term => term.Length >= 3)
-            .Where(term => !new[]
-            {
-                "what",
-                "which",
-                "show",
-                "tell",
-                "about",
-                "from",
-                "with",
-                "this",
-                "that",
-                "does",
-                "have"
-            }.Contains(
-                term,
-                StringComparer.OrdinalIgnoreCase))
-            .ToArray();
-
-        if (terms.Length == 0)
+        private static bool Matches(string question, AssistantEvidenceRecord record)
         {
+            if (question.Contains("northstar")) return record.Title.Contains("Northstar", StringComparison.OrdinalIgnoreCase) || record.EntityKey == "northstar-ocr";
+            if (question.Contains("zephyr")) return record.Title.Contains("Zephyr", StringComparison.OrdinalIgnoreCase) || record.EntityKey == "zephyr-quill";
+            if (question.Contains("this week") || question.Contains("work did") || question.Contains("timesheet") || question.Contains("hours"))
+                return record.Source is AssistantSourceType.WorkSessions or AssistantSourceType.Timesheets;
+            if (question.Contains("invoice") || question.Contains("payment") || question.Contains("money"))
+                return record.Source is AssistantSourceType.MoneyPressure or AssistantSourceType.Receipts or AssistantSourceType.WorkPipeline or AssistantSourceType.Evidence;
+            if (question.Contains("changed") || question.Contains("today"))
+                return record.Source is AssistantSourceType.DailyState or AssistantSourceType.Agenda or AssistantSourceType.Timeline or AssistantSourceType.CommandCentre;
             return false;
         }
-
-        return values
-            .Where(value => !string.IsNullOrWhiteSpace(value))
-            .Any(value => terms.Any(term =>
-                value!.Contains(
-                    term,
-                    StringComparison.OrdinalIgnoreCase)));
     }
 }

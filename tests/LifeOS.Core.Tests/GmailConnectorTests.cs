@@ -3,7 +3,7 @@ namespace LifeOS.Core.Tests;
 public sealed class GmailConnectorTests
 {
  static EmailRadarProfile Profile()=>new(){Name="Example",RelatedLabel="Example",EmailAddresses=["person@example.invalid"],SubjectPhrases=["Project update"],Keywords=["proof"],ExcludeTerms=["newsletter"]};
- [Fact] public void Version_IsGroup31Beta1()=>Assert.Equal("7.0.0-alpha.1",LifeOS.Core.ProductVersion.Semantic);
+ [Fact] public void Version_IsGroup31Beta1()=>Assert.Equal("7.0.0-alpha.2",LifeOS.Core.ProductVersion.Semantic);
  [Fact] public void ReadOnly_Scope_IsExact()=>Assert.Equal("https://www.googleapis.com/auth/gmail.readonly",LifeOS.Shared.IntegrationConnectors.Gmail.GmailOAuthPkceClient.ReadOnlyScope);
  [Fact] public void Query_IsBoundedAndVisible(){var p=Profile();var plan=GmailSearchPlanner.Build(p,new(p.Id,DateTimeOffset.UtcNow.AddDays(-7),DateTimeOffset.UtcNow,25));Assert.Contains("after:",plan.GeneratedQuery);Assert.Contains("before:",plan.GeneratedQuery);Assert.Contains("-category:promotions",plan.GeneratedQuery);}
  [Fact] public void Profile_IsRequired(){var p=Profile();Assert.Throws<ArgumentException>(()=>GmailSearchPlanner.Build(p,new(Guid.NewGuid(),DateTimeOffset.UtcNow.AddDays(-1),DateTimeOffset.UtcNow,25)));}

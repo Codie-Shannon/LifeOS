@@ -1,27 +1,13 @@
 {
-  "currentVersion": "v7.0.0-alpha.1",
-  "currentRelease": "Source-backed assistant foundation",
-  "currentScreenshotGroup": 35,
-  "currentScreenshotGroupName": "v7 assistant foundation",
-  "lane": "v7.x assistant alpha",
-  "status": "Group 35 Pack 1 applied; screenshot verification pending",
-  "verification": {
-    "desktopCoreTests": "run by Pack 1 runner",
-    "companionTests": "run by Pack 1 runner",
-    "releaseBuildPassed": "run by Pack 1 runner",
-    "androidBuildPassed": "run when shared code is touched",
-    "repositoryHygienePassed": "run by Pack 1 runner",
-    "nugetVulnerabilityScan": "run by Pack 1 runner",
-    "gitleaks": "run by Pack 1 runner",
-    "screenshotCount": 0
-  },
-  "safety": {
-    "assistantReadOnly": true,
-    "approvedLocalSourcesOnly": true,
-    "autonomousExecutionEnabled": false,
-    "externalWritesEnabled": false,
-    "durableAssistantMemoryEnabled": false,
-    "webSearchEnabled": false
-  },
-  "next": "Complete Group 35 manual verification and screenshots using Pack 2. Do not begin Group 36, full Mobile or Website."
+  "desktopVersion": "7.0.0-alpha.2",
+  "desktopReleaseName": "Source expansion and answer-quality hardening",
+  "activeGroup": 36,
+  "companionVersion": "0.1.0-beta.1",
+  "companionStatus": "complete and closed",
+  "group37Started": false,
+  "fullMobileStarted": false,
+  "websiteStarted": false,
+  "assistantDurableMemory": false,
+  "assistantTools": false,
+  "assistantExecution": false
 }

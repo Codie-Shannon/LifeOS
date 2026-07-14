@@ -6,16 +6,21 @@ public enum AssistantSourceType
     FollowUps,
     WorkPipeline,
     Timeline,
-    Evidence
+    Evidence,
+    MoneyPressure,
+    WaitingOn,
+    Projects,
+    WorkSessions,
+    Timesheets,
+    Receipts,
+    Relationships,
+    Agenda,
+    DailyState
 }
 
-public enum AssistantStatementKind
-{
-    Fact,
-    Inference,
-    MissingData,
-    Uncertainty
-}
+public enum AssistantStatementKind { Fact, Inference, MissingData, Uncertainty, Conflict, StaleData }
+public enum AssistantIntent { General, WaitingOn, ProjectStatus, MoneyAttention, WorkRecorded, WhatChanged, ConflictCheck, MissingEvidence }
+public enum AssistantTrustLevel { Summary = 1, Derived = 2, Direct = 3 }
 
 public sealed record AssistantSourcePermission(AssistantSourceType Source, bool Enabled);
 
@@ -38,16 +43,29 @@ public sealed record AssistantEvidenceRecord(
     string Title,
     string Summary,
     DateTimeOffset Timestamp,
-    string Provenance);
+    string Provenance,
+    AssistantTrustLevel Trust = AssistantTrustLevel.Direct,
+    string? EntityKey = null,
+    string? Status = null,
+    DateTimeOffset? RelevantDate = null,
+    decimal? Amount = null,
+    bool IsFictional = false);
+
+public sealed record AssistantRankedRecord(
+    AssistantEvidenceRecord Record,
+    double Score,
+    bool Used,
+    string Reason);
+
+public sealed record AssistantConflict(
+    string Field,
+    AssistantEvidenceRecord First,
+    AssistantEvidenceRecord Second,
+    string Explanation);
 
 public sealed record AssistantStatement(AssistantStatementKind Kind, string Text);
-
-public sealed record AssistantSuggestion(string Title, string Rationale, string ReviewRoute)
-{
-    public bool IsExecutable => false;
-}
-
-public sealed record AssistantRequest(string Question, AssistantConfiguration Configuration);
+public sealed record AssistantSuggestion(string Title, string Rationale, string ReviewRoute) { public bool IsExecutable => false; }
+public sealed record AssistantRequest(string Question, AssistantConfiguration Configuration, DateTimeOffset? Now = null);
 
 public sealed record AssistantResponse(
     string Answer,
@@ -56,7 +74,13 @@ public sealed record AssistantResponse(
     string Confidence,
     AssistantSuggestion? Suggestion,
     bool Refused,
-    string SafetyBoundary);
+    string SafetyBoundary,
+    AssistantIntent Intent = AssistantIntent.General,
+    IReadOnlyList<AssistantSourceType>? SourcesSearched = null,
+    IReadOnlyList<AssistantRankedRecord>? RecordsConsidered = null,
+    IReadOnlyList<AssistantConflict>? Conflicts = null,
+    IReadOnlyList<AssistantSourceType>? DisabledRelevantSources = null,
+    string ConfidenceReason = "");
 
 public interface IAssistantEvidenceSource
 {
@@ -66,5 +90,12 @@ public interface IAssistantEvidenceSource
 
 public interface IAssistantAnswerProvider
 {
-    AssistantResponse Generate(string question, IReadOnlyList<AssistantEvidenceRecord> evidence);
+    AssistantResponse Generate(
+        string question,
+        AssistantIntent intent,
+        IReadOnlyList<AssistantRankedRecord> ranked,
+        IReadOnlyList<AssistantConflict> conflicts,
+        IReadOnlyList<AssistantSourceType> searched,
+        IReadOnlyList<AssistantSourceType> disabledRelevant,
+        DateTimeOffset now);
 }

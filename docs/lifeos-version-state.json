@@ -1,38 +1,27 @@
 {
-    "currentVersion":  "v6.0.0-beta.1",
-    "currentRelease":  "Controlled automation release checkpoint",
-    "currentScreenshotGroup":  31,
-    "currentScreenshotGroupName":  "v6 controlled automation release checkpoint",
-    "lane":  "v6.x controlled automation beta checkpoint",
-    "status":  "Screenshot Group 31 complete",
-    "verification":  {
-                         "baselineTestsPassed":  129,
-                         "testsPassed":  133,
-                         "testsFailed":  0,
-                         "releaseBuildPassed":  true,
-                         "gitDiffCheckPassed":  true,
-                         "repositoryHygienePassed":  true,
-                         "gitleaksHistoryScan":  "passed full history",
-                         "screenshotCount":  8
-                     },
-    "safety":  {
-                   "manualEvaluationOnly":  true,
-                   "foregroundOnly":  true,
-                   "executionPausedByDefault":  true,
-                   "emergencyStopDistinct":  true,
-                   "emergencyStopFailClosed":  true,
-                   "resetAutoResumes":  false,
-                   "automaticRetryEnabled":  false,
-                   "unattendedActionsEnabled":  false,
-                   "externalWritesEnabled":  false,
-                   "financialMutationEnabled":  false,
-                   "destructiveActionsEnabled":  false,
-                   "communicationMutationEnabled":  false,
-                   "calendarMutationEnabled":  false,
-                   "scriptExecutionEnabled":  false,
-                   "processExecutionEnabled":  false,
-                   "pluginExecutionEnabled":  false,
-                   "aiEnabled":  false
-               },
-    "next":  "Return to the LifeOS Master Roadmap. Group 31 is closed. Mobile Companion and v7 have not started."
+  "currentVersion": "v7.0.0-alpha.1",
+  "currentRelease": "Source-backed assistant foundation",
+  "currentScreenshotGroup": 35,
+  "currentScreenshotGroupName": "v7 assistant foundation",
+  "lane": "v7.x assistant alpha",
+  "status": "Group 35 Pack 1 applied; screenshot verification pending",
+  "verification": {
+    "desktopCoreTests": "run by Pack 1 runner",
+    "companionTests": "run by Pack 1 runner",
+    "releaseBuildPassed": "run by Pack 1 runner",
+    "androidBuildPassed": "run when shared code is touched",
+    "repositoryHygienePassed": "run by Pack 1 runner",
+    "nugetVulnerabilityScan": "run by Pack 1 runner",
+    "gitleaks": "run by Pack 1 runner",
+    "screenshotCount": 0
+  },
+  "safety": {
+    "assistantReadOnly": true,
+    "approvedLocalSourcesOnly": true,
+    "autonomousExecutionEnabled": false,
+    "externalWritesEnabled": false,
+    "durableAssistantMemoryEnabled": false,
+    "webSearchEnabled": false
+  },
+  "next": "Complete Group 35 manual verification and screenshots using Pack 2. Do not begin Group 36, full Mobile or Website."
 }

@@ -9,9 +9,9 @@ public sealed class AutomationFoundationTests
     [Fact]
     public void ProductVersion_IsAlignedForGroup29()
     {
-        Assert.Equal("6.0.0-beta.1", LifeOS.Core.ProductVersion.Semantic);
-        Assert.Equal("v6.0.0-beta.1", LifeOS.Core.ProductVersion.Display);
-        Assert.Equal("Controlled automation release checkpoint", LifeOS.Core.ProductVersion.ReleaseName);
+        Assert.Equal("7.0.0-alpha.1", LifeOS.Core.ProductVersion.Semantic);
+        Assert.Equal("v7.0.0-alpha.1", LifeOS.Core.ProductVersion.Display);
+        Assert.Equal("Source-backed assistant foundation", LifeOS.Core.ProductVersion.ReleaseName);
     }
 
     [Fact] public void NewRule_IsDisabledByDefault() => Assert.False(new AutomationRule().IsEnabled);
@@ -318,7 +318,7 @@ public sealed class AutomationReleaseReadinessTests
             Settings = new() { ExecutionPaused = true }
         };
 
-        var result = AutomationReleaseReadinessService.Evaluate(store, "6.0.0-beta.1", "Controlled automation release checkpoint");
+        var result = AutomationReleaseReadinessService.Evaluate(store, LifeOS.Core.ProductVersion.Semantic, LifeOS.Core.ProductVersion.ReleaseName);
 
         Assert.Equal(AutomationReadinessState.Ready, result.State);
         Assert.Equal(0, result.Failed);
@@ -330,7 +330,7 @@ public sealed class AutomationReleaseReadinessTests
     {
         var store = AutomationDemoData.Create() with { SchemaVersion = 30 };
 
-        var result = AutomationReleaseReadinessService.Evaluate(store, "6.0.0-beta.1", "Controlled automation release checkpoint");
+        var result = AutomationReleaseReadinessService.Evaluate(store, LifeOS.Core.ProductVersion.Semantic, LifeOS.Core.ProductVersion.ReleaseName);
 
         Assert.NotEqual(AutomationReadinessState.Ready, result.State);
         Assert.Contains(result.Checks, x => x.Area == "Store schema" && !x.Passed);
@@ -345,7 +345,7 @@ public sealed class AutomationReleaseReadinessTests
             EmergencyStop = new() { IsActive = true, ActivatedAt = DateTimeOffset.UtcNow, Reason = "test" }
         };
 
-        var result = AutomationReleaseReadinessService.Evaluate(store, "6.0.0-beta.1", "Controlled automation release checkpoint");
+        var result = AutomationReleaseReadinessService.Evaluate(store, LifeOS.Core.ProductVersion.Semantic, LifeOS.Core.ProductVersion.ReleaseName);
 
         Assert.Contains(result.Checks, x => x.Area == "Emergency Stop" && x.Passed && x.Evidence == "Active");
     }
@@ -359,7 +359,7 @@ public sealed class AutomationReleaseReadinessTests
             OrchestrationRuns = [new OrchestrationRun { PlanId = "weekly-review", PlanRevision = 1, OccurrenceId = "occ", Status = OrchestrationRunStatus.InProgress }]
         };
 
-        var result = AutomationReleaseReadinessService.Evaluate(store, "6.0.0-beta.1", "Controlled automation release checkpoint");
+        var result = AutomationReleaseReadinessService.Evaluate(store, LifeOS.Core.ProductVersion.Semantic, LifeOS.Core.ProductVersion.ReleaseName);
 
         Assert.Contains(result.Checks, x => x.Area == "One-step orchestration" && !x.Passed);
         Assert.Contains(result.Checks, x => x.Area == "Restart safety" && !x.Passed);

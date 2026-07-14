@@ -56,10 +56,10 @@
                         Padding="14"
                         Margin="0,12,0,0">
                     <StackPanel>
-                        <TextBlock Text="Desktop v6.0.0-beta.1"
+                        <TextBlock Text="Desktop v7.0.0-alpha.1"
                                    Foreground="#E2E8F0"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="Automation hardening and emergency controls. Due work is queued for explicit review. Every reversible internal step requires guarded confirmation; no unattended or external execution is enabled."
+                        <TextBlock Text="Source-backed assistant foundation. Answers and suggestions are read-only, approved-source bounded and never executable."
                                    Foreground="#94A3B8"
                                    FontSize="12"
                                    TextWrapping="Wrap"
@@ -71,6 +71,11 @@
                               HorizontalScrollBarVisibility="Disabled"
                               Margin="0,0,0,12">
                     <StackPanel>
+                        <Button x:Name="AssistantNavButton"
+                                Content="Assistant"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="AssistantNavButton_Click"/>
+
                         <Button x:Name="CommandCentreNavButton"
                                 Content="Command Centre"
                                 Style="{StaticResource NavButtonStyle}"
@@ -291,7 +296,7 @@
                     BorderBrush="#1E293B"
                     BorderThickness="0,1,0,0"
                     Padding="28,10">
-                <TextBlock Text="LifeOS Desktop v6.0.0-beta.1 adds controlled orchestration, explicit step confirmation, persisted checkpoints and recoverable execution without unattended actions."
+                <TextBlock Text="LifeOS Desktop v7.0.0-alpha.1 adds controlled orchestration, explicit step confirmation, persisted checkpoints and recoverable execution without unattended actions."
                            Foreground="#64748B"
                            FontSize="12"/>
             </Border>

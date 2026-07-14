@@ -10,7 +10,7 @@ public static class AutomationReleaseReadinessService
         var health = AutomationHealthService.Derive(store);
         var checks = new List<AutomationReadinessCheck>
         {
-            Check("Version alignment", version == "6.0.0-beta.1", version == "6.0.0-beta.1" ? "Beta identity aligned" : "Unexpected runtime version", version),
+            Check("Version alignment", version == ProductVersion.Semantic, version == ProductVersion.Semantic ? "Product identity aligned" : "Unexpected runtime version", version),
             Check("Store schema", store.SchemaVersion == CurrentSchemaVersion, store.SchemaVersion == CurrentSchemaVersion ? "Current schema loaded" : "Store requires recovery or migration", $"schema {store.SchemaVersion}"),
             Check("Approval boundary", store.Proposals.All(p => !p.OperationalActionExecuted || p.State is AutomationProposalState.Executed or AutomationProposalState.Undone), "Approval remains separate from execution", $"{store.Proposals.Count} proposal(s) inspected"),
             Check("Typed execution allowlist", store.Executions.All(e => e.RiskIsLowAndInternal()), "Only typed reversible internal results are retained", $"{store.Executions.Count} execution result(s) inspected"),

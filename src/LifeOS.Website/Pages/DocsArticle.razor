@@ -1,0 +1,50 @@
+@page "/docs/guides/getting-started"
+@page "/docs/guides/mobile-companion"
+@page "/docs/guides/troubleshooting-recovery"
+@page "/docs/concepts/operating-philosophy"
+@page "/docs/concepts/evidence-provenance"
+@page "/docs/modules/desktop"
+@page "/docs/modules/integrations"
+@page "/docs/modules/automation"
+@page "/docs/modules/assistant"
+@page "/docs/releases/product-boundaries"
+@page "/docs/releases/group-41"
+@inject NavigationManager Navigation
+@inject LifeOS.Website.Services.PublicContentService Content
+
+@if (Document is null)
+{
+  <PageIntro Eyebrow="Documentation" Title="Document unavailable" Summary="The requested public documentation route is not registered." />
+}
+else
+{
+  <SeoHead Title="@Document.Title" Description="@Document.Summary" CanonicalPath="@Document.Route" />
+  <section class="page-shell page-intro doc-intro">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/docs">Docs</a><span>›</span><a href="@SectionRoute">@SectionLabel</a><span>›</span><span aria-current="page">@Document.Title</span></nav>
+    <p class="eyebrow">@Document.Category · @Document.Product</p>
+    <h1>@Document.Title</h1>
+    <p class="lead">@Document.Summary</p>
+    <div class="doc-meta"><span><b>Audience</b> @Document.Audience</span><span><b>Product</b> @Document.Product</span><span><b>Version</b> @Document.Version</span><span><b>Updated</b> @Document.Updated.ToString("yyyy-MM-dd")</span><span><b>Status</b> @Document.PublicStatus</span></div>
+  </section>
+  <main class="page-shell section doc-layout">
+    <article class="doc-body">
+      @foreach (var section in Document.Sections)
+      {
+        <section><h2>@section.Heading</h2>@foreach (var paragraph in section.Paragraphs) { <p>@paragraph</p> }</section>
+      }
+      @if (Document.EvidenceLinks.Length > 0)
+      {
+        <section class="doc-evidence"><h2>Evidence and release links</h2><p>These links support the current public claim without exposing private records.</p>@foreach (var link in Document.EvidenceLinks) { <a class="text-link" href="@link">Open supporting public proof →</a> }</section>
+      }
+      <SafetyCallout Title="Public documentation boundary" Text="Examples are fictional or sanitized. Private client data, local records, raw logs, credentials and machine-specific configuration are not published here." />
+    </article>
+    <aside class="related-docs"><p class="eyebrow">Related documentation</p>@foreach (var item in Related) { <a href="@item.Route"><strong>@item.Title</strong><span>@item.Summary</span></a> }</aside>
+  </main>
+}
+
+@code {
+  private DocEntry? Document => Content.FindByRoute(new Uri(Navigation.Uri).AbsolutePath);
+  private IReadOnlyList<DocEntry> Related => Document is null ? [] : Content.Related(Document);
+  private string SectionLabel => Document?.Category switch { "Guide" or "Troubleshooting" => "Guides", "Concept" => "Concepts", "Module" => "Modules", "Release" => "Releases", _ => "Docs" };
+  private string SectionRoute => SectionLabel switch { "Guides" => "/docs/guides", "Concepts" => "/docs/concepts", "Modules" => "/docs/modules", "Releases" => "/docs/releases", _ => "/docs" };
+}

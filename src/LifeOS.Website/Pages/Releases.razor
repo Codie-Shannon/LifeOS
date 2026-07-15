@@ -1,4 +1,4 @@
 @page "/docs/releases"
-<SeoHead Title="Releases" Description="Public version summaries and validation checkpoints." CanonicalPath="/docs/releases" />
-<PageIntro Eyebrow="Docs · Releases" Title="Releases" Summary="Public version summaries and validation checkpoints." />
-<section class="page-shell section"><div class="search-results">@foreach (var item in PublicContent.Docs.Where(x => x.Category == "Release")) { <a class="search-result-card" href="@item.Route"><div><span class="doc-type">@item.Audience · @item.Product · @item.Version</span><h2>@item.Title</h2><p>@item.Summary</p><small>Updated @item.Updated.ToString("yyyy-MM-dd")</small></div><span aria-hidden="true">→</span></a> }</div></section>
+<SeoHead Title="Releases" Description="LifeOS product boundaries, versions and public validation checkpoints." CanonicalPath="/docs/releases" />
+<PageIntro Eyebrow="Docs · Releases" Title="Releases" Summary="Current capability, historical milestones and planned tracks are kept distinct." />
+<section class="page-shell section"><DocsSectionList Category="Release" /></section>

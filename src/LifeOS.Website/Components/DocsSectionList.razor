@@ -1,0 +1,8 @@
+@inject LifeOS.Website.Services.PublicContentService Content
+<div class="search-results">
+@foreach (var item in Content.Search(null, Category))
+{
+  <a class="search-result-card" href="@item.Route"><div><span class="doc-type">@item.Audience · @item.Product · @item.Version</span><h2>@item.Title</h2><p>@item.Summary</p><small>Updated @item.Updated.ToString("yyyy-MM-dd")</small></div><span aria-hidden="true">→</span></a>
+}
+</div>
+@code { [Parameter, EditorRequired] public string Category { get; set; } = ""; }

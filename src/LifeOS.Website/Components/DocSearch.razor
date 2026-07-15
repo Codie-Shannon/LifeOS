@@ -2,7 +2,18 @@
 <div class="doc-search">
   <label for="doc-query">Search the current public documentation index</label>
   <div class="search-row"><span aria-hidden="true">⌕</span><input id="doc-query" type="search" placeholder="Try safety, Desktop, release…" @bind="query" @bind:event="oninput" /></div>
-  <p class="result-count" aria-live="polite">@Results.Count result@(Results.Count == 1 ? "" : "s")</p>
-  <div class="search-results">@foreach (var item in Results) { <a class="search-result-card" href="@item.Route"><div><span class="doc-type">@item.Category · @item.Product</span><h3>@item.Title</h3><p>@item.Summary</p></div><span aria-hidden="true">→</span></a> }</div>
+  <div class="doc-filters" aria-label="Documentation filters">
+    <label>Section<select @bind="category"><option value="">All sections</option>@foreach (var value in Content.Categories) { <option value="@value">@value</option> }</select></label>
+    <label>Audience<select @bind="audience"><option value="">All audiences</option>@foreach (var value in Content.Audiences) { <option value="@value">@value</option> }</select></label>
+    <label>Product<select @bind="product"><option value="">All products</option>@foreach (var value in Content.Products) { <option value="@value">@value</option> }</select></label>
+  </div>
+  <p class="result-count" aria-live="polite">@Results.Count result@(Results.Count == 1 ? "" : "s") · user documentation first</p>
+  <div class="search-results">@foreach (var item in Results) { <a class="search-result-card" href="@item.Route"><div><span class="doc-type">@item.Category · @item.Audience · @item.Product</span><h3>@item.Title</h3><p>@item.Summary</p><small>@item.Version · Updated @item.Updated.ToString("yyyy-MM-dd")</small></div><span aria-hidden="true">→</span></a> }</div>
 </div>
-@code { private string query = ""; private IReadOnlyList<DocEntry> Results => Content.Search(query); }
+@code {
+  private string query = "";
+  private string category = "";
+  private string audience = "";
+  private string product = "";
+  private IReadOnlyList<DocEntry> Results => Content.Search(query, category, audience, product);
+}

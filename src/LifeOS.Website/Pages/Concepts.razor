@@ -1,4 +1,4 @@
 @page "/docs/concepts"
-<SeoHead Title="Concepts" Description="The ideas and boundaries that make LifeOS understandable." CanonicalPath="/docs/concepts" />
-<PageIntro Eyebrow="Docs · Concepts" Title="Concepts" Summary="The ideas and boundaries that make LifeOS understandable." />
-<section class="page-shell section"><div class="search-results">@foreach (var item in PublicContent.Docs.Where(x => x.Category == "Concept")) { <a class="search-result-card" href="@item.Route"><div><span class="doc-type">@item.Audience · @item.Product · @item.Version</span><h2>@item.Title</h2><p>@item.Summary</p><small>Updated @item.Updated.ToString("yyyy-MM-dd")</small></div><span aria-hidden="true">→</span></a> }</div></section>
+<SeoHead Title="Concepts" Description="LifeOS operating philosophy, evidence and trust boundaries." CanonicalPath="/docs/concepts" />
+<PageIntro Eyebrow="Docs · Concepts" Title="Concepts" Summary="The operating ideas and trust boundaries that make LifeOS understandable." />
+<section class="page-shell section"><DocsSectionList Category="Concept" /></section>

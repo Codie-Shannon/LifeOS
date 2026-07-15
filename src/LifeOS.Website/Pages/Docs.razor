@@ -1,5 +1,14 @@
 @page "/docs"
-<SeoHead Title="Documentation" Description="Search LifeOS guides, concepts, modules and releases." CanonicalPath="/docs" />
-<PageIntro Eyebrow="Documentation" Title="Understand the system without hunting through the app." Summary="User documentation is the primary path. Technical detail remains available through clear sections and metadata." />
-<section class="page-shell section"><div class="docs-category-grid"><a href="/docs/guides"><span>01</span><h2>Guides</h2><p>Task-oriented starting points and setup paths.</p></a><a href="/docs/concepts"><span>02</span><h2>Concepts</h2><p>Product boundaries, safety model and operating ideas.</p></a><a href="/docs/modules"><span>03</span><h2>Modules</h2><p>Structured landing for Desktop capabilities.</p></a><a href="/docs/releases"><span>04</span><h2>Releases</h2><p>Versions, validation and public release history.</p></a></div></section>
+<SeoHead Title="Documentation" Description="Search real LifeOS guides, concepts, modules and releases." CanonicalPath="/docs" />
+<PageIntro Eyebrow="Documentation" Title="Understand the system without hunting through the app." Summary="Start with user guidance, then inspect product boundaries, modules, releases and technical proof." />
+<section class="page-shell section start-here"><div><p class="eyebrow">Start here</p><h2>New to LifeOS?</h2><p>Read the purpose, product split and first safe steps before exploring individual modules.</p></div><a class="button primary" href="/docs/guides/getting-started">Open Getting Started</a></section>
+<section class="page-shell section"><div class="docs-category-grid"><a href="/docs/guides"><span>01 · @GuideCount docs</span><h2>Guides</h2><p>Task-oriented starting points, Companion guidance and recovery.</p></a><a href="/docs/concepts"><span>02 · @ConceptCount docs</span><h2>Concepts</h2><p>Operating philosophy, evidence and trust boundaries.</p></a><a href="/docs/modules"><span>03 · @ModuleCount docs</span><h2>Modules</h2><p>Desktop, integrations, automation and Assistant.</p></a><a href="/docs/releases"><span>04 · @ReleaseCount docs</span><h2>Releases</h2><p>Product boundaries and validation checkpoints.</p></a></div></section>
+<section class="page-shell section"><div class="section-heading"><p class="eyebrow">Featured user guides</p><h2>Useful first paths</h2></div><div class="search-results">@foreach (var item in Featured) { <a class="search-result-card" href="@item.Route"><div><span class="doc-type">@item.Category · @item.Product</span><h3>@item.Title</h3><p>@item.Summary</p></div><span>→</span></a> }</div></section>
 <section class="page-shell section"><DocSearch /></section>
+@code {
+  private int GuideCount => PublicContent.Docs.Count(x => x.Category == "Guide" || x.Category == "Troubleshooting");
+  private int ConceptCount => PublicContent.Docs.Count(x => x.Category == "Concept");
+  private int ModuleCount => PublicContent.Docs.Count(x => x.Category == "Module");
+  private int ReleaseCount => PublicContent.Docs.Count(x => x.Category == "Release");
+  private IEnumerable<DocEntry> Featured => PublicContent.Docs.Where(x => x.Audience == "User").Take(4);
+}

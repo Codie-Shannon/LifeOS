@@ -5,6 +5,7 @@ using LifeOS.Shared.Assistant;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Diagnostics;
 
 namespace LifeOS.Desktop;
 
@@ -39,13 +40,38 @@ public partial class MainWindow
 
     private Border CreateAssistantBoundaryCard()
     {
-        var panel = CreatePanel(); panel.BorderBrush = new SolidColorBrush(Color.FromRgb(56,189,248));
-        panel.Child = new StackPanel { Children =
+        var panel = CreatePanel();
+        panel.BorderBrush = new SolidColorBrush(Color.FromRgb(56,189,248));
+        var stack = new StackPanel();
+        stack.Children.Add(new TextBlock { Text="V7 BETA • READ-ONLY • NON-AUTONOMOUS • EXECUTABLE: NO", Foreground=new SolidColorBrush(Color.FromRgb(125,211,252)), FontWeight=FontWeights.Bold, FontSize=13 });
+        stack.Children.Add(new TextBlock { Text="Source-backed answers can become editable planning blocks and one controlled review artifact — never operational state.", Foreground=new SolidColorBrush(Color.FromRgb(226,232,240)), FontSize=17, FontWeight=FontWeights.SemiBold, TextWrapping=TextWrapping.Wrap, Margin=new Thickness(0,8,0,0) });
+        stack.Children.Add(new TextBlock { Text="No execution or external writes. Durable context requires explicit Memory review and confirmation. Immediate safety boundaries remain available here while the full operating model is documented publicly.", Foreground=new SolidColorBrush(Color.FromRgb(148,163,184)), TextWrapping=TextWrapping.Wrap, Margin=new Thickness(0,8,0,0) });
+        var docs = new Button { Content="Open Documentation", Margin=new Thickness(0,12,0,0), Padding=new Thickness(12,8,12,8), HorizontalAlignment=HorizontalAlignment.Left };
+        docs.Click += (_,_) => OpenOfficialDocumentation("/docs/modules/assistant");
+        stack.Children.Add(docs);
+        panel.Child = stack;
+        return panel;
+    }
+
+    private void OpenOfficialDocumentation(string route)
+    {
+        var allowedRoutes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            new TextBlock { Text="V7 BETA • READ-ONLY • NON-AUTONOMOUS • EXECUTABLE: NO", Foreground=new SolidColorBrush(Color.FromRgb(125,211,252)), FontWeight=FontWeights.Bold, FontSize=13 },
-            new TextBlock { Text="Source-backed answers can become editable planning blocks and one controlled review artifact — never operational state.", Foreground=new SolidColorBrush(Color.FromRgb(226,232,240)), FontSize=17, FontWeight=FontWeights.SemiBold, TextWrapping=TextWrapping.Wrap, Margin=new Thickness(0,8,0,0) },
-            new TextBlock { Text="No tasks, projects, Follow-Ups, payments, calendar items, emails, automations, orchestration runs, tools, scripts or external writes. Durable context is available only through explicit Memory review and confirmation.", Foreground=new SolidColorBrush(Color.FromRgb(148,163,184)), TextWrapping=TextWrapping.Wrap, Margin=new Thickness(0,8,0,0) }
-        }}; return panel;
+            "/docs/modules/assistant"
+        };
+        if (!allowedRoutes.Contains(route))
+        {
+            MessageBox.Show("That documentation route is not allowlisted.", "LifeOS documentation", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        try
+        {
+            Process.Start(new ProcessStartInfo($"https://lifeos.nz{route}") { UseShellExecute = true });
+        }
+        catch
+        {
+            MessageBox.Show($"Documentation is unavailable in the current browser or offline state. Route: {route}", "LifeOS documentation", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 
     private Border CreateAssistantConfigurationCard()

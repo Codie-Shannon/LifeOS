@@ -7,8 +7,15 @@
     <label>Audience<select @bind="audience"><option value="">All audiences</option>@foreach (var value in Content.Audiences) { <option value="@value">@value</option> }</select></label>
     <label>Product<select @bind="product"><option value="">All products</option>@foreach (var value in Content.Products) { <option value="@value">@value</option> }</select></label>
   </div>
-  <p class="result-count" aria-live="polite">@Results.Count result@(Results.Count == 1 ? "" : "s") · user documentation first</p>
-  <div class="search-results">@foreach (var item in Results) { <a class="search-result-card" href="@item.Route"><div><span class="doc-type">@item.Category · @item.Audience · @item.Product</span><h3>@item.Title</h3><p>@item.Summary</p><small>@item.Version · Updated @item.Updated.ToString("yyyy-MM-dd")</small></div><span aria-hidden="true">→</span></a> }</div>
+  <div class="result-summary"><p class="result-count" aria-live="polite">@Results.Count result@(Results.Count == 1 ? "" : "s") · user documentation first</p>@if (HasFilters) { <button class="filter-reset" type="button" @onclick="Reset">Reset search and filters</button> }</div>
+  @if (Results.Count == 0)
+  {
+    <div class="empty-results" role="status"><p class="eyebrow">No public document matched</p><h3>Try a broader term or clear one filter.</h3><p>Search is deterministic and local. Nothing is sent to an external service.</p><button class="button secondary" type="button" @onclick="Reset">Reset filters</button></div>
+  }
+  else
+  {
+    <div class="search-results">@foreach (var item in Results) { <a class="search-result-card" href="@item.Route"><div><span class="doc-type">@item.Category · @item.Audience · @item.Product</span><h3>@item.Title</h3><p>@item.Summary</p><small>@item.Version · Updated @item.Updated.ToString("yyyy-MM-dd")</small></div><span aria-hidden="true">→</span></a> }</div>
+  }
 </div>
 @code {
   private string query = "";
@@ -16,4 +23,6 @@
   private string audience = "";
   private string product = "";
   private IReadOnlyList<DocEntry> Results => Content.Search(query, category, audience, product);
+  private bool HasFilters => !string.IsNullOrWhiteSpace(query) || !string.IsNullOrWhiteSpace(category) || !string.IsNullOrWhiteSpace(audience) || !string.IsNullOrWhiteSpace(product);
+  private void Reset() { query = ""; category = ""; audience = ""; product = ""; }
 }

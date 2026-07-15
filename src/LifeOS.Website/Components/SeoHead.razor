@@ -1,10 +1,22 @@
+@using LifeOS.Website.Content
 <PageTitle>@Title · LifeOS</PageTitle>
 <HeadContent>
   <meta name="description" content="@Description" />
+  <meta name="robots" content="@Robots" />
   <meta property="og:title" content="@Title · LifeOS" />
   <meta property="og:description" content="@Description" />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="@CanonicalPath" />
+  <meta property="og:image" content="/social/lifeos-social.svg" />
+  <meta property="og:image:alt" content="LifeOS — visible, reviewable state" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="@Title · LifeOS" />
+  <meta name="twitter:description" content="@Description" />
   <link rel="canonical" href="@CanonicalPath" />
 </HeadContent>
-@code { [Parameter, EditorRequired] public string Title { get; set; } = "LifeOS"; [Parameter, EditorRequired] public string Description { get; set; } = PublicContent.PrimaryMessage; [Parameter] public string CanonicalPath { get; set; } = "/"; }
+@code {
+  [Parameter, EditorRequired] public string Title { get; set; } = "LifeOS";
+  [Parameter, EditorRequired] public string Description { get; set; } = PublicContent.PrimaryMessage;
+  [Parameter] public string CanonicalPath { get; set; } = "/";
+  [Parameter] public string Robots { get; set; } = "index,follow";
+}

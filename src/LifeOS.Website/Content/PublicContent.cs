@@ -3,7 +3,7 @@ namespace LifeOS.Website.Content;
 public static class PublicContent
 {
     public const string PrimaryMessage = "A local-first personal operating system that turns work, money, projects, evidence and daily pressure into visible, reviewable state.";
-    public static readonly DateOnly LastUpdated = new(2026, 7, 15);
+    public static readonly DateOnly LastUpdated = new(2026, 7, 16);
 
     public static IReadOnlyList<ProductStatus> Products { get; } =
     [
@@ -21,17 +21,17 @@ public static class PublicContent
 
     public static IReadOnlyList<ProofMetric> ProofMetrics { get; } =
     [
+        new("22", "Website tests", "Documentation and launch-readiness baseline"),
         new("187", "Core + Desktop tests", "Existing v7 baseline"),
         new("34", "Companion tests", "Existing beta baseline"),
-        new("Release", "Build discipline", "Desktop and Android verified"),
-        new("Clean", "Security posture", "Vulnerability and secret scans")
+        new("Clean", "Security posture", "Release, vulnerability and secret scans")
     ];
 
     private static DocumentationSection S(string heading, params string[] paragraphs) => new(heading, paragraphs);
 
     public static IReadOnlyList<DocEntry> Docs { get; } =
     [
-        new("getting-started", "Getting Started", "Understand LifeOS purpose, the product split and the safest first steps.", "User", "Guide", "Platform", "v8 / Website v0.2", LastUpdated, "/docs/guides/getting-started", "Public",
+        new("getting-started", "Getting Started", "Understand LifeOS purpose, the product split and the safest first steps.", "User", "Guide", "Platform", "v8 / Website v0.3 beta", LastUpdated, "/docs/guides/getting-started", "Public",
             ["start", "overview", "onboarding", "local-first", "product split"],
             [S("What LifeOS is", PrimaryMessage), S("Choose the right product", "Desktop is the full local operating environment. Mobile Companion is intentionally lightweight. Full Mobile is a separate planned application."), S("Start safely", "Review current state before changing it, keep evidence attached to important decisions and treat unavailable states as real boundaries rather than invitations to bypass them.")],
             ["desktop-overview", "product-release-boundaries", "operating-philosophy"], []),
@@ -86,14 +86,14 @@ public static class PublicContent
             [S("Current products", "Desktop v7 beta and Mobile Companion beta are complete baselines. Website v0.2 is the public knowledge foundation."), S("Planned products", "Full Mobile is a separate planned application. A future Portal may support selected secure web capabilities only after Desktop and Full Mobile stabilize."), S("Not included", "The public Website has no login, account model, billing, licence system, downloads or private dashboard.")],
             ["getting-started", "mobile-companion-guide", "group-41-release"], ["/roadmap"]),
 
-        new("group-41-release", "Group 41 Documentation Foundation", "The first real public documentation set, deterministic search and controlled Desktop link-outs.", "Technical reviewer", "Release", "Website", "v0.2.0-alpha.1", LastUpdated, "/docs/releases/group-41", "Public",
+        new("group-41-release", "Group 41 Documentation Foundation", "The first real public documentation set, deterministic search and controlled Desktop link-outs.", "Technical reviewer", "Release", "Website", "v0.3.0-beta.1", LastUpdated, "/docs/releases/group-41", "Public",
             ["group 41", "website", "documentation", "release", "validation"],
             [S("Delivered", "A controlled inventory, ten public documents, stable routes, metadata, breadcrumbs, related content and deterministic local search."), S("Desktop boundary", "Only selected long-form Assistant copy is reduced, with action-level safety retained and an allowlisted Open Documentation link."), S("Validation", "Website, Core/Desktop and Companion tests remain separate. Static output is checked for private paths, tracking scripts and forbidden content patterns.")],
             ["product-release-boundaries", "evidence-provenance"], ["/evidence"]),
 
         new("release-history", "Release history", "Public release summaries and validation checkpoints.", "User", "Release", "Platform", "Current", LastUpdated, "/docs/releases/release-history", "Public",
             ["release", "history", "versions", "validation", "checkpoint"],
-            [S("Release discipline", "LifeOS records completed release groups, validation totals and product boundaries without presenting planned work as available."), S("Current public baseline", "Desktop v7 beta and Mobile Companion beta are complete. Website v0.2 is the controlled documentation foundation."), S("Evidence links", "Release claims link to sanitized screenshots, tests and repository-backed validation where practical.")],
+            [S("Release discipline", "LifeOS records completed release groups, validation totals and product boundaries without presenting planned work as available."), S("Current public baseline", "Desktop v7 beta and Mobile Companion beta are complete. Website v0.3 beta is the public launch-readiness checkpoint."), S("Evidence links", "Release claims link to sanitized screenshots, tests and repository-backed validation where practical.")],
             ["group-41-release", "product-release-boundaries"], ["/evidence", "/roadmap"]),
 
         new("desktop-operating-model", "Desktop operating model", "How Desktop turns pressure into explicit state and reviewable decisions.", "User", "Concept", "Desktop", "v7.0.0-beta.1", LastUpdated, "/docs/concepts/desktop-operating-model", "Public",
@@ -134,6 +134,6 @@ public static class PublicContent
         new("/docs/modules", "Modules", "Modules landing"), new("/docs/releases", "Releases", "Releases landing"),
         new("/evidence", "Evidence", "Development proof"), new("/roadmap", "Roadmap", "Product tracks"),
         new("/access", "Early Access", "Preview waitlist boundary"), new("/about", "About", "Product and creator"),
-        new("/privacy", "Privacy", "Website privacy boundary")
+        new("/privacy", "Privacy", "Website privacy boundary"), new("/downloads", "Downloads", "Future GitHub Releases boundary")
     }.Concat(Docs.Select(x => new RouteEntry(x.Route, x.Title, x.Summary))).ToArray();
 }

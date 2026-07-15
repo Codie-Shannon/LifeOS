@@ -1,12 +1,17 @@
 <Router AppAssembly="typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
-        <FocusOnNavigate RouteData="routeData" Selector="h1" />
-    </Found>
-    <NotFound>
-        <PageTitle>Page not found · LifeOS</PageTitle>
-        <LayoutView Layout="typeof(Layout.MainLayout)">
-            <section class="page-shell narrow"><p class="eyebrow">404</p><h1>That page is not here.</h1><p class="lead">The route may have moved or may not exist yet.</p><a class="button primary" href="/">Return home</a></section>
-        </LayoutView>
-    </NotFound>
+  <Found Context="routeData">
+    <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
+    <FocusOnNavigate RouteData="routeData" Selector="h1" />
+  </Found>
+  <NotFound>
+    <PageTitle>Page not found · LifeOS</PageTitle>
+    <LayoutView Layout="typeof(Layout.MainLayout)">
+      <section class="page-shell narrow not-found">
+        <p class="eyebrow">404 · safe route recovery</p>
+        <h1>That page is not here.</h1>
+        <p class="lead">The route may have moved, may be planned, or may never have been public. Nothing was submitted or changed.</p>
+        <div class="hero-actions"><a class="button primary" href="/product">Explore Product</a><a class="button secondary" href="/docs">Search Docs</a><a class="text-link" href="/evidence">View Evidence <span aria-hidden="true">→</span></a></div>
+      </section>
+    </LayoutView>
+  </NotFound>
 </Router>

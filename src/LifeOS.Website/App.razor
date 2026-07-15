@@ -1,0 +1,12 @@
+<Router AppAssembly="typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Page not found · LifeOS</PageTitle>
+        <LayoutView Layout="typeof(Layout.MainLayout)">
+            <section class="page-shell narrow"><p class="eyebrow">404</p><h1>That page is not here.</h1><p class="lead">The route may have moved or may not exist yet.</p><a class="button primary" href="/">Return home</a></section>
+        </LayoutView>
+    </NotFound>
+</Router>

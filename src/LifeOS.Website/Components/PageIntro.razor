@@ -1,0 +1,2 @@
+<section class="page-intro page-shell narrow"><p class="eyebrow">@Eyebrow</p><h1>@Title</h1><p class="lead">@Summary</p>@if (ChildContent is not null) { <div class="intro-actions">@ChildContent</div> }</section>
+@code { [Parameter] public string Eyebrow { get; set; } = "LifeOS"; [Parameter, EditorRequired] public string Title { get; set; } = ""; [Parameter, EditorRequired] public string Summary { get; set; } = ""; [Parameter] public RenderFragment? ChildContent { get; set; } }

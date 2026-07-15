@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://example.invalid/</loc></url>
+  <url><loc>https://example.invalid/product</loc></url>
+  <url><loc>https://example.invalid/product/desktop</loc></url>
+  <url><loc>https://example.invalid/product/companion</loc></url>
+  <url><loc>https://example.invalid/solutions</loc></url>
+  <url><loc>https://example.invalid/solutions/businesses</loc></url>
+  <url><loc>https://example.invalid/solutions/individuals</loc></url>
+  <url><loc>https://example.invalid/solutions/technical-reviewers</loc></url>
+  <url><loc>https://example.invalid/safety</loc></url>
+  <url><loc>https://example.invalid/docs</loc></url>
+  <url><loc>https://example.invalid/docs/guides</loc></url>
+  <url><loc>https://example.invalid/docs/concepts</loc></url>
+  <url><loc>https://example.invalid/docs/modules</loc></url>
+  <url><loc>https://example.invalid/docs/releases</loc></url>
+  <url><loc>https://example.invalid/evidence</loc></url>
+  <url><loc>https://example.invalid/roadmap</loc></url>
+  <url><loc>https://example.invalid/access</loc></url>
+  <url><loc>https://example.invalid/about</loc></url>
+  <url><loc>https://example.invalid/privacy</loc></url>
+</urlset>

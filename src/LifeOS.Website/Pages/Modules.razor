@@ -1,0 +1,4 @@
+@page "/docs/modules"
+<SeoHead Title="Modules" Description="A public architecture for module documentation without migrating every repository document." CanonicalPath="/docs/modules" />
+<PageIntro Eyebrow="Docs · Modules" Title="Modules" Summary="A public architecture for module documentation without migrating every repository document." />
+<section class="page-shell section"><div class="search-results">@foreach (var item in PublicContent.Docs.Where(x => x.Category == "Module")) { <a class="search-result-card" href="@item.Route"><div><span class="doc-type">@item.Audience · @item.Product · @item.Version</span><h2>@item.Title</h2><p>@item.Summary</p><small>Updated @item.Updated.ToString("yyyy-MM-dd")</small></div><span aria-hidden="true">→</span></a> }</div></section>

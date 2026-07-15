@@ -1,0 +1,8 @@
+@inject LifeOS.Website.Services.PublicContentService Content
+<div class="doc-search">
+  <label for="doc-query">Search the current public documentation index</label>
+  <div class="search-row"><span aria-hidden="true">⌕</span><input id="doc-query" type="search" placeholder="Try safety, Desktop, release…" @bind="query" @bind:event="oninput" /></div>
+  <p class="result-count" aria-live="polite">@Results.Count result@(Results.Count == 1 ? "" : "s")</p>
+  <div class="search-results">@foreach (var item in Results) { <a class="search-result-card" href="@item.Route"><div><span class="doc-type">@item.Category · @item.Product</span><h3>@item.Title</h3><p>@item.Summary</p></div><span aria-hidden="true">→</span></a> }</div>
+</div>
+@code { private string query = ""; private IReadOnlyList<DocEntry> Results => Content.Search(query); }

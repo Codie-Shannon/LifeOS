@@ -1,0 +1,4 @@
+@page "/solutions"
+<SeoHead Title="Solutions" Description="Explore LifeOS from a business, individual or technical-review perspective." CanonicalPath="/solutions" />
+<PageIntro Eyebrow="Solutions" Title="Start with the outcome you need to inspect." Summary="The product stays the same. The useful proof changes depending on whether you are evaluating workflow value, personal control or technical discipline." />
+<section class="page-shell section"><div class="card-grid three">@foreach (var audience in PublicContent.Audiences) { <a class="audience-card" href="@audience.Route"><span class="card-signal">@audience.Signal</span><h2>@audience.Name</h2><p>@audience.Summary</p><span class="card-link">Open path <b aria-hidden="true">→</b></span></a> }</div></section>

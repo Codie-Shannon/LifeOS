@@ -1,0 +1,22 @@
+@inject IJSRuntime JS
+<header class="site-header">
+  <div class="nav-shell">
+    <a class="brand" href="/" aria-label="LifeOS home"><span class="brand-mark" aria-hidden="true">L</span><span>LifeOS</span></a>
+    <button class="mobile-menu-button" type="button" aria-label="Toggle navigation" aria-expanded="@menuOpen" @onclick="ToggleMenu"><span></span><span></span><span></span></button>
+    <nav class="top-nav @(menuOpen ? "open" : null)" aria-label="Primary navigation">
+      <NavLink href="/product" Match="NavLinkMatch.Prefix" @onclick="CloseMenu">Product</NavLink>
+      <NavLink href="/solutions" Match="NavLinkMatch.Prefix" @onclick="CloseMenu">Solutions</NavLink>
+      <NavLink href="/docs" Match="NavLinkMatch.Prefix" @onclick="CloseMenu">Docs</NavLink>
+      <NavLink href="/evidence" @onclick="CloseMenu">Evidence</NavLink>
+      <NavLink href="/roadmap" @onclick="CloseMenu">Roadmap</NavLink>
+      <NavLink href="/access" @onclick="CloseMenu">Access</NavLink>
+      <button class="theme-toggle" type="button" @onclick="ToggleTheme" aria-label="Toggle light and dark theme"><span aria-hidden="true">◐</span><span class="theme-label">Theme</span></button>
+    </nav>
+  </div>
+</header>
+@code {
+  private bool menuOpen;
+  private void ToggleMenu() => menuOpen = !menuOpen;
+  private void CloseMenu() => menuOpen = false;
+  private async Task ToggleTheme() => await JS.InvokeVoidAsync("lifeosTheme.toggle");
+}

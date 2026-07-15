@@ -64,6 +64,16 @@ public sealed class DocumentationContentTests
     }
 
     [Fact]
+    public void Modules_include_required_product_boundaries()
+    {
+        var moduleTitles = new PublicContentService().Search(null, category: "Module").Select(x => x.Title).ToArray();
+        Assert.Contains("Desktop Overview", moduleTitles);
+        Assert.Contains("Mobile Companion", moduleTitles);
+        Assert.Contains("Controlled Automation", moduleTitles);
+        Assert.Contains("Assistant", moduleTitles);
+    }
+
+    [Fact]
     public void Filters_cover_category_audience_and_product()
     {
         var service = new PublicContentService();

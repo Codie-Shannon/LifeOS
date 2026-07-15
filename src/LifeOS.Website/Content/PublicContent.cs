@@ -46,6 +46,11 @@ public static class PublicContent
             [S("Purpose", "Mobile Companion is a separate lightweight application for capture, glance, review, outbox and send-to-desktop."), S("Pairing and transfer", "Pairing establishes a bounded device relationship. Outbox items remain visible until transfer succeeds or the user resolves the failure."), S("Offline behaviour", "Capture and review remain honest about stale or unavailable state. The Companion does not silently invent synchronization success.")],
             ["product-release-boundaries", "troubleshooting-recovery"], ["/product/companion", "/evidence"]),
 
+        new("mobile-companion-module", "Mobile Companion", "The lightweight Companion module boundary, capture flow, outbox and offline behaviour.", "User", "Module", "Companion", "v0.1.0-beta.1", LastUpdated, "/docs/modules/mobile-companion", "Public",
+            ["mobile", "companion", "module", "capture", "glance", "review", "outbox", "send-to-desktop", "offline"],
+            [S("Lightweight by design", "Mobile Companion is a separate intentionally lightweight application for capture, glance, review, outbox and send-to-desktop. It is not the future Full Mobile application."), S("Visible transfer state", "Captured items and outbox work remain visible until transfer succeeds or the user resolves the failure. The Companion never silently invents synchronization success."), S("Offline boundary", "Capture and review remain available within the local Companion boundary while stale or unavailable state is labelled honestly.")],
+            ["mobile-companion-guide", "product-release-boundaries", "troubleshooting-recovery"], ["/product/companion", "/evidence"]),
+
         new("operating-philosophy", "Local-first, Review-first and Fail-closed", "Plain-language operating philosophy and trust boundaries.", "All", "Concept", "Platform", "Current", LastUpdated, "/docs/concepts/operating-philosophy", "Public",
             ["local-first", "review-first", "fail-closed", "safety", "trust"],
             [S("Local-first", "Private Desktop and Companion records stay local unless a separately approved feature explicitly moves them."), S("Review-first", "Consequential actions should remain inspectable and confirmable. Authentication or data access never implies permission to act."), S("Fail-closed", "When a real handling path is unavailable, LifeOS shows the boundary instead of pretending success or silently dropping work.")],
@@ -107,6 +112,7 @@ public static class PublicContent
         new("getting-started", "Group 40 product content", "Website product pages", "Move to Website", "/docs/guides/getting-started", "User", "Guide", "Platform", "v8", LastUpdated, true),
         new("desktop-overview", "Desktop module summaries", "Desktop contextual surfaces", "Summary only", "/docs/modules/desktop", "User", "Module", "Desktop", "v7 beta", LastUpdated, true),
         new("mobile-companion-guide", "Companion release proof", "Repository release records", "Move to Website", "/docs/guides/mobile-companion", "User", "Guide", "Companion", "v0.1 beta", LastUpdated, true),
+        new("mobile-companion-module", "Companion product boundary", "Companion module documentation", "Move to Website", "/docs/modules/mobile-companion", "User", "Module", "Companion", "v0.1 beta", LastUpdated, true),
         new("operating-philosophy", "Safety and trust model", "Website safety page", "Move to Website", "/docs/concepts/operating-philosophy", "All", "Concept", "Platform", "Current", LastUpdated, true),
         new("evidence-provenance", "Evidence architecture", "Repository evidence records", "Move to Website", "/docs/concepts/evidence-provenance", "Business evaluator", "Concept", "Platform", "Current", LastUpdated, true),
         new("integrations", "Integration boundary copy", "Desktop Integration Inbox", "Summary only", "/docs/modules/integrations", "Technical reviewer", "Module", "Desktop", "v7 beta", LastUpdated, true),

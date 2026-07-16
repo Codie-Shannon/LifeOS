@@ -366,6 +366,17 @@
                                     </StackPanel>
                                 </Border>
 
+                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
+                                    <StackPanel>
+                                        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                            <StackPanel><TextBlock Text="Microsoft Files · OneDrive + SharePoint" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}"/><TextBlock Text="Bounded selected-drive, selected-folder, selected-site and selected-library metadata sync through the existing Microsoft provider." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Body}"/></StackPanel>
+                                            <Border Grid.Column="1" Background="{DynamicResource LifeOS.Brush.AccentSoft}" BorderBrush="{DynamicResource LifeOS.Brush.Accent}" BorderThickness="1" CornerRadius="8" Padding="9,5" VerticalAlignment="Top"><TextBlock Text="GROUP 49" FontWeight="SemiBold"/></Border>
+                                        </Grid>
+                                        <TextBlock Text="Read-only metadata only. No automatic body download and no upload, rename, move, delete, sharing or permission writes." Margin="0,9,0,0" Style="{StaticResource LifeOS.Text.Caption}"/>
+                                        <Button Content="Open Microsoft Files" Click="OpenGroup49MicrosoftFiles_Click" HorizontalAlignment="Left" Margin="0,12,0,0" Style="{StaticResource LifeOS.Button}"/>
+                                    </StackPanel>
+                                </Border>
+
                                 <TextBlock Text="About / Diagnostics" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
                                 <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
                                     <StackPanel>

@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using LifeOS.Core.IntegrationInbox;
@@ -28,7 +28,7 @@ public partial class IntegrationInboxView : UserControl
 
         _storePath = IntegrationInboxV9Store.DefaultPath;
         IntegrationInboxV9State state =
-            IntegrationInboxV9Store.LoadOrCreate(DateTimeOffset.UtcNow);
+            Group49IntegrationInboxMigration.LoadOrCreateProofState(DateTimeOffset.UtcNow);
         _service = new IntegrationInboxV9Service(state);
 
         ApplyDensity(compactDensity);

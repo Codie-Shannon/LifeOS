@@ -1,4 +1,4 @@
-﻿using LifeOS.Core.IntegrationControlCentre;
+using LifeOS.Core.IntegrationControlCentre;
 
 namespace LifeOS.Core.MicrosoftProvider;
 
@@ -51,15 +51,15 @@ public static class MicrosoftControlCentreBridge
         provider.DisplayName = "Microsoft 365";
         provider.Description =
             "Single complete LifeOS Microsoft registration. " +
-            "Group 48 delivers read-only Outlook Mail and Calendar.";
+            "Groups 48-49 deliver read-only Mail, Calendar, OneDrive and SharePoint metadata through one provider identity.";
         provider.IsFictional = false;
         provider.Capabilities =
         [
             Capability("outlook-mail", "Outlook Mail", "Group 48 read-only metadata and attachment metadata."),
             Capability("calendar", "Microsoft Calendar", "Group 48 read-only bounded calendar view."),
             Capability("contacts-people", "Contacts / People", "Planned; permission not requested."),
-            Capability("onedrive", "OneDrive", "Planned for Group 49; permission not requested."),
-            Capability("sharepoint", "SharePoint", "Planned for Group 49; permission not requested."),
+            Capability("onedrive", "OneDrive", "Group 49 read-only selected-drive and selected-folder metadata sync."),
+            Capability("sharepoint", "SharePoint", "Group 49 read-only selected-site and selected-library metadata sync."),
             Capability("teams", "Teams", "Planned for a later group; permission not requested."),
             Capability("power-bi", "Power BI", "Planned; permission not requested."),
             Capability("power-automate", "Power Automate", "Planned; permission not requested.")
@@ -177,15 +177,15 @@ public static class MicrosoftControlCentreBridge
             "OneDrive read",
             "onedrive",
             IntegrationPermissionRequirement.Optional,
-            IntegrationPermissionState.NotRequested,
-            null),
+            MapPermission(account, MicrosoftProviderCapability.OneDrive),
+            account.LastIdentityVerificationUtc),
         Permission(
             "microsoft-sites-read",
             "SharePoint read",
             "sharepoint",
             IntegrationPermissionRequirement.Optional,
-            IntegrationPermissionState.NotRequested,
-            null),
+            MapPermission(account, MicrosoftProviderCapability.SharePoint),
+            account.LastIdentityVerificationUtc),
         Permission(
             "microsoft-teams-read",
             "Teams read",
@@ -228,8 +228,8 @@ public static class MicrosoftControlCentreBridge
             account.LastErrorCode,
             account.LastErrorMessage),
         Status("contacts-people", null, null, null, null, null),
-        Status("onedrive", null, null, null, null, null),
-        Status("sharepoint", null, null, null, null, null),
+        Status("onedrive", account.LastIdentityVerificationUtc, account.LastIdentityVerificationUtc, null, null, null),
+        Status("sharepoint", account.LastIdentityVerificationUtc, account.LastIdentityVerificationUtc, null, null, null),
         Status("teams", null, null, null, null, null),
         Status("power-bi", null, null, null, null, null),
         Status("power-automate", null, null, null, null, null)

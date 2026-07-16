@@ -18,9 +18,12 @@ public partial class IntegrationControlCentreView : UserControl
         InitializeComponent();
 
         _storePath = IntegrationControlCentreStore.DefaultPath;
+        DateTimeOffset nowUtc = DateTimeOffset.UtcNow;
         IntegrationControlCentreState state = IntegrationControlCentreStore.LoadOrCreate(
-            DateTimeOffset.UtcNow,
+            nowUtc,
             _storePath);
+        state = Group49ControlCentreMigration.Apply(state, nowUtc);
+        try { IntegrationControlCentreStore.Save(state, _storePath); } catch (Exception exception) when (exception is IOException or UnauthorizedAccessException) { }
         _service = new IntegrationControlCentreService(state);
 
         ApplyDensity(compactDensity);

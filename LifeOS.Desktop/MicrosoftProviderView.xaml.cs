@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Http;
 using System.IO;
 using System.Windows;
@@ -284,7 +284,7 @@ public partial class MicrosoftProviderView : UserControl
                     _selectedAccountId);
 
             IntegrationInboxV9State inboxState =
-                IntegrationInboxV9Store.LoadOrCreate(
+                Group49IntegrationInboxMigration.LoadOrCreateProofState(
                     DateTimeOffset.UtcNow);
 
             using HttpClient graphHttp = new();

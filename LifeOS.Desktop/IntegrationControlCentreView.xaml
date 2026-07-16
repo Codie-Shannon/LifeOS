@@ -170,7 +170,7 @@
             <StackPanel>
                 <TextBlock Text="INTEGRATIONS / SYSTEM CONTROL" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.Accent}" />
                 <TextBlock Text="Integration Control Centre" FontSize="30" FontWeight="SemiBold" Margin="0,4,0,0" />
-                <TextBlock Text="Accounts, provider capabilities, permissions, freshness, recovery and disconnect controls. Fictional proof data only in Group 46." Margin="0,6,0,0" Style="{StaticResource Integration.Body}" />
+                <TextBlock Text="Accounts, provider capabilities, permissions, freshness, recovery and disconnect controls. Group 49 adds bounded read-only Microsoft Files proof state." Margin="0,6,0,0" Style="{StaticResource Integration.Body}" />
             </StackPanel>
             <Border Grid.Column="1" Background="{DynamicResource LifeOS.Brush.AccentSoft}" BorderBrush="{DynamicResource LifeOS.Brush.Accent}" BorderThickness="1" CornerRadius="10" Padding="12,8" VerticalAlignment="Top">
                 <TextBlock Text="READ-ONLY FOUNDATION · NO LIVE CREDENTIALS" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
@@ -191,7 +191,7 @@
                 <StackPanel><TextBlock Text="Needs attention" Style="{StaticResource Integration.Caption}" /><TextBlock x:Name="AttentionCountText" Text="0" FontSize="26" FontWeight="SemiBold" Margin="0,3,0,0" /><TextBlock Text="Visible; never silently green" Style="{StaticResource Integration.Caption}" /></StackPanel>
             </Border>
             <Border Style="{StaticResource Integration.Card}" Width="215">
-                <StackPanel><TextBlock Text="External writes" Style="{StaticResource Integration.Caption}" /><TextBlock Text="0" FontSize="26" FontWeight="SemiBold" Margin="0,3,0,0" /><TextBlock Text="Disabled for Group 46" Style="{StaticResource Integration.Caption}" /></StackPanel>
+                <StackPanel><TextBlock Text="External writes" Style="{StaticResource Integration.Caption}" /><TextBlock Text="0" FontSize="26" FontWeight="SemiBold" Margin="0,3,0,0" /><TextBlock Text="Disabled for Group 49" Style="{StaticResource Integration.Caption}" /></StackPanel>
             </Border>
         </WrapPanel>
 
@@ -210,7 +210,7 @@
                                             <Grid>
                                                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                                                 <TextBlock Text="{Binding DisplayName}" Style="{StaticResource Integration.Subheading}" />
-                                                <Border Grid.Column="1" Background="{DynamicResource LifeOS.Brush.SurfaceRaised}" BorderBrush="{DynamicResource LifeOS.Brush.Border}" BorderThickness="1" CornerRadius="8" Padding="8,4"><TextBlock Text="FICTIONAL" FontSize="11" FontWeight="SemiBold" /></Border>
+                                                <Border Grid.Column="1" Background="{DynamicResource LifeOS.Brush.SurfaceRaised}" BorderBrush="{DynamicResource LifeOS.Brush.Border}" BorderThickness="1" CornerRadius="8" Padding="8,4"><TextBlock Text="READ ONLY" FontSize="11" FontWeight="SemiBold" /></Border>
                                             </Grid>
                                             <TextBlock Text="{Binding Description}" Margin="0,8,0,10" Style="{StaticResource Integration.Body}" />
                                             <TextBlock Text="{Binding Summary}" Style="{StaticResource Integration.Caption}" />

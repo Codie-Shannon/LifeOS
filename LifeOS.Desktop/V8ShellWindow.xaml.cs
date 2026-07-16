@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -34,6 +34,7 @@ public partial class V8ShellWindow : Window
     private IntegrationControlCentreView? _integrationControlCentreView;
     private IntegrationInboxView? _integrationInboxView;
     private MicrosoftProviderView? _microsoftProviderView;
+    private Group49MicrosoftFilesView? _group49MicrosoftFilesView;
     private WorkspaceSnapshot _snapshot = WorkspaceSnapshot.Load();
 
     private bool IsCommandOpen => CommandOverlay.Visibility == Visibility.Visible;
@@ -701,6 +702,33 @@ public partial class V8ShellWindow : Window
     }
 
 
+    private void OpenGroup49MicrosoftFiles_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (!string.Equals(
+                _activeWorkspace,
+                "Settings",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            NavigateTo("Settings");
+        }
+
+        _group49MicrosoftFilesView ??=
+            CreateGroup49MicrosoftFilesView();
+
+        ShowSettingsSubpage(_group49MicrosoftFilesView);
+    }
+
+    private Group49MicrosoftFilesView CreateGroup49MicrosoftFilesView()
+    {
+        Group49MicrosoftFilesView view = new();
+        view.BackRequested += (_, _) =>
+            ShowSettingsOverview(scrollToTop: true);
+        return view;
+    }
+
+
     private void ShowSettingsSubpage(
         UserControl subpage)
     {
@@ -741,7 +769,7 @@ public partial class V8ShellWindow : Window
             try
             {
                 IntegrationInboxV9State state =
-                    IntegrationInboxV9Store.LoadOrCreate(
+                    Group49IntegrationInboxMigration.LoadOrCreateProofState(
                         DateTimeOffset.UtcNow);
                 count = new IntegrationInboxV9Service(state)
                     .GetReviewCount();

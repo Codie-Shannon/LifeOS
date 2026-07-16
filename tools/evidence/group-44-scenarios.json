@@ -1,0 +1,57 @@
+{
+  "group": 44,
+  "title": "v8 workspace and module migration",
+  "expectedCount": 8,
+  "captureWidth": 1360,
+  "captureHeight": 820,
+  "scenarios": [
+    {
+      "id": "group44-work",
+      "fileName": "01_Work_Workspace.png",
+      "workspace": "Work",
+      "proof": "clients, follow-ups, sessions, timesheets and paid-work modules in one workspace"
+    },
+    {
+      "id": "group44-career",
+      "fileName": "02_Career_Separate_From_Work.png",
+      "workspace": "Career",
+      "proof": "profile, CV, application and interview surfaces remain separate from client delivery"
+    },
+    {
+      "id": "group44-money",
+      "fileName": "03_Money_Workspace.png",
+      "workspace": "Money",
+      "proof": "weekly money, bills, payment timing, pay-later and receipt evidence"
+    },
+    {
+      "id": "group44-life-projects",
+      "fileName": "04_Life_And_Projects_Organization.png",
+      "workspace": "Life/Projects",
+      "proof": "personal operations and project proof are organised without extra core pages"
+    },
+    {
+      "id": "group44-timesheet",
+      "fileName": "05_Timesheet_Work_Behavior_Preserved.png",
+      "workspace": "Work",
+      "proof": "canonical work-session/timesheet behaviour and records remain preserved"
+    },
+    {
+      "id": "group44-assistant",
+      "fileName": "06_Assistant_Behavior_Preserved.png",
+      "workspace": "Assistant",
+      "proof": "source-backed answers, review-only plans, explicit memory and no execution"
+    },
+    {
+      "id": "group44-density",
+      "fileName": "07_Comfortable_Vs_Compact.png",
+      "workspace": "Work",
+      "proof": "comfortable and compact density reflow the same content"
+    },
+    {
+      "id": "group44-validation",
+      "fileName": "08_Validation_Summary.png",
+      "workspace": "PowerShell",
+      "proof": "all regressions, builds, scans, synchronization and clean-tree checks pass"
+    }
+  ]
+}

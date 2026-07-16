@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace LifeOS.Desktop;
 
@@ -14,29 +17,20 @@ public partial class V8ShellWindow : Window
         "Home", "Work", "Career", "Money", "Life", "Projects", "Assistant", "Settings"
     };
 
-    private readonly Dictionary<string, (string Subtitle, string Description)> _workspaceCopy = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["Home"] = ("Balanced operating overview", "Today's pressure, work and money in one calm view."),
-        ["Work"] = ("Clients, follow-ups and paid work", "The permanent home for clients, waiting-on items, timesheets, invoices and work records. Existing v7 modules remain available while migration is staged."),
-        ["Career"] = ("Career stays separate from Work", "Profile, CVs, applications, interviews and career follow-ups will live here without mixing them into client delivery."),
-        ["Money"] = ("Income, bills and weekly control", "Weekly money, expected income, bills, payment timing and pressure signals will be reorganised here."),
-        ["Life"] = ("Personal operating systems", "Goals, routines, family, household, road trips and personal administration belong here."),
-        ["Projects"] = ("Milestones, evidence and delivery", "Active projects, milestones, proof and later DevOps views will share this workspace."),
-        ["Assistant"] = ("Source-backed, review-first help", "The existing assistant, plans, evidence boundaries and explicit memory remain preserved underneath this shell."),
-        ["Settings"] = ("System behaviour only", "Appearance, startup, accessibility, profiles, privacy, sync, automation safety and diagnostics will be completed in Group 45.")
-    };
-
     private string _activeWorkspace = "Home";
+    private bool _compactDensity;
     private bool _contextOpen;
-    private bool _lightTheme;
     private bool _stopArmed;
     private IInputElement? _focusBeforeCommand;
+    private WorkspaceSnapshot _snapshot = WorkspaceSnapshot.Load();
 
     private bool IsCommandOpen =>
         CommandOverlay.Visibility == Visibility.Visible;
 
     public V8ShellWindow()
     {
+        WorkspaceCatalog.Validate(MainWindow.WorkspaceRouteIds);
+
         InitializeComponent();
 
         Loaded += Window_Loaded;
@@ -45,110 +39,20 @@ public partial class V8ShellWindow : Window
         NavigateTo("Home");
     }
 
-    private void Window_Loaded(
-        object sender,
-        RoutedEventArgs e)
+    private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         ApplyResponsiveLayout();
+        ApplyDensity();
     }
 
-    private void Window_SizeChanged(
-        object sender,
-        SizeChangedEventArgs e)
+    private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         ApplyResponsiveLayout();
+        ApplyDensity();
     }
 
-    private void ApplyResponsiveLayout()
-    {
-        if (!IsLoaded) return;
-
-        bool compactWidth = ActualWidth <= 1120;
-        bool veryCompactWidth = ActualWidth <= 1000;
-        bool compactHeight = ActualHeight <= 800;
-
-        WorkspaceTitle.FontSize =
-            compactWidth
-                ? 16
-                : 17;
-
-        WorkspaceSubtitle.Visibility =
-            compactWidth
-                ? Visibility.Collapsed
-                : Visibility.Visible;
-
-        CommandButton.Width =
-            veryCompactWidth
-                ? 190
-                : compactWidth
-                    ? 230
-                    : 360;
-
-        CommandButton.MaxWidth = CommandButton.Width;
-
-        TextBlock? commandLabel =
-            FindVisualChildren<TextBlock>(CommandButton)
-                .FirstOrDefault(
-                    text =>
-                        text.Text.StartsWith(
-                            "Search",
-                            StringComparison.Ordinal));
-
-        if (commandLabel is not null)
-        {
-            commandLabel.Text =
-                compactWidth
-                    ? "Search"
-                    : "Search or run a command";
-        }
-
-        TextBlock? commandShortcut =
-            FindVisualChildren<TextBlock>(CommandButton)
-                .FirstOrDefault(
-                    text =>
-                        string.Equals(
-                            text.Text,
-                            "Ctrl+K",
-                            StringComparison.Ordinal));
-
-        if (commandShortcut is not null)
-        {
-            commandShortcut.Visibility =
-                veryCompactWidth
-                    ? Visibility.Collapsed
-                    : Visibility.Visible;
-
-            commandShortcut.Margin =
-                compactWidth
-                    ? new Thickness(8, 0, 0, 0)
-                    : new Thickness(16, 0, 0, 0);
-        }
-
-        if (StopButton.Parent is Panel topBarActions)
-        {
-            foreach (Button button in
-                     topBarActions.Children.OfType<Button>())
-            {
-                button.MinWidth = 0;
-
-                button.Padding =
-                    compactWidth
-                        ? new Thickness(8, 6, 8, 6)
-                        : new Thickness(12, 8, 12, 8);
-
-                button.Margin =
-                    compactWidth
-                        ? new Thickness(2, 0, 2, 0)
-                        : new Thickness(4, 0, 4, 0);
-
-                button.FontSize =
-                    compactWidth
-                        ? 12
-                        : 13;
-            }
-        }
-
-        Button[] navigationButtons =
+    private Button[] GetNavigationButtons() =>
+        new[]
         {
             HomeNav,
             WorkNav,
@@ -160,144 +64,114 @@ public partial class V8ShellWindow : Window
             SettingsNav
         };
 
-        foreach (Button button in navigationButtons)
+    private void ApplyResponsiveLayout()
+    {
+        if (!IsLoaded)
         {
-            button.Height =
-                compactHeight
-                    ? 56
-                    : 62;
+            return;
+        }
 
-            button.Margin =
-                compactHeight
-                    ? new Thickness(0, 1, 0, 1)
-                    : new Thickness(0, 3, 0, 3);
+        bool compactWidth = ActualWidth <= 1120;
+        bool veryCompactWidth = ActualWidth <= 1000;
+        bool compactHeight = ActualHeight <= 800;
 
-            button.Padding =
-                compactHeight
-                    ? new Thickness(0, 2, 0, 2)
-                    : new Thickness(0);
+        WorkspaceTitle.FontSize = compactWidth ? 16 : 17;
+        WorkspaceSubtitle.Visibility = compactWidth
+            ? Visibility.Collapsed
+            : Visibility.Visible;
 
-            button.HorizontalContentAlignment =
-                HorizontalAlignment.Center;
+        CommandButton.Width = veryCompactWidth
+            ? 190
+            : compactWidth
+                ? 230
+                : 360;
+        CommandButton.MaxWidth = CommandButton.Width;
 
-            button.VerticalContentAlignment =
-                VerticalAlignment.Center;
+        TextBlock? commandLabel = FindVisualChildren<TextBlock>(CommandButton)
+            .FirstOrDefault(text =>
+                text.Text.StartsWith("Search", StringComparison.Ordinal));
 
-            TextBlock[] navigationText =
-                FindVisualChildren<TextBlock>(button)
-                    .ToArray();
+        if (commandLabel is not null)
+        {
+            commandLabel.Text = compactWidth
+                ? "Search"
+                : "Search or run a command";
+        }
 
+        TextBlock? commandShortcut = FindVisualChildren<TextBlock>(CommandButton)
+            .FirstOrDefault(text =>
+                string.Equals(text.Text, "Ctrl+K", StringComparison.Ordinal));
+
+        if (commandShortcut is not null)
+        {
+            commandShortcut.Visibility = veryCompactWidth
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+            commandShortcut.Margin = compactWidth
+                ? new Thickness(8, 0, 0, 0)
+                : new Thickness(16, 0, 0, 0);
+        }
+
+        if (StopButton.Parent is Panel topBarActions)
+        {
+            foreach (Button button in topBarActions.Children.OfType<Button>())
+            {
+                button.MinWidth = 0;
+                button.Padding = compactWidth
+                    ? new Thickness(8, 6, 8, 6)
+                    : new Thickness(12, 8, 12, 8);
+                button.Margin = compactWidth
+                    ? new Thickness(2, 0, 2, 0)
+                    : new Thickness(4, 0, 4, 0);
+                button.FontSize = compactWidth ? 12 : 13;
+            }
+        }
+
+        foreach (Button button in GetNavigationButtons())
+        {
+            button.Height = compactHeight ? 56 : 62;
+            button.Margin = compactHeight
+                ? new Thickness(0, 1, 0, 1)
+                : new Thickness(0, 3, 0, 3);
+            button.Padding = compactHeight
+                ? new Thickness(0, 2, 0, 2)
+                : new Thickness(0);
+            button.HorizontalContentAlignment = HorizontalAlignment.Center;
+            button.VerticalContentAlignment = VerticalAlignment.Center;
+
+            TextBlock[] navigationText = FindVisualChildren<TextBlock>(button).ToArray();
             if (navigationText.Length >= 2)
             {
                 TextBlock icon = navigationText[0];
                 TextBlock label = navigationText[1];
 
-                icon.FontSize =
-                    compactHeight
-                        ? 18
-                        : 19;
-
-                icon.Margin =
-                    compactHeight
-                        ? new Thickness(0, 0, 0, 1)
-                        : new Thickness(0, 0, 0, 2);
-
-                label.FontSize =
-                    compactHeight
-                        ? 10
-                        : 11;
-
+                icon.FontSize = compactHeight ? 18 : 19;
+                icon.Margin = compactHeight
+                    ? new Thickness(0, 0, 0, 1)
+                    : new Thickness(0, 0, 0, 2);
+                label.FontSize = compactHeight ? 10 : 11;
                 label.Margin = new Thickness(0);
             }
         }
 
         if (HomeNav.Parent is StackPanel navigationStack)
         {
-            navigationStack.Margin =
-                compactHeight
-                    ? new Thickness(8, 0, 8, 0)
-                    : new Thickness(8, 8, 8, 12);
+            navigationStack.Margin = compactHeight
+                ? new Thickness(8, 0, 8, 0)
+                : new Thickness(8, 8, 8, 12);
         }
 
-        ScrollViewer? railScrollViewer =
-            FindVisualChildren<ScrollViewer>(this)
-                .FirstOrDefault(
-                    viewer =>
-                        FindVisualChildren<Button>(viewer)
-                            .Any(
-                                button =>
-                                    ReferenceEquals(
-                                        button,
-                                        HomeNav)));
+        ScrollViewer? railScrollViewer = FindVisualChildren<ScrollViewer>(this)
+            .FirstOrDefault(viewer =>
+                FindVisualChildren<Button>(viewer)
+                    .Any(button => ReferenceEquals(button, HomeNav)));
 
         if (railScrollViewer is not null)
         {
-            railScrollViewer.VerticalScrollBarVisibility =
-                compactHeight
-                    ? ScrollBarVisibility.Disabled
-                    : ScrollBarVisibility.Auto;
-
-            railScrollViewer.HorizontalScrollBarVisibility =
-                ScrollBarVisibility.Disabled;
-        }
-
-        if (HomeWorkspace.Parent is FrameworkElement workspaceHost)
-        {
-            workspaceHost.Margin =
-                compactWidth
-                    ? new Thickness(14)
-                    : new Thickness(24);
-        }
-
-        if (HomeWorkspace.ColumnDefinitions.Count >= 2)
-        {
-            HomeWorkspace.ColumnDefinitions[0].Width =
-                new GridLength(
-                    compactWidth ? 1.65 : 2,
-                    GridUnitType.Star);
-
-            HomeWorkspace.ColumnDefinitions[1].Width =
-                new GridLength(
-                    1,
-                    GridUnitType.Star);
-        }
-
-        Grid? primaryColumn =
-            HomeWorkspace.Children
-                .OfType<Grid>()
-                .FirstOrDefault(
-                    element =>
-                        Grid.GetRow(element) == 1 &&
-                        Grid.GetColumn(element) == 0);
-
-        if (primaryColumn is not null)
-        {
-            primaryColumn.Margin =
-                compactWidth
-                    ? new Thickness(0, 0, 7, 0)
-                    : new Thickness(0, 0, 12, 0);
-        }
-
-        StackPanel? secondaryColumn =
-            HomeWorkspace.Children
-                .OfType<StackPanel>()
-                .FirstOrDefault(
-                    element =>
-                        Grid.GetRow(element) == 1 &&
-                        Grid.GetColumn(element) == 1);
-
-        if (secondaryColumn is not null)
-        {
-            secondaryColumn.Margin =
-                compactWidth
-                    ? new Thickness(7, 0, 0, 0)
-                    : new Thickness(12, 0, 0, 0);
-        }
-
-        foreach (TextBlock textBlock in
-                 FindVisualChildren<TextBlock>(HomeWorkspace))
-        {
-            textBlock.TextWrapping = TextWrapping.Wrap;
+            railScrollViewer.VerticalScrollBarVisibility = compactHeight
+                ? ScrollBarVisibility.Disabled
+                : ScrollBarVisibility.Auto;
+            railScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
         }
 
         if (compactWidth && _contextOpen)
@@ -306,9 +180,59 @@ public partial class V8ShellWindow : Window
             ContextColumn.Width = new GridLength(0);
         }
     }
+
+    private void ApplyDensity()
+    {
+        if (!IsLoaded)
+        {
+            return;
+        }
+
+        bool useCompact = _compactDensity || ActualWidth <= 980;
+
+        WorkspaceRoot.Margin = useCompact
+            ? new Thickness(16)
+            : new Thickness(24);
+
+        DensityButton.Content = _compactDensity
+            ? "Use Comfortable"
+            : "Use Compact";
+
+        DensityStatusText.Text = _compactDensity
+            ? "Compact density"
+            : "Comfortable density";
+
+        foreach (Border border in FindVisualChildren<Border>(WorkspaceRoot))
+        {
+            if (string.Equals(border.Tag as string, "WorkspaceMetricCard", StringComparison.Ordinal))
+            {
+                border.Width = useCompact ? 184 : 220;
+                border.Padding = useCompact
+                    ? new Thickness(12)
+                    : new Thickness(16);
+                border.Margin = useCompact
+                    ? new Thickness(0, 0, 8, 8)
+                    : new Thickness(0, 0, 12, 12);
+            }
+            else if (string.Equals(border.Tag as string, "WorkspaceModuleCard", StringComparison.Ordinal))
+            {
+                border.Width = useCompact ? 292 : 348;
+                border.Padding = useCompact
+                    ? new Thickness(14)
+                    : new Thickness(18);
+                border.Margin = useCompact
+                    ? new Thickness(0, 0, 8, 8)
+                    : new Thickness(0, 0, 12, 12);
+            }
+        }
+    }
+
     private void WorkspaceNav_Click(object sender, RoutedEventArgs e)
     {
-        if (IsCommandOpen) return;
+        if (IsCommandOpen)
+        {
+            return;
+        }
 
         if (sender is Button { Tag: string workspace })
         {
@@ -318,38 +242,89 @@ public partial class V8ShellWindow : Window
 
     private void NavigateTo(string workspace)
     {
-        if (!_workspaceCopy.TryGetValue(workspace, out var copy)) return;
-        _activeWorkspace = workspace;
-        WorkspaceTitle.Text = workspace;
-        WorkspaceSubtitle.Text = copy.Subtitle;
-        ContextTitle.Text = $"{workspace} context";
-        ContextBody.Text = copy.Description;
-        HomeWorkspace.Visibility = workspace == "Home" ? Visibility.Visible : Visibility.Collapsed;
-        PlaceholderWorkspace.Visibility = workspace == "Home" ? Visibility.Collapsed : Visibility.Visible;
-        PlaceholderTitle.Text = workspace;
-        PlaceholderDescription.Text = copy.Description;
-        PlaceholderEyebrow.Text = workspace == "Settings" ? "GROUP 45 COMPLETION BOUNDARY" : "GROUP 43 WORKSPACE FOUNDATION";
+        WorkspaceDefinition definition;
+
+        try
+        {
+            definition = WorkspaceCatalog.Get(workspace);
+        }
+        catch (InvalidOperationException)
+        {
+            return;
+        }
+
+        _activeWorkspace = definition.Name;
+        _snapshot = WorkspaceSnapshot.Load();
+
+        WorkspaceTitle.Text = definition.Name;
+        WorkspaceSubtitle.Text = definition.Subtitle;
+        WorkspaceEyebrow.Text = definition.Eyebrow;
+        WorkspaceDisplayTitle.Text = definition.DisplayTitle;
+        WorkspaceDescription.Text = definition.Description;
+
+        MetricItems.ItemsSource = definition.Metrics
+            .Select(metric => new WorkspaceMetricView(
+                metric.Label,
+                _snapshot.Resolve(metric),
+                metric.Detail))
+            .ToArray();
+
+        SectionItems.ItemsSource = definition.Sections;
+
+        ContextTitle.Text = $"{definition.Name} context";
+        ContextBody.Text = definition.ContextSummary;
+        ContextModulesList.ItemsSource = definition.Sections
+            .SelectMany(section => section.Modules)
+            .Select(module => $"{module.Title} — {module.Status}")
+            .ToArray();
+
+        WorkspaceScrollViewer.ScrollToTop();
         UpdateNavigationSelection();
+
+        Dispatcher.BeginInvoke(
+            DispatcherPriority.Loaded,
+            new Action(ApplyDensity));
     }
 
     private void UpdateNavigationSelection()
     {
-        foreach (var button in FindVisualChildren<Button>(this).Where(b => b.Tag is string))
+        foreach (Button button in GetNavigationButtons())
         {
-            bool selected = string.Equals(button.Tag as string, _activeWorkspace, StringComparison.OrdinalIgnoreCase);
-            button.Background = selected ? (System.Windows.Media.Brush)FindResource("LifeOS.Brush.AccentSoft") : System.Windows.Media.Brushes.Transparent;
-            button.BorderBrush = selected ? (System.Windows.Media.Brush)FindResource("LifeOS.Brush.Accent") : System.Windows.Media.Brushes.Transparent;
+            bool selected = string.Equals(
+                button.Tag as string,
+                _activeWorkspace,
+                StringComparison.OrdinalIgnoreCase);
+
+            button.Background = selected
+                ? (Brush)FindResource("LifeOS.Brush.AccentSoft")
+                : Brushes.Transparent;
+            button.BorderBrush = selected
+                ? (Brush)FindResource("LifeOS.Brush.Accent")
+                : Brushes.Transparent;
         }
     }
 
-    private static IEnumerable<T> FindVisualChildren<T>(DependencyObject parent) where T : DependencyObject
+    private static IEnumerable<T> FindVisualChildren<T>(DependencyObject parent)
+        where T : DependencyObject
     {
-        if (parent is null) yield break;
-        for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(parent); i++)
+        if (parent is null)
         {
-            DependencyObject child = System.Windows.Media.VisualTreeHelper.GetChild(parent, i);
-            if (child is T typed) yield return typed;
-            foreach (T descendant in FindVisualChildren<T>(child)) yield return descendant;
+            yield break;
+        }
+
+        for (int index = 0; index < VisualTreeHelper.GetChildrenCount(parent); index++)
+        {
+            DependencyObject child = VisualTreeHelper.GetChild(parent, index);
+
+            if (child is T typed)
+            {
+                yield return typed;
+            }
+
+            foreach (T descendant in FindVisualChildren<T>(child))
+            {
+                yield return descendant;
+            }
         }
     }
 
@@ -382,7 +357,6 @@ public partial class V8ShellWindow : Window
             if (workspaceShortcut)
             {
                 e.Handled = true;
-                return;
             }
 
             return;
@@ -402,8 +376,11 @@ public partial class V8ShellWindow : Window
         }
     }
 
-    private void CommandButton_Click(object sender, RoutedEventArgs e) => OpenCommand();
-    private void CloseCommand_Click(object sender, RoutedEventArgs e) => CloseCommand();
+    private void CommandButton_Click(object sender, RoutedEventArgs e) =>
+        OpenCommand();
+
+    private void CloseCommand_Click(object sender, RoutedEventArgs e) =>
+        CloseCommand();
 
     private void OpenCommand()
     {
@@ -414,16 +391,17 @@ public partial class V8ShellWindow : Window
         }
 
         _focusBeforeCommand = Keyboard.FocusedElement;
-
         CommandOverlay.Visibility = Visibility.Visible;
         CommandTextBox.Clear();
-
         Keyboard.Focus(CommandTextBox);
     }
 
     private void CloseCommand()
     {
-        if (!IsCommandOpen) return;
+        if (!IsCommandOpen)
+        {
+            return;
+        }
 
         CommandOverlay.Visibility = Visibility.Collapsed;
 
@@ -443,15 +421,15 @@ public partial class V8ShellWindow : Window
 
     private void CommandTextBox_KeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Enter) return;
+        if (e.Key != Key.Enter)
+        {
+            return;
+        }
 
         string command = CommandTextBox.Text.Trim();
 
-        string? workspace = WorkspaceOrder.FirstOrDefault(
-            candidate => string.Equals(
-                candidate,
-                command,
-                StringComparison.OrdinalIgnoreCase));
+        string? workspace = WorkspaceOrder.FirstOrDefault(candidate =>
+            string.Equals(candidate, command, StringComparison.OrdinalIgnoreCase));
 
         if (workspace is not null)
         {
@@ -463,7 +441,7 @@ public partial class V8ShellWindow : Window
 
         if (command.Equals("Theme light", StringComparison.OrdinalIgnoreCase))
         {
-            ApplyTheme(true);
+            ApplyTheme(light: true);
             CloseCommand();
             e.Handled = true;
             return;
@@ -471,7 +449,23 @@ public partial class V8ShellWindow : Window
 
         if (command.Equals("Theme dark", StringComparison.OrdinalIgnoreCase))
         {
-            ApplyTheme(false);
+            ApplyTheme(light: false);
+            CloseCommand();
+            e.Handled = true;
+            return;
+        }
+
+        if (command.Equals("Density compact", StringComparison.OrdinalIgnoreCase))
+        {
+            SetDensity(compact: true);
+            CloseCommand();
+            e.Handled = true;
+            return;
+        }
+
+        if (command.Equals("Density comfortable", StringComparison.OrdinalIgnoreCase))
+        {
+            SetDensity(compact: false);
             CloseCommand();
             e.Handled = true;
             return;
@@ -487,13 +481,38 @@ public partial class V8ShellWindow : Window
 
     private void ApplyTheme(bool light)
     {
-        _lightTheme = light;
-        ResourceDictionary theme = new() { Source = new Uri(light ? "Resources/Themes/Theme.Light.xaml" : "Resources/Themes/Theme.Dark.xaml", UriKind.Relative) };
-        var dictionaries = Application.Current.Resources.MergedDictionaries;
-        if (dictionaries.Count == 0) dictionaries.Add(theme);
-        else if (dictionaries.Count == 1) dictionaries.Add(theme);
-        else dictionaries[dictionaries.Count - 1] = theme;
+        ResourceDictionary theme = new()
+        {
+            Source = new Uri(
+                light
+                    ? "Resources/Themes/Theme.Light.xaml"
+                    : "Resources/Themes/Theme.Dark.xaml",
+                UriKind.Relative)
+        };
+
+        var dictionaries =
+            Application.Current.Resources.MergedDictionaries;
+
+        if (dictionaries.Count <= 1)
+        {
+            dictionaries.Add(theme);
+        }
+        else
+        {
+            dictionaries[dictionaries.Count - 1] = theme;
+        }
+
         UpdateNavigationSelection();
+        ApplyDensity();
+    }
+
+    private void DensityButton_Click(object sender, RoutedEventArgs e) =>
+        SetDensity(!_compactDensity);
+
+    private void SetDensity(bool compact)
+    {
+        _compactDensity = compact;
+        ApplyDensity();
     }
 
     private void ContextButton_Click(object sender, RoutedEventArgs e)
@@ -506,32 +525,102 @@ public partial class V8ShellWindow : Window
         }
 
         _contextOpen = !_contextOpen;
-
-        ContextColumn.Width =
-            _contextOpen
-                ? new GridLength(320)
-                : new GridLength(0);
+        ContextColumn.Width = _contextOpen
+            ? new GridLength(320)
+            : new GridLength(0);
     }
 
-    private void OpenLegacy_Click(object sender, RoutedEventArgs e) => OpenLegacy();
-
-    private static void OpenLegacy()
+    private void OpenModule_Click(object sender, RoutedEventArgs e)
     {
-        MainWindow legacyWindow = new() { Owner = Application.Current.MainWindow };
+        if (sender is not Button { Tag: string routeId } ||
+            string.IsNullOrWhiteSpace(routeId))
+        {
+            return;
+        }
+
+        if (routeId.StartsWith("workspace:", StringComparison.OrdinalIgnoreCase))
+        {
+            NavigateTo(routeId["workspace:".Length..]);
+            return;
+        }
+
+        if (!WorkspaceCatalog.IsRouteAllowed(_activeWorkspace, routeId))
+        {
+            MessageBox.Show(
+                "This module is not assigned to the active workspace.",
+                "LifeOS workspace boundary",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        MainWindow moduleWindow = new()
+        {
+            Owner = this
+        };
+
+        moduleWindow.OpenWorkspaceModule(routeId);
+        moduleWindow.Show();
+    }
+
+    private void OpenLegacy()
+    {
+        MainWindow legacyWindow = new()
+        {
+            Owner = this
+        };
+
         legacyWindow.Show();
     }
 
-    private void OpenWork_Click(object sender, RoutedEventArgs e) => NavigateTo("Work");
-    private void OpenMoney_Click(object sender, RoutedEventArgs e) => NavigateTo("Money");
-    private void ReviewButton_Click(object sender, RoutedEventArgs e) { ContextTitle.Text = "Combined review"; ContextBody.Text = "Four review items are collected across work, money, assistant and system safety."; if (!_contextOpen) ContextButton_Click(sender, e); }
-    private void StatusButton_Click(object sender, RoutedEventArgs e) { ContextTitle.Text = "System and sync status"; ContextBody.Text = "Local data is healthy. Companion sync is connected. No pending transfer requires intervention."; if (!_contextOpen) ContextButton_Click(sender, e); }
-    private void ProfileButton_Click(object sender, RoutedEventArgs e) { ContextTitle.Text = "Active context"; ContextBody.Text = "Profile: Codie Shannon. Context: Personal. Local-first and review-first boundaries remain active."; if (!_contextOpen) ContextButton_Click(sender, e); }
+    private void ReviewButton_Click(object sender, RoutedEventArgs e)
+    {
+        ContextTitle.Text = "Combined review";
+        ContextBody.Text =
+            "Review items remain collected across Work, Money, Assistant and system safety. Opening a review does not edit the active workspace.";
+
+        if (!_contextOpen)
+        {
+            ContextButton_Click(sender, e);
+        }
+    }
+
+    private void StatusButton_Click(object sender, RoutedEventArgs e)
+    {
+        ContextTitle.Text = "System and sync status";
+        ContextBody.Text =
+            "Local data remains authoritative. Companion and integration state stay review-first, and no pending transfer mutates a workspace automatically.";
+
+        if (!_contextOpen)
+        {
+            ContextButton_Click(sender, e);
+        }
+    }
+
+    private void ProfileButton_Click(object sender, RoutedEventArgs e)
+    {
+        ContextTitle.Text = "Active context";
+        ContextBody.Text =
+            "Profile: Codie Shannon. Context: Personal. Workspace assignments do not change the underlying trust, review or evidence boundaries.";
+
+        if (!_contextOpen)
+        {
+            ContextButton_Click(sender, e);
+        }
+    }
 
     private void StopButton_Click(object sender, RoutedEventArgs e)
     {
         _stopArmed = !_stopArmed;
-        StopButton.Content = _stopArmed ? "STOP ARMED" : "Stop";
-        StopButton.BorderBrush = (System.Windows.Media.Brush)FindResource(_stopArmed ? "LifeOS.Brush.Danger" : "LifeOS.Brush.Border");
-        StopButton.ToolTip = _stopArmed ? "Emergency Stop is armed. Press again to return to idle." : "Emergency Stop is idle.";
+        StopButton.Content = _stopArmed
+            ? "STOP ARMED"
+            : "Stop";
+        StopButton.BorderBrush = (Brush)FindResource(
+            _stopArmed
+                ? "LifeOS.Brush.Danger"
+                : "LifeOS.Brush.Border");
+        StopButton.ToolTip = _stopArmed
+            ? "Emergency Stop is armed. Press again to return to idle."
+            : "Emergency Stop is idle.";
     }
 }

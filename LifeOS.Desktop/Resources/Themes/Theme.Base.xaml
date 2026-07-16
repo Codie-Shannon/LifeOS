@@ -111,4 +111,246 @@
         <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextSecondary}"/>
         <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
     </Style>
+  <!-- Group 45 ComboBox theme hotfix -->
+
+  <Style x:Key="LifeOS.ComboBoxItemStyle"
+         TargetType="{x:Type ComboBoxItem}">
+    <Setter Property="Foreground"
+            Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+    <Setter Property="Background"
+            Value="{DynamicResource LifeOS.Brush.SurfaceRaised}"/>
+    <Setter Property="BorderBrush"
+            Value="Transparent"/>
+    <Setter Property="BorderThickness"
+            Value="1"/>
+    <Setter Property="Padding"
+            Value="10,7"/>
+    <Setter Property="Margin"
+            Value="2"/>
+    <Setter Property="HorizontalContentAlignment"
+            Value="Stretch"/>
+    <Setter Property="VerticalContentAlignment"
+            Value="Center"/>
+    <Setter Property="SnapsToDevicePixels"
+            Value="True"/>
+    <Setter Property="FocusVisualStyle"
+            Value="{x:Null}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+          <Border x:Name="ItemBorder"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="5"
+                  Padding="{TemplateBinding Padding}"
+                  SnapsToDevicePixels="True">
+            <ContentPresenter
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+          </Border>
+
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected"
+                     Value="True">
+              <Setter TargetName="ItemBorder"
+                      Property="Background"
+                      Value="{DynamicResource LifeOS.Brush.AccentSoft}"/>
+              <Setter TargetName="ItemBorder"
+                      Property="BorderBrush"
+                      Value="{DynamicResource LifeOS.Brush.Focus}"/>
+            </Trigger>
+
+            <Trigger Property="IsHighlighted"
+                     Value="True">
+              <Setter TargetName="ItemBorder"
+                      Property="Background"
+                      Value="{DynamicResource LifeOS.Brush.SurfaceHover}"/>
+              <Setter TargetName="ItemBorder"
+                      Property="BorderBrush"
+                      Value="{DynamicResource LifeOS.Brush.Border}"/>
+            </Trigger>
+
+            <Trigger Property="IsKeyboardFocusWithin"
+                     Value="True">
+              <Setter TargetName="ItemBorder"
+                      Property="BorderBrush"
+                      Value="{DynamicResource LifeOS.Brush.Focus}"/>
+            </Trigger>
+
+            <Trigger Property="IsEnabled"
+                     Value="False">
+              <Setter Property="Opacity"
+                      Value="0.55"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="{x:Type ComboBoxItem}"
+         BasedOn="{StaticResource LifeOS.ComboBoxItemStyle}"/>
+
+  <Style x:Key="LifeOS.ComboBoxStyle"
+         TargetType="{x:Type ComboBox}">
+    <Setter Property="Foreground"
+            Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+    <Setter Property="Background"
+            Value="{DynamicResource LifeOS.Brush.SurfaceRaised}"/>
+    <Setter Property="BorderBrush"
+            Value="{DynamicResource LifeOS.Brush.Border}"/>
+    <Setter Property="BorderThickness"
+            Value="1"/>
+    <Setter Property="Padding"
+            Value="11,8,38,8"/>
+    <Setter Property="MinHeight"
+            Value="38"/>
+    <Setter Property="MaxDropDownHeight"
+            Value="320"/>
+    <Setter Property="HorizontalContentAlignment"
+            Value="Stretch"/>
+    <Setter Property="VerticalContentAlignment"
+            Value="Center"/>
+    <Setter Property="SnapsToDevicePixels"
+            Value="True"/>
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+            Value="Disabled"/>
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+            Value="Auto"/>
+    <Setter Property="FocusVisualStyle"
+            Value="{x:Null}"/>
+
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ComboBox}">
+          <Grid SnapsToDevicePixels="True">
+
+            <Border x:Name="ControlBorder"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="6"/>
+
+            <ContentPresenter
+                x:Name="ContentSite"
+                Margin="{TemplateBinding Padding}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Content="{TemplateBinding SelectionBoxItem}"
+                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                IsHitTestVisible="False"
+                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+
+            <Path x:Name="DropDownArrow"
+                  Width="10"
+                  Height="6"
+                  Margin="0,0,14,0"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Center"
+                  Data="M 0 0 L 5 5 L 10 0"
+                  Fill="Transparent"
+                  Stroke="{DynamicResource LifeOS.Brush.TextSecondary}"
+                  StrokeThickness="1.6"
+                  StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Round"
+                  StrokeLineJoin="Round"
+                  IsHitTestVisible="False"/>
+
+            <ToggleButton
+                x:Name="DropDownToggle"
+                Background="Transparent"
+                BorderThickness="0"
+                ClickMode="Press"
+                Focusable="False"
+                AutomationProperties.Name="Open options"
+                IsChecked="{Binding IsDropDownOpen,
+                    Mode=TwoWay,
+                    RelativeSource={RelativeSource TemplatedParent}}">
+
+              <ToggleButton.Template>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                  <Border Background="Transparent"/>
+                </ControlTemplate>
+              </ToggleButton.Template>
+            </ToggleButton>
+
+            <Popup x:Name="PART_Popup"
+                   AllowsTransparency="True"
+                   Focusable="False"
+                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                   Placement="Bottom"
+                   PopupAnimation="None">
+
+              <Border x:Name="PopupBorder"
+                      MinWidth="{TemplateBinding ActualWidth}"
+                      Margin="0,4,0,0"
+                      Background="{DynamicResource LifeOS.Brush.SurfaceRaised}"
+                      BorderBrush="{DynamicResource LifeOS.Brush.Border}"
+                      BorderThickness="1"
+                      CornerRadius="7"
+                      SnapsToDevicePixels="True">
+
+                <ScrollViewer
+                    Margin="2"
+                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                    CanContentScroll="True"
+                    HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Auto"
+                    SnapsToDevicePixels="True">
+
+                  <ItemsPresenter
+                      KeyboardNavigation.DirectionalNavigation="Contained"
+                      SnapsToDevicePixels="True"/>
+                </ScrollViewer>
+              </Border>
+            </Popup>
+          </Grid>
+
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+              <Setter TargetName="ControlBorder"
+                      Property="Background"
+                      Value="{DynamicResource LifeOS.Brush.SurfaceHover}"/>
+            </Trigger>
+
+            <Trigger Property="IsKeyboardFocusWithin"
+                     Value="True">
+              <Setter TargetName="ControlBorder"
+                      Property="BorderBrush"
+                      Value="{DynamicResource LifeOS.Brush.Focus}"/>
+              <Setter TargetName="ControlBorder"
+                      Property="BorderThickness"
+                      Value="2"/>
+            </Trigger>
+
+            <Trigger Property="IsDropDownOpen"
+                     Value="True">
+              <Setter TargetName="ControlBorder"
+                      Property="Background"
+                      Value="{DynamicResource LifeOS.Brush.AccentSoft}"/>
+              <Setter TargetName="ControlBorder"
+                      Property="BorderBrush"
+                      Value="{DynamicResource LifeOS.Brush.Focus}"/>
+              <Setter TargetName="DropDownArrow"
+                      Property="Stroke"
+                      Value="{DynamicResource LifeOS.Brush.Focus}"/>
+            </Trigger>
+
+            <Trigger Property="IsEnabled"
+                     Value="False">
+              <Setter Property="Opacity"
+                      Value="0.58"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style TargetType="{x:Type ComboBox}"
+         BasedOn="{StaticResource LifeOS.ComboBoxStyle}"/>
 </ResourceDictionary>

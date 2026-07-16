@@ -2,7 +2,7 @@
   "desktopVersion": "9.0.0-alpha.2",
   "desktopReleaseName": "Group 47 Integration Inbox",
   "desktopGroup": 47,
-  "desktopStatus": "pack-1-complete-awaiting-evidence",
+  "desktopStatus": "complete-and-closed",
   "desktopBaselineVersion": "8.0.0-beta.1",
   "websiteVersion": "0.3.0-beta.1",
   "websiteStatus": "complete-and-closed",
@@ -21,6 +21,6 @@
   "assistantExecutionEnabled": false,
   "fullMobileStarted": false,
   "group46EvidenceCount": 8,
-  "group47EvidenceCount": 0,
+  "group47EvidenceCount": 8,
   "nextGroupStarted": false
 }

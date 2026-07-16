@@ -1,0 +1,22 @@
+{
+  "group": 49,
+  "slug": "microsoft-files",
+  "expectedCount": 8,
+  "screenshots": [
+    "01_Microsoft_Files_Capability.png",
+    "02_OneDrive_Bounded_Selection.png",
+    "03_OneDrive_Integration_Candidates.png",
+    "04_File_Provenance_And_Freshness.png",
+    "05_SharePoint_Site_Library_Selection.png",
+    "06_SharePoint_Candidate_Project_Link.png",
+    "07_Source_Removed_Permission_Lost.png",
+    "08_Group49_Validation_Clean_Sync.png"
+  ],
+  "forbiddenNameFragments": [
+    "token",
+    "secret",
+    "credential",
+    "authorization-code",
+    "client-secret"
+  ]
+}

@@ -1,4 +1,4 @@
-<Window x:Class="LifeOS.Desktop.V8ShellWindow"
+﻿<Window x:Class="LifeOS.Desktop.V8ShellWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -220,7 +220,7 @@
                               HorizontalScrollBarVisibility="Disabled">
                     <Grid>
                         <StackPanel x:Name="WorkspaceRoot" Margin="24">
-                            <Grid>
+                            <Grid x:Name="WorkspaceHeaderGrid">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                                 <StackPanel>
                                     <TextBlock x:Name="WorkspaceEyebrow" Text="TODAY / PRESSURE / WORK / MONEY" Style="{StaticResource LifeOS.Text.Caption}" />
@@ -283,7 +283,8 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
 
-                            <StackPanel x:Name="SettingsRoot" Visibility="Collapsed" Margin="0,8,0,0">
+                            <Grid x:Name="SettingsRoot" Visibility="Collapsed" Margin="0,8,0,0">
+                                <StackPanel x:Name="SettingsOverviewPanel">
                                 <TextBlock Text="Appearance" Style="{StaticResource LifeOS.Text.Heading}" />
                                 <WrapPanel Margin="0,10,0,12">
                                     <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Theme" Style="{StaticResource LifeOS.Text.Body}" /><ComboBox x:Name="ThemeComboBox" Style="{StaticResource LifeOS.ComboBoxStyle}" AutomationProperties.AutomationId="Settings.Appearance.Theme" /><TextBlock Text="Light, Dark, System or High Contrast." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></StackPanel></Border>
@@ -352,7 +353,14 @@
                                     <Button Content="Reset Approved Defaults" Click="ResetSettingsButton_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Reset" />
                                     <TextBlock x:Name="SettingsSaveStatusText" Margin="16,10,0,0" Style="{StaticResource LifeOS.Text.Body}" />
                                 </WrapPanel>
-                            </StackPanel>
+                                </StackPanel>
+
+                                <ContentControl x:Name="SettingsSubpageHost"
+                                                Visibility="Collapsed"
+                                                HorizontalContentAlignment="Stretch"
+                                                VerticalContentAlignment="Top"
+                                                AutomationProperties.AutomationId="Settings.SubpageHost" />
+                            </Grid>
                         </StackPanel>
                     </Grid>
                 </ScrollViewer>

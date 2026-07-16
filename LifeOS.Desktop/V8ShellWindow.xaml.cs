@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -30,7 +30,7 @@ public partial class V8ShellWindow : Window
     private bool _contextOpen;
     private IInputElement? _focusBeforeCommand;
     private IInputElement? _focusBeforeContext;
-    private IntegrationControlCentreWindow? _integrationControlCentreWindow;
+    private IntegrationControlCentreView? _integrationControlCentreView;
     private WorkspaceSnapshot _snapshot = WorkspaceSnapshot.Load();
 
     private bool IsCommandOpen => CommandOverlay.Visibility == Visibility.Visible;
@@ -201,6 +201,8 @@ public partial class V8ShellWindow : Window
                     : new Thickness(0, 0, 12, 12);
             }
         }
+
+        _integrationControlCentreView?.ApplyDensity(compact);
     }
 
     private void WorkspaceNav_Click(object sender, RoutedEventArgs e)
@@ -248,6 +250,7 @@ public partial class V8ShellWindow : Window
         SettingsRoot.Visibility = definition.Name == "Settings"
             ? Visibility.Visible
             : Visibility.Collapsed;
+        ShowSettingsOverview(scrollToTop: false);
 
         ContextTitle.Text = $"{definition.Name} context";
         ContextBody.Text = definition.ContextSummary;
@@ -337,6 +340,13 @@ public partial class V8ShellWindow : Window
                 e.Handled = true;
             }
 
+            return;
+        }
+
+        if (e.Key == Key.Escape && IsIntegrationControlCentreOpen)
+        {
+            ShowSettingsOverview(scrollToTop: true);
+            e.Handled = true;
             return;
         }
 
@@ -579,29 +589,44 @@ public partial class V8ShellWindow : Window
         Keyboard.Focus(ContextButton);
     }
 
+    private bool IsIntegrationControlCentreOpen =>
+        SettingsSubpageHost.Visibility == Visibility.Visible;
+
     private void OpenIntegrationControlCentre_Click(object sender, RoutedEventArgs e)
     {
-        if (_integrationControlCentreWindow is { IsLoaded: true } existingWindow)
-        {
-            if (existingWindow.WindowState == WindowState.Minimized)
-            {
-                existingWindow.WindowState = WindowState.Normal;
-            }
+        _integrationControlCentreView ??= CreateIntegrationControlCentreView();
+        _integrationControlCentreView.ApplyDensity(
+            _preferences.Density == V8Density.Compact || ActualWidth <= 980);
 
-            existingWindow.Activate();
-            return;
+        SettingsOverviewPanel.Visibility = Visibility.Collapsed;
+        SettingsSubpageHost.Content = _integrationControlCentreView;
+        SettingsSubpageHost.Visibility = Visibility.Visible;
+        WorkspaceHeaderGrid.Visibility = Visibility.Collapsed;
+        MetricItems.Visibility = Visibility.Collapsed;
+        WorkspaceScrollViewer.ScrollToTop();
+        Keyboard.Focus(_integrationControlCentreView);
+    }
+
+    private IntegrationControlCentreView CreateIntegrationControlCentreView()
+    {
+        IntegrationControlCentreView view = new(
+            _preferences.Density == V8Density.Compact || ActualWidth <= 980);
+        view.BackRequested += (_, _) => ShowSettingsOverview(scrollToTop: true);
+        return view;
+    }
+
+    private void ShowSettingsOverview(bool scrollToTop)
+    {
+        SettingsSubpageHost.Visibility = Visibility.Collapsed;
+        SettingsOverviewPanel.Visibility = Visibility.Visible;
+        WorkspaceHeaderGrid.Visibility = Visibility.Visible;
+        MetricItems.Visibility = Visibility.Visible;
+
+        if (scrollToTop)
+        {
+            WorkspaceScrollViewer.ScrollToTop();
+            Keyboard.Focus(SettingsNav);
         }
-
-        IntegrationControlCentreWindow window = new(
-            _preferences.Density == V8Density.Compact)
-        {
-            Owner = this
-        };
-
-        _integrationControlCentreWindow = window;
-        window.Closed += (_, _) => _integrationControlCentreWindow = null;
-        window.Show();
-        window.Activate();
     }
 
     private void OpenModule_Click(object sender, RoutedEventArgs e)

@@ -5,13 +5,15 @@ using LifeOS.Core.IntegrationControlCentre;
 
 namespace LifeOS.Desktop;
 
-public partial class IntegrationControlCentreWindow : Window
+public partial class IntegrationControlCentreView : UserControl
 {
     private readonly string _storePath;
     private readonly IntegrationControlCentreService _service;
     private string? _selectedAccountId;
 
-    public IntegrationControlCentreWindow(bool compactDensity)
+    public event EventHandler? BackRequested;
+
+    public IntegrationControlCentreView(bool compactDensity)
     {
         InitializeComponent();
 
@@ -21,7 +23,7 @@ public partial class IntegrationControlCentreWindow : Window
             _storePath);
         _service = new IntegrationControlCentreService(state);
 
-        RootGrid.Margin = compactDensity ? new Thickness(16) : new Thickness(24);
+        ApplyDensity(compactDensity);
         RefreshView();
     }
 
@@ -255,10 +257,8 @@ public partial class IntegrationControlCentreWindow : Window
         IntegrationConnectionReviewDialog dialog = new(
             account.DisplayName,
             account.ConnectionState,
-            IntegrationConnectionReviewMode.Reconnect)
-        {
-            Owner = this
-        };
+            IntegrationConnectionReviewMode.Reconnect);
+        SetDialogOwner(dialog);
 
         if (dialog.ShowDialog() != true)
         {
@@ -281,10 +281,8 @@ public partial class IntegrationControlCentreWindow : Window
         IntegrationConnectionReviewDialog dialog = new(
             account.DisplayName,
             account.ConnectionState,
-            IntegrationConnectionReviewMode.Revoke)
-        {
-            Owner = this
-        };
+            IntegrationConnectionReviewMode.Revoke);
+        SetDialogOwner(dialog);
 
         if (dialog.ShowDialog() != true)
         {
@@ -304,10 +302,8 @@ public partial class IntegrationControlCentreWindow : Window
         }
 
         ConnectedIntegrationAccount account = _service.GetRequiredAccount(_selectedAccountId);
-        IntegrationDisconnectReviewDialog dialog = new(account.DisplayName)
-        {
-            Owner = this
-        };
+        IntegrationDisconnectReviewDialog dialog = new(account.DisplayName);
+        SetDialogOwner(dialog);
 
         if (dialog.ShowDialog() != true || dialog.SelectedChoice is null)
         {
@@ -341,7 +337,22 @@ public partial class IntegrationControlCentreWindow : Window
         }
     }
 
-    private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
+    public void ApplyDensity(bool compactDensity)
+    {
+        ControlTabs.Height = compactDensity ? 520 : 560;
+    }
+
+    private void SetDialogOwner(Window dialog)
+    {
+        Window? owner = Window.GetWindow(this) ?? Application.Current?.MainWindow;
+        if (owner is { IsVisible: true })
+        {
+            dialog.Owner = owner;
+        }
+    }
+
+    private void BackButton_Click(object sender, RoutedEventArgs e) =>
+        BackRequested?.Invoke(this, EventArgs.Empty);
 
     private static string FormatTimestamp(DateTimeOffset? timestampUtc) =>
         timestampUtc is null

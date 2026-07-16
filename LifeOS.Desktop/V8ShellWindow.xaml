@@ -299,7 +299,7 @@
 
                                 <TextBlock Text="Accessibility" Style="{StaticResource LifeOS.Text.Heading}" />
                                 <WrapPanel Margin="0,10,0,12">
-                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Text scale" Style="{StaticResource LifeOS.Text.Body}" /><ComboBox x:Name="TextScaleComboBox" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Accessibility.TextScale" /><TextBlock Text="100%, 110%, 125% or 140%." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Text scale" Style="{StaticResource LifeOS.Text.Body}" /><ComboBox x:Name="TextScaleComboBox" Style="{StaticResource LifeOS.ComboBoxStyle}" AutomationProperties.AutomationId="Settings.Accessibility.TextScale" /><TextBlock Text="100%, 110%, 125% or 140%." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></StackPanel></Border>
                                     <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Motion" Style="{StaticResource LifeOS.Text.Body}" /><CheckBox x:Name="ReducedMotionCheckBox" Content="Reduced Motion" Margin="0,12,0,0" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" AutomationProperties.AutomationId="Settings.Accessibility.ReducedMotion" /><TextBlock Text="Disables non-essential transitions and animation." Margin="0,9,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></StackPanel></Border>
                                 </WrapPanel>
 

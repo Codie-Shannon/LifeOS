@@ -33,6 +33,7 @@ public partial class V8ShellWindow : Window
     private IInputElement? _focusBeforeContext;
     private IntegrationControlCentreView? _integrationControlCentreView;
     private IntegrationInboxView? _integrationInboxView;
+    private MicrosoftProviderView? _microsoftProviderView;
     private WorkspaceSnapshot _snapshot = WorkspaceSnapshot.Load();
 
     private bool IsCommandOpen => CommandOverlay.Visibility == Visibility.Visible;
@@ -207,6 +208,7 @@ public partial class V8ShellWindow : Window
 
         _integrationControlCentreView?.ApplyDensity(compact);
         _integrationInboxView?.ApplyDensity(compact);
+        _microsoftProviderView?.ApplyDensity(compact);
     }
 
     private void WorkspaceNav_Click(object sender, RoutedEventArgs e)
@@ -664,6 +666,40 @@ public partial class V8ShellWindow : Window
             count => UpdateIntegrationReviewCount(count);
         return view;
     }
+
+    private void OpenMicrosoftProvider_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (!string.Equals(
+                _activeWorkspace,
+                "Settings",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            NavigateTo("Settings");
+        }
+
+        _microsoftProviderView ??=
+            CreateMicrosoftProviderView();
+        _microsoftProviderView.ApplyDensity(
+            _preferences.Density == V8Density.Compact ||
+            ActualWidth <= 980);
+
+        ShowSettingsSubpage(_microsoftProviderView);
+    }
+
+    private MicrosoftProviderView CreateMicrosoftProviderView()
+    {
+        MicrosoftProviderView view = new(
+            _preferences.Density == V8Density.Compact ||
+            ActualWidth <= 980);
+        view.BackRequested += (_, _) =>
+            ShowSettingsOverview(scrollToTop: true);
+        view.ReviewCountChanged +=
+            count => UpdateIntegrationReviewCount(count);
+        return view;
+    }
+
 
     private void ShowSettingsSubpage(
         UserControl subpage)

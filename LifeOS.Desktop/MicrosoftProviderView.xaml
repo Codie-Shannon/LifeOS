@@ -1,0 +1,320 @@
+﻿<UserControl x:Class="LifeOS.Desktop.MicrosoftProviderView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Background="Transparent"
+        Foreground="{DynamicResource LifeOS.Brush.TextPrimary}"
+        Focusable="True"
+        AutomationProperties.AutomationId="MicrosoftProvider.Root">
+    <UserControl.Resources>
+        <Style x:Key="Ms.Heading" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="Ms.Subheading" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="Ms.Body" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextSecondary}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="Ms.Caption" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextMuted}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="Ms.Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.Surface}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="Margin" Value="0,0,12,12" />
+        </Style>
+        <Style x:Key="Ms.Button" TargetType="Button" BasedOn="{StaticResource LifeOS.FocusableButton}">
+            <Setter Property="Margin" Value="0,0,8,0" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="Padding" Value="13,8" />
+        </Style>
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.AccentSoft}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Accent}" />
+                    <Setter Property="BorderThickness" Value="1" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid x:Name="RootGrid" MinHeight="820">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="MICROSOFT PROVIDER / READ-ONLY"
+                           Foreground="{DynamicResource LifeOS.Brush.Accent}"
+                           FontWeight="SemiBold" />
+                <TextBlock Text="Microsoft Mail + Calendar"
+                           FontSize="30"
+                           FontWeight="SemiBold"
+                           Margin="0,8,0,0" />
+                <TextBlock Text="One complete LifeOS Microsoft registration. Only Group 48 Mail and Calendar delegated read scopes are requested."
+                           Margin="0,7,0,0"
+                           Style="{StaticResource Ms.Body}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                <Border Background="{DynamicResource LifeOS.Brush.AccentSoft}"
+                        BorderBrush="{DynamicResource LifeOS.Brush.Accent}"
+                        BorderThickness="1"
+                        CornerRadius="9"
+                        Padding="12,8">
+                    <TextBlock Text="NO SENDS · NO EVENT WRITES · NO SECRETS IN GIT"
+                               FontWeight="SemiBold" />
+                </Border>
+                <Button Content="Back to Settings"
+                        Click="BackButton_Click"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource Ms.Button}" />
+            </StackPanel>
+        </Grid>
+
+        <WrapPanel Grid.Row="1" Margin="0,18,0,8">
+            <Border Style="{StaticResource Ms.Card}" Width="230">
+                <StackPanel>
+                    <TextBlock Text="Registration" Style="{StaticResource Ms.Caption}" />
+                    <TextBlock x:Name="RegistrationStateText" Text="Not configured" FontSize="23" Margin="0,8,0,0" />
+                    <TextBlock Text="Local configuration only" Style="{StaticResource Ms.Caption}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Ms.Card}" Width="230">
+                <StackPanel>
+                    <TextBlock Text="Accounts" Style="{StaticResource Ms.Caption}" />
+                    <TextBlock x:Name="AccountCountText" Text="0" FontSize="23" Margin="0,8,0,0" />
+                    <TextBlock Text="Personal and work separated" Style="{StaticResource Ms.Caption}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Ms.Card}" Width="230">
+                <StackPanel>
+                    <TextBlock Text="Mail candidates" Style="{StaticResource Ms.Caption}" />
+                    <TextBlock x:Name="MailCountText" Text="0" FontSize="23" Margin="0,8,0,0" />
+                    <TextBlock Text="Read-only review candidates" Style="{StaticResource Ms.Caption}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Ms.Card}" Width="230">
+                <StackPanel>
+                    <TextBlock Text="Calendar candidates" Style="{StaticResource Ms.Caption}" />
+                    <TextBlock x:Name="CalendarCountText" Text="0" FontSize="23" Margin="0,8,0,0" />
+                    <TextBlock Text="Bounded calendar window" Style="{StaticResource Ms.Caption}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Ms.Card}" Width="230">
+                <StackPanel>
+                    <TextBlock Text="External writes" Style="{StaticResource Ms.Caption}" />
+                    <TextBlock Text="0" FontSize="23" Margin="0,8,0,0" />
+                    <TextBlock Text="Disabled for Group 48" Style="{StaticResource Ms.Caption}" />
+                </StackPanel>
+            </Border>
+        </WrapPanel>
+
+        <Border Grid.Row="2" Style="{StaticResource Ms.Card}">
+            <StackPanel>
+                <TextBlock Text="Complete-first Microsoft registration"
+                           Style="{StaticResource Ms.Heading}" />
+                <TextBlock Text="Save only the public application client ID, tenant boundary and localhost redirect configuration. No client secret is used by this Desktop public client."
+                           Margin="0,7,0,12"
+                           Style="{StaticResource Ms.Body}" />
+                <WrapPanel>
+                    <StackPanel Width="390" Margin="0,0,12,10">
+                        <TextBlock Text="Application (client) ID" Style="{StaticResource Ms.Caption}" />
+                        <TextBox x:Name="ClientIdTextBox"
+                                 Style="{StaticResource LifeOS.Input}"
+                                 AutomationProperties.AutomationId="MicrosoftProvider.ClientId" />
+                    </StackPanel>
+                    <StackPanel Width="270" Margin="0,0,12,10">
+                        <TextBlock Text="Tenant" Style="{StaticResource Ms.Caption}" />
+                        <TextBox x:Name="TenantTextBox"
+                                 Style="{StaticResource LifeOS.Input}"
+                                 AutomationProperties.AutomationId="MicrosoftProvider.Tenant" />
+                    </StackPanel>
+                    <StackPanel Width="180" Margin="0,0,12,10">
+                        <TextBlock Text="Redirect port" Style="{StaticResource Ms.Caption}" />
+                        <TextBox x:Name="RedirectPortTextBox"
+                                 Style="{StaticResource LifeOS.Input}"
+                                 AutomationProperties.AutomationId="MicrosoftProvider.RedirectPort" />
+                    </StackPanel>
+                </WrapPanel>
+                <WrapPanel>
+                    <StackPanel Width="200" Margin="0,0,12,10">
+                        <TextBlock Text="Mail lookback days" Style="{StaticResource Ms.Caption}" />
+                        <TextBox x:Name="MailLookbackTextBox" Style="{StaticResource LifeOS.Input}" />
+                    </StackPanel>
+                    <StackPanel Width="200" Margin="0,0,12,10">
+                        <TextBlock Text="Calendar lookback" Style="{StaticResource Ms.Caption}" />
+                        <TextBox x:Name="CalendarLookbackTextBox" Style="{StaticResource LifeOS.Input}" />
+                    </StackPanel>
+                    <StackPanel Width="200" Margin="0,0,12,10">
+                        <TextBlock Text="Calendar lookahead" Style="{StaticResource Ms.Caption}" />
+                        <TextBox x:Name="CalendarLookaheadTextBox" Style="{StaticResource LifeOS.Input}" />
+                    </StackPanel>
+                    <StackPanel Width="290" Margin="0,0,12,10">
+                        <TextBlock Text="New account classification" Style="{StaticResource Ms.Caption}" />
+                        <ComboBox x:Name="ClassificationComboBox"
+                                  Style="{StaticResource LifeOS.ComboBoxStyle}"
+                                  AutomationProperties.AutomationId="MicrosoftProvider.Classification" />
+                    </StackPanel>
+                </WrapPanel>
+                <WrapPanel>
+                    <Button Content="Save local configuration"
+                            Click="SaveConfigurationButton_Click"
+                            Style="{StaticResource Ms.Button}" />
+                    <Button Content="Connect Microsoft account"
+                            Click="ConnectButton_Click"
+                            Style="{StaticResource Ms.Button}"
+                            AutomationProperties.AutomationId="MicrosoftProvider.Connect" />
+                </WrapPanel>
+                <TextBlock x:Name="ConfigurationStatusText"
+                           Margin="0,10,0,0"
+                           Style="{StaticResource Ms.Body}" />
+                <TextBlock x:Name="RedirectUriText"
+                           Margin="0,5,0,0"
+                           Style="{StaticResource Ms.Caption}" />
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="3" Margin="0,4,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="370" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Style="{StaticResource Ms.Card}">
+                <StackPanel>
+                    <TextBlock Text="Connected accounts" Style="{StaticResource Ms.Heading}" />
+                    <TextBlock Text="Each identity keeps its own Personal/Work classification, permission state, token and sync health."
+                               Margin="0,6,0,12"
+                               Style="{StaticResource Ms.Body}" />
+                    <ListBox x:Name="AccountListBox"
+                             Height="230"
+                             SelectionChanged="AccountListBox_SelectionChanged"
+                             AutomationProperties.AutomationId="MicrosoftProvider.Accounts">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Identity}" Style="{StaticResource Ms.Caption}" />
+                                    <TextBlock Text="{Binding StateLine}" Style="{StaticResource Ms.Caption}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" Style="{StaticResource Ms.Card}">
+                <StackPanel>
+                    <TextBlock x:Name="SelectedAccountTitleText"
+                               Text="Select or connect a Microsoft account"
+                               Style="{StaticResource Ms.Heading}" />
+                    <TextBlock x:Name="SelectedAccountDetailText"
+                               Margin="0,7,0,10"
+                               Style="{StaticResource Ms.Body}" />
+                    <WrapPanel>
+                        <Button Content="Verify identity"
+                                Click="VerifyIdentityButton_Click"
+                                Style="{StaticResource Ms.Button}" />
+                        <Button Content="Sync Mail + Calendar"
+                                Click="SyncButton_Click"
+                                Style="{StaticResource Ms.Button}"
+                                AutomationProperties.AutomationId="MicrosoftProvider.Sync" />
+                        <Button Content="Disconnect and delete local token"
+                                Click="DisconnectButton_Click"
+                                Style="{StaticResource Ms.Button}" />
+                    </WrapPanel>
+                    <TextBlock x:Name="ActionStatusText"
+                               Margin="0,10,0,0"
+                               Style="{StaticResource Ms.Body}" />
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Border Grid.Row="4" Style="{StaticResource Ms.Card}">
+            <StackPanel>
+                <TextBlock Text="Microsoft capability and incremental permission catalogue"
+                           Style="{StaticResource Ms.Heading}" />
+                <TextBlock Text="The complete planned Microsoft family is registered once. Group 48 requests only User.Read, Mail.Read and Calendars.Read plus identity/offline scopes."
+                           Margin="0,7,0,12"
+                           Style="{StaticResource Ms.Body}" />
+                <ItemsControl x:Name="CapabilityItems">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="220" />
+                                    <ColumnDefinition Width="190" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Capability}" FontWeight="SemiBold" />
+                                <TextBlock Grid.Column="1" Text="{Binding Delivery}" Style="{StaticResource Ms.Body}" />
+                                <TextBlock Grid.Column="2" Text="{Binding Permission}" Style="{StaticResource Ms.Body}" />
+                                <TextBlock Grid.Column="3" Text="{Binding Note}" Style="{StaticResource Ms.Caption}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="5" Style="{StaticResource Ms.Card}">
+            <StackPanel>
+                <TextBlock Text="Recovery, partial permission and sanitized audit"
+                           Style="{StaticResource Ms.Heading}" />
+                <TextBlock Text="Expired, revoked, tenant-denied, offline and throttled states remain visible. Failures never convert stale data into current data."
+                           Margin="0,7,0,12"
+                           Style="{StaticResource Ms.Body}" />
+                <ItemsControl x:Name="AuditItems">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="190" />
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Timestamp}" Style="{StaticResource Ms.Caption}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Action}" FontWeight="SemiBold" />
+                                <TextBlock Grid.Column="2" Text="{Binding Result}" Style="{StaticResource Ms.Body}" />
+                                <TextBlock Grid.Column="3" Text="{Binding Summary}" Style="{StaticResource Ms.Body}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock Text="Local paths: %LOCALAPPDATA%\LifeOS\microsoft-provider-config.json, microsoft-provider-state.json and DPAPI-protected microsoft-provider-tokens.dat."
+                           Margin="0,8,0,0"
+                           Style="{StaticResource Ms.Caption}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

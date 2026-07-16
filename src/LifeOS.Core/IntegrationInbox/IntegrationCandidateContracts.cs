@@ -1,4 +1,4 @@
-namespace LifeOS.Core.IntegrationInbox;
+﻿namespace LifeOS.Core.IntegrationInbox;
 
 public abstract class IntegrationCandidateDraftBase
 {
@@ -23,6 +23,8 @@ public sealed class MessageCandidateDraft : IntegrationCandidateDraftBase
     public string Importance { get; init; } = string.Empty;
     public bool IsRead { get; init; }
     public bool HasAttachments { get; init; }
+    public string AttachmentMetadata { get; init; } = string.Empty;
+    public DateTimeOffset? LastModifiedUtc { get; init; }
 }
 
 public sealed class CalendarEventCandidateDraft : IntegrationCandidateDraftBase
@@ -35,6 +37,10 @@ public sealed class CalendarEventCandidateDraft : IntegrationCandidateDraftBase
     public string Organizer { get; init; } = string.Empty;
     public string Attendees { get; init; } = string.Empty;
     public string RecurrenceReference { get; init; } = string.Empty;
+    public string ResponseState { get; init; } = string.Empty;
+    public string OnlineMeetingReference { get; init; } = string.Empty;
+    public DateTimeOffset? LastModifiedUtc { get; init; }
+    public bool IsCancelled { get; init; }
 }
 
 public sealed class ContactPersonCandidateDraft : IntegrationCandidateDraftBase

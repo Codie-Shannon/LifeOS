@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="LifeOS Desktop v9.0.0-alpha.2"
+        Title="LifeOS Desktop v9.0.0-alpha.3"
         Width="1680"
         Height="920"
         MinWidth="900"
@@ -350,11 +350,27 @@
                                     </StackPanel>
                                 </Border>
 
+
+                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="Microsoft Mail + Calendar" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                                <TextBlock Text="Single complete Microsoft provider registration with explicit account identity, incremental consent, read-only Outlook Mail and Microsoft Calendar sync into the Integration Inbox." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Body}" />
+                                            </StackPanel>
+                                            <Border Grid.Column="1" Background="{DynamicResource LifeOS.Brush.AccentSoft}" BorderBrush="{DynamicResource LifeOS.Brush.Accent}" BorderThickness="1" CornerRadius="8" Padding="9,5" VerticalAlignment="Top"><TextBlock Text="GROUP 48" FontWeight="SemiBold" /></Border>
+                                        </Grid>
+                                        <TextBlock Text="Only User.Read, Mail.Read and Calendars.Read are requested in Group 48. Tokens are DPAPI-protected outside Git. No sends, drafts, event writes, Teams actions or background polling exist." Margin="0,9,0,0" Style="{StaticResource LifeOS.Text.Caption}" />
+                                        <Button Content="Open Microsoft Provider Setup" Click="OpenMicrosoftProvider_Click" HorizontalAlignment="Left" Margin="0,12,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Integrations.OpenMicrosoftProvider" />
+                                    </StackPanel>
+                                </Border>
+
                                 <TextBlock Text="About / Diagnostics" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
                                 <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
                                     <StackPanel>
-                                        <TextBlock Text="LifeOS Desktop v9.0.0-alpha.2" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
-                                        <TextBlock Text="Eight permanent workspaces. Integration Control Centre and Integration Inbox are embedded system surfaces. Local, review-first and foreground-only." Margin="0,6,0,12" Style="{StaticResource LifeOS.Text.Body}" />
+                                        <TextBlock Text="LifeOS Desktop v9.0.0-alpha.3" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                        <TextBlock Text="Eight permanent workspaces. Integration Control Centre, Integration Inbox and Microsoft Provider Setup are embedded system surfaces. Read-only, review-first and foreground-only." Margin="0,6,0,12" Style="{StaticResource LifeOS.Text.Body}" />
                                         <WrapPanel>
                                             <Button Content="Desktop Release" Tag="desktop-release" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.DesktopRelease" />
                                             <Button Content="Offline Checkpoint" Tag="final-offline-os" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.OfflineCheckpoint" />

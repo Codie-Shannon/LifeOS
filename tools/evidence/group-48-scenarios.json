@@ -1,0 +1,47 @@
+﻿{
+  "group": 48,
+  "release": "v9.0.0-alpha.3",
+  "expectedScreenshotCount": 8,
+  "scenarios": [
+    {
+      "order": 1,
+      "file": "01_Microsoft_Provider_Connected_Accounts.png",
+      "title": "Connected Microsoft accounts"
+    },
+    {
+      "order": 2,
+      "file": "02_Microsoft_Capability_And_Permission_Catalogue.png",
+      "title": "Capability and permission catalogue"
+    },
+    {
+      "order": 3,
+      "file": "03_Outlook_Mail_Candidates.png",
+      "title": "Outlook Mail candidates"
+    },
+    {
+      "order": 4,
+      "file": "04_Outlook_Message_Provenance_And_Attachments.png",
+      "title": "Message provenance and attachments"
+    },
+    {
+      "order": 5,
+      "file": "05_Microsoft_Calendar_Candidates.png",
+      "title": "Calendar candidates"
+    },
+    {
+      "order": 6,
+      "file": "06_Reviewable_Mail_Suggestion.png",
+      "title": "Reviewable mail suggestion"
+    },
+    {
+      "order": 7,
+      "file": "07_Microsoft_Recovery_And_Partial_Permission.png",
+      "title": "Recovery and partial permission"
+    },
+    {
+      "order": 8,
+      "file": "08_Group_48_Validation_And_Clean_Sync.png",
+      "title": "Validation and clean synchronization"
+    }
+  ]
+}

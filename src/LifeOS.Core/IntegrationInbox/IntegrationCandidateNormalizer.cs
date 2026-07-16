@@ -1,4 +1,4 @@
-namespace LifeOS.Core.IntegrationInbox;
+﻿namespace LifeOS.Core.IntegrationInbox;
 
 public static class IntegrationCandidateNormalizer
 {
@@ -73,7 +73,16 @@ public static class IntegrationCandidateNormalizer
             Field("conversation", "Conversation / thread", draft.ConversationId),
             Field("importance", "Importance", draft.Importance),
             Field("read-state", "Read state", draft.IsRead ? "Read" : "Unread"),
-            Field("attachments", "Attachment metadata", draft.HasAttachments ? "Present" : "None")
+            Field(
+                "attachments",
+                "Attachment metadata",
+                string.IsNullOrWhiteSpace(draft.AttachmentMetadata)
+                    ? draft.HasAttachments ? "Present" : "None"
+                    : draft.AttachmentMetadata),
+            Field(
+                "last-modified",
+                "Last modified",
+                draft.LastModifiedUtc?.ToString("O") ?? "Not supplied")
         ];
 
         return Create(
@@ -113,7 +122,20 @@ public static class IntegrationCandidateNormalizer
             Field("location", "Location", draft.Location),
             Field("organizer", "Organizer", draft.Organizer),
             Field("attendees", "Attendees", draft.Attendees),
-            Field("recurrence", "Recurrence reference", draft.RecurrenceReference)
+            Field("response", "Response state", draft.ResponseState),
+            Field("recurrence", "Recurrence reference", draft.RecurrenceReference),
+            Field(
+                "online-meeting",
+                "Online meeting",
+                draft.OnlineMeetingReference),
+            Field(
+                "last-modified",
+                "Last modified",
+                draft.LastModifiedUtc?.ToString("O") ?? "Not supplied"),
+            Field(
+                "cancelled",
+                "Cancelled",
+                draft.IsCancelled ? "Yes" : "No")
         ];
 
         return Create(

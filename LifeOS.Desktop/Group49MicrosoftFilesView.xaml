@@ -248,26 +248,43 @@
           <ColumnDefinition Width="*"/>
          </Grid.ColumnDefinitions>
 
-         <TextBlock Text="Selection"/>
-         <TextBlock Grid.Column="1"
+         <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+         </Grid.RowDefinitions>
+
+         <TextBlock Grid.Row="0"
+                    Grid.Column="0"
+                    Text="Selection"
+                    Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/>
+
+         <TextBlock Grid.Row="0"
+                    Grid.Column="1"
                     Text="Explicitly selected"
                     FontWeight="SemiBold"/>
 
          <TextBlock Grid.Row="1"
+                    Grid.Column="0"
                     Text="Metadata limit"
-                    Margin="0,9,0,0"/>
+                    Margin="0,10,0,0"
+                    Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/>
+
          <TextBlock Grid.Row="1"
                     Grid.Column="1"
                     Text="Maximum 200 items"
-                    Margin="0,9,0,0"/>
+                    Margin="0,10,0,0"/>
 
          <TextBlock Grid.Row="2"
+                    Grid.Column="0"
                     Text="Date window"
-                    Margin="0,9,0,0"/>
+                    Margin="0,10,0,0"
+                    Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/>
+
          <TextBlock Grid.Row="2"
                     Grid.Column="1"
                     Text="90-day lookback"
-                    Margin="0,9,0,0"/>
+                    Margin="0,10,0,0"/>
         </Grid>
        </StackPanel>
       </Border>

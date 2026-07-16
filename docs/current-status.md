@@ -1,9 +1,9 @@
 ﻿# LifeOS current status
 
-LifeOS Desktop is at `v9.0.0-alpha.1`, with Group 46 complete and closed. Desktop v8 remains complete and closed at `v8.0.0-beta.1`; Website remains complete and closed at `v0.3.0-beta.1`; Companion remains a separate application, complete and closed at `v0.1.0-beta.1`.
+LifeOS Desktop is at `v9.0.0-alpha.2`. Group 46 Integration Control Centre is complete and closed. Group 47 Pack 1 implements the permanent Integration Inbox and normalized review pipeline and is awaiting exactly eight approved screenshots plus Pack 2 closure.
 
-Group 46 establishes the permanent Integration Control Centre as an embedded Settings subpage. Provider catalogue, account classification, incremental permissions, per-capability health and freshness, reconnect, revoke, disconnect retention review, ordered audit history, persistence and provider-neutral adapter contracts are implemented and evidenced.
+The Integration Inbox is an embedded system surface reachable from the v8 top-bar Review action, Settings / Integrations and the existing Assistant Integration Inbox route. It normalizes fictional message, calendar event, contact/person, file/document, task, financial item and generic provider records into one source-backed review contract.
 
-Exactly eight approved Group 46 screenshots are committed. The evidence uses deterministic fictional providers and accounts only. No live Microsoft or Google account is connected, no OAuth consent is requested, no real external data is ingested, no background synchronization runs and no external write action exists.
+Candidate provenance, freshness, deterministic fingerprints, provider external-ID matching, duplicate review, field-level conflict review, authoritative links, low-risk batch preview, idempotent re-import, malformed-candidate quarantine, source tombstones and ordered review audit entries are implemented. The top-bar review count is calculated from New, Needs Review, Duplicate Suspected and Conflict candidates.
 
-Group 47 Integration Inbox work has not started.
+No live provider is connected. No OAuth consent is requested. No real external data is ingested. No candidate is silently trusted or merged. No background synchronization or external write action exists. Group 48 Microsoft provider work has not started.

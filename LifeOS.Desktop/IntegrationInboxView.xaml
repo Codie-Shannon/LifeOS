@@ -1,0 +1,623 @@
+<UserControl x:Class="LifeOS.Desktop.IntegrationInboxView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Background="Transparent"
+        Foreground="{DynamicResource LifeOS.Brush.TextPrimary}"
+        Focusable="True"
+        AutomationProperties.AutomationId="IntegrationInboxV9.Root">
+    <UserControl.Resources>
+        <Style x:Key="Inbox.Heading" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="Inbox.Subheading" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="Inbox.Body" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextSecondary}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="Inbox.Caption" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextMuted}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="Inbox.Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.Surface}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="Margin" Value="0,0,12,12" />
+        </Style>
+        <Style x:Key="Inbox.Button" TargetType="Button" BasedOn="{StaticResource LifeOS.FocusableButton}">
+            <Setter Property="Margin" Value="0,0,8,0" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="Padding" Value="13,8" />
+        </Style>
+        <Style x:Key="Inbox.TabItem" TargetType="{x:Type TabItem}">
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextSecondary}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="16,10" />
+            <Setter Property="Margin" Value="0,0,4,0" />
+            <Setter Property="MinHeight" Value="44" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid SnapsToDevicePixels="True">
+                            <Border x:Name="TabBackground"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="8,8,0,0"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter ContentSource="Header"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"
+                                                  RecognizesAccessKey="True" />
+                            </Border>
+                            <Border x:Name="SelectionIndicator"
+                                    Height="3"
+                                    Margin="10,0"
+                                    VerticalAlignment="Bottom"
+                                    Background="Transparent"
+                                    CornerRadius="2"
+                                    IsHitTestVisible="False" />
+                            <Border x:Name="FocusBorder"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0"
+                                    CornerRadius="8,8,0,0"
+                                    IsHitTestVisible="False" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="TabBackground" Property="Background" Value="{DynamicResource LifeOS.Brush.SurfaceRaised}" />
+                                <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="TabBackground" Property="Background" Value="{DynamicResource LifeOS.Brush.AccentSoft}" />
+                                <Setter TargetName="SelectionIndicator" Property="Background" Value="{DynamicResource LifeOS.Brush.Accent}" />
+                                <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                                <Setter Property="Panel.ZIndex" Value="2" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="FocusBorder" Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Focus}" />
+                                <Setter TargetName="FocusBorder" Property="BorderThickness" Value="2" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.55" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Inbox.TabControl" TargetType="{x:Type TabControl}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid KeyboardNavigation.TabNavigation="Local" SnapsToDevicePixels="True">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TabPanel x:Name="HeaderPanel"
+                                      Grid.Row="0"
+                                      Panel.ZIndex="1"
+                                      Margin="0,0,0,4"
+                                      IsItemsHost="True"
+                                      KeyboardNavigation.TabIndex="1"
+                                      Background="Transparent" />
+                            <Border x:Name="ContentBorder"
+                                    Grid.Row="1"
+                                    Background="Transparent"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter x:Name="PART_SelectedContentHost"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  ContentSource="SelectedContent"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.AccentSoft}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Accent}" />
+                    <Setter Property="BorderThickness" Value="1" />
+                </Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Focus}" />
+                    <Setter Property="BorderThickness" Value="2" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid x:Name="RootGrid" MinHeight="780">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="INTEGRATIONS / REVIEW PIPELINE"
+                           Foreground="{DynamicResource LifeOS.Brush.Accent}"
+                           FontWeight="SemiBold" />
+                <TextBlock Text="Integration Inbox"
+                           Margin="0,8,0,0"
+                           FontSize="30"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                <TextBlock Text="Normalized, source-backed candidates remain untrusted until an explicit review decision links them to authoritative LifeOS records."
+                           Margin="0,7,0,0"
+                           MaxWidth="1120"
+                           Style="{StaticResource Inbox.Body}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                <Border Background="{DynamicResource LifeOS.Brush.AccentSoft}"
+                        BorderBrush="{DynamicResource LifeOS.Brush.Accent}"
+                        BorderThickness="1"
+                        CornerRadius="9"
+                        Padding="12,8">
+                    <TextBlock Text="FICTIONAL CANDIDATES · NO LIVE PROVIDER SYNC"
+                               FontWeight="SemiBold" />
+                </Border>
+                <Button Content="Back to Settings"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource Inbox.Button}"
+                        Click="BackButton_Click"
+                        AutomationProperties.AutomationId="IntegrationInboxV9.Back" />
+            </StackPanel>
+        </Grid>
+
+        <WrapPanel Grid.Row="1" Margin="0,20,0,8">
+            <Border Style="{StaticResource Inbox.Card}" Width="214">
+                <StackPanel>
+                    <TextBlock Text="Candidates" Style="{StaticResource Inbox.Caption}" />
+                    <TextBlock x:Name="TotalText" Margin="0,8,0,0" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="Normalized records" Margin="0,5,0,0" Style="{StaticResource Inbox.Caption}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Inbox.Card}" Width="214">
+                <StackPanel>
+                    <TextBlock Text="Needs review" Style="{StaticResource Inbox.Caption}" />
+                    <TextBlock x:Name="ReviewCountText" Margin="0,8,0,0" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="Top-bar count" Margin="0,5,0,0" Style="{StaticResource Inbox.Caption}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Inbox.Card}" Width="214">
+                <StackPanel>
+                    <TextBlock Text="Duplicates" Style="{StaticResource Inbox.Caption}" />
+                    <TextBlock x:Name="DuplicateCountText" Margin="0,8,0,0" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="Never silently merged" Margin="0,5,0,0" Style="{StaticResource Inbox.Caption}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Inbox.Card}" Width="214">
+                <StackPanel>
+                    <TextBlock Text="Conflicts" Style="{StaticResource Inbox.Caption}" />
+                    <TextBlock x:Name="ConflictCountText" Margin="0,8,0,0" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="Field-level review" Margin="0,5,0,0" Style="{StaticResource Inbox.Caption}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Inbox.Card}" Width="214">
+                <StackPanel>
+                    <TextBlock Text="External writes" Style="{StaticResource Inbox.Caption}" />
+                    <TextBlock Text="0" Margin="0,8,0,0" FontSize="24" FontWeight="SemiBold" />
+                    <TextBlock Text="Disabled for Group 47" Margin="0,5,0,0" Style="{StaticResource Inbox.Caption}" />
+                </StackPanel>
+            </Border>
+        </WrapPanel>
+
+        <TabControl x:Name="InboxTabs"
+                    Grid.Row="2"
+                    Height="640"
+                    Style="{StaticResource Inbox.TabControl}"
+                    ItemContainerStyle="{StaticResource Inbox.TabItem}"
+                    AutomationProperties.AutomationId="IntegrationInboxV9.Tabs">
+            <TabItem Header="Inbox"
+                     AutomationProperties.AutomationId="IntegrationInboxV9.Tab.Inbox">
+                <Grid Margin="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="350" />
+                        <ColumnDefinition Width="16" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Style="{StaticResource Inbox.Card}" Margin="0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Mixed fictional candidates" Style="{StaticResource Inbox.Heading}" />
+                                <TextBlock Text="Message, calendar, contact, file, task, financial and generic provider records share one review contract."
+                                           Margin="0,6,0,12"
+                                           Style="{StaticResource Inbox.Caption}" />
+                            </StackPanel>
+                            <ListBox x:Name="CandidateListBox"
+                                     Grid.Row="1"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     SelectionChanged="CandidateListBox_SelectionChanged"
+                                     AutomationProperties.AutomationId="IntegrationInboxV9.CandidateList">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Title}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding TypeAndStatus}" Margin="0,4,0,0" Style="{StaticResource Inbox.Caption}" />
+                                            <TextBlock Text="{Binding Source}" Margin="0,3,0,0" Style="{StaticResource Inbox.Caption}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </Border>
+
+                    <ScrollViewer Grid.Column="2"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock x:Name="DetailTitleText" Style="{StaticResource Inbox.Heading}" />
+                                    <TextBlock x:Name="DetailTypeText" Margin="0,5,0,0" Style="{StaticResource Inbox.Caption}" />
+                                </StackPanel>
+                                <Border Grid.Column="1"
+                                        Background="{DynamicResource LifeOS.Brush.AccentSoft}"
+                                        BorderBrush="{DynamicResource LifeOS.Brush.Accent}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="10,6">
+                                    <TextBlock x:Name="DetailStatusText" FontWeight="SemiBold" />
+                                </Border>
+                            </Grid>
+
+                            <TextBlock x:Name="DetailSummaryText"
+                                       Margin="0,12,0,0"
+                                       Style="{StaticResource Inbox.Body}" />
+
+                            <Border Style="{StaticResource Inbox.Card}" Margin="0,16,0,12">
+                                <StackPanel>
+                                    <TextBlock Text="Provenance and freshness" Style="{StaticResource Inbox.Subheading}" />
+                                    <TextBlock x:Name="ProvenanceText" Margin="0,9,0,0" Style="{StaticResource Inbox.Body}" />
+                                    <TextBlock x:Name="RawReferenceText" Margin="0,8,0,0" Style="{StaticResource Inbox.Caption}" />
+                                </StackPanel>
+                            </Border>
+
+                            <TextBlock Text="Normalized fields" Style="{StaticResource Inbox.Subheading}" />
+                            <ItemsControl x:Name="DetailFieldItems" Margin="0,8,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource Inbox.Card}" Margin="0,0,0,8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="190" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                                <TextBlock Grid.Column="1" Text="{Binding Value}" Style="{StaticResource Inbox.Body}" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <WrapPanel Margin="0,8,0,0">
+                                <Button Content="Accept"
+                                        Style="{StaticResource Inbox.Button}"
+                                        Click="AcceptButton_Click"
+                                        AutomationProperties.AutomationId="IntegrationInboxV9.Accept" />
+                                <Button Content="Reject"
+                                        Style="{StaticResource Inbox.Button}"
+                                        Click="RejectButton_Click"
+                                        AutomationProperties.AutomationId="IntegrationInboxV9.Reject" />
+                                <Button Content="Ignore"
+                                        Style="{StaticResource Inbox.Button}"
+                                        Click="IgnoreButton_Click"
+                                        AutomationProperties.AutomationId="IntegrationInboxV9.Ignore" />
+                            </WrapPanel>
+                            <TextBlock x:Name="ActionStatusText" Margin="0,10,0,0" Style="{StaticResource Inbox.Caption}" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Duplicate review"
+                     AutomationProperties.AutomationId="IntegrationInboxV9.Tab.Duplicate">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="Duplicate suspected comparison" Style="{StaticResource Inbox.Heading}" />
+                        <TextBlock Text="External IDs differ, but the deterministic normalized fingerprint matches. LifeOS requires an explicit choice."
+                                   Margin="0,6,0,14"
+                                   Style="{StaticResource Inbox.Body}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="14" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Style="{StaticResource Inbox.Card}" Margin="0">
+                                <StackPanel>
+                                    <TextBlock Text="Incoming candidate" Style="{StaticResource Inbox.Subheading}" />
+                                    <TextBlock x:Name="DuplicateIncomingTitleText" Margin="0,8,0,0" FontSize="18" FontWeight="SemiBold" />
+                                    <TextBlock x:Name="DuplicateIncomingSourceText" Margin="0,6,0,0" Style="{StaticResource Inbox.Body}" />
+                                    <TextBlock x:Name="DuplicateIncomingExternalText" Margin="0,6,0,0" Style="{StaticResource Inbox.Caption}" />
+                                </StackPanel>
+                            </Border>
+                            <Border Grid.Column="2" Style="{StaticResource Inbox.Card}" Margin="0">
+                                <StackPanel>
+                                    <TextBlock Text="Existing accepted candidate" Style="{StaticResource Inbox.Subheading}" />
+                                    <TextBlock x:Name="DuplicateExistingTitleText" Margin="0,8,0,0" FontSize="18" FontWeight="SemiBold" />
+                                    <TextBlock x:Name="DuplicateExistingSourceText" Margin="0,6,0,0" Style="{StaticResource Inbox.Body}" />
+                                    <TextBlock x:Name="DuplicateExistingLinkText" Margin="0,6,0,0" Style="{StaticResource Inbox.Caption}" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Border Style="{StaticResource Inbox.Card}" Margin="0,14,0,12">
+                            <StackPanel>
+                                <TextBlock Text="Deterministic comparison" Style="{StaticResource Inbox.Subheading}" />
+                                <TextBlock x:Name="DuplicateFingerprintText" Margin="0,8,0,0" Style="{StaticResource Inbox.Caption}" />
+                                <ItemsControl x:Name="DuplicateFieldItems" Margin="0,10,0,0">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,8">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="180" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                                <TextBlock Grid.Column="1" Text="{Binding Incoming}" Style="{StaticResource Inbox.Body}" />
+                                                <TextBlock Grid.Column="2" Text="{Binding Existing}" Style="{StaticResource Inbox.Body}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <WrapPanel>
+                            <Button Content="Link existing"
+                                    Style="{StaticResource Inbox.Button}"
+                                    Click="DuplicateLinkButton_Click"
+                                    AutomationProperties.AutomationId="IntegrationInboxV9.Duplicate.LinkExisting" />
+                            <Button Content="Keep separate"
+                                    Style="{StaticResource Inbox.Button}"
+                                    Click="DuplicateSeparateButton_Click"
+                                    AutomationProperties.AutomationId="IntegrationInboxV9.Duplicate.KeepSeparate" />
+                            <Button Content="Replace candidate"
+                                    Style="{StaticResource Inbox.Button}"
+                                    Click="DuplicateReplaceButton_Click"
+                                    AutomationProperties.AutomationId="IntegrationInboxV9.Duplicate.Replace" />
+                            <Button Content="Ignore"
+                                    Style="{StaticResource Inbox.Button}"
+                                    Click="DuplicateIgnoreButton_Click"
+                                    AutomationProperties.AutomationId="IntegrationInboxV9.Duplicate.Ignore" />
+                            <Button Content="Reject"
+                                    Style="{StaticResource Inbox.Button}"
+                                    Click="DuplicateRejectButton_Click"
+                                    AutomationProperties.AutomationId="IntegrationInboxV9.Duplicate.Reject" />
+                        </WrapPanel>
+                        <TextBlock x:Name="DuplicateStatusText" Margin="0,10,0,0" Style="{StaticResource Inbox.Caption}" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Conflict review"
+                     AutomationProperties.AutomationId="IntegrationInboxV9.Tab.Conflict">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="Field-level conflict review" Style="{StaticResource Inbox.Heading}" />
+                        <TextBlock x:Name="ConflictHeaderText" Margin="0,6,0,0" Style="{StaticResource Inbox.Body}" />
+                        <TextBlock Text="Each changed field keeps its current LifeOS value and the new source value visible. No silent replacement occurs."
+                                   Margin="0,6,0,14"
+                                   Style="{StaticResource Inbox.Caption}" />
+                        <Border Style="{StaticResource Inbox.Card}" Margin="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="190" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="180" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Field" FontWeight="SemiBold" />
+                                <TextBlock Grid.Column="1" Text="Current LifeOS value" FontWeight="SemiBold" />
+                                <TextBlock Grid.Column="2" Text="Source candidate value" FontWeight="SemiBold" />
+                                <TextBlock Grid.Column="3" Text="Explicit decision" FontWeight="SemiBold" />
+                            </Grid>
+                        </Border>
+                        <ItemsControl x:Name="ConflictFieldItems" Margin="0,8,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource Inbox.Card}" Margin="0,0,0,8">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="190" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="180" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Current}" Style="{StaticResource Inbox.Body}" />
+                                            <TextBlock Grid.Column="2" Text="{Binding Candidate}" Style="{StaticResource Inbox.Body}" />
+                                            <TextBlock Grid.Column="3" Text="{Binding Decision}" FontWeight="SemiBold" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button Content="Apply reviewed field choices"
+                                HorizontalAlignment="Left"
+                                Margin="0,8,0,0"
+                                Style="{StaticResource Inbox.Button}"
+                                Click="ApplyConflictButton_Click"
+                                AutomationProperties.AutomationId="IntegrationInboxV9.Conflict.Apply" />
+                        <TextBlock x:Name="ConflictStatusText" Margin="0,10,0,0" Style="{StaticResource Inbox.Caption}" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Batch &amp; accepted"
+                     AutomationProperties.AutomationId="IntegrationInboxV9.Tab.BatchAccepted">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="Batch review preview" Style="{StaticResource Inbox.Heading}" />
+                        <TextBlock Text="Only low-risk candidates of the same type and identical decision can proceed, and the preview can be cancelled without mutation."
+                                   Margin="0,6,0,12"
+                                   Style="{StaticResource Inbox.Body}" />
+                        <Border Style="{StaticResource Inbox.Card}" Margin="0">
+                            <StackPanel>
+                                <TextBlock x:Name="BatchSummaryText" Style="{StaticResource Inbox.Subheading}" />
+                                <ItemsControl x:Name="BatchCandidateItems" Margin="0,10,0,0">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,7">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="180" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="140" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Type}" FontWeight="SemiBold" />
+                                                <TextBlock Grid.Column="1" Text="{Binding Title}" Style="{StaticResource Inbox.Body}" />
+                                                <TextBlock Grid.Column="2" Text="{Binding Decision}" FontWeight="SemiBold" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <WrapPanel Margin="0,10,0,0">
+                                    <Button Content="Apply batch acceptance"
+                                            Style="{StaticResource Inbox.Button}"
+                                            Click="ApplyBatchButton_Click"
+                                            AutomationProperties.AutomationId="IntegrationInboxV9.Batch.Apply" />
+                                    <Button Content="Cancel preview"
+                                            Style="{StaticResource Inbox.Button}"
+                                            Click="CancelBatchButton_Click"
+                                            AutomationProperties.AutomationId="IntegrationInboxV9.Batch.Cancel" />
+                                </WrapPanel>
+                                <TextBlock x:Name="BatchStatusText" Margin="0,8,0,0" Style="{StaticResource Inbox.Caption}" />
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="Accepted candidate linked to authoritative LifeOS record"
+                                   Margin="0,14,0,10"
+                                   Style="{StaticResource Inbox.Heading}" />
+                        <Border Style="{StaticResource Inbox.Card}" Margin="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock x:Name="AcceptedTitleText" FontSize="18" FontWeight="SemiBold" />
+                                    <TextBlock x:Name="AcceptedSourceText" Margin="0,7,0,0" Style="{StaticResource Inbox.Body}" />
+                                    <TextBlock x:Name="AcceptedStatusText" Margin="0,6,0,0" Style="{StaticResource Inbox.Caption}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Authoritative link" Style="{StaticResource Inbox.Subheading}" />
+                                    <TextBlock x:Name="AcceptedLinkText" Margin="0,7,0,0" Style="{StaticResource Inbox.Body}" />
+                                    <TextBlock Text="The target module remains authoritative; the Integration Inbox does not create another editor."
+                                               Margin="0,7,0,0"
+                                               Style="{StaticResource Inbox.Caption}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Source status &amp; audit"
+                     AutomationProperties.AutomationId="IntegrationInboxV9.Tab.SourceAudit">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="Stale and source-removed handling" Style="{StaticResource Inbox.Heading}" />
+                        <TextBlock Text="Freshness is explicit. Provider deletion creates a tombstone and retains normalized fields plus provenance."
+                                   Margin="0,6,0,12"
+                                   Style="{StaticResource Inbox.Body}" />
+                        <ItemsControl x:Name="SourceCandidateItems">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource Inbox.Card}" Margin="0,0,0,8">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="230" />
+                                                <ColumnDefinition Width="150" />
+                                                <ColumnDefinition Width="150" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                                <TextBlock Text="{Binding Source}" Margin="0,4,0,0" Style="{StaticResource Inbox.Caption}" />
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1" Text="{Binding Status}" FontWeight="SemiBold" />
+                                            <TextBlock Grid.Column="2" Text="{Binding Freshness}" FontWeight="SemiBold" />
+                                            <TextBlock Grid.Column="3" Text="{Binding Detail}" Style="{StaticResource Inbox.Body}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <TextBlock Text="Review audit trail" Margin="0,14,0,10" Style="{StaticResource Inbox.Heading}" />
+                        <ItemsControl x:Name="AuditItems">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource Inbox.Card}" Margin="0,0,0,8">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="170" />
+                                                <ColumnDefinition Width="180" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Timestamp}" Style="{StaticResource Inbox.Caption}" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Action}" FontWeight="SemiBold" />
+                                            <TextBlock Grid.Column="2" Text="{Binding Summary}" Style="{StaticResource Inbox.Body}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <TextBlock Grid.Row="3"
+                   Margin="0,10,0,0"
+                   Text="%LOCALAPPDATA%\LifeOS\integration-inbox-v9.json · Normalized fields only; no unnecessary raw provider payload is stored."
+                   Style="{StaticResource Inbox.Caption}" />
+    </Grid>
+</UserControl>

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\LifeOS.Shared\LifeOS.Shared.csproj" />
@@ -14,9 +14,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <PropertyGroup Label="Group46V9IntegrationFoundation">
-    <Version>9.0.0-alpha.1</Version>
+  <PropertyGroup Label="Group47V9IntegrationInbox">
+    <Version>9.0.0-alpha.2</Version>
     <AssemblyVersion>9.0.0.0</AssemblyVersion>
     <FileVersion>9.0.0.0</FileVersion>
-    <InformationalVersion>9.0.0-alpha.1</InformationalVersion>
+    <InformationalVersion>9.0.0-alpha.2</InformationalVersion>
   </PropertyGroup></Project>

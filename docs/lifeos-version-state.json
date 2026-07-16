@@ -1,8 +1,8 @@
 ﻿{
-  "desktopVersion": "9.0.0-alpha.1",
-  "desktopReleaseName": "Group 46 Integration Control Centre",
-  "desktopGroup": 46,
-  "desktopStatus": "complete-and-closed",
+  "desktopVersion": "9.0.0-alpha.2",
+  "desktopReleaseName": "Group 47 Integration Inbox",
+  "desktopGroup": 47,
+  "desktopStatus": "pack-1-complete-awaiting-evidence",
   "desktopBaselineVersion": "8.0.0-beta.1",
   "websiteVersion": "0.3.0-beta.1",
   "websiteStatus": "complete-and-closed",
@@ -10,7 +10,10 @@
   "companionStatus": "complete-and-closed",
   "integrationControlCentreEnabled": true,
   "integrationControlCentreEmbeddedInSettings": true,
-  "integrationInboxV9Started": false,
+  "integrationInboxV9Started": true,
+  "integrationInboxV9Pack1Complete": true,
+  "integrationInboxEmbeddedInSettings": true,
+  "integrationInboxReviewButtonEnabled": true,
   "liveProvidersEnabled": false,
   "oauthConsentEnabled": false,
   "backgroundSyncEnabled": false,
@@ -18,5 +21,6 @@
   "assistantExecutionEnabled": false,
   "fullMobileStarted": false,
   "group46EvidenceCount": 8,
+  "group47EvidenceCount": 0,
   "nextGroupStarted": false
 }

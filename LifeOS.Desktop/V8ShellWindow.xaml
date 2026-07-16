@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="LifeOS Desktop v9.0.0-alpha.1"
+        Title="LifeOS Desktop v9.0.0-alpha.2"
         Width="1680"
         Height="920"
         MinWidth="900"
@@ -335,11 +335,26 @@
                                     </StackPanel>
                                 </Border>
 
+                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="Integration Inbox" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                                <TextBlock Text="Permanent normalized review pipeline for source-backed imported candidates, duplicates, conflicts, linking, batch preview and source tombstones." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Body}" />
+                                            </StackPanel>
+                                            <Border Grid.Column="1" Background="{DynamicResource LifeOS.Brush.AccentSoft}" BorderBrush="{DynamicResource LifeOS.Brush.Accent}" BorderThickness="1" CornerRadius="8" Padding="9,5" VerticalAlignment="Top"><TextBlock Text="GROUP 47" FontWeight="SemiBold" /></Border>
+                                        </Grid>
+                                        <TextBlock Text="Deterministic fictional candidates only. No OAuth consent, live provider sync, silent trust, automatic handoff or external write action exists." Margin="0,9,0,0" Style="{StaticResource LifeOS.Text.Caption}" />
+                                        <Button Content="Open Integration Inbox" Click="OpenIntegrationInbox_Click" HorizontalAlignment="Left" Margin="0,12,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Integrations.OpenInbox" />
+                                    </StackPanel>
+                                </Border>
+
                                 <TextBlock Text="About / Diagnostics" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
                                 <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
                                     <StackPanel>
-                                        <TextBlock Text="LifeOS Desktop v9.0.0-alpha.1" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
-                                        <TextBlock Text="Eight permanent workspaces. Integration Control Centre added under Settings. Local, review-first and foreground-only." Margin="0,6,0,12" Style="{StaticResource LifeOS.Text.Body}" />
+                                        <TextBlock Text="LifeOS Desktop v9.0.0-alpha.2" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                        <TextBlock Text="Eight permanent workspaces. Integration Control Centre and Integration Inbox are embedded system surfaces. Local, review-first and foreground-only." Margin="0,6,0,12" Style="{StaticResource LifeOS.Text.Body}" />
                                         <WrapPanel>
                                             <Button Content="Desktop Release" Tag="desktop-release" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.DesktopRelease" />
                                             <Button Content="Offline Checkpoint" Tag="final-offline-os" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.OfflineCheckpoint" />

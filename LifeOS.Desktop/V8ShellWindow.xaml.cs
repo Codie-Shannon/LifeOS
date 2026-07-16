@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using LifeOS.Shared.V8;
+using LifeOS.Core.IntegrationInbox;
 
 namespace LifeOS.Desktop;
 
@@ -31,6 +32,7 @@ public partial class V8ShellWindow : Window
     private IInputElement? _focusBeforeCommand;
     private IInputElement? _focusBeforeContext;
     private IntegrationControlCentreView? _integrationControlCentreView;
+    private IntegrationInboxView? _integrationInboxView;
     private WorkspaceSnapshot _snapshot = WorkspaceSnapshot.Load();
 
     private bool IsCommandOpen => CommandOverlay.Visibility == Visibility.Visible;
@@ -45,6 +47,7 @@ public partial class V8ShellWindow : Window
 
         ConfigureSettingsControls();
         ApplyPreferencesToUi();
+        UpdateIntegrationReviewCount();
 
         string startupWorkspace = _preferences.StartupMode == V8StartupMode.LastUsed
             ? _preferences.LastWorkspace
@@ -203,6 +206,7 @@ public partial class V8ShellWindow : Window
         }
 
         _integrationControlCentreView?.ApplyDensity(compact);
+        _integrationInboxView?.ApplyDensity(compact);
     }
 
     private void WorkspaceNav_Click(object sender, RoutedEventArgs e)
@@ -343,7 +347,7 @@ public partial class V8ShellWindow : Window
             return;
         }
 
-        if (e.Key == Key.Escape && IsIntegrationControlCentreOpen)
+        if (e.Key == Key.Escape && IsSettingsSubpageOpen)
         {
             ShowSettingsOverview(scrollToTop: true);
             e.Handled = true;
@@ -589,30 +593,88 @@ public partial class V8ShellWindow : Window
         Keyboard.Focus(ContextButton);
     }
 
-    private bool IsIntegrationControlCentreOpen =>
+    private bool IsSettingsSubpageOpen =>
         SettingsSubpageHost.Visibility == Visibility.Visible;
 
-    private void OpenIntegrationControlCentre_Click(object sender, RoutedEventArgs e)
+    private void OpenIntegrationControlCentre_Click(
+        object sender,
+        RoutedEventArgs e)
     {
-        _integrationControlCentreView ??= CreateIntegrationControlCentreView();
-        _integrationControlCentreView.ApplyDensity(
-            _preferences.Density == V8Density.Compact || ActualWidth <= 980);
+        if (!string.Equals(
+                _activeWorkspace,
+                "Settings",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            NavigateTo("Settings");
+        }
 
+        _integrationControlCentreView ??=
+            CreateIntegrationControlCentreView();
+        _integrationControlCentreView.ApplyDensity(
+            _preferences.Density == V8Density.Compact ||
+            ActualWidth <= 980);
+
+        ShowSettingsSubpage(_integrationControlCentreView);
+    }
+
+    private IntegrationControlCentreView
+        CreateIntegrationControlCentreView()
+    {
+        IntegrationControlCentreView view = new(
+            _preferences.Density == V8Density.Compact ||
+            ActualWidth <= 980);
+        view.BackRequested += (_, _) =>
+            ShowSettingsOverview(scrollToTop: true);
+        return view;
+    }
+
+    private void OpenIntegrationInbox_Click(
+        object sender,
+        RoutedEventArgs e) =>
+        OpenIntegrationInbox();
+
+    private void OpenIntegrationInbox()
+    {
+        if (!string.Equals(
+                _activeWorkspace,
+                "Settings",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            NavigateTo("Settings");
+        }
+
+        _integrationInboxView ??= CreateIntegrationInboxView();
+        _integrationInboxView.ApplyDensity(
+            _preferences.Density == V8Density.Compact ||
+            ActualWidth <= 980);
+
+        ShowSettingsSubpage(_integrationInboxView);
+        UpdateIntegrationReviewCount(
+            _integrationInboxView.CurrentReviewCount);
+    }
+
+    private IntegrationInboxView CreateIntegrationInboxView()
+    {
+        IntegrationInboxView view = new(
+            _preferences.Density == V8Density.Compact ||
+            ActualWidth <= 980);
+        view.BackRequested += (_, _) =>
+            ShowSettingsOverview(scrollToTop: true);
+        view.ReviewCountChanged +=
+            count => UpdateIntegrationReviewCount(count);
+        return view;
+    }
+
+    private void ShowSettingsSubpage(
+        UserControl subpage)
+    {
         SettingsOverviewPanel.Visibility = Visibility.Collapsed;
-        SettingsSubpageHost.Content = _integrationControlCentreView;
+        SettingsSubpageHost.Content = subpage;
         SettingsSubpageHost.Visibility = Visibility.Visible;
         WorkspaceHeaderGrid.Visibility = Visibility.Collapsed;
         MetricItems.Visibility = Visibility.Collapsed;
         WorkspaceScrollViewer.ScrollToTop();
-        Keyboard.Focus(_integrationControlCentreView);
-    }
-
-    private IntegrationControlCentreView CreateIntegrationControlCentreView()
-    {
-        IntegrationControlCentreView view = new(
-            _preferences.Density == V8Density.Compact || ActualWidth <= 980);
-        view.BackRequested += (_, _) => ShowSettingsOverview(scrollToTop: true);
-        return view;
+        Keyboard.Focus(subpage);
     }
 
     private void ShowSettingsOverview(bool scrollToTop)
@@ -629,6 +691,36 @@ public partial class V8ShellWindow : Window
         }
     }
 
+    private void UpdateIntegrationReviewCount(
+        int? knownCount = null)
+    {
+        int count;
+
+        if (knownCount.HasValue)
+        {
+            count = knownCount.Value;
+        }
+        else
+        {
+            try
+            {
+                IntegrationInboxV9State state =
+                    IntegrationInboxV9Store.LoadOrCreate(
+                        DateTimeOffset.UtcNow);
+                count = new IntegrationInboxV9Service(state)
+                    .GetReviewCount();
+            }
+            catch (Exception exception) when (
+                exception is System.IO.IOException or
+                UnauthorizedAccessException)
+            {
+                count = 0;
+            }
+        }
+
+        ReviewButton.Content = $"Review {count}";
+    }
+
     private void OpenModule_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button { Tag: string routeId } ||
@@ -640,6 +732,15 @@ public partial class V8ShellWindow : Window
         if (routeId.StartsWith("workspace:", StringComparison.OrdinalIgnoreCase))
         {
             NavigateTo(routeId["workspace:".Length..]);
+            return;
+        }
+
+        if (string.Equals(
+                routeId,
+                "integration-inbox",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            OpenIntegrationInbox();
             return;
         }
 
@@ -663,13 +764,10 @@ public partial class V8ShellWindow : Window
         moduleWindow.Show();
     }
 
-    private void ReviewButton_Click(object sender, RoutedEventArgs e)
-    {
-        OpenContext(
-            "Combined review",
-            "Four review items are collected across Work, Money, Assistant and system safety. Opening review does not edit the active workspace.",
-            forceOpen: true);
-    }
+    private void ReviewButton_Click(
+        object sender,
+        RoutedEventArgs e) =>
+        OpenIntegrationInbox();
 
     private void StatusButton_Click(object sender, RoutedEventArgs e)
     {

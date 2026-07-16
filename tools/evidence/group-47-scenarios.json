@@ -1,0 +1,39 @@
+﻿{
+  "group": 47,
+  "release": "v9.0.0-alpha.2",
+  "expectedCount": 8,
+  "scenarios": [
+    {
+      "id": "mixed-candidates",
+      "fileName": "01_Integration_Inbox_Mixed_Candidates.png"
+    },
+    {
+      "id": "provenance-freshness",
+      "fileName": "02_Provenance_And_Freshness_Detail.png"
+    },
+    {
+      "id": "duplicate-comparison",
+      "fileName": "03_Duplicate_Suspected_Comparison.png"
+    },
+    {
+      "id": "field-conflict",
+      "fileName": "04_Field_Level_Conflict_Review.png"
+    },
+    {
+      "id": "accepted-link",
+      "fileName": "05_Accepted_Candidate_Authoritative_Link.png"
+    },
+    {
+      "id": "batch-preview",
+      "fileName": "06_Batch_Review_Preview.png"
+    },
+    {
+      "id": "source-status",
+      "fileName": "07_Stale_And_Source_Removed_Handling.png"
+    },
+    {
+      "id": "validation",
+      "fileName": "08_Group_47_Validation_And_Clean_Sync.png"
+    }
+  ]
+}

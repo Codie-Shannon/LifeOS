@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -286,7 +286,7 @@ internal static class WorkspaceCatalog
                     Metric("Core pages", "", "8", "Permanent workspaces"),
                     Metric("Obsolete shell routes", "", "0", "Removed"),
                     Metric("Emergency Stop", "", "Available", "Textual state"),
-                    Metric("Desktop release", "", "v9.0.0-alpha.1", "Group 46 integration foundation")
+                    Metric("Desktop release", "", "v9.0.0-alpha.2", "Group 47 normalized review pipeline")
                 },
                 new WorkspaceSectionDefinition[]
                 {

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="LifeOS Desktop v8.0.0-beta.1"
+        Title="LifeOS Desktop v9.0.0-alpha.1"
         Width="1680"
         Height="920"
         MinWidth="900"
@@ -319,13 +319,26 @@
                                 <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left"><StackPanel><TextBlock x:Name="SettingsStopStatusText" Text="Emergency Stop: Idle" Style="{StaticResource LifeOS.Text.Body}" /><TextBlock Text="The state is always written in text and never communicated by colour alone." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" /><Button Content="Open Automation Centre" Tag="automation-centre" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,12,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Automation.OpenCentre" /></StackPanel></Border>
 
                                 <TextBlock Text="Integrations" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
-                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left"><TextBlock Text="Placeholder only. Microsoft and Google integrations are outside Group 45 and are not configured from this release surface." Style="{StaticResource LifeOS.Text.Body}" /></Border>
+                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="Integration Control Centre" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                                <TextBlock Text="Permanent provider, account, permission, capability-health, freshness, audit, reconnect, revoke and disconnect controls." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Body}" />
+                                            </StackPanel>
+                                            <Border Grid.Column="1" Background="{DynamicResource LifeOS.Brush.AccentSoft}" BorderBrush="{DynamicResource LifeOS.Brush.Accent}" BorderThickness="1" CornerRadius="8" Padding="9,5" VerticalAlignment="Top"><TextBlock Text="GROUP 46" FontWeight="SemiBold" /></Border>
+                                        </Grid>
+                                        <TextBlock Text="Fictional proof providers only. No live Microsoft or Google credentials, external reads or external writes are enabled in this group." Margin="0,9,0,0" Style="{StaticResource LifeOS.Text.Caption}" />
+                                        <Button Content="Open Integration Control Centre" Click="OpenIntegrationControlCentre_Click" HorizontalAlignment="Left" Margin="0,12,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Integrations.OpenControlCentre" />
+                                    </StackPanel>
+                                </Border>
 
                                 <TextBlock Text="About / Diagnostics" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
                                 <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
                                     <StackPanel>
-                                        <TextBlock Text="LifeOS Desktop v8.0.0-beta.1" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
-                                        <TextBlock Text="Eight permanent workspaces. Zero obsolete shell routes. Local, review-first and foreground-only." Margin="0,6,0,12" Style="{StaticResource LifeOS.Text.Body}" />
+                                        <TextBlock Text="LifeOS Desktop v9.0.0-alpha.1" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                        <TextBlock Text="Eight permanent workspaces. Integration Control Centre added under Settings. Local, review-first and foreground-only." Margin="0,6,0,12" Style="{StaticResource LifeOS.Text.Body}" />
                                         <WrapPanel>
                                             <Button Content="Desktop Release" Tag="desktop-release" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.DesktopRelease" />
                                             <Button Content="Offline Checkpoint" Tag="final-offline-os" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.OfflineCheckpoint" />

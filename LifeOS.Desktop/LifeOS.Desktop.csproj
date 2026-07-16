@@ -14,9 +14,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <PropertyGroup Label="Group45V8Release">
-    <Version>8.0.0-beta.1</Version>
-    <AssemblyVersion>8.0.0.0</AssemblyVersion>
-    <FileVersion>8.0.0.0</FileVersion>
-    <InformationalVersion>8.0.0-beta.1</InformationalVersion>
+  <PropertyGroup Label="Group46V9IntegrationFoundation">
+    <Version>9.0.0-alpha.1</Version>
+    <AssemblyVersion>9.0.0.0</AssemblyVersion>
+    <FileVersion>9.0.0.0</FileVersion>
+    <InformationalVersion>9.0.0-alpha.1</InformationalVersion>
   </PropertyGroup></Project>

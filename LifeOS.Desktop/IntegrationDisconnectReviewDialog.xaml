@@ -1,0 +1,44 @@
+<Window x:Class="LifeOS.Desktop.IntegrationDisconnectReviewDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Disconnect retention review"
+        Width="690"
+        Height="560"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource LifeOS.Brush.Window}"
+        Foreground="{DynamicResource LifeOS.Brush.TextPrimary}"
+        AutomationProperties.AutomationId="IntegrationControlCentre.DisconnectReview">
+    <Grid Margin="24">
+        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock Text="DISCONNECT / DATA RETENTION" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.Accent}" />
+            <TextBlock Text="Choose what LifeOS retains" FontSize="25" FontWeight="SemiBold" Margin="0,5,0,0" />
+            <TextBlock x:Name="AccountText" Margin="0,7,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Margin="0,18,0,18">
+            <Border Background="{DynamicResource LifeOS.Brush.Surface}" BorderBrush="{DynamicResource LifeOS.Brush.Border}" BorderThickness="1" CornerRadius="12" Padding="16" Margin="0,0,0,10">
+                <RadioButton x:Name="KeepAcceptedRadio" GroupName="Retention" IsChecked="True" Checked="Retention_Changed" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" AutomationProperties.AutomationId="IntegrationControlCentre.Disconnect.KeepAccepted">
+                    <StackPanel Margin="8,0,0,0"><TextBlock Text="Keep accepted LifeOS records" FontWeight="SemiBold" /><TextBlock Text="Disconnect the provider but keep accepted records and reviewable provenance links." Margin="0,4,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" /></StackPanel>
+                </RadioButton>
+            </Border>
+            <Border Background="{DynamicResource LifeOS.Brush.Surface}" BorderBrush="{DynamicResource LifeOS.Brush.Border}" BorderThickness="1" CornerRadius="12" Padding="16" Margin="0,0,0,10">
+                <RadioButton x:Name="ArchiveLinksRadio" GroupName="Retention" Checked="Retention_Changed" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" AutomationProperties.AutomationId="IntegrationControlCentre.Disconnect.ArchiveLinks">
+                    <StackPanel Margin="8,0,0,0"><TextBlock Text="Archive provider links" FontWeight="SemiBold" /><TextBlock Text="Keep accepted records, archive provider links and stop future refresh until reconnect." Margin="0,4,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" /></StackPanel>
+                </RadioButton>
+            </Border>
+            <Border Background="{DynamicResource LifeOS.Brush.Surface}" BorderBrush="{DynamicResource LifeOS.Brush.Border}" BorderThickness="1" CornerRadius="12" Padding="16">
+                <RadioButton x:Name="RemoveCandidatesRadio" GroupName="Retention" Checked="Retention_Changed" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" AutomationProperties.AutomationId="IntegrationControlCentre.Disconnect.RemoveCandidates">
+                    <StackPanel Margin="8,0,0,0"><TextBlock Text="Remove unaccepted imported candidates" FontWeight="SemiBold" /><TextBlock Text="Remove only unaccepted candidates. Accepted LifeOS records remain protected and are not silently deleted." Margin="0,4,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" /></StackPanel>
+                </RadioButton>
+            </Border>
+            <CheckBox x:Name="ConfirmCheckBox" Content="I reviewed the retention choice and understand that disconnect does not delete accepted LifeOS records." Margin="0,18,0,0" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" Checked="Confirmation_Changed" Unchecked="Confirmation_Changed" AutomationProperties.AutomationId="IntegrationControlCentre.Disconnect.Confirm" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cancel" Width="110" Margin="0,0,8,0" Click="CancelButton_Click" Style="{StaticResource LifeOS.FocusableButton}" />
+            <Button x:Name="DisconnectButton" Content="Confirm disconnect" Width="180" IsEnabled="False" Click="DisconnectButton_Click" Style="{StaticResource LifeOS.FocusableButton}" AutomationProperties.AutomationId="IntegrationControlCentre.Disconnect.Apply" />
+        </StackPanel>
+    </Grid>
+</Window>

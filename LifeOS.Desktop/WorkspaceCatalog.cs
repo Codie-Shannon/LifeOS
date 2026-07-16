@@ -279,14 +279,14 @@ internal static class WorkspaceCatalog
                 "Settings",
                 "System behaviour only",
                 "SYSTEM CONTROL",
-                "Appearance, startup, accessibility, profiles, privacy, sync, safety and diagnostics live here—not operational records.",
+                "Appearance, startup, accessibility, profiles, privacy, sync, integrations, safety and diagnostics live here—not operational records.",
                 "Settings controls the shell and safety boundaries. It does not become an operational dumping ground.",
                 new WorkspaceMetricDefinition[]
                 {
                     Metric("Core pages", "", "8", "Permanent workspaces"),
                     Metric("Obsolete shell routes", "", "0", "Removed"),
                     Metric("Emergency Stop", "", "Available", "Textual state"),
-                    Metric("Desktop release", "", "v8.0.0-beta.1", "Closed checkpoint")
+                    Metric("Desktop release", "", "v9.0.0-alpha.1", "Group 46 integration foundation")
                 },
                 new WorkspaceSectionDefinition[]
                 {

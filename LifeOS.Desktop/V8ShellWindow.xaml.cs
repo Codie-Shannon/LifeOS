@@ -578,6 +578,17 @@ public partial class V8ShellWindow : Window
         Keyboard.Focus(ContextButton);
     }
 
+    private void OpenIntegrationControlCentre_Click(object sender, RoutedEventArgs e)
+    {
+        IntegrationControlCentreWindow window = new(
+            _preferences.Density == V8Density.Compact)
+        {
+            Owner = this
+        };
+
+        window.ShowDialog();
+    }
+
     private void OpenModule_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button { Tag: string routeId } ||

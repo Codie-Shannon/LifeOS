@@ -1,0 +1,15 @@
+{
+  "group": 46,
+  "release": "v9.0.0-alpha.1",
+  "expectedCount": 8,
+  "scenarios": [
+    { "id": "overview", "fileName": "01_Integration_Control_Centre_Overview.png" },
+    { "id": "account-separation", "fileName": "02_Work_And_Personal_Accounts_Separated.png" },
+    { "id": "capabilities-permissions", "fileName": "03_Capabilities_And_Incremental_Permissions.png" },
+    { "id": "capability-health", "fileName": "04_Per_Capability_Health.png" },
+    { "id": "reconnect-revoke", "fileName": "05_Reconnect_Or_Revoke_Review.png" },
+    { "id": "disconnect-retention", "fileName": "06_Disconnect_Retention_Choices.png" },
+    { "id": "audit", "fileName": "07_Connector_Audit_History.png" },
+    { "id": "validation", "fileName": "08_Group_46_Validation_And_Clean_Sync.png" }
+  ]
+}

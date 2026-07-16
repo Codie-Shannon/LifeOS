@@ -1,14 +1,16 @@
-# Group 46 — Integration Control Centre evidence
+﻿# Group 46 — Integration Control Centre evidence
 
-Capture exactly eight approved PNG screenshots at 1360 × 820 where practical. Use only the deterministic fictional Group 46 state. Do not expose real account identities, provider credentials, tokens, private data or unrelated local paths.
+Evidence status: **complete and closed**.
 
-1. `01_Integration_Control_Centre_Overview.png` — provider catalogue, summary cards and fictional-only boundary.
+Exactly eight approved PNG screenshots are authoritative for Group 46. They use only deterministic fictional provider/account state and expose no provider credential, OAuth token, client secret, authorization code or real external record.
+
+1. `01_Integration_Control_Centre_Overview.png` — embedded Control Centre, provider catalogue, summary cards and fictional-only boundary.
 2. `02_Work_And_Personal_Accounts_Separated.png` — connected Work and Personal accounts shown independently.
-3. `03_Capabilities_And_Incremental_Permissions.png` — provider capabilities plus Required/Optional and Granted/Missing/Revoked/Not Requested states.
-4. `04_Per_Capability_Health.png` — Healthy, Stale and Needs Attention capability states visible together.
-5. `05_Reconnect_Or_Revoke_Review.png` — explicit account/action review flow before confirmation.
-6. `06_Disconnect_Retention_Choices.png` — all three data-retention choices and confirmation boundary.
-7. `07_Connector_Audit_History.png` — ordered fictional consent, sync, permission and recovery audit entries.
-8. `08_Group_46_Validation_And_Clean_Sync.png` — Pack 2 validation, commit, push, `HEAD = origin/main` and clean tree.
+3. `03_Capabilities_And_Incremental_Permissions.png` — Required/Optional classification plus Granted, Missing and Not Requested states.
+4. `04_Per_Capability_Health.png` — Healthy, Fresh, Stale, Not Available and Needs Attention states represented per capability.
+5. `05_Reconnect_Or_Revoke_Review.png` — explicit account/action review with safety explanation, confirmation boundary and visible actions.
+6. `06_Disconnect_Retention_Choices.png` — all three explicit data-retention choices and disconnect confirmation boundary.
+7. `07_Connector_Audit_History.png` — ordered fictional refresh, permission, connection and initial-sync audit entries.
+8. `08_Group_46_Validation_And_Clean_Sync.png` — evidence contract, release identity, disabled writes, fictional-only state, synchronized HEAD and clean working tree ready for Pack 2.
 
-Pack 1 creates this evidence contract but includes no screenshots. Pack 2 must reject missing, duplicate, renamed or extra PNG files.
+Pack 2 rejects missing, duplicate, renamed or extra PNG files. Its runner reruns evidence validation with `-RequireImages`, full regressions/builds, NuGet vulnerability scans, Gitleaks, repository hygiene, commit, push and final clean synchronization.

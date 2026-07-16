@@ -1,14 +1,15 @@
-{
+﻿{
   "desktopVersion": "9.0.0-alpha.1",
   "desktopReleaseName": "Group 46 Integration Control Centre",
   "desktopGroup": 46,
-  "desktopStatus": "pack-1-manual-evidence-pending",
+  "desktopStatus": "complete-and-closed",
   "desktopBaselineVersion": "8.0.0-beta.1",
   "websiteVersion": "0.3.0-beta.1",
   "websiteStatus": "complete-and-closed",
   "companionVersion": "0.1.0-beta.1",
   "companionStatus": "complete-and-closed",
   "integrationControlCentreEnabled": true,
+  "integrationControlCentreEmbeddedInSettings": true,
   "integrationInboxV9Started": false,
   "liveProvidersEnabled": false,
   "oauthConsentEnabled": false,
@@ -16,5 +17,6 @@
   "externalWritesEnabled": false,
   "assistantExecutionEnabled": false,
   "fullMobileStarted": false,
+  "group46EvidenceCount": 8,
   "nextGroupStarted": false
 }

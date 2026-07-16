@@ -1,12 +1,6 @@
-# Group 46 manual verification — Integration Control Centre
+﻿# Group 46 manual verification — Integration Control Centre
 
 Group 46 starts the LifeOS v9 integration lane at `v9.0.0-alpha.1`. It adds the permanent system-level Integration Control Centre as an embedded Settings subpage. This group uses deterministic fictional providers and accounts only.
-
-## Entry conditions
-
-- Group 46 Pack 1 and both Settings ComboBox corrections are committed, pushed and synchronized.
-- Desktop launches through the permanent eight-workspace v8 shell.
-- No live Microsoft or Google credential, token, account or external provider read is used.
 
 ## Deterministic proof-state reset
 
@@ -18,30 +12,33 @@ The Integration Control Centre stores fictional proof state outside Git at:
 
 Close LifeOS and delete only that file to restore the deterministic fictional provider/account seed on next launch. Do not delete operational module stores.
 
-## Required manual checks
+## Verified manual checks
 
-1. Open **Settings** and confirm **Integration Control Centre** appears inside the Integrations section rather than as a ninth workspace.
-2. Confirm Theme, Accent, Density, Startup workspace and Text scale retain the established dark custom ComboBox presentation.
-3. Select **Open Integration Control Centre** and confirm it replaces the Settings overview inside the existing LifeOS shell.
-4. Confirm the left workspace rail, top bar, main window title bar and normal window movement/resizing remain available.
-5. Confirm no second LifeOS window, borderless overlay or laptop-sized immovable surface is created.
-6. Select **Back to Settings** and confirm the normal Settings overview returns at the top of the page.
-7. Reopen the Control Centre and confirm only one embedded instance is used.
-8. Press **Escape** while the Control Centre is open and confirm it returns to the Settings overview.
-9. Navigate directly to another workspace while the Control Centre is open and confirm the normal workspace header and metrics are restored.
-10. Confirm all provider cards state **FICTIONAL** and the boundary states **NO LIVE CREDENTIALS**.
-11. Confirm Microsoft 365, Google Workspace and Local connectors use the shared account, permission, health, audit and recovery contract.
-12. Confirm the Work account and Personal account are visibly separate.
-13. Open **Capabilities & permissions** and confirm Required/Optional is separate from Granted/Missing/Revoked/Not Requested.
-14. Confirm healthy, stale and Needs Attention capability states can be visible simultaneously.
-15. Run Refresh and confirm no external read or write occurs.
-16. Open Reconnect, Revoke and Disconnect reviews and confirm only those review confirmations open as modal dialogs owned by the main LifeOS window.
-17. Verify all three disconnect retention choices.
-18. Open Audit history and verify ordered, timestamped and sanitized entries.
-19. Verify Light, Dark and High Contrast themes.
-20. Verify Comfortable and Compact density plus 100%, 110%, 125% and 140% text scale.
-21. Verify keyboard focus, AutomationIds and inner scrolling remain usable on the laptop display.
-22. Confirm the local JSON contains no client secret, access token, refresh token, authorization code or password field.
+1. **Integration Control Centre** is under Settings and does not create a ninth workspace.
+2. The Control Centre is embedded inside the existing LifeOS shell rather than opening a separate borderless overlay.
+3. The main title bar, workspace rail, top bar, movement, resizing and normal workspace navigation remain available.
+4. Theme, Accent, Density, Startup workspace and Text scale retain the established custom ComboBox presentation.
+5. Overview, Capabilities & permissions and Audit history use readable custom dark tabs without native white rendering or clipped selection indicators.
+6. Microsoft 365, Google Workspace and Local connector proof cards are explicitly marked fictional.
+7. Work and Personal accounts remain visibly and independently classified.
+8. Required/Optional permission classification is separate from Granted/Missing/Revoked/Not Requested consent state.
+9. Healthy, stale, unavailable and Needs Attention states are represented per capability.
+10. Reconnect and revoke actions require explicit review before confirmation.
+11. The connection review dialog is resizable and scroll-safe; its confirmation control and actions are fully visible.
+12. Disconnect review exposes all three explicit retention choices:
+    - keep accepted LifeOS records;
+    - archive provider links;
+    - remove unaccepted imported candidates.
+13. Audit entries are ordered, timestamped, source-identifiable and sanitized.
+14. No external read, write, OAuth token, client secret or authorization code appears in the proof.
+15. The Group 46 evidence contract contains exactly eight ordered PNG screenshots.
+16. The repository was synchronized and clean before Pack 2 finalization.
+
+## Closure
+
+Group 46 Pack 2 reruns the complete Core/Desktop, Website and Companion regression/build boundary, NuGet vulnerability checks, Gitleaks, repository hygiene, evidence validation and clean synchronization verification before committing the evidence.
+
+Group 46 is complete and closed. Group 47 Integration Inbox work has not started.
 
 ## Stop rule
 

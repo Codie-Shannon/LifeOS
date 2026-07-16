@@ -179,16 +179,7 @@
                 </Grid>
             </ScrollViewer>
 
-            <Border x:Name="CommandOverlay" Visibility="Collapsed" Background="#99000000" AutomationProperties.AutomationId="Command.Surface">
-                <Border Style="{StaticResource LifeOS.Card}" Width="620" VerticalAlignment="Top" Margin="0,74,0,0">
-                    <StackPanel>
-                        <TextBlock FontSize="16" FontWeight="SemiBold" Text="Search and commands"/>
-                        <TextBox x:Name="CommandTextBox" Margin="0,14,0,12" Padding="12,10" FontSize="15" KeyDown="CommandTextBox_KeyDown" AutomationProperties.AutomationId="Command.Input"/>
-                        <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Try: Home, Work, Money, Theme light, Theme dark, Legacy"/>
-                        <Button Margin="0,14,0,0" HorizontalAlignment="Left" Style="{StaticResource LifeOS.FocusableButton}" Content="Close" Click="CloseCommand_Click"/>
-                    </StackPanel>
-                </Border>
-            </Border>
+
         </Grid>
 
         <Border Grid.Column="2" Grid.RowSpan="2" Background="{DynamicResource LifeOS.Brush.Surface}"
@@ -204,6 +195,49 @@
                     <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" Text="All v7 routes remain available through the legacy module window during Groups 43 and 44."/>
                 </StackPanel>
             </DockPanel>
+        </Border>
+
+        <Border x:Name="CommandOverlay"
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Panel.ZIndex="1000"
+                Visibility="Collapsed"
+                Background="#99000000"
+                AutomationProperties.AutomationId="Command.Surface"
+                AutomationProperties.Name="Search and commands modal">
+            <Border Style="{StaticResource LifeOS.Card}"
+                    Width="620"
+                    VerticalAlignment="Top"
+                    Margin="0,138,0,0"
+                    FocusManager.IsFocusScope="True"
+                    KeyboardNavigation.TabNavigation="Cycle"
+                    KeyboardNavigation.ControlTabNavigation="Cycle"
+                    KeyboardNavigation.DirectionalNavigation="Contained">
+                <StackPanel>
+                    <TextBlock FontSize="16"
+                               FontWeight="SemiBold"
+                               Text="Search and commands"/>
+
+                    <TextBox x:Name="CommandTextBox"
+                             Margin="0,14,0,12"
+                             Padding="12,10"
+                             FontSize="15"
+                             KeyDown="CommandTextBox_KeyDown"
+                             AutomationProperties.AutomationId="Command.Input"/>
+
+                    <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"
+                               Text="Try: Home, Work, Money, Theme light, Theme dark, Legacy"/>
+
+                    <Button Margin="0,14,0,0"
+                            HorizontalAlignment="Left"
+                            Style="{StaticResource LifeOS.FocusableButton}"
+                            Content="Close"
+                            Click="CloseCommand_Click"
+                            AutomationProperties.AutomationId="Command.Close"/>
+                </StackPanel>
+            </Border>
         </Border>
     </Grid>
 </Window>

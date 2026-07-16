@@ -30,6 +30,10 @@ public partial class V8ShellWindow : Window
     private bool _contextOpen;
     private bool _lightTheme;
     private bool _stopArmed;
+    private IInputElement? _focusBeforeCommand;
+
+    private bool IsCommandOpen =>
+        CommandOverlay.Visibility == Visibility.Visible;
 
     public V8ShellWindow()
     {
@@ -39,7 +43,12 @@ public partial class V8ShellWindow : Window
 
     private void WorkspaceNav_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is Button { Tag: string workspace }) NavigateTo(workspace);
+        if (IsCommandOpen) return;
+
+        if (sender is Button { Tag: string workspace })
+        {
+            NavigateTo(workspace);
+        }
     }
 
     private void NavigateTo(string workspace)
@@ -81,21 +90,47 @@ public partial class V8ShellWindow : Window
 
     private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-        if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control && e.Key == Key.K)
+        bool controlK =
+            (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control &&
+            e.Key == Key.K;
+
+        bool workspaceShortcut =
+            (Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt &&
+            e.Key is >= Key.D1 and <= Key.D8;
+
+        if (IsCommandOpen)
+        {
+            if (e.Key == Key.Escape)
+            {
+                CloseCommand();
+                e.Handled = true;
+                return;
+            }
+
+            if (controlK)
+            {
+                Keyboard.Focus(CommandTextBox);
+                e.Handled = true;
+                return;
+            }
+
+            if (workspaceShortcut)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            return;
+        }
+
+        if (controlK)
         {
             OpenCommand();
             e.Handled = true;
             return;
         }
 
-        if (e.Key == Key.Escape && CommandOverlay.Visibility == Visibility.Visible)
-        {
-            CloseCommand();
-            e.Handled = true;
-            return;
-        }
-
-        if ((Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt && e.Key is >= Key.D1 and <= Key.D8)
+        if (workspaceShortcut)
         {
             NavigateTo(WorkspaceOrder[(int)e.Key - (int)Key.D1]);
             e.Handled = true;
@@ -107,28 +142,82 @@ public partial class V8ShellWindow : Window
 
     private void OpenCommand()
     {
+        if (IsCommandOpen)
+        {
+            Keyboard.Focus(CommandTextBox);
+            return;
+        }
+
+        _focusBeforeCommand = Keyboard.FocusedElement;
+
         CommandOverlay.Visibility = Visibility.Visible;
-        CommandTextBox.Text = string.Empty;
-        CommandTextBox.Focus();
+        CommandTextBox.Clear();
+
+        Keyboard.Focus(CommandTextBox);
     }
 
     private void CloseCommand()
     {
+        if (!IsCommandOpen) return;
+
         CommandOverlay.Visibility = Visibility.Collapsed;
-        CommandButton.Focus();
+
+        IInputElement? previousFocus = _focusBeforeCommand;
+        _focusBeforeCommand = null;
+
+        if (previousFocus is UIElement previousElement &&
+            previousElement.IsVisible &&
+            previousElement.IsEnabled)
+        {
+            Keyboard.Focus(previousElement);
+            return;
+        }
+
+        Keyboard.Focus(CommandButton);
     }
 
     private void CommandTextBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key != Key.Enter) return;
+
         string command = CommandTextBox.Text.Trim();
-        string? workspace = WorkspaceOrder.FirstOrDefault(w => string.Equals(w, command, StringComparison.OrdinalIgnoreCase));
-        if (workspace is not null) NavigateTo(workspace);
-        else if (command.Equals("Theme light", StringComparison.OrdinalIgnoreCase)) ApplyTheme(true);
-        else if (command.Equals("Theme dark", StringComparison.OrdinalIgnoreCase)) ApplyTheme(false);
-        else if (command.Equals("Legacy", StringComparison.OrdinalIgnoreCase)) OpenLegacy();
-        CloseCommand();
-        e.Handled = true;
+
+        string? workspace = WorkspaceOrder.FirstOrDefault(
+            candidate => string.Equals(
+                candidate,
+                command,
+                StringComparison.OrdinalIgnoreCase));
+
+        if (workspace is not null)
+        {
+            CloseCommand();
+            NavigateTo(workspace);
+            e.Handled = true;
+            return;
+        }
+
+        if (command.Equals("Theme light", StringComparison.OrdinalIgnoreCase))
+        {
+            ApplyTheme(true);
+            CloseCommand();
+            e.Handled = true;
+            return;
+        }
+
+        if (command.Equals("Theme dark", StringComparison.OrdinalIgnoreCase))
+        {
+            ApplyTheme(false);
+            CloseCommand();
+            e.Handled = true;
+            return;
+        }
+
+        if (command.Equals("Legacy", StringComparison.OrdinalIgnoreCase))
+        {
+            CloseCommand();
+            OpenLegacy();
+            e.Handled = true;
+        }
     }
 
     private void ApplyTheme(bool light)

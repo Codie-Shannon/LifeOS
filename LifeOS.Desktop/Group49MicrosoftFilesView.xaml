@@ -2,47 +2,449 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  Background="Transparent">
- <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+ <UserControl.Resources>
+
+  <Style x:Key="Group49.InfoCard"
+         TargetType="Border"
+         BasedOn="{StaticResource LifeOS.Card}">
+   <Setter Property="Padding" Value="18"/>
+   <Setter Property="Margin" Value="0"/>
+  </Style>
+
+  <Style x:Key="Group49.StatusPill"
+         TargetType="Border">
+   <Setter Property="Background"
+           Value="{DynamicResource LifeOS.Brush.AccentSoft}"/>
+   <Setter Property="BorderBrush"
+           Value="{DynamicResource LifeOS.Brush.Accent}"/>
+   <Setter Property="BorderThickness" Value="1"/>
+   <Setter Property="CornerRadius" Value="8"/>
+   <Setter Property="Padding" Value="10,5"/>
+   <Setter Property="Margin" Value="0,0,8,0"/>
+  </Style>
+
+  <Style x:Key="Group49.NeutralPill"
+         TargetType="Border"
+         BasedOn="{StaticResource Group49.StatusPill}">
+   <Setter Property="Background"
+           Value="{DynamicResource LifeOS.Brush.SurfaceRaised}"/>
+   <Setter Property="BorderBrush"
+           Value="{DynamicResource LifeOS.Brush.Border}"/>
+  </Style>
+
+  <Style x:Key="Group49.TabControl"
+         TargetType="TabControl">
+   <Setter Property="Background" Value="Transparent"/>
+   <Setter Property="BorderThickness" Value="0"/>
+   <Setter Property="Padding" Value="0"/>
+   <Setter Property="Template">
+    <Setter.Value>
+     <ControlTemplate TargetType="TabControl">
+      <Grid KeyboardNavigation.TabNavigation="Local">
+       <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+       </Grid.RowDefinitions>
+
+       <Border Grid.Row="0"
+               Background="{DynamicResource LifeOS.Brush.Surface}"
+               BorderBrush="{DynamicResource LifeOS.Brush.Border}"
+               BorderThickness="1"
+               CornerRadius="10"
+               Padding="5">
+        <TabPanel IsItemsHost="True"
+                  KeyboardNavigation.TabIndex="1"/>
+       </Border>
+
+       <Border Grid.Row="1"
+               Margin="0,12,0,0"
+               Background="{DynamicResource LifeOS.Brush.Surface}"
+               BorderBrush="{DynamicResource LifeOS.Brush.Border}"
+               BorderThickness="1"
+               CornerRadius="12"
+               Padding="18">
+        <ContentPresenter ContentSource="SelectedContent"/>
+       </Border>
+      </Grid>
+     </ControlTemplate>
+    </Setter.Value>
+   </Setter>
+  </Style>
+
+  <Style x:Key="Group49.TabItem"
+         TargetType="TabItem">
+   <Setter Property="Foreground"
+           Value="{DynamicResource LifeOS.Brush.TextSecondary}"/>
+   <Setter Property="FontWeight" Value="SemiBold"/>
+   <Setter Property="FontSize" Value="13"/>
+   <Setter Property="Padding" Value="15,9"/>
+   <Setter Property="Margin" Value="0,0,4,0"/>
+   <Setter Property="Background" Value="Transparent"/>
+   <Setter Property="BorderThickness" Value="0"/>
+   <Setter Property="Template">
+    <Setter.Value>
+     <ControlTemplate TargetType="TabItem">
+      <Border x:Name="TabSurface"
+              Background="{TemplateBinding Background}"
+              BorderBrush="Transparent"
+              BorderThickness="1"
+              CornerRadius="7"
+              Padding="{TemplateBinding Padding}">
+       <ContentPresenter ContentSource="Header"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+      </Border>
+
+      <ControlTemplate.Triggers>
+       <Trigger Property="IsMouseOver" Value="True">
+        <Setter TargetName="TabSurface"
+                Property="Background"
+                Value="{DynamicResource LifeOS.Brush.SurfaceHover}"/>
+        <Setter Property="Foreground"
+                Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+       </Trigger>
+
+       <Trigger Property="IsSelected" Value="True">
+        <Setter TargetName="TabSurface"
+                Property="Background"
+                Value="{DynamicResource LifeOS.Brush.AccentSoft}"/>
+        <Setter TargetName="TabSurface"
+                Property="BorderBrush"
+                Value="{DynamicResource LifeOS.Brush.Accent}"/>
+        <Setter Property="Foreground"
+                Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+       </Trigger>
+
+       <Trigger Property="IsEnabled" Value="False">
+        <Setter Property="Opacity" Value="0.45"/>
+       </Trigger>
+      </ControlTemplate.Triggers>
+     </ControlTemplate>
+    </Setter.Value>
+   </Setter>
+  </Style>
+
+ </UserControl.Resources>
+
+ <ScrollViewer VerticalScrollBarVisibility="Auto"
+               HorizontalScrollBarVisibility="Disabled">
+
   <StackPanel Margin="0,0,8,24">
+
    <Grid>
-    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+    <Grid.ColumnDefinitions>
+     <ColumnDefinition Width="*"/>
+     <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+
     <StackPanel>
-     <TextBlock Text="INTEGRATIONS / MICROSOFT FILES" Foreground="{DynamicResource LifeOS.Brush.Accent}" FontWeight="SemiBold" FontSize="12"/>
-     <TextBlock Text="Group 49 · OneDrive + SharePoint" FontSize="30" FontWeight="SemiBold" Margin="0,4,0,0"/>
-     <TextBlock Text="Metadata-first, bounded, review-first and read-only through the existing Microsoft provider identity." Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Margin="0,6,0,0"/>
+     <TextBlock Text="INTEGRATIONS / MICROSOFT FILES"
+                Foreground="{DynamicResource LifeOS.Brush.Accent}"
+                FontWeight="SemiBold"
+                FontSize="12"/>
+
+     <TextBlock Text="Group 49 · OneDrive + SharePoint"
+                FontSize="30"
+                FontWeight="SemiBold"
+                Margin="0,4,0,0"/>
+
+     <TextBlock Text="Bounded Microsoft file awareness with review-first metadata and no external writes."
+                Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"
+                Margin="0,6,0,0"/>
     </StackPanel>
-    <Button Grid.Column="1" Content="Back to Settings" Click="Back_Click" Style="{StaticResource LifeOS.FocusableButton}" VerticalAlignment="Top"/>
+
+    <Button Grid.Column="1"
+            Content="Back to Settings"
+            Click="Back_Click"
+            Style="{StaticResource LifeOS.FocusableButton}"
+            VerticalAlignment="Top"/>
    </Grid>
-   <Border Style="{StaticResource LifeOS.Card}" Margin="0,18,0,8">
-    <StackPanel>
-     <TextBlock Text="Microsoft Files capability enabled" FontSize="20" FontWeight="SemiBold"/>
-     <TextBlock Text="Existing Microsoft 365 provider · incremental Files.Read + Sites.Read.All · no second registration" Margin="0,7,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/>
-     <WrapPanel Margin="0,12,0,0">
-      <Border Background="{DynamicResource LifeOS.Brush.AccentSoft}" BorderBrush="{DynamicResource LifeOS.Brush.Accent}" BorderThickness="1" CornerRadius="8" Padding="10,6" Margin="0,0,8,8"><TextBlock Text="OneDrive · Granted · Read only" FontWeight="SemiBold"/></Border>
-      <Border Background="{DynamicResource LifeOS.Brush.AccentSoft}" BorderBrush="{DynamicResource LifeOS.Brush.Accent}" BorderThickness="1" CornerRadius="8" Padding="10,6" Margin="0,0,8,8"><TextBlock Text="SharePoint · Granted · Read only" FontWeight="SemiBold"/></Border>
-      <Border Background="{DynamicResource LifeOS.Brush.SurfaceRaised}" BorderBrush="{DynamicResource LifeOS.Brush.Border}" BorderThickness="1" CornerRadius="8" Padding="10,6" Margin="0,0,8,8"><TextBlock Text="External writes · 0" FontWeight="SemiBold"/></Border>
-     </WrapPanel>
-    </StackPanel>
-   </Border>
-   <TabControl Margin="0,6,0,0" MinHeight="500">
-    <TabItem Header="OneDrive selection">
-     <Grid Margin="18"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-      <Border Style="{StaticResource LifeOS.Card}" Margin="0,0,8,0"><StackPanel><TextBlock Text="Selected drive" FontSize="18" FontWeight="SemiBold"/><TextBlock Text="Codie Shannon · OneDrive" Margin="0,8,0,0"/><TextBlock Text="Drive scope: explicitly selected" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Margin="0,5,0,0"/><TextBlock Text="Maximum 200 metadata items · 90-day lookback" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Margin="0,5,0,0"/></StackPanel></Border>
-      <Border Grid.Column="1" Style="{StaticResource LifeOS.Card}" Margin="8,0,0,0"><StackPanel><TextBlock Text="Selected folder" FontSize="18" FontWeight="SemiBold"/><TextBlock Text="Projects / LifeOS Evidence" Margin="0,8,0,0"/><TextBlock Text="Bounded sync · folders + file metadata only" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Margin="0,5,0,0"/><TextBlock Text="Automatic file-body download: Disabled" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Margin="0,5,0,0"/><TextBlock Text="Last sync: Healthy · Fresh" Margin="0,12,0,0" FontWeight="SemiBold"/></StackPanel></Border>
-     </Grid>
-    </TabItem>
-    <TabItem Header="SharePoint selection">
-     <Grid Margin="18"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-      <Border Style="{StaticResource LifeOS.Card}" Margin="0,0,8,0"><StackPanel><TextBlock Text="Selected site" FontSize="18" FontWeight="SemiBold"/><TextBlock Text="LifeOS Delivery Workspace" Margin="0,8,0,0"/><TextBlock Text="Explicit site selection · no tenant-wide ingestion" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Margin="0,5,0,0"/></StackPanel></Border>
-      <Border Grid.Column="1" Style="{StaticResource LifeOS.Card}" Margin="8,0,0,0"><StackPanel><TextBlock Text="Selected document library" FontSize="18" FontWeight="SemiBold"/><TextBlock Text="Project Documents" Margin="0,8,0,0"/><TextBlock Text="Metadata-first · bounded delta sync" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Margin="0,5,0,0"/><TextBlock Text="Upload / rename / move / delete / sharing: Disabled" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Margin="0,5,0,0"/></StackPanel></Border>
-     </Grid>
-    </TabItem>
-    <TabItem Header="Recovery state">
-     <StackPanel Margin="18">
-      <Border Style="{StaticResource LifeOS.Card}"><StackPanel><TextBlock Text="Source recovery remains visible" FontSize="18" FontWeight="SemiBold"/><TextBlock Text="Project brief - superseded.docx" Margin="0,10,0,0" FontWeight="SemiBold"/><TextBlock Text="State: Source removed" Margin="0,6,0,0"/><TextBlock Text="Freshness: Source removed · last confirmed 2026-07-17 04:31" Margin="0,4,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/><TextBlock Text="The accepted LifeOS link is retained for review; stale metadata is never presented as current." Margin="0,8,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/></StackPanel></Border>
-      <Border Style="{StaticResource LifeOS.Card}"><StackPanel><TextBlock Text="SharePoint access recovery" FontSize="18" FontWeight="SemiBold"/><TextBlock Text="Permission lost · Project Documents" Margin="0,10,0,0" FontWeight="SemiBold"/><TextBlock Text="Capability health: Needs attention · sync failed closed" Margin="0,6,0,0"/><TextBlock Text="No existing accepted record was deleted and no stale candidate was converted to current." Margin="0,8,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/></StackPanel></Border>
+
+   <Border Style="{StaticResource LifeOS.Card}"
+           Margin="0,18,0,14"
+           Padding="18">
+
+    <Grid>
+     <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+     </Grid.ColumnDefinitions>
+
+     <StackPanel>
+      <TextBlock Text="Microsoft Files"
+                 FontSize="20"
+                 FontWeight="SemiBold"/>
+
+      <TextBlock Text="Existing Microsoft 365 provider · incremental read-only consent · no second registration"
+                 Margin="0,5,0,0"
+                 Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/>
      </StackPanel>
+
+     <WrapPanel Grid.Column="1"
+                VerticalAlignment="Center"
+                Margin="18,0,0,0">
+
+      <Border Style="{StaticResource Group49.StatusPill}">
+       <StackPanel Orientation="Horizontal">
+        <Ellipse Width="7"
+                 Height="7"
+                 Fill="{DynamicResource LifeOS.Brush.Success}"
+                 Margin="0,0,7,0"/>
+        <TextBlock Text="OneDrive · Read only"
+                   FontWeight="SemiBold"/>
+       </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Group49.StatusPill}">
+       <StackPanel Orientation="Horizontal">
+        <Ellipse Width="7"
+                 Height="7"
+                 Fill="{DynamicResource LifeOS.Brush.Success}"
+                 Margin="0,0,7,0"/>
+        <TextBlock Text="SharePoint · Read only"
+                   FontWeight="SemiBold"/>
+       </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Group49.NeutralPill}">
+       <TextBlock Text="External writes · 0"
+                  FontWeight="SemiBold"/>
+      </Border>
+     </WrapPanel>
+    </Grid>
+   </Border>
+
+   <TabControl Style="{StaticResource Group49.TabControl}"
+               MinHeight="340">
+
+    <TabItem Header="OneDrive selection"
+             Style="{StaticResource Group49.TabItem}">
+
+     <Grid>
+      <Grid.ColumnDefinitions>
+       <ColumnDefinition Width="*"/>
+       <ColumnDefinition Width="18"/>
+       <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <Border Style="{StaticResource Group49.InfoCard}">
+       <StackPanel>
+        <TextBlock Text="Selected drive"
+                   FontSize="18"
+                   FontWeight="SemiBold"/>
+
+        <TextBlock Text="Codie Shannon · OneDrive"
+                   FontSize="15"
+                   FontWeight="SemiBold"
+                   Margin="0,12,0,0"/>
+
+        <Separator Margin="0,12"
+                   Background="{DynamicResource LifeOS.Brush.Border}"/>
+
+        <Grid>
+         <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="155"/>
+          <ColumnDefinition Width="*"/>
+         </Grid.ColumnDefinitions>
+
+         <TextBlock Text="Selection"/>
+         <TextBlock Grid.Column="1"
+                    Text="Explicitly selected"
+                    FontWeight="SemiBold"/>
+
+         <TextBlock Grid.Row="1"
+                    Text="Metadata limit"
+                    Margin="0,9,0,0"/>
+         <TextBlock Grid.Row="1"
+                    Grid.Column="1"
+                    Text="Maximum 200 items"
+                    Margin="0,9,0,0"/>
+
+         <TextBlock Grid.Row="2"
+                    Text="Date window"
+                    Margin="0,9,0,0"/>
+         <TextBlock Grid.Row="2"
+                    Grid.Column="1"
+                    Text="90-day lookback"
+                    Margin="0,9,0,0"/>
+        </Grid>
+       </StackPanel>
+      </Border>
+
+      <Border Grid.Column="2"
+              Style="{StaticResource Group49.InfoCard}">
+       <StackPanel>
+        <TextBlock Text="Selected folder"
+                   FontSize="18"
+                   FontWeight="SemiBold"/>
+
+        <TextBlock Text="Projects / LifeOS Evidence"
+                   FontSize="15"
+                   FontWeight="SemiBold"
+                   Margin="0,12,0,0"/>
+
+        <Separator Margin="0,12"
+                   Background="{DynamicResource LifeOS.Brush.Border}"/>
+
+        <TextBlock Text="Folders and file metadata only"
+                   Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/>
+
+        <TextBlock Text="Automatic file-body download disabled"
+                   Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"
+                   Margin="0,8,0,0"/>
+
+        <Border Background="{DynamicResource LifeOS.Brush.AccentSoft}"
+                BorderBrush="{DynamicResource LifeOS.Brush.Accent}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="10,7"
+                Margin="0,16,0,0"
+                HorizontalAlignment="Left">
+         <TextBlock Text="Healthy · Fresh"
+                    FontWeight="SemiBold"/>
+        </Border>
+       </StackPanel>
+      </Border>
+     </Grid>
     </TabItem>
+
+    <TabItem Header="SharePoint selection"
+             Style="{StaticResource Group49.TabItem}">
+
+     <Grid>
+      <Grid.ColumnDefinitions>
+       <ColumnDefinition Width="*"/>
+       <ColumnDefinition Width="18"/>
+       <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <Border Style="{StaticResource Group49.InfoCard}">
+       <StackPanel>
+        <TextBlock Text="Selected site"
+                   FontSize="18"
+                   FontWeight="SemiBold"/>
+
+        <TextBlock Text="LifeOS Delivery Workspace"
+                   FontSize="15"
+                   FontWeight="SemiBold"
+                   Margin="0,12,0,0"/>
+
+        <Separator Margin="0,12"
+                   Background="{DynamicResource LifeOS.Brush.Border}"/>
+
+        <TextBlock Text="Explicit site selection"
+                   Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/>
+
+        <TextBlock Text="No tenant-wide ingestion"
+                   Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"
+                   Margin="0,8,0,0"/>
+       </StackPanel>
+      </Border>
+
+      <Border Grid.Column="2"
+              Style="{StaticResource Group49.InfoCard}">
+       <StackPanel>
+        <TextBlock Text="Selected document library"
+                   FontSize="18"
+                   FontWeight="SemiBold"/>
+
+        <TextBlock Text="Project Documents"
+                   FontSize="15"
+                   FontWeight="SemiBold"
+                   Margin="0,12,0,0"/>
+
+        <Separator Margin="0,12"
+                   Background="{DynamicResource LifeOS.Brush.Border}"/>
+
+        <TextBlock Text="Metadata-first bounded delta synchronization"
+                   Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/>
+
+        <TextBlock Text="Upload, rename, move, delete and sharing disabled"
+                   Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"
+                   Margin="0,8,0,0"/>
+
+        <Border Background="{DynamicResource LifeOS.Brush.AccentSoft}"
+                BorderBrush="{DynamicResource LifeOS.Brush.Accent}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="10,7"
+                Margin="0,16,0,0"
+                HorizontalAlignment="Left">
+         <TextBlock Text="Bounded · Read only"
+                    FontWeight="SemiBold"/>
+        </Border>
+       </StackPanel>
+      </Border>
+     </Grid>
+    </TabItem>
+
+    <TabItem Header="Recovery state"
+             Style="{StaticResource Group49.TabItem}">
+
+     <Grid>
+      <Grid.ColumnDefinitions>
+       <ColumnDefinition Width="*"/>
+       <ColumnDefinition Width="18"/>
+       <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <Border Style="{StaticResource Group49.InfoCard}">
+       <StackPanel>
+        <TextBlock Text="Source removed"
+                   FontSize="18"
+                   FontWeight="SemiBold"/>
+
+        <TextBlock Text="Project brief - superseded.docx"
+                   Margin="0,12,0,0"
+                   FontWeight="SemiBold"/>
+
+        <TextBlock Text="Last confirmed 2026-07-17 04:31"
+                   Margin="0,6,0,0"
+                   Foreground="{DynamicResource LifeOS.Brush.TextSecondary}"/>
+
+        <Border Background="{DynamicResource LifeOS.Brush.SurfaceRaised}"
+                BorderBrush="{DynamicResource LifeOS.Brush.Warning}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="10"
+                Margin="0,15,0,0">
+         <TextBlock Text="Accepted LifeOS link retained for review. Stale metadata is not presented as current."
+                    TextWrapping="Wrap"/>
+        </Border>
+       </StackPanel>
+      </Border>
+
+      <Border Grid.Column="2"
+              Style="{StaticResource Group49.InfoCard}">
+       <StackPanel>
+        <TextBlock Text="SharePoint access lost"
+                   FontSize="18"
+                   FontWeight="SemiBold"/>
+
+        <TextBlock Text="Project Documents"
+                   Margin="0,12,0,0"
+                   FontWeight="SemiBold"/>
+
+        <TextBlock Text="Capability health · Needs attention"
+                   Margin="0,6,0,0"
+                   Foreground="{DynamicResource LifeOS.Brush.Warning}"
+                   FontWeight="SemiBold"/>
+
+        <Border Background="{DynamicResource LifeOS.Brush.SurfaceRaised}"
+                BorderBrush="{DynamicResource LifeOS.Brush.Warning}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="10"
+                Margin="0,15,0,0">
+         <TextBlock Text="Synchronization failed closed. Accepted records remain intact and no stale candidate becomes current."
+                    TextWrapping="Wrap"/>
+        </Border>
+       </StackPanel>
+      </Border>
+     </Grid>
+    </TabItem>
+
    </TabControl>
   </StackPanel>
  </ScrollViewer>

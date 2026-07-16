@@ -38,9 +38,274 @@ public partial class V8ShellWindow : Window
     public V8ShellWindow()
     {
         InitializeComponent();
+
+        Loaded += Window_Loaded;
+        SizeChanged += Window_SizeChanged;
+
         NavigateTo("Home");
     }
 
+    private void Window_Loaded(
+        object sender,
+        RoutedEventArgs e)
+    {
+        ApplyResponsiveLayout();
+    }
+
+    private void Window_SizeChanged(
+        object sender,
+        SizeChangedEventArgs e)
+    {
+        ApplyResponsiveLayout();
+    }
+
+    private void ApplyResponsiveLayout()
+    {
+        if (!IsLoaded) return;
+
+        bool compactWidth = ActualWidth <= 1120;
+        bool veryCompactWidth = ActualWidth <= 1000;
+        bool compactHeight = ActualHeight <= 800;
+
+        WorkspaceTitle.FontSize =
+            compactWidth
+                ? 16
+                : 17;
+
+        WorkspaceSubtitle.Visibility =
+            compactWidth
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+
+        CommandButton.Width =
+            veryCompactWidth
+                ? 190
+                : compactWidth
+                    ? 230
+                    : 360;
+
+        CommandButton.MaxWidth = CommandButton.Width;
+
+        TextBlock? commandLabel =
+            FindVisualChildren<TextBlock>(CommandButton)
+                .FirstOrDefault(
+                    text =>
+                        text.Text.StartsWith(
+                            "Search",
+                            StringComparison.Ordinal));
+
+        if (commandLabel is not null)
+        {
+            commandLabel.Text =
+                compactWidth
+                    ? "Search"
+                    : "Search or run a command";
+        }
+
+        TextBlock? commandShortcut =
+            FindVisualChildren<TextBlock>(CommandButton)
+                .FirstOrDefault(
+                    text =>
+                        string.Equals(
+                            text.Text,
+                            "Ctrl+K",
+                            StringComparison.Ordinal));
+
+        if (commandShortcut is not null)
+        {
+            commandShortcut.Visibility =
+                veryCompactWidth
+                    ? Visibility.Collapsed
+                    : Visibility.Visible;
+
+            commandShortcut.Margin =
+                compactWidth
+                    ? new Thickness(8, 0, 0, 0)
+                    : new Thickness(16, 0, 0, 0);
+        }
+
+        if (StopButton.Parent is Panel topBarActions)
+        {
+            foreach (Button button in
+                     topBarActions.Children.OfType<Button>())
+            {
+                button.MinWidth = 0;
+
+                button.Padding =
+                    compactWidth
+                        ? new Thickness(8, 6, 8, 6)
+                        : new Thickness(12, 8, 12, 8);
+
+                button.Margin =
+                    compactWidth
+                        ? new Thickness(2, 0, 2, 0)
+                        : new Thickness(4, 0, 4, 0);
+
+                button.FontSize =
+                    compactWidth
+                        ? 12
+                        : 13;
+            }
+        }
+
+        Button[] navigationButtons =
+        {
+            HomeNav,
+            WorkNav,
+            CareerNav,
+            MoneyNav,
+            LifeNav,
+            ProjectsNav,
+            AssistantNav,
+            SettingsNav
+        };
+
+        foreach (Button button in navigationButtons)
+        {
+            button.Height =
+                compactHeight
+                    ? 56
+                    : 62;
+
+            button.Margin =
+                compactHeight
+                    ? new Thickness(0, 1, 0, 1)
+                    : new Thickness(0, 3, 0, 3);
+
+            button.Padding =
+                compactHeight
+                    ? new Thickness(0, 2, 0, 2)
+                    : new Thickness(0);
+
+            button.HorizontalContentAlignment =
+                HorizontalAlignment.Center;
+
+            button.VerticalContentAlignment =
+                VerticalAlignment.Center;
+
+            TextBlock[] navigationText =
+                FindVisualChildren<TextBlock>(button)
+                    .ToArray();
+
+            if (navigationText.Length >= 2)
+            {
+                TextBlock icon = navigationText[0];
+                TextBlock label = navigationText[1];
+
+                icon.FontSize =
+                    compactHeight
+                        ? 18
+                        : 19;
+
+                icon.Margin =
+                    compactHeight
+                        ? new Thickness(0, 0, 0, 1)
+                        : new Thickness(0, 0, 0, 2);
+
+                label.FontSize =
+                    compactHeight
+                        ? 10
+                        : 11;
+
+                label.Margin = new Thickness(0);
+            }
+        }
+
+        if (HomeNav.Parent is StackPanel navigationStack)
+        {
+            navigationStack.Margin =
+                compactHeight
+                    ? new Thickness(8, 0, 8, 0)
+                    : new Thickness(8, 8, 8, 12);
+        }
+
+        ScrollViewer? railScrollViewer =
+            FindVisualChildren<ScrollViewer>(this)
+                .FirstOrDefault(
+                    viewer =>
+                        FindVisualChildren<Button>(viewer)
+                            .Any(
+                                button =>
+                                    ReferenceEquals(
+                                        button,
+                                        HomeNav)));
+
+        if (railScrollViewer is not null)
+        {
+            railScrollViewer.VerticalScrollBarVisibility =
+                compactHeight
+                    ? ScrollBarVisibility.Disabled
+                    : ScrollBarVisibility.Auto;
+
+            railScrollViewer.HorizontalScrollBarVisibility =
+                ScrollBarVisibility.Disabled;
+        }
+
+        if (HomeWorkspace.Parent is FrameworkElement workspaceHost)
+        {
+            workspaceHost.Margin =
+                compactWidth
+                    ? new Thickness(14)
+                    : new Thickness(24);
+        }
+
+        if (HomeWorkspace.ColumnDefinitions.Count >= 2)
+        {
+            HomeWorkspace.ColumnDefinitions[0].Width =
+                new GridLength(
+                    compactWidth ? 1.65 : 2,
+                    GridUnitType.Star);
+
+            HomeWorkspace.ColumnDefinitions[1].Width =
+                new GridLength(
+                    1,
+                    GridUnitType.Star);
+        }
+
+        Grid? primaryColumn =
+            HomeWorkspace.Children
+                .OfType<Grid>()
+                .FirstOrDefault(
+                    element =>
+                        Grid.GetRow(element) == 1 &&
+                        Grid.GetColumn(element) == 0);
+
+        if (primaryColumn is not null)
+        {
+            primaryColumn.Margin =
+                compactWidth
+                    ? new Thickness(0, 0, 7, 0)
+                    : new Thickness(0, 0, 12, 0);
+        }
+
+        StackPanel? secondaryColumn =
+            HomeWorkspace.Children
+                .OfType<StackPanel>()
+                .FirstOrDefault(
+                    element =>
+                        Grid.GetRow(element) == 1 &&
+                        Grid.GetColumn(element) == 1);
+
+        if (secondaryColumn is not null)
+        {
+            secondaryColumn.Margin =
+                compactWidth
+                    ? new Thickness(7, 0, 0, 0)
+                    : new Thickness(12, 0, 0, 0);
+        }
+
+        foreach (TextBlock textBlock in
+                 FindVisualChildren<TextBlock>(HomeWorkspace))
+        {
+            textBlock.TextWrapping = TextWrapping.Wrap;
+        }
+
+        if (compactWidth && _contextOpen)
+        {
+            _contextOpen = false;
+            ContextColumn.Width = new GridLength(0);
+        }
+    }
     private void WorkspaceNav_Click(object sender, RoutedEventArgs e)
     {
         if (IsCommandOpen) return;
@@ -233,8 +498,19 @@ public partial class V8ShellWindow : Window
 
     private void ContextButton_Click(object sender, RoutedEventArgs e)
     {
+        if (ActualWidth <= 1120)
+        {
+            _contextOpen = false;
+            ContextColumn.Width = new GridLength(0);
+            return;
+        }
+
         _contextOpen = !_contextOpen;
-        ContextColumn.Width = _contextOpen ? new GridLength(320) : new GridLength(0);
+
+        ContextColumn.Width =
+            _contextOpen
+                ? new GridLength(320)
+                : new GridLength(0);
     }
 
     private void OpenLegacy_Click(object sender, RoutedEventArgs e) => OpenLegacy();

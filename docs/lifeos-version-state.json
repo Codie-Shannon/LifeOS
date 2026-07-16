@@ -1,8 +1,8 @@
-﻿{
-  "desktopVersion": "9.0.0-alpha.3",
-  "desktopReleaseName": "Group 48 Microsoft Mail and Calendar",
-  "desktopGroup": 48,
-  "desktopStatus": "complete-and-closed",
+{
+  "desktopVersion": "9.0.0-alpha.4",
+  "desktopReleaseName": "Group 49 Microsoft Files",
+  "desktopGroup": 49,
+  "desktopStatus": "pack-1-built",
   "desktopBaselineVersion": "8.0.0-beta.1",
   "websiteVersion": "0.3.0-beta.1",
   "websiteStatus": "complete-and-closed",
@@ -24,5 +24,10 @@
   "group46EvidenceCount": 8,
   "group47EvidenceCount": 8,
   "group48EvidenceCount": 8,
-  "nextGroupStarted": false
+  "nextGroupStarted": false,
+  "microsoftFilesReadImplemented": true,
+  "microsoftOneDriveMetadataImplemented": true,
+  "microsoftSharePointMetadataImplemented": true,
+  "microsoftFileBodyDownloadEnabled": false,
+  "group49EvidenceCount": 0
 }

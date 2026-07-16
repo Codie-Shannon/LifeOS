@@ -208,6 +208,10 @@ public static class IntegrationCandidateNormalizer
             Field("web-reference", "Provider reference", draft.WebReference)
         ];
 
+        fields.AddRange(draft.AdditionalFields
+            .OrderBy(pair => pair.Key, StringComparer.OrdinalIgnoreCase)
+            .Select(pair => Field(pair.Key, pair.Key.Replace('-', ' '), pair.Value)));
+
         return Create(
             IntegrationCandidateType.FileDocument,
             draft.Name,

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using LifeOS.Core.IntegrationControlCentre;
 
 namespace LifeOS.Core.MicrosoftProvider;
@@ -126,6 +126,13 @@ public sealed class MicrosoftProviderConfiguration
         "User.Read",
         "Mail.Read",
         "Calendars.Read"
+    ];
+
+    public static IReadOnlyList<string> Group49RequestedScopes =>
+    [
+        .. Group48RequestedScopes,
+        "Files.Read",
+        "Sites.Read.All"
     ];
 }
 

@@ -1,4 +1,4 @@
-﻿namespace LifeOS.Core.IntegrationInbox;
+namespace LifeOS.Core.IntegrationInbox;
 
 public abstract class IntegrationCandidateDraftBase
 {
@@ -58,6 +58,8 @@ public sealed class FileDocumentCandidateDraft : IntegrationCandidateDraftBase
     public long SizeBytes { get; init; }
     public DateTimeOffset ModifiedUtc { get; init; }
     public string WebReference { get; init; } = string.Empty;
+    public IReadOnlyDictionary<string, string> AdditionalFields { get; init; } =
+        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 }
 
 public sealed class TaskCandidateDraft : IntegrationCandidateDraftBase

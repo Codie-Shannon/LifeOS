@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -139,7 +139,7 @@ public sealed class MicrosoftOAuthPkceClient
             ["redirect_uri"] = configuration.RedirectUri,
             ["scope"] = string.Join(
                 " ",
-                MicrosoftProviderConfiguration.Group48RequestedScopes)
+                MicrosoftProviderConfiguration.Group49RequestedScopes)
         };
 
         using HttpResponseMessage response =
@@ -185,7 +185,7 @@ public sealed class MicrosoftOAuthPkceClient
             ["code_verifier"] = verifier,
             ["scope"] = string.Join(
                 " ",
-                MicrosoftProviderConfiguration.Group48RequestedScopes)
+                MicrosoftProviderConfiguration.Group49RequestedScopes)
         };
 
         using HttpResponseMessage response =

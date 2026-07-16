@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace LifeOS.Core.MicrosoftProvider;
@@ -41,7 +41,7 @@ public static class MicrosoftOAuthProtocol
             ["response_mode"] = "query",
             ["scope"] = string.Join(
                 " ",
-                MicrosoftProviderConfiguration.Group48RequestedScopes),
+                MicrosoftProviderConfiguration.Group49RequestedScopes),
             ["code_challenge"] = pkce.Challenge,
             ["code_challenge_method"] = "S256",
             ["state"] = state,

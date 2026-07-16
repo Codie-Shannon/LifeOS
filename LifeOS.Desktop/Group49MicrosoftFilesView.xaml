@@ -11,7 +11,7 @@
      <TextBlock Text="Group 49 · OneDrive + SharePoint" FontSize="30" FontWeight="SemiBold" Margin="0,4,0,0"/>
      <TextBlock Text="Metadata-first, bounded, review-first and read-only through the existing Microsoft provider identity." Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Margin="0,6,0,0"/>
     </StackPanel>
-    <Button Grid.Column="1" Content="Back to Settings" Click="Back_Click" Style="{StaticResource LifeOS.Button}" VerticalAlignment="Top"/>
+    <Button Grid.Column="1" Content="Back to Settings" Click="Back_Click" Style="{StaticResource LifeOS.FocusableButton}" VerticalAlignment="Top"/>
    </Grid>
    <Border Style="{StaticResource LifeOS.Card}" Margin="0,18,0,8">
     <StackPanel>

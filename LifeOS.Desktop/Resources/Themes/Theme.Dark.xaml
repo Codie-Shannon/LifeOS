@@ -19,6 +19,66 @@
     <SolidColorBrush x:Key="LifeOS.Brush.Warning" Color="#FBBF24" />
     <SolidColorBrush x:Key="LifeOS.Brush.Danger" Color="#FB7185" />
     <SolidColorBrush x:Key="LifeOS.Brush.Overlay" Color="#C9000000" />
-    <SolidColorBrush x:Key="LifeOS.Brush.Input" Color="#F8FAFC" />
-    <SolidColorBrush x:Key="LifeOS.Brush.InputText" Color="#111827" />
+  <SolidColorBrush x:Key="LifeOS.Brush.Input" Color="#1B1C28"/>
+  <SolidColorBrush x:Key="LifeOS.Brush.InputText" Color="#F5F3FF"/>
+  <!-- Group 45 native ComboBox system-colour hotfix -->
+
+  <!-- Native WPF ComboBox closed and popup surfaces -->
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.WindowBrushKey}"
+      Color="#1B1C28"/>
+
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.WindowTextBrushKey}"
+      Color="#F5F3FF"/>
+
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.ControlBrushKey}"
+      Color="#1B1C28"/>
+
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.ControlTextBrushKey}"
+      Color="#F5F3FF"/>
+
+  <!-- Hovered or keyboard-highlighted option -->
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.HighlightBrushKey}"
+      Color="#252638"/>
+
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+      Color="#F5F3FF"/>
+
+  <!-- Selected item when another row is being hovered -->
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+      Color="#1B1C28"/>
+
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+      Color="#F5F3FF"/>
+
+  <!-- Disabled dropdown text -->
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.GrayTextBrushKey}"
+      Color="#A9A8B7"/>
+
+  <!-- Popup/menu option colours -->
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.MenuBrushKey}"
+      Color="#1B1C28"/>
+
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.MenuTextBrushKey}"
+      Color="#F5F3FF"/>
+
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.MenuHighlightBrushKey}"
+      Color="#252638"/>
+
+  <SolidColorBrush
+      x:Key="{x:Static SystemColors.HotTrackBrushKey}"
+      Color="#A78BFA"/>
+
+  <!-- /Group 45 native ComboBox system-colour hotfix -->
 </ResourceDictionary>

@@ -9,7 +9,7 @@ namespace LifeOS.Desktop;
 
 internal static class V8ThemeManager
 {
-    private const string ThemePrefix = "Resources/Themes/Theme.";
+    private const string ThemePrefix = "Resources/Themes/";
 
     public static V8Theme Apply(V8Preferences preferences)
     {

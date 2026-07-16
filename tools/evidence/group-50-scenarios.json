@@ -1,0 +1,23 @@
+{
+  "group": 50,
+  "slug": "teams-foundation",
+  "expectedCount": 8,
+  "screenshots": [
+    "01_Teams_Capability_Enabled.png",
+    "02_Team_Channel_Selection.png",
+    "03_Teams_Channel_Message_Candidate.png",
+    "04_Thread_Reply_Provenance.png",
+    "05_Meeting_Context_Linked.png",
+    "06_Reviewable_Action_Suggestion.png",
+    "07_Teams_Access_Lost_Recovery.png",
+    "08_Group50_Validation_Clean_Sync.png"
+  ],
+  "forbiddenNameFragments": [
+    "token",
+    "secret",
+    "credential",
+    "authorization-code",
+    "client-secret",
+    "raw-message-id"
+  ]
+}

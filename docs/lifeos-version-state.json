@@ -2,7 +2,7 @@
   "desktopVersion": "9.0.0-alpha.5",
   "desktopReleaseName": "Group 51 Complete Google Workspace",
   "desktopGroup": 51,
-  "desktopStatus": "pack-1-built",
+  "desktopStatus": "complete-and-closed",
   "desktopBaselineVersion": "8.0.0-beta.1",
   "websiteVersion": "0.3.0-beta.1",
   "websiteStatus": "complete-and-closed",
@@ -24,7 +24,7 @@
   "group46EvidenceCount": 8,
   "group47EvidenceCount": 8,
   "group48EvidenceCount": 8,
-  "nextGroupStarted": false,
+  "nextGroupStarted": true,
   "microsoftFilesReadImplemented": true,
   "microsoftOneDriveMetadataImplemented": true,
   "microsoftSharePointMetadataImplemented": true,
@@ -40,5 +40,13 @@
   "googleWorkspaceExternalWritesEnabled": false,
   "googleWorkspaceFileBodyDownloadEnabled": false,
   "group50EvidenceCount": 8,
-  "group51EvidenceCount": 0
+  "group51EvidenceCount": 8,
+  "fullMobileVersion": "10.0.0-alpha.1",
+  "fullMobileReleaseName": "Group 52 Full Mobile foundation",
+  "fullMobileGroup": 52,
+  "fullMobileStatus": "pack-1-built",
+  "fullMobileSeparateFromCompanion": true,
+  "fullMobileProviderWritesEnabled": false,
+  "fullMobileEmergencyStopEnabled": true,
+  "fullMobileEvidenceCount": 0
 }

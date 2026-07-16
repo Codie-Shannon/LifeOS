@@ -23,6 +23,7 @@ public partial class IntegrationControlCentreView : UserControl
             nowUtc,
             _storePath);
         state = Group49ControlCentreMigration.Apply(state, nowUtc);
+        state = Group50ControlCentreMigration.Apply(state, nowUtc);
         try { IntegrationControlCentreStore.Save(state, _storePath); } catch (Exception exception) when (exception is IOException or UnauthorizedAccessException) { }
         _service = new IntegrationControlCentreService(state);
 

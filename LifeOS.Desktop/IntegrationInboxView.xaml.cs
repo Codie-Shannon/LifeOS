@@ -28,7 +28,9 @@ public partial class IntegrationInboxView : UserControl
 
         _storePath = IntegrationInboxV9Store.DefaultPath;
         IntegrationInboxV9State state =
-            Group49IntegrationInboxMigration.LoadOrCreateProofState(DateTimeOffset.UtcNow);
+            Group50IntegrationInboxMigration.Apply(
+                Group49IntegrationInboxMigration.LoadOrCreateProofState(DateTimeOffset.UtcNow),
+                DateTimeOffset.UtcNow);
         _service = new IntegrationInboxV9Service(state);
 
         ApplyDensity(compactDensity);

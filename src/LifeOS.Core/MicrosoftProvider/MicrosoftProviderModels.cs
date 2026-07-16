@@ -134,6 +134,15 @@ public sealed class MicrosoftProviderConfiguration
         "Files.Read",
         "Sites.Read.All"
     ];
+
+    public static IReadOnlyList<string> Group50RequestedScopes =>
+    [
+        .. Group49RequestedScopes,
+        "Team.ReadBasic.All",
+        "Channel.ReadBasic.All",
+        "ChannelMessage.Read.All",
+        "OnlineMeetings.Read"
+    ];
 }
 
 public sealed class MicrosoftProviderAccount

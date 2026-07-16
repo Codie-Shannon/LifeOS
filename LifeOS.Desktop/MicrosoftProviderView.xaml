@@ -41,6 +41,17 @@
             <Setter Property="MinHeight" Value="38" />
             <Setter Property="Padding" Value="13,8" />
         </Style>
+        <Style x:Key="Ms.Input" TargetType="TextBox">
+            <Setter Property="FontSize" Value="{DynamicResource LifeOS.FontSize.Body}" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="Margin" Value="0,6,0,0" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.InputText}" />
+            <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.Input}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.BorderStrong}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="8,5" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
         <Style TargetType="ListBoxItem">
             <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}" />
             <Setter Property="Background" Value="Transparent" />
@@ -150,34 +161,34 @@
                     <StackPanel Width="390" Margin="0,0,12,10">
                         <TextBlock Text="Application (client) ID" Style="{StaticResource Ms.Caption}" />
                         <TextBox x:Name="ClientIdTextBox"
-                                 Style="{StaticResource LifeOS.Input}"
+                                 Style="{StaticResource Ms.Input}"
                                  AutomationProperties.AutomationId="MicrosoftProvider.ClientId" />
                     </StackPanel>
                     <StackPanel Width="270" Margin="0,0,12,10">
                         <TextBlock Text="Tenant" Style="{StaticResource Ms.Caption}" />
                         <TextBox x:Name="TenantTextBox"
-                                 Style="{StaticResource LifeOS.Input}"
+                                 Style="{StaticResource Ms.Input}"
                                  AutomationProperties.AutomationId="MicrosoftProvider.Tenant" />
                     </StackPanel>
                     <StackPanel Width="180" Margin="0,0,12,10">
                         <TextBlock Text="Redirect port" Style="{StaticResource Ms.Caption}" />
                         <TextBox x:Name="RedirectPortTextBox"
-                                 Style="{StaticResource LifeOS.Input}"
+                                 Style="{StaticResource Ms.Input}"
                                  AutomationProperties.AutomationId="MicrosoftProvider.RedirectPort" />
                     </StackPanel>
                 </WrapPanel>
                 <WrapPanel>
                     <StackPanel Width="200" Margin="0,0,12,10">
                         <TextBlock Text="Mail lookback days" Style="{StaticResource Ms.Caption}" />
-                        <TextBox x:Name="MailLookbackTextBox" Style="{StaticResource LifeOS.Input}" />
+                        <TextBox x:Name="MailLookbackTextBox" Style="{StaticResource Ms.Input}" />
                     </StackPanel>
                     <StackPanel Width="200" Margin="0,0,12,10">
                         <TextBlock Text="Calendar lookback" Style="{StaticResource Ms.Caption}" />
-                        <TextBox x:Name="CalendarLookbackTextBox" Style="{StaticResource LifeOS.Input}" />
+                        <TextBox x:Name="CalendarLookbackTextBox" Style="{StaticResource Ms.Input}" />
                     </StackPanel>
                     <StackPanel Width="200" Margin="0,0,12,10">
                         <TextBlock Text="Calendar lookahead" Style="{StaticResource Ms.Caption}" />
-                        <TextBox x:Name="CalendarLookaheadTextBox" Style="{StaticResource LifeOS.Input}" />
+                        <TextBox x:Name="CalendarLookaheadTextBox" Style="{StaticResource Ms.Input}" />
                     </StackPanel>
                     <StackPanel Width="290" Margin="0,0,12,10">
                         <TextBlock Text="New account classification" Style="{StaticResource Ms.Caption}" />

@@ -22,24 +22,26 @@ Close LifeOS and delete only that file to restore the deterministic fictional pr
 ## Required manual checks
 
 1. Open **Settings** and confirm **Integration Control Centre** appears inside the Integrations section rather than as a ninth workspace.
-2. Open the Control Centre and confirm all provider cards state **FICTIONAL** and the top boundary states **NO LIVE CREDENTIALS**.
-3. Confirm the provider catalogue exposes Microsoft 365, Google Workspace and Local connectors through one shared lifecycle/permission/health contract.
-4. Confirm the Work account and Personal account are visibly separate, with classification, provider identity and connection state shown independently.
-5. Open **Capabilities & permissions** and confirm Required/Optional is separate from Granted/Missing/Revoked/Not Requested.
-6. Confirm capability health is calculated separately: healthy Mail, stale Calendar and Needs Attention Files must be simultaneously visible for the fictional work account.
-7. Run Refresh and confirm bounded, explicit audit output; no external data or write action occurs.
-8. Open Reconnect review, cancel once, then explicitly confirm and verify ordered audit entries.
-9. Open Revoke review and confirm the account, current state, action effect and no-live-provider boundary are visible before confirmation.
-10. Open Disconnect review and verify all three explicit retention choices:
+2. Confirm Theme, Accent, Density and Startup workspace retain the established dark custom ComboBox presentation and remain enabled.
+3. Open the Control Centre and confirm it opens modelessly: Settings remains enabled, the four dropdowns do not switch to native white rendering, and reopening the command activates the existing Control Centre instead of creating duplicates.
+4. Confirm all provider cards state **FICTIONAL** and the top boundary states **NO LIVE CREDENTIALS**.
+5. Confirm the provider catalogue exposes Microsoft 365, Google Workspace and Local connectors through one shared lifecycle/permission/health contract.
+6. Confirm the Work account and Personal account are visibly separate, with classification, provider identity and connection state shown independently.
+7. Open **Capabilities & permissions** and confirm Required/Optional is separate from Granted/Missing/Revoked/Not Requested.
+8. Confirm capability health is calculated separately: healthy Mail, stale Calendar and Needs Attention Files must be simultaneously visible for the fictional work account.
+9. Run Refresh and confirm bounded, explicit audit output; no external data or write action occurs.
+10. Open Reconnect review, cancel once, then explicitly confirm and verify ordered audit entries.
+11. Open Revoke review and confirm the account, current state, action effect and no-live-provider boundary are visible before confirmation.
+12. Open Disconnect review and verify all three explicit retention choices:
     - keep accepted LifeOS records;
     - archive provider links;
     - remove unaccepted imported candidates.
-11. Confirm accepted LifeOS records are never described as silently deleted by disconnect or revoke.
-12. Open Audit history and verify consent, sync, permission, reconnect, revoke and disconnect events are ordered, timestamped and sanitized.
-13. Verify the Control Centre in Light, Dark and High Contrast themes.
-14. Verify Comfortable and Compact density plus 100%, 110%, 125% and 140% text scale remain usable.
-15. Verify keyboard focus is visible and the key controls expose stable AutomationIds.
-16. Confirm the local JSON contains no client secret, access token, refresh token, authorization code or password field.
+13. Confirm accepted LifeOS records are never described as silently deleted by disconnect or revoke.
+14. Open Audit history and verify consent, sync, permission, reconnect, revoke and disconnect events are ordered, timestamped and sanitized.
+15. Verify the Control Centre in Light, Dark and High Contrast themes.
+16. Verify Comfortable and Compact density plus 100%, 110%, 125% and 140% text scale remain usable.
+17. Verify keyboard focus is visible and the key controls expose stable AutomationIds.
+18. Confirm the local JSON contains no client secret, access token, refresh token, authorization code or password field.
 
 ## Stop rule
 

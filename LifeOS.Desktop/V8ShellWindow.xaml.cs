@@ -30,6 +30,7 @@ public partial class V8ShellWindow : Window
     private bool _contextOpen;
     private IInputElement? _focusBeforeCommand;
     private IInputElement? _focusBeforeContext;
+    private IntegrationControlCentreWindow? _integrationControlCentreWindow;
     private WorkspaceSnapshot _snapshot = WorkspaceSnapshot.Load();
 
     private bool IsCommandOpen => CommandOverlay.Visibility == Visibility.Visible;
@@ -580,13 +581,27 @@ public partial class V8ShellWindow : Window
 
     private void OpenIntegrationControlCentre_Click(object sender, RoutedEventArgs e)
     {
+        if (_integrationControlCentreWindow is { IsLoaded: true } existingWindow)
+        {
+            if (existingWindow.WindowState == WindowState.Minimized)
+            {
+                existingWindow.WindowState = WindowState.Normal;
+            }
+
+            existingWindow.Activate();
+            return;
+        }
+
         IntegrationControlCentreWindow window = new(
             _preferences.Density == V8Density.Compact)
         {
             Owner = this
         };
 
-        window.ShowDialog();
+        _integrationControlCentreWindow = window;
+        window.Closed += (_, _) => _integrationControlCentreWindow = null;
+        window.Show();
+        window.Activate();
     }
 
     private void OpenModule_Click(object sender, RoutedEventArgs e)

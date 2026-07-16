@@ -388,6 +388,17 @@
                                     </StackPanel>
                                 </Border>
 
+                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
+                                    <StackPanel>
+                                        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                            <StackPanel><TextBlock Text="Complete Google Workspace" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}"/><TextBlock Text="One Google Cloud project for Gmail, Calendar, Drive, Contacts and Tasks through the shared Control Centre and Integration Inbox." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Body}"/></StackPanel>
+                                            <Border Grid.Column="1" Background="{DynamicResource LifeOS.Brush.AccentSoft}" BorderBrush="{DynamicResource LifeOS.Brush.Accent}" BorderThickness="1" CornerRadius="8" Padding="9,5" VerticalAlignment="Top"><TextBlock Text="GROUP 51" FontWeight="SemiBold"/></Border>
+                                        </Grid>
+                                        <TextBlock Text="Read-only only. No Gmail send/draft, Calendar, Drive, Contact or Task writes. Credentials remain machine-local." Margin="0,9,0,0" Style="{StaticResource LifeOS.Text.Caption}"/>
+                                        <Button Content="Open Google Workspace" Click="OpenGroup51GoogleWorkspace_Click" HorizontalAlignment="Left" Margin="0,12,0,0" Style="{StaticResource LifeOS.Button}"/>
+                                    </StackPanel>
+                                </Border>
+
                                 <TextBlock Text="About / Diagnostics" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
                                 <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
                                     <StackPanel>

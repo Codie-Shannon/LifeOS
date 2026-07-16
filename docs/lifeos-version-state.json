@@ -1,7 +1,7 @@
 {
-  "desktopVersion": "9.0.0-alpha.4",
-  "desktopReleaseName": "Group 49 Microsoft Files",
-  "desktopGroup": 49,
+  "desktopVersion": "9.0.0-alpha.5",
+  "desktopReleaseName": "Group 51 Complete Google Workspace",
+  "desktopGroup": 51,
   "desktopStatus": "pack-1-built",
   "desktopBaselineVersion": "8.0.0-beta.1",
   "websiteVersion": "0.3.0-beta.1",
@@ -29,5 +29,16 @@
   "microsoftOneDriveMetadataImplemented": true,
   "microsoftSharePointMetadataImplemented": true,
   "microsoftFileBodyDownloadEnabled": false,
-  "group49EvidenceCount": 0
+  "group49EvidenceCount": 8,
+  "googleWorkspaceProviderImplemented": true,
+  "googleWorkspaceSingleProjectBoundary": true,
+  "googleWorkspaceGmailReadImplemented": true,
+  "googleWorkspaceCalendarReadImplemented": true,
+  "googleWorkspaceDriveReadImplemented": true,
+  "googleWorkspaceContactsReadImplemented": true,
+  "googleWorkspaceTasksReadImplemented": true,
+  "googleWorkspaceExternalWritesEnabled": false,
+  "googleWorkspaceFileBodyDownloadEnabled": false,
+  "group50EvidenceCount": 8,
+  "group51EvidenceCount": 0
 }

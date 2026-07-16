@@ -36,6 +36,7 @@ public partial class V8ShellWindow : Window
     private MicrosoftProviderView? _microsoftProviderView;
     private Group49MicrosoftFilesView? _group49MicrosoftFilesView;
     private Group50TeamsView? _group50TeamsView;
+    private Group51GoogleWorkspaceView? _group51GoogleWorkspaceView;
     private WorkspaceSnapshot _snapshot = WorkspaceSnapshot.Load();
 
     private bool IsCommandOpen => CommandOverlay.Visibility == Visibility.Visible;
@@ -749,6 +750,32 @@ public partial class V8ShellWindow : Window
     private Group50TeamsView CreateGroup50TeamsView()
     {
         Group50TeamsView view = new();
+        view.BackRequested += (_, _) =>
+            ShowSettingsOverview(scrollToTop: true);
+        return view;
+    }
+
+
+    private void OpenGroup51GoogleWorkspace_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (!string.Equals(
+                _activeWorkspace,
+                "Settings",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            NavigateTo("Settings");
+        }
+
+        _group51GoogleWorkspaceView ??=
+            CreateGroup51GoogleWorkspaceView();
+        ShowSettingsSubpage(_group51GoogleWorkspaceView);
+    }
+
+    private Group51GoogleWorkspaceView CreateGroup51GoogleWorkspaceView()
+    {
+        Group51GoogleWorkspaceView view = new();
         view.BackRequested += (_, _) =>
             ShowSettingsOverview(scrollToTop: true);
         return view;

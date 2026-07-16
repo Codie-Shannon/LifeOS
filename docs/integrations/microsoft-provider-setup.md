@@ -4,10 +4,10 @@ This is the single complete Microsoft provider registration for the planned Life
 
 ## Registration boundary
 
-Create one Microsoft Entra application registration named clearly, for example:
+Create one Microsoft Entra application registration with a clear non-protected name. The working proof registration was:
 
 ```text
-LifeOS Microsoft Provider
+LifeOS Mail Calendar Connector
 ```
 
 Recommended supported account type for Personal and Work account proof:
@@ -26,7 +26,7 @@ Add the Desktop redirect URI shown inside LifeOS Microsoft Provider Setup. The d
 http://localhost:53682/
 ```
 
-Use the **Mobile and desktop applications** platform boundary where supported by the Entra registration experience. Keep the exact URI and trailing slash aligned with LifeOS local configuration.
+Use the **Mobile and desktop applications** platform boundary. Keep the exact URI and trailing slash aligned with LifeOS local configuration. Enable public-client flows for the Desktop registration.
 
 Future Companion, Full Mobile and Portal redirect boundaries must be documented separately and must not be enabled until those clients are implemented.
 
@@ -100,11 +100,14 @@ Never copy token files into the repository, build packs, screenshots or support 
 2. Choose Personal, Work, Business, Family / Household or Other before connecting.
 3. Select **Connect Microsoft account**.
 4. Review Microsoft consent. Confirm that only identity, Mail read and Calendar read access are requested.
-5. Return to LifeOS after the browser callback.
-6. Verify that identity and classification are visible separately.
-7. Select **Verify identity** to perform the safe `/me` read.
-8. Select **Sync Mail + Calendar** to run one bounded foreground read.
-9. Review all imported records in Integration Inbox. They remain untrusted candidates.
+5. Leave tenant-wide consent unchecked unless an authorized tenant administrator deliberately approves it.
+6. Return to LifeOS after the browser callback.
+7. Verify that identity and classification are visible separately.
+8. Select **Verify identity** to perform the safe `/me` read.
+9. Select **Sync Mail + Calendar** to run one bounded foreground read.
+10. Review all imported records in Integration Inbox. They remain untrusted candidates.
+
+A work tenant may restrict mailbox or calendar access independently of the LifeOS implementation. Use only accounts and services the user is authorized to access.
 
 ## Bounded read behavior
 

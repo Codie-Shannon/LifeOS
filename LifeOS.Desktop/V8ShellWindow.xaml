@@ -28,14 +28,54 @@
                 </Grid>
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Margin="8,8,8,12">
-                        <Button x:Name="HomeNav" Style="{StaticResource LifeOS.NavButton}" Content="⌂&#x0a;Home" Tag="Home" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Home"/>
-                        <Button x:Name="WorkNav" Style="{StaticResource LifeOS.NavButton}" Content="▣&#x0a;Work" Tag="Work" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Work"/>
-                        <Button x:Name="CareerNav" Style="{StaticResource LifeOS.NavButton}" Content="◆&#x0a;Career" Tag="Career" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Career"/>
-                        <Button x:Name="MoneyNav" Style="{StaticResource LifeOS.NavButton}" Content="$&#x0a;Money" Tag="Money" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Money"/>
-                        <Button x:Name="LifeNav" Style="{StaticResource LifeOS.NavButton}" Content="♥&#x0a;Life" Tag="Life" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Life"/>
-                        <Button x:Name="ProjectsNav" Style="{StaticResource LifeOS.NavButton}" Content="◇&#x0a;Projects" Tag="Projects" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Projects"/>
-                        <Button x:Name="AssistantNav" Style="{StaticResource LifeOS.NavButton}" Content="✦&#x0a;Assistant" Tag="Assistant" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Assistant"/>
-                        <Button x:Name="SettingsNav" Style="{StaticResource LifeOS.NavButton}" Content="⚙&#x0a;Settings" Tag="Settings" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Settings"/>
+                        <Button x:Name="HomeNav" Style="{StaticResource LifeOS.NavButton}" Tag="Home" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Home">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource LifeOS.NavIcon}" Text="⌂"/>
+                                <TextBlock Style="{StaticResource LifeOS.NavLabel}" Text="Home"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="WorkNav" Style="{StaticResource LifeOS.NavButton}" Tag="Work" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Work">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource LifeOS.NavIcon}" Text="▣"/>
+                                <TextBlock Style="{StaticResource LifeOS.NavLabel}" Text="Work"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="CareerNav" Style="{StaticResource LifeOS.NavButton}" Tag="Career" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Career">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource LifeOS.NavIcon}" Text="◆"/>
+                                <TextBlock Style="{StaticResource LifeOS.NavLabel}" Text="Career"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="MoneyNav" Style="{StaticResource LifeOS.NavButton}" Tag="Money" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Money">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource LifeOS.NavIcon}" Text="$"/>
+                                <TextBlock Style="{StaticResource LifeOS.NavLabel}" Text="Money"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="LifeNav" Style="{StaticResource LifeOS.NavButton}" Tag="Life" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Life">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource LifeOS.NavIcon}" Text="♥"/>
+                                <TextBlock Style="{StaticResource LifeOS.NavLabel}" Text="Life"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="ProjectsNav" Style="{StaticResource LifeOS.NavButton}" Tag="Projects" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Projects">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource LifeOS.NavIcon}" Text="◇"/>
+                                <TextBlock Style="{StaticResource LifeOS.NavLabel}" Text="Projects"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="AssistantNav" Style="{StaticResource LifeOS.NavButton}" Tag="Assistant" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Assistant">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource LifeOS.NavIcon}" Text="✦"/>
+                                <TextBlock Style="{StaticResource LifeOS.NavLabel}" Text="Assistant"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="SettingsNav" Style="{StaticResource LifeOS.NavButton}" Tag="Settings" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Settings">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource LifeOS.NavIcon}" Text="⚙"/>
+                                <TextBlock Style="{StaticResource LifeOS.NavLabel}" Text="Settings"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </ScrollViewer>
             </DockPanel>
@@ -50,13 +90,20 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock x:Name="WorkspaceTitle" FontSize="18" FontWeight="SemiBold" Text="Home" AutomationProperties.AutomationId="TopBar.WorkspaceIdentity"/>
+                    <TextBlock x:Name="WorkspaceTitle" Style="{StaticResource LifeOS.TopBarTitle}" Text="Home" AutomationProperties.AutomationId="TopBar.WorkspaceIdentity"/>
                     <TextBlock x:Name="WorkspaceSubtitle" FontSize="11" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Balanced operating overview"/>
                 </StackPanel>
-                <Button Grid.Column="1" x:Name="CommandButton" Width="360" MaxWidth="420" HorizontalAlignment="Center"
+                <Button Grid.Column="1" x:Name="CommandButton" Width="360" MaxWidth="420" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch"
                         Style="{StaticResource LifeOS.FocusableButton}" Click="CommandButton_Click"
                         AutomationProperties.AutomationId="TopBar.CommandSearch">
-                    <Grid><TextBlock HorizontalAlignment="Left" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Search or run a command"/><TextBlock HorizontalAlignment="Right" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Ctrl+K"/></Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" VerticalAlignment="Center" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Search or run a command"/>
+                        <TextBlock Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Ctrl+K"/>
+                    </Grid>
                 </Button>
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Style="{StaticResource LifeOS.FocusableButton}" Margin="4,0" Content="Review 4" Click="ReviewButton_Click" AutomationProperties.AutomationId="TopBar.Review"/>
@@ -74,7 +121,7 @@
                         <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
                         <Grid.ColumnDefinitions><ColumnDefinition Width="2*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                         <StackPanel Grid.ColumnSpan="2" Margin="0,0,0,18">
-                            <TextBlock FontSize="30" FontWeight="SemiBold" Text="Good afternoon, Codie."/>
+                            <TextBlock Style="{StaticResource LifeOS.PageTitle}" Text="Good afternoon, Codie."/>
                             <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="One view of today's pressure, paid work and upcoming money."/>
                         </StackPanel>
                         <Grid Grid.Row="1" Grid.Column="0" Margin="0,0,12,0">
@@ -82,7 +129,7 @@
                             <Border Style="{StaticResource LifeOS.Card}" Margin="0,0,0,12">
                                 <StackPanel>
                                     <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="TODAY / PRESSURE"/>
-                                    <TextBlock Margin="0,12,0,4" FontSize="22" FontWeight="SemiBold" Text="3 priorities need a decision"/>
+                                    <TextBlock Margin="0,12,0,4" Style="{StaticResource LifeOS.CardHeadline}" Text="3 priorities need a decision"/>
                                     <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" Text="Finish the current build group, check two client follow-ups, and protect the next focused work block."/>
                                     <StackPanel Orientation="Horizontal" Margin="0,16,0,0"><Button Style="{StaticResource LifeOS.FocusableButton}" Content="Open Today"/><Button Style="{StaticResource LifeOS.FocusableButton}" Margin="8,0,0,0" Content="Review pressure"/></StackPanel>
                                 </StackPanel>
@@ -90,7 +137,7 @@
                             <Border Grid.Row="1" Style="{StaticResource LifeOS.Card}">
                                 <StackPanel>
                                     <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="WORK / CLIENTS"/>
-                                    <TextBlock Margin="0,12,0,6" FontSize="18" FontWeight="SemiBold" Text="2 follow-ups · 1 waiting-on"/>
+                                    <TextBlock Margin="0,12,0,6" Style="{StaticResource LifeOS.CardHeadline}" Text="2 follow-ups · 1 waiting-on"/>
                                     <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="AIE proof review and Total Door payment remain visible without over-chasing."/>
                                     <Button Margin="0,16,0,0" HorizontalAlignment="Left" Style="{StaticResource LifeOS.FocusableButton}" Content="Open Work" Click="OpenWork_Click"/>
                                 </StackPanel>
@@ -100,7 +147,7 @@
                             <Border Style="{StaticResource LifeOS.Card}" Margin="0,0,0,12">
                                 <StackPanel>
                                     <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="MONEY / UPCOMING"/>
-                                    <TextBlock Margin="0,12,0,4" FontSize="26" FontWeight="SemiBold" Text="$759 available"/>
+                                    <TextBlock Margin="0,12,0,4" Style="{StaticResource LifeOS.CardHeadline}" Text="$759 available"/>
                                     <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Two expected payments are still pending."/>
                                     <Button Margin="0,16,0,0" HorizontalAlignment="Left" Style="{StaticResource LifeOS.FocusableButton}" Content="Open Money" Click="OpenMoney_Click"/>
                                 </StackPanel>
@@ -120,7 +167,7 @@
                         <Border Style="{StaticResource LifeOS.Card}" MaxWidth="780" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <StackPanel>
                                 <TextBlock x:Name="PlaceholderEyebrow" Style="{StaticResource LifeOS.SectionTitle}" Text="WORKSPACE FOUNDATION"/>
-                                <TextBlock x:Name="PlaceholderTitle" Margin="0,12,0,8" FontSize="30" FontWeight="SemiBold" Text="Work"/>
+                                <TextBlock x:Name="PlaceholderTitle" Margin="0,12,0,8" Style="{StaticResource LifeOS.PageTitle}" Text="Work"/>
                                 <TextBlock x:Name="PlaceholderDescription" FontSize="15" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap"/>
                                 <WrapPanel Margin="0,22,0,0">
                                     <Button Style="{StaticResource LifeOS.FocusableButton}" Content="Open preserved v7 modules" Click="OpenLegacy_Click" AutomationProperties.AutomationId="Workspace.OpenLegacy"/>
@@ -150,7 +197,7 @@
                 <Button DockPanel.Dock="Top" HorizontalAlignment="Right" Style="{StaticResource LifeOS.FocusableButton}" Content="×" Click="ContextButton_Click" AutomationProperties.AutomationId="Context.Close"/>
                 <StackPanel Margin="0,18,0,0">
                     <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="CONTEXT"/>
-                    <TextBlock x:Name="ContextTitle" Margin="0,12,0,8" FontSize="22" FontWeight="SemiBold" Text="Home briefing"/>
+                    <TextBlock x:Name="ContextTitle" Margin="0,12,0,8" Style="{StaticResource LifeOS.CardHeadline}" Text="Home briefing"/>
                     <TextBlock x:Name="ContextBody" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" Text="Relevant help and review information can appear here without replacing the active workspace."/>
                     <Separator Margin="0,18" Background="{DynamicResource LifeOS.Brush.Border}"/>
                     <TextBlock FontWeight="SemiBold" Text="Preserved capability"/>

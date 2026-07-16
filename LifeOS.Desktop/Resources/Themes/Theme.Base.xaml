@@ -12,6 +12,47 @@
         <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.Window}"/>
     </Style>
 
+    <Style TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+    </Style>
+
+    <Style x:Key="LifeOS.TopBarTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+    </Style>
+
+    <Style x:Key="LifeOS.PageTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="26"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+    </Style>
+
+    <Style x:Key="LifeOS.CardHeadline" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+    </Style>
+
+    <Style x:Key="LifeOS.NavIcon" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+        <Setter Property="FontSize" Value="19"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,2"/>
+    </Style>
+
+    <Style x:Key="LifeOS.NavLabel" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+    </Style>
     <Style x:Key="LifeOS.FocusableButton" TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
         <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.SurfaceRaised}"/>
@@ -46,7 +87,7 @@
 
     <Style x:Key="LifeOS.NavButton" TargetType="Button" BasedOn="{StaticResource LifeOS.FocusableButton}">
         <Setter Property="Width" Value="68"/>
-        <Setter Property="Height" Value="58"/>
+        <Setter Property="Height" Value="62"/>
         <Setter Property="Margin" Value="0,3"/>
         <Setter Property="Padding" Value="4"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>

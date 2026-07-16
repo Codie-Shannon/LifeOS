@@ -1,0 +1,162 @@
+<Window x:Class="LifeOS.Desktop.V8ShellWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="LifeOS Desktop v8"
+        Width="1360" Height="820" MinWidth="840" MinHeight="620"
+        WindowStartupLocation="CenterScreen"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        AutomationProperties.AutomationId="LifeOS.V8.Shell">
+    <Grid Background="{DynamicResource LifeOS.Brush.Window}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="84"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition x:Name="ContextColumn" Width="0"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="64"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.RowSpan="2" Grid.Column="0" Background="{DynamicResource LifeOS.Brush.Rail}"
+                BorderBrush="{DynamicResource LifeOS.Brush.Border}" BorderThickness="0,0,1,0">
+            <DockPanel LastChildFill="True">
+                <Grid DockPanel.Dock="Top" Height="64" ToolTip="LifeOS">
+                    <Border Width="38" Height="38" CornerRadius="10" Background="{DynamicResource LifeOS.Brush.Accent}">
+                        <Path Data="M 11,7 L 17,7 L 17,25 L 29,25 L 29,31 L 11,31 Z M 20,7 L 26,7 L 26,21 L 20,21 Z"
+                              Fill="White" Stretch="Uniform" Margin="5"/>
+                    </Border>
+                </Grid>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="8,8,8,12">
+                        <Button x:Name="HomeNav" Style="{StaticResource LifeOS.NavButton}" Content="⌂&#x0a;Home" Tag="Home" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Home"/>
+                        <Button x:Name="WorkNav" Style="{StaticResource LifeOS.NavButton}" Content="▣&#x0a;Work" Tag="Work" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Work"/>
+                        <Button x:Name="CareerNav" Style="{StaticResource LifeOS.NavButton}" Content="◆&#x0a;Career" Tag="Career" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Career"/>
+                        <Button x:Name="MoneyNav" Style="{StaticResource LifeOS.NavButton}" Content="$&#x0a;Money" Tag="Money" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Money"/>
+                        <Button x:Name="LifeNav" Style="{StaticResource LifeOS.NavButton}" Content="♥&#x0a;Life" Tag="Life" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Life"/>
+                        <Button x:Name="ProjectsNav" Style="{StaticResource LifeOS.NavButton}" Content="◇&#x0a;Projects" Tag="Projects" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Projects"/>
+                        <Button x:Name="AssistantNav" Style="{StaticResource LifeOS.NavButton}" Content="✦&#x0a;Assistant" Tag="Assistant" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Assistant"/>
+                        <Button x:Name="SettingsNav" Style="{StaticResource LifeOS.NavButton}" Content="⚙&#x0a;Settings" Tag="Settings" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Settings"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Column="1" Grid.Row="0" Background="{DynamicResource LifeOS.Brush.TopBar}"
+                BorderBrush="{DynamicResource LifeOS.Brush.Border}" BorderThickness="0,0,0,1">
+            <Grid Margin="20,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock x:Name="WorkspaceTitle" FontSize="18" FontWeight="SemiBold" Text="Home" AutomationProperties.AutomationId="TopBar.WorkspaceIdentity"/>
+                    <TextBlock x:Name="WorkspaceSubtitle" FontSize="11" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Balanced operating overview"/>
+                </StackPanel>
+                <Button Grid.Column="1" x:Name="CommandButton" Width="360" MaxWidth="420" HorizontalAlignment="Center"
+                        Style="{StaticResource LifeOS.FocusableButton}" Click="CommandButton_Click"
+                        AutomationProperties.AutomationId="TopBar.CommandSearch">
+                    <Grid><TextBlock HorizontalAlignment="Left" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Search or run a command"/><TextBlock HorizontalAlignment="Right" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Ctrl+K"/></Grid>
+                </Button>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource LifeOS.FocusableButton}" Margin="4,0" Content="Review 4" Click="ReviewButton_Click" AutomationProperties.AutomationId="TopBar.Review"/>
+                    <Button Style="{StaticResource LifeOS.FocusableButton}" Margin="4,0" Content="● Synced" Click="StatusButton_Click" AutomationProperties.AutomationId="TopBar.SystemStatus"/>
+                    <Button x:Name="StopButton" Style="{StaticResource LifeOS.FocusableButton}" Margin="4,0" Content="Stop" Click="StopButton_Click" AutomationProperties.AutomationId="TopBar.EmergencyStop"/>
+                    <Button Style="{StaticResource LifeOS.FocusableButton}" Margin="4,0" Content="CS ▾" Click="ProfileButton_Click" AutomationProperties.AutomationId="TopBar.Profile"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1" Grid.Row="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid Margin="24">
+                    <Grid x:Name="HomeWorkspace" AutomationProperties.AutomationId="Workspace.Home">
+                        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="2*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <StackPanel Grid.ColumnSpan="2" Margin="0,0,0,18">
+                            <TextBlock FontSize="30" FontWeight="SemiBold" Text="Good afternoon, Codie."/>
+                            <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="One view of today's pressure, paid work and upcoming money."/>
+                        </StackPanel>
+                        <Grid Grid.Row="1" Grid.Column="0" Margin="0,0,12,0">
+                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                            <Border Style="{StaticResource LifeOS.Card}" Margin="0,0,0,12">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="TODAY / PRESSURE"/>
+                                    <TextBlock Margin="0,12,0,4" FontSize="22" FontWeight="SemiBold" Text="3 priorities need a decision"/>
+                                    <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" Text="Finish the current build group, check two client follow-ups, and protect the next focused work block."/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0"><Button Style="{StaticResource LifeOS.FocusableButton}" Content="Open Today"/><Button Style="{StaticResource LifeOS.FocusableButton}" Margin="8,0,0,0" Content="Review pressure"/></StackPanel>
+                                </StackPanel>
+                            </Border>
+                            <Border Grid.Row="1" Style="{StaticResource LifeOS.Card}">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="WORK / CLIENTS"/>
+                                    <TextBlock Margin="0,12,0,6" FontSize="18" FontWeight="SemiBold" Text="2 follow-ups · 1 waiting-on"/>
+                                    <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="AIE proof review and Total Door payment remain visible without over-chasing."/>
+                                    <Button Margin="0,16,0,0" HorizontalAlignment="Left" Style="{StaticResource LifeOS.FocusableButton}" Content="Open Work" Click="OpenWork_Click"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="12,0,0,0">
+                            <Border Style="{StaticResource LifeOS.Card}" Margin="0,0,0,12">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="MONEY / UPCOMING"/>
+                                    <TextBlock Margin="0,12,0,4" FontSize="26" FontWeight="SemiBold" Text="$759 available"/>
+                                    <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Two expected payments are still pending."/>
+                                    <Button Margin="0,16,0,0" HorizontalAlignment="Left" Style="{StaticResource LifeOS.FocusableButton}" Content="Open Money" Click="OpenMoney_Click"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource LifeOS.Card}">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="SYSTEM"/>
+                                    <TextBlock Margin="0,12,0,4" FontWeight="SemiBold" Text="Local data healthy"/>
+                                    <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Last safe checkpoint: today"/>
+                                    <Button Margin="0,16,0,0" HorizontalAlignment="Left" Style="{StaticResource LifeOS.FocusableButton}" Content="Show context" Click="ContextButton_Click"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid x:Name="PlaceholderWorkspace" Visibility="Collapsed" AutomationProperties.AutomationId="Workspace.Placeholder">
+                        <Border Style="{StaticResource LifeOS.Card}" MaxWidth="780" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel>
+                                <TextBlock x:Name="PlaceholderEyebrow" Style="{StaticResource LifeOS.SectionTitle}" Text="WORKSPACE FOUNDATION"/>
+                                <TextBlock x:Name="PlaceholderTitle" Margin="0,12,0,8" FontSize="30" FontWeight="SemiBold" Text="Work"/>
+                                <TextBlock x:Name="PlaceholderDescription" FontSize="15" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap"/>
+                                <WrapPanel Margin="0,22,0,0">
+                                    <Button Style="{StaticResource LifeOS.FocusableButton}" Content="Open preserved v7 modules" Click="OpenLegacy_Click" AutomationProperties.AutomationId="Workspace.OpenLegacy"/>
+                                    <Button Style="{StaticResource LifeOS.FocusableButton}" Margin="8,0,0,0" Content="Toggle context" Click="ContextButton_Click"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+
+            <Border x:Name="CommandOverlay" Visibility="Collapsed" Background="#99000000" AutomationProperties.AutomationId="Command.Surface">
+                <Border Style="{StaticResource LifeOS.Card}" Width="620" VerticalAlignment="Top" Margin="0,74,0,0">
+                    <StackPanel>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Text="Search and commands"/>
+                        <TextBox x:Name="CommandTextBox" Margin="0,14,0,12" Padding="12,10" FontSize="15" KeyDown="CommandTextBox_KeyDown" AutomationProperties.AutomationId="Command.Input"/>
+                        <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Try: Home, Work, Money, Theme light, Theme dark, Legacy"/>
+                        <Button Margin="0,14,0,0" HorizontalAlignment="Left" Style="{StaticResource LifeOS.FocusableButton}" Content="Close" Click="CloseCommand_Click"/>
+                    </StackPanel>
+                </Border>
+            </Border>
+        </Grid>
+
+        <Border Grid.Column="2" Grid.RowSpan="2" Background="{DynamicResource LifeOS.Brush.Surface}"
+                BorderBrush="{DynamicResource LifeOS.Brush.Border}" BorderThickness="1,0,0,0">
+            <DockPanel Margin="18">
+                <Button DockPanel.Dock="Top" HorizontalAlignment="Right" Style="{StaticResource LifeOS.FocusableButton}" Content="×" Click="ContextButton_Click" AutomationProperties.AutomationId="Context.Close"/>
+                <StackPanel Margin="0,18,0,0">
+                    <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="CONTEXT"/>
+                    <TextBlock x:Name="ContextTitle" Margin="0,12,0,8" FontSize="22" FontWeight="SemiBold" Text="Home briefing"/>
+                    <TextBlock x:Name="ContextBody" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" Text="Relevant help and review information can appear here without replacing the active workspace."/>
+                    <Separator Margin="0,18" Background="{DynamicResource LifeOS.Brush.Border}"/>
+                    <TextBlock FontWeight="SemiBold" Text="Preserved capability"/>
+                    <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" Text="All v7 routes remain available through the legacy module window during Groups 43 and 44."/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

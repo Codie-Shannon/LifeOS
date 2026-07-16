@@ -1,0 +1,18 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="LifeOS.Brush.Window" Color="#F5F5FA"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.Rail" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.TopBar" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.Surface" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.SurfaceRaised" Color="#F7F7FB"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.SurfaceHover" Color="#EEEAFB"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.Border" Color="#D9D7E3"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.TextPrimary" Color="#181522"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.TextSecondary" Color="#625F6E"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.Accent" Color="#6D28D9"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.AccentSoft" Color="#EDE9FE"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.Focus" Color="#7C3AED"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.Success" Color="#047857"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.Warning" Color="#B45309"/>
+    <SolidColorBrush x:Key="LifeOS.Brush.Danger" Color="#BE123C"/>
+</ResourceDictionary>

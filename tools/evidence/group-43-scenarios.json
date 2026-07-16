@@ -1,0 +1,16 @@
+{
+  "group": 43,
+  "captureWidth": 1360,
+  "captureHeight": 820,
+  "humanApprovalRequired": true,
+  "scenarios": [
+    { "id": "group43.shell.dark", "file": "01_New_Shell_Dark_Theme.png" },
+    { "id": "group43.shell.light", "file": "02_New_Shell_Light_Theme_and_Emblem.png" },
+    { "id": "group43.home.balanced", "file": "03_Balanced_Home.png" },
+    { "id": "group43.context.open", "file": "04_Contextual_Panel.png" },
+    { "id": "group43.command.ctrlk", "file": "05_CtrlK_Command.png" },
+    { "id": "group43.legacy.preserved", "file": "06_Legacy_Module_Preserved.png" },
+    { "id": "group43.layout.minimum", "file": "07_Narrow_Minimum_Layout.png" },
+    { "id": "group43.validation.summary", "file": "08_Validation_Summary.png" }
+  ]
+}

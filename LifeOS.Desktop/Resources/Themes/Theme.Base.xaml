@@ -1,0 +1,73 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <FontFamily x:Key="LifeOS.FontFamily">Segoe UI</FontFamily>
+    <CornerRadius x:Key="LifeOS.Radius.Small">6</CornerRadius>
+    <CornerRadius x:Key="LifeOS.Radius.Medium">10</CornerRadius>
+    <CornerRadius x:Key="LifeOS.Radius.Large">16</CornerRadius>
+    <Thickness x:Key="LifeOS.Space.Card">18</Thickness>
+
+    <Style TargetType="Window">
+        <Setter Property="FontFamily" Value="{StaticResource LifeOS.FontFamily}"/>
+        <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+        <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.Window}"/>
+    </Style>
+
+    <Style x:Key="LifeOS.FocusableButton" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}"/>
+        <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.SurfaceRaised}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border" CornerRadius="7" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource LifeOS.Brush.SurfaceHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Focus}"/>
+                            <Setter TargetName="Border" Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.55"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LifeOS.NavButton" TargetType="Button" BasedOn="{StaticResource LifeOS.FocusableButton}">
+        <Setter Property="Width" Value="68"/>
+        <Setter Property="Height" Value="58"/>
+        <Setter Property="Margin" Value="0,3"/>
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+    </Style>
+
+    <Style x:Key="LifeOS.Card" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.Surface}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Padding" Value="18"/>
+    </Style>
+
+    <Style x:Key="LifeOS.SectionTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextSecondary}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+    </Style>
+</ResourceDictionary>

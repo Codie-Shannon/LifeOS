@@ -1,18 +1,24 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key="LifeOS.Brush.Window" Color="#0B0C12"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.Rail" Color="#11121A"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.TopBar" Color="#10111A"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.Surface" Color="#151621"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.SurfaceRaised" Color="#1B1C28"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.SurfaceHover" Color="#252638"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.Border" Color="#303143"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.TextPrimary" Color="#F5F3FF"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.TextSecondary" Color="#A9A8B7"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.Accent" Color="#8B5CF6"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.AccentSoft" Color="#2E2548"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.Focus" Color="#A78BFA"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.Success" Color="#34D399"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.Warning" Color="#FBBF24"/>
-    <SolidColorBrush x:Key="LifeOS.Brush.Danger" Color="#FB7185"/>
+    <Color x:Key="LifeOS.Color.Accent">#8B5CF6</Color>
+    <SolidColorBrush x:Key="LifeOS.Brush.Window" Color="#090B12" />
+    <SolidColorBrush x:Key="LifeOS.Brush.Rail" Color="#10121C" />
+    <SolidColorBrush x:Key="LifeOS.Brush.TopBar" Color="#11131E" />
+    <SolidColorBrush x:Key="LifeOS.Brush.Surface" Color="#151824" />
+    <SolidColorBrush x:Key="LifeOS.Brush.SurfaceRaised" Color="#1B1E2C" />
+    <SolidColorBrush x:Key="LifeOS.Brush.SurfaceHover" Color="#24283A" />
+    <SolidColorBrush x:Key="LifeOS.Brush.Border" Color="#303447" />
+    <SolidColorBrush x:Key="LifeOS.Brush.BorderStrong" Color="#484D65" />
+    <SolidColorBrush x:Key="LifeOS.Brush.TextPrimary" Color="#F8FAFC" />
+    <SolidColorBrush x:Key="LifeOS.Brush.TextSecondary" Color="#B9C0D5" />
+    <SolidColorBrush x:Key="LifeOS.Brush.TextMuted" Color="#8E96AD" />
+    <SolidColorBrush x:Key="LifeOS.Brush.Accent" Color="{StaticResource LifeOS.Color.Accent}" />
+    <SolidColorBrush x:Key="LifeOS.Brush.AccentSoft" Color="#348B5CF6" />
+    <SolidColorBrush x:Key="LifeOS.Brush.Focus" Color="{StaticResource LifeOS.Color.Accent}" />
+    <SolidColorBrush x:Key="LifeOS.Brush.Success" Color="#4ADE80" />
+    <SolidColorBrush x:Key="LifeOS.Brush.Warning" Color="#FBBF24" />
+    <SolidColorBrush x:Key="LifeOS.Brush.Danger" Color="#FB7185" />
+    <SolidColorBrush x:Key="LifeOS.Brush.Overlay" Color="#C9000000" />
+    <SolidColorBrush x:Key="LifeOS.Brush.Input" Color="#F8FAFC" />
+    <SolidColorBrush x:Key="LifeOS.Brush.InputText" Color="#111827" />
 </ResourceDictionary>

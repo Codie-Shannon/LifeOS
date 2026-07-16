@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using LifeOS.Shared.V8;
 
 namespace LifeOS.Desktop;
 
@@ -14,41 +15,75 @@ public partial class V8ShellWindow : Window
 {
     private static readonly string[] WorkspaceOrder =
     {
-        "Home", "Work", "Career", "Money", "Life", "Projects", "Assistant", "Settings"
+        "Home",
+        "Work",
+        "Career",
+        "Money",
+        "Life",
+        "Projects",
+        "Assistant",
+        "Settings"
     };
 
+    private V8Preferences _preferences = V8PreferenceStore.Load();
     private string _activeWorkspace = "Home";
-    private bool _compactDensity;
     private bool _contextOpen;
-    private bool _stopArmed;
     private IInputElement? _focusBeforeCommand;
+    private IInputElement? _focusBeforeContext;
     private WorkspaceSnapshot _snapshot = WorkspaceSnapshot.Load();
 
-    private bool IsCommandOpen =>
-        CommandOverlay.Visibility == Visibility.Visible;
+    private bool IsCommandOpen => CommandOverlay.Visibility == Visibility.Visible;
 
     public V8ShellWindow()
     {
-        WorkspaceCatalog.Validate(MainWindow.WorkspaceRouteIds);
-
+        WorkspaceCatalog.Validate(MainWindow.V8RouteIds);
         InitializeComponent();
 
         Loaded += Window_Loaded;
         SizeChanged += Window_SizeChanged;
 
-        NavigateTo("Home");
+        ConfigureSettingsControls();
+        ApplyPreferencesToUi();
+
+        string startupWorkspace = _preferences.StartupMode == V8StartupMode.LastUsed
+            ? _preferences.LastWorkspace
+            : "Home";
+
+        NavigateTo(startupWorkspace, persist: false);
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         ApplyResponsiveLayout();
         ApplyDensity();
+
+        if (_preferences.ContextPanelOpen && ActualWidth > 1120)
+        {
+            SetContextOpen(true, persist: false, returnFocusOnClose: false);
+        }
     }
 
     private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         ApplyResponsiveLayout();
         ApplyDensity();
+    }
+
+    private void Window_Closing(object? sender, CancelEventArgs e)
+    {
+        _preferences.LastWorkspace = _activeWorkspace;
+        _preferences.ContextPanelOpen = _contextOpen;
+
+        try
+        {
+            V8PreferenceStore.Save(_preferences);
+        }
+        catch (Exception exception) when (
+            exception is System.IO.IOException or
+            UnauthorizedAccessException)
+        {
+            // Closing must remain safe even when the local preference file is unavailable.
+        }
     }
 
     private Button[] GetNavigationButtons() =>
@@ -71,60 +106,34 @@ public partial class V8ShellWindow : Window
             return;
         }
 
-        bool compactWidth = ActualWidth <= 1120;
-        bool veryCompactWidth = ActualWidth <= 1000;
+        bool compactWidth = ActualWidth <= 1220 || _contextOpen;
+        bool veryCompactWidth = ActualWidth <= 1020 || (_contextOpen && ActualWidth <= 1450);
         bool compactHeight = ActualHeight <= 800;
 
         WorkspaceTitle.FontSize = compactWidth ? 16 : 17;
-        WorkspaceSubtitle.Visibility = compactWidth
-            ? Visibility.Collapsed
-            : Visibility.Visible;
+        WorkspaceSubtitle.Visibility = compactWidth ? Visibility.Collapsed : Visibility.Visible;
 
-        CommandButton.Width = veryCompactWidth
-            ? 190
-            : compactWidth
-                ? 230
-                : 360;
+        CommandButton.Width = veryCompactWidth ? 180 : compactWidth ? 250 : 400;
         CommandButton.MaxWidth = CommandButton.Width;
+        CommandLabel.Text = compactWidth ? "Search" : "Search or run a command";
+        CommandShortcut.Visibility = veryCompactWidth ? Visibility.Collapsed : Visibility.Visible;
+        CommandShortcut.Margin = compactWidth
+            ? new Thickness(8, 0, 0, 0)
+            : new Thickness(16, 0, 0, 0);
 
-        TextBlock? commandLabel = FindVisualChildren<TextBlock>(CommandButton)
-            .FirstOrDefault(text =>
-                text.Text.StartsWith("Search", StringComparison.Ordinal));
+        ContextButton.Visibility = veryCompactWidth ? Visibility.Collapsed : Visibility.Visible;
+        ProfileButton.Content = veryCompactWidth ? GetProfileInitials() : $"{GetProfileInitials()} ▾";
 
-        if (commandLabel is not null)
+        foreach (Button button in TopBarActions.Children.OfType<Button>())
         {
-            commandLabel.Text = compactWidth
-                ? "Search"
-                : "Search or run a command";
-        }
-
-        TextBlock? commandShortcut = FindVisualChildren<TextBlock>(CommandButton)
-            .FirstOrDefault(text =>
-                string.Equals(text.Text, "Ctrl+K", StringComparison.Ordinal));
-
-        if (commandShortcut is not null)
-        {
-            commandShortcut.Visibility = veryCompactWidth
-                ? Visibility.Collapsed
-                : Visibility.Visible;
-            commandShortcut.Margin = compactWidth
-                ? new Thickness(8, 0, 0, 0)
-                : new Thickness(16, 0, 0, 0);
-        }
-
-        if (StopButton.Parent is Panel topBarActions)
-        {
-            foreach (Button button in topBarActions.Children.OfType<Button>())
-            {
-                button.MinWidth = 0;
-                button.Padding = compactWidth
-                    ? new Thickness(8, 6, 8, 6)
-                    : new Thickness(12, 8, 12, 8);
-                button.Margin = compactWidth
-                    ? new Thickness(2, 0, 2, 0)
-                    : new Thickness(4, 0, 4, 0);
-                button.FontSize = compactWidth ? 12 : 13;
-            }
+            button.MinWidth = 0;
+            button.Padding = compactWidth
+                ? new Thickness(7, 6, 7, 6)
+                : new Thickness(12, 8, 12, 8);
+            button.Margin = compactWidth
+                ? new Thickness(2, 0, 2, 0)
+                : new Thickness(4, 0, 4, 0);
+            button.FontSize = compactWidth ? 12 : 13;
         }
 
         foreach (Button button in GetNavigationButtons())
@@ -136,48 +145,23 @@ public partial class V8ShellWindow : Window
             button.Padding = compactHeight
                 ? new Thickness(0, 2, 0, 2)
                 : new Thickness(0);
-            button.HorizontalContentAlignment = HorizontalAlignment.Center;
-            button.VerticalContentAlignment = VerticalAlignment.Center;
 
             TextBlock[] navigationText = FindVisualChildren<TextBlock>(button).ToArray();
+
             if (navigationText.Length >= 2)
             {
-                TextBlock icon = navigationText[0];
-                TextBlock label = navigationText[1];
-
-                icon.FontSize = compactHeight ? 18 : 19;
-                icon.Margin = compactHeight
-                    ? new Thickness(0, 0, 0, 1)
-                    : new Thickness(0, 0, 0, 2);
-                label.FontSize = compactHeight ? 10 : 11;
-                label.Margin = new Thickness(0);
+                navigationText[0].FontSize = compactHeight ? 18 : 19;
+                navigationText[1].FontSize = compactHeight ? 10 : 11;
             }
         }
 
-        if (HomeNav.Parent is StackPanel navigationStack)
-        {
-            navigationStack.Margin = compactHeight
-                ? new Thickness(8, 0, 8, 0)
-                : new Thickness(8, 8, 8, 12);
-        }
+        NavigationStack.Margin = compactHeight
+            ? new Thickness(8, 0, 8, 0)
+            : new Thickness(8, 8, 8, 12);
 
-        ScrollViewer? railScrollViewer = FindVisualChildren<ScrollViewer>(this)
-            .FirstOrDefault(viewer =>
-                FindVisualChildren<Button>(viewer)
-                    .Any(button => ReferenceEquals(button, HomeNav)));
-
-        if (railScrollViewer is not null)
+        if (ActualWidth <= 1120 && _contextOpen)
         {
-            railScrollViewer.VerticalScrollBarVisibility = compactHeight
-                ? ScrollBarVisibility.Disabled
-                : ScrollBarVisibility.Auto;
-            railScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-        }
-
-        if (compactWidth && _contextOpen)
-        {
-            _contextOpen = false;
-            ContextColumn.Width = new GridLength(0);
+            SetContextOpen(false, persist: false, returnFocusOnClose: false);
         }
     }
 
@@ -188,17 +172,12 @@ public partial class V8ShellWindow : Window
             return;
         }
 
-        bool useCompact = _compactDensity || ActualWidth <= 980;
-
-        WorkspaceRoot.Margin = useCompact
-            ? new Thickness(16)
-            : new Thickness(24);
-
-        DensityButton.Content = _compactDensity
+        bool compact = _preferences.Density == V8Density.Compact || ActualWidth <= 980;
+        WorkspaceRoot.Margin = compact ? new Thickness(16) : new Thickness(24);
+        DensityButton.Content = _preferences.Density == V8Density.Compact
             ? "Use Comfortable"
             : "Use Compact";
-
-        DensityStatusText.Text = _compactDensity
+        DensityStatusText.Text = _preferences.Density == V8Density.Compact
             ? "Compact density"
             : "Comfortable density";
 
@@ -206,21 +185,17 @@ public partial class V8ShellWindow : Window
         {
             if (string.Equals(border.Tag as string, "WorkspaceMetricCard", StringComparison.Ordinal))
             {
-                border.Width = useCompact ? 184 : 220;
-                border.Padding = useCompact
-                    ? new Thickness(12)
-                    : new Thickness(16);
-                border.Margin = useCompact
+                border.Width = compact ? 184 : 220;
+                border.Padding = compact ? new Thickness(12) : new Thickness(16);
+                border.Margin = compact
                     ? new Thickness(0, 0, 8, 8)
                     : new Thickness(0, 0, 12, 12);
             }
             else if (string.Equals(border.Tag as string, "WorkspaceModuleCard", StringComparison.Ordinal))
             {
-                border.Width = useCompact ? 292 : 348;
-                border.Padding = useCompact
-                    ? new Thickness(14)
-                    : new Thickness(18);
-                border.Margin = useCompact
+                border.Width = compact ? 292 : 348;
+                border.Padding = compact ? new Thickness(14) : new Thickness(18);
+                border.Margin = compact
                     ? new Thickness(0, 0, 8, 8)
                     : new Thickness(0, 0, 12, 12);
             }
@@ -240,17 +215,11 @@ public partial class V8ShellWindow : Window
         }
     }
 
-    private void NavigateTo(string workspace)
+    private void NavigateTo(string? requestedWorkspace, bool persist = true)
     {
-        WorkspaceDefinition definition;
-
-        try
+        if (!WorkspaceCatalog.TryGet(requestedWorkspace, out WorkspaceDefinition definition))
         {
-            definition = WorkspaceCatalog.Get(workspace);
-        }
-        catch (InvalidOperationException)
-        {
-            return;
+            definition = WorkspaceCatalog.Get("Home");
         }
 
         _activeWorkspace = definition.Name;
@@ -259,7 +228,9 @@ public partial class V8ShellWindow : Window
         WorkspaceTitle.Text = definition.Name;
         WorkspaceSubtitle.Text = definition.Subtitle;
         WorkspaceEyebrow.Text = definition.Eyebrow;
-        WorkspaceDisplayTitle.Text = definition.DisplayTitle;
+        WorkspaceDisplayTitle.Text = definition.Name == "Home"
+            ? $"Good afternoon, {GetFirstName()}."
+            : definition.DisplayTitle;
         WorkspaceDescription.Text = definition.Description;
 
         MetricItems.ItemsSource = definition.Metrics
@@ -270,6 +241,12 @@ public partial class V8ShellWindow : Window
             .ToArray();
 
         SectionItems.ItemsSource = definition.Sections;
+        SectionItems.Visibility = definition.Name == "Settings"
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+        SettingsRoot.Visibility = definition.Name == "Settings"
+            ? Visibility.Visible
+            : Visibility.Collapsed;
 
         ContextTitle.Text = $"{definition.Name} context";
         ContextBody.Text = definition.ContextSummary;
@@ -281,6 +258,13 @@ public partial class V8ShellWindow : Window
         WorkspaceScrollViewer.ScrollToTop();
         UpdateNavigationSelection();
 
+        _preferences.LastWorkspace = definition.Name;
+
+        if (persist)
+        {
+            SavePreferencesSilently();
+        }
+
         Dispatcher.BeginInvoke(
             DispatcherPriority.Loaded,
             new Action(ApplyDensity));
@@ -288,6 +272,9 @@ public partial class V8ShellWindow : Window
 
     private void UpdateNavigationSelection()
     {
+        Brush accent = (Brush)FindResource("LifeOS.Brush.Accent");
+        Brush accentSoft = (Brush)FindResource("LifeOS.Brush.AccentSoft");
+
         foreach (Button button in GetNavigationButtons())
         {
             bool selected = string.Equals(
@@ -295,23 +282,14 @@ public partial class V8ShellWindow : Window
                 _activeWorkspace,
                 StringComparison.OrdinalIgnoreCase);
 
-            button.Background = selected
-                ? (Brush)FindResource("LifeOS.Brush.AccentSoft")
-                : Brushes.Transparent;
-            button.BorderBrush = selected
-                ? (Brush)FindResource("LifeOS.Brush.Accent")
-                : Brushes.Transparent;
+            button.Background = selected ? accentSoft : Brushes.Transparent;
+            button.BorderBrush = selected ? accent : Brushes.Transparent;
         }
     }
 
     private static IEnumerable<T> FindVisualChildren<T>(DependencyObject parent)
         where T : DependencyObject
     {
-        if (parent is null)
-        {
-            yield break;
-        }
-
         for (int index = 0; index < VisualTreeHelper.GetChildrenCount(parent); index++)
         {
             DependencyObject child = VisualTreeHelper.GetChild(parent, index);
@@ -333,7 +311,6 @@ public partial class V8ShellWindow : Window
         bool controlK =
             (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control &&
             e.Key == Key.K;
-
         bool workspaceShortcut =
             (Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt &&
             e.Key is >= Key.D1 and <= Key.D8;
@@ -376,11 +353,9 @@ public partial class V8ShellWindow : Window
         }
     }
 
-    private void CommandButton_Click(object sender, RoutedEventArgs e) =>
-        OpenCommand();
+    private void CommandButton_Click(object sender, RoutedEventArgs e) => OpenCommand();
 
-    private void CloseCommand_Click(object sender, RoutedEventArgs e) =>
-        CloseCommand();
+    private void CloseCommand_Click(object sender, RoutedEventArgs e) => CloseCommand();
 
     private void OpenCommand()
     {
@@ -404,7 +379,6 @@ public partial class V8ShellWindow : Window
         }
 
         CommandOverlay.Visibility = Visibility.Collapsed;
-
         IInputElement? previousFocus = _focusBeforeCommand;
         _focusBeforeCommand = null;
 
@@ -427,7 +401,6 @@ public partial class V8ShellWindow : Window
         }
 
         string command = CommandTextBox.Text.Trim();
-
         string? workspace = WorkspaceOrder.FirstOrDefault(candidate =>
             string.Equals(candidate, command, StringComparison.OrdinalIgnoreCase));
 
@@ -439,95 +412,170 @@ public partial class V8ShellWindow : Window
             return;
         }
 
-        if (command.Equals("Theme light", StringComparison.OrdinalIgnoreCase))
+        bool handled = TryApplyPreferenceCommand(command);
+
+        if (handled)
         {
-            ApplyTheme(light: true);
             CloseCommand();
             e.Handled = true;
-            return;
+        }
+    }
+
+    private bool TryApplyPreferenceCommand(string command)
+    {
+        if (command.Equals("Theme light", StringComparison.OrdinalIgnoreCase))
+        {
+            SetTheme(V8Theme.Light);
+            return true;
         }
 
         if (command.Equals("Theme dark", StringComparison.OrdinalIgnoreCase))
         {
-            ApplyTheme(light: false);
-            CloseCommand();
-            e.Handled = true;
-            return;
+            SetTheme(V8Theme.Dark);
+            return true;
+        }
+
+        if (command.Equals("Theme system", StringComparison.OrdinalIgnoreCase))
+        {
+            SetTheme(V8Theme.System);
+            return true;
+        }
+
+        if (command.Equals("Theme high contrast", StringComparison.OrdinalIgnoreCase) ||
+            command.Equals("High contrast", StringComparison.OrdinalIgnoreCase))
+        {
+            SetTheme(V8Theme.HighContrast);
+            return true;
+        }
+
+        if (command.Equals("Accent purple", StringComparison.OrdinalIgnoreCase))
+        {
+            SetAccent(V8Accent.Purple);
+            return true;
+        }
+
+        if (command.Equals("Accent blue", StringComparison.OrdinalIgnoreCase))
+        {
+            SetAccent(V8Accent.Blue);
+            return true;
+        }
+
+        if (command.Equals("Accent teal", StringComparison.OrdinalIgnoreCase))
+        {
+            SetAccent(V8Accent.Teal);
+            return true;
         }
 
         if (command.Equals("Density compact", StringComparison.OrdinalIgnoreCase))
         {
-            SetDensity(compact: true);
-            CloseCommand();
-            e.Handled = true;
-            return;
+            SetDensity(V8Density.Compact);
+            return true;
         }
 
         if (command.Equals("Density comfortable", StringComparison.OrdinalIgnoreCase))
         {
-            SetDensity(compact: false);
-            CloseCommand();
-            e.Handled = true;
-            return;
+            SetDensity(V8Density.Comfortable);
+            return true;
         }
 
-        if (command.Equals("Legacy", StringComparison.OrdinalIgnoreCase))
-        {
-            CloseCommand();
-            OpenLegacy();
-            e.Handled = true;
-        }
+        return false;
     }
 
-    private void ApplyTheme(bool light)
+    private void DensityButton_Click(object sender, RoutedEventArgs e)
     {
-        ResourceDictionary theme = new()
-        {
-            Source = new Uri(
-                light
-                    ? "Resources/Themes/Theme.Light.xaml"
-                    : "Resources/Themes/Theme.Dark.xaml",
-                UriKind.Relative)
-        };
+        SetDensity(_preferences.Density == V8Density.Compact
+            ? V8Density.Comfortable
+            : V8Density.Compact);
+    }
 
-        var dictionaries =
-            Application.Current.Resources.MergedDictionaries;
+    private void SetDensity(V8Density density)
+    {
+        _preferences.Density = density;
+        DensityComboBox.SelectedItem = density;
+        SavePreferencesSilently();
+        ApplyDensity();
+    }
 
-        if (dictionaries.Count <= 1)
-        {
-            dictionaries.Add(theme);
-        }
-        else
-        {
-            dictionaries[dictionaries.Count - 1] = theme;
-        }
-
+    private void SetTheme(V8Theme theme)
+    {
+        _preferences.Theme = theme;
+        ThemeComboBox.SelectedItem = theme;
+        SavePreferencesSilently();
+        V8ThemeManager.Apply(_preferences);
         UpdateNavigationSelection();
         ApplyDensity();
     }
 
-    private void DensityButton_Click(object sender, RoutedEventArgs e) =>
-        SetDensity(!_compactDensity);
-
-    private void SetDensity(bool compact)
+    private void SetAccent(V8Accent accent)
     {
-        _compactDensity = compact;
-        ApplyDensity();
+        _preferences.Accent = accent;
+        AccentComboBox.SelectedItem = accent;
+        SavePreferencesSilently();
+        V8ThemeManager.Apply(_preferences);
+        UpdateNavigationSelection();
     }
 
     private void ContextButton_Click(object sender, RoutedEventArgs e)
     {
         if (ActualWidth <= 1120)
         {
-            _contextOpen = false;
-            ContextColumn.Width = new GridLength(0);
+            SetContextOpen(false, persist: true, returnFocusOnClose: false);
             return;
         }
 
-        _contextOpen = !_contextOpen;
-        ContextColumn.Width = _contextOpen
-            ? new GridLength(320)
-            : new GridLength(0);
+        SetContextOpen(!_contextOpen, persist: true, returnFocusOnClose: true);
+    }
+
+    private void CloseContextButton_Click(object sender, RoutedEventArgs e) =>
+        SetContextOpen(false, persist: true, returnFocusOnClose: true);
+
+    private void SetContextOpen(bool open, bool persist, bool returnFocusOnClose)
+    {
+        if (open && ActualWidth <= 1120)
+        {
+            open = false;
+        }
+
+        if (open && !_contextOpen)
+        {
+            _focusBeforeContext = Keyboard.FocusedElement;
+        }
+
+        _contextOpen = open;
+        ContextColumn.Width = open ? new GridLength(340) : new GridLength(0);
+        ContextButton.Content = open ? "Hide context" : "Context";
+
+        if (IsLoaded)
+        {
+            ApplyResponsiveLayout();
+        }
+
+        if (persist)
+        {
+            _preferences.ContextPanelOpen = open;
+            SavePreferencesSilently();
+        }
+
+        if (!open && returnFocusOnClose)
+        {
+            RestoreContextFocus();
+        }
+    }
+
+    private void RestoreContextFocus()
+    {
+        IInputElement? previousFocus = _focusBeforeContext;
+        _focusBeforeContext = null;
+
+        if (previousFocus is UIElement previousElement &&
+            previousElement.IsVisible &&
+            previousElement.IsEnabled)
+        {
+            Keyboard.Focus(previousElement);
+            return;
+        }
+
+        Keyboard.Focus(ContextButton);
     }
 
     private void OpenModule_Click(object sender, RoutedEventArgs e)
@@ -556,71 +604,247 @@ public partial class V8ShellWindow : Window
 
         MainWindow moduleWindow = new()
         {
-            Owner = this
+            Owner = this,
+            Title = $"LifeOS — {routeId}"
         };
 
-        moduleWindow.OpenWorkspaceModule(routeId);
+        moduleWindow.OpenV8ModuleWindow(routeId);
         moduleWindow.Show();
-    }
-
-    private void OpenLegacy()
-    {
-        MainWindow legacyWindow = new()
-        {
-            Owner = this
-        };
-
-        legacyWindow.Show();
     }
 
     private void ReviewButton_Click(object sender, RoutedEventArgs e)
     {
-        ContextTitle.Text = "Combined review";
-        ContextBody.Text =
-            "Review items remain collected across Work, Money, Assistant and system safety. Opening a review does not edit the active workspace.";
-
-        if (!_contextOpen)
-        {
-            ContextButton_Click(sender, e);
-        }
+        OpenContext(
+            "Combined review",
+            "Four review items are collected across Work, Money, Assistant and system safety. Opening review does not edit the active workspace.",
+            forceOpen: true);
     }
 
     private void StatusButton_Click(object sender, RoutedEventArgs e)
     {
-        ContextTitle.Text = "System and sync status";
-        ContextBody.Text =
-            "Local data remains authoritative. Companion and integration state stay review-first, and no pending transfer mutates a workspace automatically.";
-
-        if (!_contextOpen)
-        {
-            ContextButton_Click(sender, e);
-        }
+        OpenContext(
+            "System and sync status",
+            "Local data is healthy. Companion and integration state remain review-first. No pending transfer mutates a workspace automatically.",
+            forceOpen: true);
     }
 
     private void ProfileButton_Click(object sender, RoutedEventArgs e)
     {
-        ContextTitle.Text = "Active context";
-        ContextBody.Text =
-            "Profile: Codie Shannon. Context: Personal. Workspace assignments do not change the underlying trust, review or evidence boundaries.";
-
-        if (!_contextOpen)
-        {
-            ContextButton_Click(sender, e);
-        }
+        OpenContext(
+            "Profile and active context",
+            $"Profile: {_preferences.ProfileName}. Active context: {_preferences.ActiveContext}. Workspace assignments do not change trust or evidence boundaries.",
+            forceOpen: true);
     }
 
     private void StopButton_Click(object sender, RoutedEventArgs e)
     {
-        _stopArmed = !_stopArmed;
-        StopButton.Content = _stopArmed
-            ? "STOP ARMED"
-            : "Stop";
-        StopButton.BorderBrush = (Brush)FindResource(
-            _stopArmed
-                ? "LifeOS.Brush.Danger"
-                : "LifeOS.Brush.Border");
-        StopButton.ToolTip = _stopArmed
-            ? "Emergency Stop is armed. Press again to return to idle."
-            : "Emergency Stop is idle.";
+        _preferences.EmergencyStopState = _preferences.EmergencyStopState switch
+        {
+            V8EmergencyStopState.Idle => V8EmergencyStopState.Armed,
+            V8EmergencyStopState.Armed => V8EmergencyStopState.Stopped,
+            _ => V8EmergencyStopState.Idle
+        };
+
+        SavePreferencesSilently();
+        UpdateStopVisual();
+
+        string body = _preferences.EmergencyStopState switch
+        {
+            V8EmergencyStopState.Armed =>
+                "Emergency Stop is armed. Press Stop again to enter the stopped state. No work resumes automatically.",
+            V8EmergencyStopState.Stopped =>
+                "Emergency Stop is active and the shell is stopped. Records and evidence remain intact. Press again only to return the shell control to idle; work still requires review.",
+            _ =>
+                "Emergency Stop is idle. Guarded work remains manual, foreground-only and review-bound."
+        };
+
+        OpenContext("Emergency Stop", body, forceOpen: true);
     }
+
+    private void OpenContext(string title, string body, bool forceOpen)
+    {
+        ContextTitle.Text = title;
+        ContextBody.Text = body;
+
+        bool shouldOpen = forceOpen || _preferences.ContextPanelAutoOpen;
+
+        if (shouldOpen && ActualWidth > 1120)
+        {
+            SetContextOpen(true, persist: true, returnFocusOnClose: true);
+        }
+    }
+
+    private void ConfigureSettingsControls()
+    {
+        ThemeComboBox.ItemsSource = Enum.GetValues<V8Theme>();
+        AccentComboBox.ItemsSource = Enum.GetValues<V8Accent>();
+        DensityComboBox.ItemsSource = Enum.GetValues<V8Density>();
+        StartupComboBox.ItemsSource = Enum.GetValues<V8StartupMode>();
+        TextScaleComboBox.ItemsSource = new[] { "100%", "110%", "125%", "140%" };
+    }
+
+    private void ApplyPreferencesToUi()
+    {
+        _preferences.Normalize();
+        V8ThemeManager.Apply(_preferences);
+
+        ThemeComboBox.SelectedItem = _preferences.Theme;
+        AccentComboBox.SelectedItem = _preferences.Accent;
+        DensityComboBox.SelectedItem = _preferences.Density;
+        StartupComboBox.SelectedItem = _preferences.StartupMode;
+        TextScaleComboBox.SelectedIndex = TextScaleToIndex(_preferences.TextScale);
+        ReducedMotionCheckBox.IsChecked = _preferences.ReducedMotion;
+        ContextAutoOpenCheckBox.IsChecked = _preferences.ContextPanelAutoOpen;
+        ProfileNameTextBox.Text = _preferences.ProfileName;
+        ActiveContextTextBox.Text = _preferences.ActiveContext;
+
+        UpdateStopVisual();
+        UpdateProfileVisual();
+    }
+
+    private void UpdateStopVisual()
+    {
+        StopButton.Content = _preferences.EmergencyStopState switch
+        {
+            V8EmergencyStopState.Armed => "STOP ARMED",
+            V8EmergencyStopState.Stopped => "STOPPED",
+            _ => "Stop"
+        };
+
+        string brushKey = _preferences.EmergencyStopState switch
+        {
+            V8EmergencyStopState.Armed => "LifeOS.Brush.Warning",
+            V8EmergencyStopState.Stopped => "LifeOS.Brush.Danger",
+            _ => "LifeOS.Brush.Border"
+        };
+
+        StopButton.BorderBrush = (Brush)FindResource(brushKey);
+        StopButton.ToolTip = $"Emergency Stop: {_preferences.EmergencyStopState}";
+        SettingsStopStatusText.Text = $"Emergency Stop: {_preferences.EmergencyStopState}";
+    }
+
+    private void UpdateProfileVisual()
+    {
+        ProfileButton.Content = ActualWidth <= 1020
+            ? GetProfileInitials()
+            : $"{GetProfileInitials()} ▾";
+    }
+
+    private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
+    {
+        _preferences.Theme = ThemeComboBox.SelectedItem is V8Theme theme
+            ? theme
+            : V8Theme.Dark;
+        _preferences.Accent = AccentComboBox.SelectedItem is V8Accent accent
+            ? accent
+            : V8Accent.Purple;
+        _preferences.Density = DensityComboBox.SelectedItem is V8Density density
+            ? density
+            : V8Density.Comfortable;
+        _preferences.StartupMode = StartupComboBox.SelectedItem is V8StartupMode startup
+            ? startup
+            : V8StartupMode.Home;
+        _preferences.TextScale = IndexToTextScale(TextScaleComboBox.SelectedIndex);
+        _preferences.ReducedMotion = ReducedMotionCheckBox.IsChecked == true;
+        _preferences.ContextPanelAutoOpen = ContextAutoOpenCheckBox.IsChecked == true;
+        _preferences.ProfileName = ProfileNameTextBox.Text;
+        _preferences.ActiveContext = ActiveContextTextBox.Text;
+        _preferences.LastWorkspace = _activeWorkspace;
+        _preferences.ContextPanelOpen = _contextOpen;
+        _preferences.Normalize();
+
+        try
+        {
+            V8PreferenceStore.Save(_preferences);
+            ApplyPreferencesToUi();
+            ApplyDensity();
+            UpdateNavigationSelection();
+            SettingsSaveStatusText.Text = "Saved locally. Approved settings are active.";
+            NavigateTo(_activeWorkspace, persist: false);
+        }
+        catch (Exception exception) when (
+            exception is System.IO.IOException or
+            UnauthorizedAccessException)
+        {
+            SettingsSaveStatusText.Text = "Could not save the local preference file.";
+        }
+    }
+
+    private void ResetSettingsButton_Click(object sender, RoutedEventArgs e)
+    {
+        MessageBoxResult result = MessageBox.Show(
+            "Reset shell preferences to approved defaults? Module records will not be changed.",
+            "Reset LifeOS v8 settings",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+
+        if (result != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        _preferences = new V8Preferences().Normalize();
+        V8PreferenceStore.Save(_preferences);
+        ApplyPreferencesToUi();
+        SetContextOpen(false, persist: false, returnFocusOnClose: false);
+        NavigateTo("Home", persist: false);
+        SettingsSaveStatusText.Text = "Approved defaults restored. Module records were not changed.";
+    }
+
+    private void SavePreferencesSilently()
+    {
+        try
+        {
+            V8PreferenceStore.Save(_preferences);
+        }
+        catch (Exception exception) when (
+            exception is System.IO.IOException or
+            UnauthorizedAccessException)
+        {
+            // Shell operation remains available when local preference persistence is unavailable.
+        }
+    }
+
+    private string GetFirstName()
+    {
+        string normalized = _preferences.ProfileName.Trim();
+        int separator = normalized.IndexOf(' ');
+        return separator > 0 ? normalized[..separator] : normalized;
+    }
+
+    private string GetProfileInitials()
+    {
+        string[] parts = _preferences.ProfileName
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        if (parts.Length == 0)
+        {
+            return "CS";
+        }
+
+        return string.Concat(parts.Take(2).Select(part => char.ToUpperInvariant(part[0])));
+    }
+
+    private static int TextScaleToIndex(double scale)
+    {
+        if (Math.Abs(scale - 1.1) < 0.001)
+        {
+            return 1;
+        }
+
+        if (Math.Abs(scale - 1.25) < 0.001)
+        {
+            return 2;
+        }
+
+        return Math.Abs(scale - 1.4) < 0.001 ? 3 : 0;
+    }
+
+    private static double IndexToTextScale(int index) => index switch
+    {
+        1 => 1.1,
+        2 => 1.25,
+        3 => 1.4,
+        _ => 1.0
+    };
 }

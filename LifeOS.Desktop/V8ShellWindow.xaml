@@ -1,248 +1,404 @@
 <Window x:Class="LifeOS.Desktop.V8ShellWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="LifeOS Desktop v8"
-        Width="1360"
-        Height="820"
-        MinWidth="840"
-        MinHeight="620"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="LifeOS Desktop v8.0.0-beta.1"
+        Width="1680"
+        Height="920"
+        MinWidth="900"
+        MinHeight="700"
         WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource LifeOS.Brush.Window}"
+        Foreground="{DynamicResource LifeOS.Brush.TextPrimary}"
+        FontFamily="Segoe UI"
         PreviewKeyDown="Window_PreviewKeyDown"
-        AutomationProperties.AutomationId="LifeOS.V8.Shell">
-    <Grid Background="{DynamicResource LifeOS.Brush.Window}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="84"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition x:Name="ContextColumn" Width="0"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="64"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        Closing="Window_Closing"
+        AutomationProperties.AutomationId="LifeOS.V8.RootWindow">
+    <Window.Resources>
+        <Style x:Key="LifeOS.Text.Caption" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{DynamicResource LifeOS.FontSize.Caption}" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextSecondary}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="LifeOS.Text.Body" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{DynamicResource LifeOS.FontSize.Body}" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextSecondary}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="LifeOS.Text.Heading" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{DynamicResource LifeOS.FontSize.Heading}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="LifeOS.Button" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.TextPrimary}" />
+            <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.SurfaceRaised}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="Margin" Value="4,0" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="FontSize" Value="{DynamicResource LifeOS.FontSize.Body}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="9"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource LifeOS.Brush.SurfaceHover}" />
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.BorderStrong}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Focus}" />
+                                <Setter TargetName="ButtonBorder" Property="BorderThickness" Value="2" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.55" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="LifeOS.NavButton" TargetType="Button" BasedOn="{StaticResource LifeOS.Button}">
+            <Setter Property="Height" Value="62" />
+            <Setter Property="Margin" Value="0,3" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style x:Key="LifeOS.Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.Surface}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="13" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Margin" Value="0,0,12,12" />
+        </Style>
+        <Style x:Key="LifeOS.Input" TargetType="Control">
+            <Setter Property="FontSize" Value="{DynamicResource LifeOS.FontSize.Body}" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="Margin" Value="0,6,0,0" />
+            <Setter Property="Foreground" Value="{DynamicResource LifeOS.Brush.InputText}" />
+            <Setter Property="Background" Value="{DynamicResource LifeOS.Brush.Input}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LifeOS.Brush.BorderStrong}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+    </Window.Resources>
 
-        <Border Grid.RowSpan="2"
-                Grid.Column="0"
-                Background="{DynamicResource LifeOS.Brush.Rail}"
-                BorderBrush="{DynamicResource LifeOS.Brush.Border}"
-                BorderThickness="0,0,1,0">
-            <DockPanel LastChildFill="True">
-                <Grid DockPanel.Dock="Top" Height="64" ToolTip="LifeOS">
-                    <Border Width="38"
-                            Height="38"
-                            CornerRadius="10"
-                            Background="{DynamicResource LifeOS.Brush.Accent}">
-                        <Path Data="M 11,7 L 17,7 L 17,25 L 29,25 L 29,31 L 11,31 Z M 20,7 L 26,7 L 26,21 L 20,21 Z"
-                              Fill="White"
-                              Stretch="Uniform"
-                              Margin="5"/>
+    <Grid x:Name="RootGrid">
+        <Grid x:Name="ShellGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition x:Name="ContextColumn" Width="0" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Background="{DynamicResource LifeOS.Brush.Rail}"
+                    BorderBrush="{DynamicResource LifeOS.Brush.Border}"
+                    BorderThickness="0,0,1,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="94" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Border Width="48"
+                            Height="48"
+                            Margin="0,16,0,0"
+                            VerticalAlignment="Top"
+                            Background="{DynamicResource LifeOS.Brush.Accent}"
+                            CornerRadius="12"
+                            AutomationProperties.AutomationId="LifeOS.Brand.Emblem">
+                        <TextBlock Text="L"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="30"
+                                   FontWeight="Bold"
+                                   Foreground="White" />
                     </Border>
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="NavigationStack" Margin="8,8,8,12">
+                            <Button x:Name="HomeNav" Style="{StaticResource LifeOS.NavButton}" Tag="Home" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Home">
+                                <StackPanel><TextBlock Text="⌂" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Home" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                            </Button>
+                            <Button x:Name="WorkNav" Style="{StaticResource LifeOS.NavButton}" Tag="Work" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Work">
+                                <StackPanel><TextBlock Text="▣" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Work" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                            </Button>
+                            <Button x:Name="CareerNav" Style="{StaticResource LifeOS.NavButton}" Tag="Career" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Career">
+                                <StackPanel><TextBlock Text="◆" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Career" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                            </Button>
+                            <Button x:Name="MoneyNav" Style="{StaticResource LifeOS.NavButton}" Tag="Money" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Money">
+                                <StackPanel><TextBlock Text="$" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Money" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                            </Button>
+                            <Button x:Name="LifeNav" Style="{StaticResource LifeOS.NavButton}" Tag="Life" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Life">
+                                <StackPanel><TextBlock Text="♥" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Life" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                            </Button>
+                            <Button x:Name="ProjectsNav" Style="{StaticResource LifeOS.NavButton}" Tag="Projects" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Projects">
+                                <StackPanel><TextBlock Text="◇" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Projects" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                            </Button>
+                            <Button x:Name="AssistantNav" Style="{StaticResource LifeOS.NavButton}" Tag="Assistant" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Assistant">
+                                <StackPanel><TextBlock Text="✦" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Assistant" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                            </Button>
+                            <Button x:Name="SettingsNav" Style="{StaticResource LifeOS.NavButton}" Tag="Settings" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Settings">
+                                <StackPanel><TextBlock Text="⚙" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Settings" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </ScrollViewer>
                 </Grid>
+            </Border>
 
-                <ScrollViewer VerticalScrollBarVisibility="Auto"
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="94" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0"
+                        Background="{DynamicResource LifeOS.Brush.TopBar}"
+                        BorderBrush="{DynamicResource LifeOS.Brush.Border}"
+                        BorderThickness="0,0,0,1">
+                    <Grid Margin="22,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="260" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock x:Name="WorkspaceTitle"
+                                       Text="Home"
+                                       FontSize="17"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                            <TextBlock x:Name="WorkspaceSubtitle"
+                                       Text="Balanced operating overview"
+                                       Margin="0,3,0,0"
+                                       Style="{StaticResource LifeOS.Text.Caption}" />
+                        </StackPanel>
+                        <Button x:Name="CommandButton"
+                                Grid.Column="1"
+                                Width="400"
+                                MaxWidth="400"
+                                HorizontalAlignment="Center"
+                                Style="{StaticResource LifeOS.Button}"
+                                Click="CommandButton_Click"
+                                AutomationProperties.AutomationId="TopBar.Command">
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <TextBlock x:Name="CommandLabel" Text="Search or run a command" Style="{StaticResource LifeOS.Text.Caption}" />
+                                <TextBlock x:Name="CommandShortcut" Grid.Column="1" Text="Ctrl+K" Margin="16,0,0,0" Style="{StaticResource LifeOS.Text.Caption}" />
+                            </Grid>
+                        </Button>
+                        <StackPanel x:Name="TopBarActions" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button x:Name="ReviewButton" Content="Review 4" Style="{StaticResource LifeOS.Button}" Click="ReviewButton_Click" AutomationProperties.AutomationId="TopBar.Review" />
+                            <Button x:Name="StatusButton" Content="● Synced" Style="{StaticResource LifeOS.Button}" Click="StatusButton_Click" AutomationProperties.AutomationId="TopBar.Status" />
+                            <Button x:Name="StopButton" Content="Stop" Style="{StaticResource LifeOS.Button}" Click="StopButton_Click" AutomationProperties.AutomationId="TopBar.EmergencyStop" />
+                            <Button x:Name="ContextButton" Content="Context" Style="{StaticResource LifeOS.Button}" Click="ContextButton_Click" AutomationProperties.AutomationId="TopBar.Context" />
+                            <Button x:Name="ProfileButton" Content="CS ▾" Style="{StaticResource LifeOS.Button}" Click="ProfileButton_Click" AutomationProperties.AutomationId="TopBar.Profile" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <ScrollViewer x:Name="WorkspaceScrollViewer"
+                              Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled">
-                    <StackPanel Margin="8,8,8,12">
-                        <Button x:Name="HomeNav" Tag="Home" Click="WorkspaceNav_Click" Style="{StaticResource LifeOS.FocusableButton}" AutomationProperties.AutomationId="Nav.Home">
-                            <StackPanel><TextBlock FontSize="19" Text="⌂" HorizontalAlignment="Center"/><TextBlock FontSize="11" Text="Home" HorizontalAlignment="Center"/></StackPanel>
-                        </Button>
-                        <Button x:Name="WorkNav" Tag="Work" Click="WorkspaceNav_Click" Style="{StaticResource LifeOS.FocusableButton}" AutomationProperties.AutomationId="Nav.Work">
-                            <StackPanel><TextBlock FontSize="19" Text="▣" HorizontalAlignment="Center"/><TextBlock FontSize="11" Text="Work" HorizontalAlignment="Center"/></StackPanel>
-                        </Button>
-                        <Button x:Name="CareerNav" Tag="Career" Click="WorkspaceNav_Click" Style="{StaticResource LifeOS.FocusableButton}" AutomationProperties.AutomationId="Nav.Career">
-                            <StackPanel><TextBlock FontSize="19" Text="◆" HorizontalAlignment="Center"/><TextBlock FontSize="11" Text="Career" HorizontalAlignment="Center"/></StackPanel>
-                        </Button>
-                        <Button x:Name="MoneyNav" Tag="Money" Click="WorkspaceNav_Click" Style="{StaticResource LifeOS.FocusableButton}" AutomationProperties.AutomationId="Nav.Money">
-                            <StackPanel><TextBlock FontSize="19" Text="$" HorizontalAlignment="Center"/><TextBlock FontSize="11" Text="Money" HorizontalAlignment="Center"/></StackPanel>
-                        </Button>
-                        <Button x:Name="LifeNav" Tag="Life" Click="WorkspaceNav_Click" Style="{StaticResource LifeOS.FocusableButton}" AutomationProperties.AutomationId="Nav.Life">
-                            <StackPanel><TextBlock FontSize="19" Text="♥" HorizontalAlignment="Center"/><TextBlock FontSize="11" Text="Life" HorizontalAlignment="Center"/></StackPanel>
-                        </Button>
-                        <Button x:Name="ProjectsNav" Tag="Projects" Click="WorkspaceNav_Click" Style="{StaticResource LifeOS.FocusableButton}" AutomationProperties.AutomationId="Nav.Projects">
-                            <StackPanel><TextBlock FontSize="19" Text="◇" HorizontalAlignment="Center"/><TextBlock FontSize="11" Text="Projects" HorizontalAlignment="Center"/></StackPanel>
-                        </Button>
-                        <Button x:Name="AssistantNav" Tag="Assistant" Click="WorkspaceNav_Click" Style="{StaticResource LifeOS.FocusableButton}" AutomationProperties.AutomationId="Nav.Assistant">
-                            <StackPanel><TextBlock FontSize="19" Text="✦" HorizontalAlignment="Center"/><TextBlock FontSize="11" Text="Assistant" HorizontalAlignment="Center"/></StackPanel>
-                        </Button>
-                        <Button x:Name="SettingsNav" Tag="Settings" Click="WorkspaceNav_Click" Style="{StaticResource LifeOS.FocusableButton}" AutomationProperties.AutomationId="Nav.Settings">
-                            <StackPanel><TextBlock FontSize="19" Text="⚙" HorizontalAlignment="Center"/><TextBlock FontSize="11" Text="Settings" HorizontalAlignment="Center"/></StackPanel>
-                        </Button>
-                    </StackPanel>
-                </ScrollViewer>
-            </DockPanel>
-        </Border>
-
-        <Border Grid.Column="1"
-                Grid.Row="0"
-                Background="{DynamicResource LifeOS.Brush.Surface}"
-                BorderBrush="{DynamicResource LifeOS.Brush.Border}"
-                BorderThickness="0,0,0,1">
-            <Grid Margin="20,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock x:Name="WorkspaceTitle" FontSize="17" FontWeight="SemiBold" Text="Home"/>
-                    <TextBlock x:Name="WorkspaceSubtitle" FontSize="11" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Balanced operating overview"/>
-                </StackPanel>
-
-                <Button x:Name="CommandButton"
-                        Grid.Column="1"
-                        Width="360"
-                        MaxWidth="420"
-                        Height="52"
-                        Style="{StaticResource LifeOS.FocusableButton}"
-                        Click="CommandButton_Click"
-                        AutomationProperties.AutomationId="TopBar.Command">
                     <Grid>
-                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Search or run a command"/>
-                        <TextBlock Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Ctrl+K"/>
-                    </Grid>
-                </Button>
+                        <StackPanel x:Name="WorkspaceRoot" Margin="24">
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock x:Name="WorkspaceEyebrow" Text="TODAY / PRESSURE / WORK / MONEY" Style="{StaticResource LifeOS.Text.Caption}" />
+                                    <TextBlock x:Name="WorkspaceDisplayTitle" Text="Good afternoon, Codie." Margin="0,12,0,0" FontSize="{DynamicResource LifeOS.FontSize.Hero}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                    <TextBlock x:Name="WorkspaceDescription" Margin="0,8,0,0" MaxWidth="1100" Style="{StaticResource LifeOS.Text.Body}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                    <Button x:Name="DensityButton" Content="Use Compact" Style="{StaticResource LifeOS.Button}" Click="DensityButton_Click" AutomationProperties.AutomationId="Workspace.DensityToggle" />
+                                    <TextBlock x:Name="DensityStatusText" Text="Comfortable density" Margin="4,8,4,0" HorizontalAlignment="Center" Style="{StaticResource LifeOS.Text.Caption}" />
+                                </StackPanel>
+                            </Grid>
 
-                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <Button Style="{StaticResource LifeOS.FocusableButton}" Margin="4,0" Content="Review 4" Click="ReviewButton_Click" AutomationProperties.AutomationId="TopBar.Review"/>
-                    <Button Style="{StaticResource LifeOS.FocusableButton}" Margin="4,0" Content="● Synced" Click="StatusButton_Click" AutomationProperties.AutomationId="TopBar.Status"/>
-                    <Button x:Name="StopButton" Style="{StaticResource LifeOS.FocusableButton}" Margin="4,0" Content="Stop" Click="StopButton_Click" AutomationProperties.AutomationId="TopBar.EmergencyStop"/>
-                    <Button Style="{StaticResource LifeOS.FocusableButton}" Margin="4,0" Content="CS ▾" Click="ProfileButton_Click" AutomationProperties.AutomationId="TopBar.Profile"/>
-                </StackPanel>
-            </Grid>
-        </Border>
+                            <ItemsControl x:Name="MetricItems" Margin="0,22,0,0">
+                                <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource LifeOS.Card}" Width="220" Tag="WorkspaceMetricCard">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Label}" Style="{StaticResource LifeOS.Text.Caption}" />
+                                                <TextBlock Text="{Binding Value}" Margin="0,10,0,0" FontSize="{DynamicResource LifeOS.FontSize.Heading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                                <TextBlock Text="{Binding Detail}" Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" />
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
 
-        <Grid Grid.Column="1" Grid.Row="1">
-            <ScrollViewer x:Name="WorkspaceScrollViewer"
-                          VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled"
-                          AutomationProperties.AutomationId="Workspace.Scroll">
-                <StackPanel x:Name="WorkspaceRoot" Margin="24" AutomationProperties.AutomationId="Workspace.Content">
-                    <Grid Margin="0,0,0,18">
-                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <TextBlock x:Name="WorkspaceEyebrow" Style="{StaticResource LifeOS.SectionTitle}" Text="TODAY / PRESSURE / WORK / MONEY"/>
-                            <TextBlock x:Name="WorkspaceDisplayTitle" Margin="0,10,0,4" Style="{StaticResource LifeOS.PageTitle}" Text="Good afternoon, Codie."/>
-                            <TextBlock x:Name="WorkspaceDescription" MaxWidth="960" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" FontSize="14" TextWrapping="Wrap"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" Margin="18,0,0,0" VerticalAlignment="Top">
-                            <Button x:Name="DensityButton" Style="{StaticResource LifeOS.FocusableButton}" Content="Use Compact" Click="DensityButton_Click" AutomationProperties.AutomationId="Workspace.DensityToggle"/>
-                            <TextBlock x:Name="DensityStatusText" Margin="0,6,0,0" HorizontalAlignment="Center" FontSize="11" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="Comfortable density"/>
-                        </StackPanel>
-                    </Grid>
+                            <ItemsControl x:Name="SectionItems" Margin="0,8,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0,0,0,12">
+                                            <TextBlock Text="{Binding Title}" Style="{StaticResource LifeOS.Text.Heading}" />
+                                            <TextBlock Text="{Binding Description}" Margin="0,5,0,12" Style="{StaticResource LifeOS.Text.Body}" />
+                                            <ItemsControl ItemsSource="{Binding Modules}">
+                                                <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Style="{StaticResource LifeOS.Card}" Width="348" MinHeight="190" Tag="WorkspaceModuleCard">
+                                                            <Grid>
+                                                                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                                                                <TextBlock Text="{Binding Status}" Style="{StaticResource LifeOS.Text.Caption}" />
+                                                                <TextBlock Grid.Row="1" Text="{Binding Title}" Margin="0,10,0,0" FontSize="{DynamicResource LifeOS.FontSize.Heading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                                                <TextBlock Grid.Row="2" Text="{Binding Description}" Margin="0,8,0,14" Style="{StaticResource LifeOS.Text.Body}" />
+                                                                <Button Grid.Row="3"
+                                                                        Content="{Binding ActionLabel}"
+                                                                        Tag="{Binding RouteId}"
+                                                                        IsEnabled="{Binding CanOpen}"
+                                                                        HorizontalAlignment="Left"
+                                                                        Margin="0"
+                                                                        Style="{StaticResource LifeOS.Button}"
+                                                                        Click="OpenModule_Click"
+                                                                        AutomationProperties.AutomationId="{Binding AutomationId}" />
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
 
-                    <ItemsControl x:Name="MetricItems" Margin="0,0,0,8" AutomationProperties.AutomationId="Workspace.Metrics">
-                        <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Tag="WorkspaceMetricCard" Style="{StaticResource LifeOS.Card}" Width="220" Margin="0,0,12,12">
+                            <StackPanel x:Name="SettingsRoot" Visibility="Collapsed" Margin="0,8,0,0">
+                                <TextBlock Text="Appearance" Style="{StaticResource LifeOS.Text.Heading}" />
+                                <WrapPanel Margin="0,10,0,12">
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Theme" Style="{StaticResource LifeOS.Text.Body}" /><ComboBox x:Name="ThemeComboBox" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Appearance.Theme" /><TextBlock Text="Light, Dark, System or High Contrast." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Accent" Style="{StaticResource LifeOS.Text.Body}" /><ComboBox x:Name="AccentComboBox" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Appearance.Accent" /><TextBlock Text="Purple, Blue or Teal. No unrestricted colour editor." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Density" Style="{StaticResource LifeOS.Text.Body}" /><ComboBox x:Name="DensityComboBox" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Appearance.Density" /><TextBlock Text="Comfortable or Compact without changing records." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></StackPanel></Border>
+                                </WrapPanel>
+
+                                <TextBlock Text="Startup / Navigation" Style="{StaticResource LifeOS.Text.Heading}" />
+                                <WrapPanel Margin="0,10,0,12">
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Startup workspace" Style="{StaticResource LifeOS.Text.Body}" /><ComboBox x:Name="StartupComboBox" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Startup.Mode" /><TextBlock Text="Home remains the safe default; Last Used is optional." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Context panel" Style="{StaticResource LifeOS.Text.Body}" /><CheckBox x:Name="ContextAutoOpenCheckBox" Content="Auto-open when relevant" Margin="0,12,0,0" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" AutomationProperties.AutomationId="Settings.Navigation.ContextAutoOpen" /><TextBlock Text="The panel still collapses at narrow widths." Margin="0,9,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></StackPanel></Border>
+                                </WrapPanel>
+
+                                <TextBlock Text="Accessibility" Style="{StaticResource LifeOS.Text.Heading}" />
+                                <WrapPanel Margin="0,10,0,12">
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Text scale" Style="{StaticResource LifeOS.Text.Body}" /><ComboBox x:Name="TextScaleComboBox" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Accessibility.TextScale" /><TextBlock Text="100%, 110%, 125% or 140%." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></StackPanel></Border>
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Motion" Style="{StaticResource LifeOS.Text.Body}" /><CheckBox x:Name="ReducedMotionCheckBox" Content="Reduced Motion" Margin="0,12,0,0" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" AutomationProperties.AutomationId="Settings.Accessibility.ReducedMotion" /><TextBlock Text="Disables non-essential transitions and animation." Margin="0,9,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></StackPanel></Border>
+                                </WrapPanel>
+
+                                <TextBlock Text="Profiles" Style="{StaticResource LifeOS.Text.Heading}" />
+                                <WrapPanel Margin="0,10,0,12">
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Profile name" Style="{StaticResource LifeOS.Text.Body}" /><TextBox x:Name="ProfileNameTextBox" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Profile.Name" /></StackPanel></Border>
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Active context" Style="{StaticResource LifeOS.Text.Body}" /><TextBox x:Name="ActiveContextTextBox" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Profile.ActiveContext" /></StackPanel></Border>
+                                </WrapPanel>
+
+                                <TextBlock Text="Privacy / Local Data" Style="{StaticResource LifeOS.Text.Heading}" />
+                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left"><TextBlock Text="Preferences are stored locally under the user profile. Operational records stay in their authoritative module stores. Resetting shell preferences does not delete module data." Style="{StaticResource LifeOS.Text.Body}" /></Border>
+
+                                <TextBlock Text="Sync / Companion" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
+                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left"><TextBlock Text="Companion and integration evidence remain review-first. No pending transfer mutates a workspace automatically." Style="{StaticResource LifeOS.Text.Body}" /></Border>
+
+                                <TextBlock Text="Automation / Emergency Stop" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
+                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left"><StackPanel><TextBlock x:Name="SettingsStopStatusText" Text="Emergency Stop: Idle" Style="{StaticResource LifeOS.Text.Body}" /><TextBlock Text="The state is always written in text and never communicated by colour alone." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" /><Button Content="Open Automation Centre" Tag="automation-centre" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,12,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Automation.OpenCentre" /></StackPanel></Border>
+
+                                <TextBlock Text="Integrations" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
+                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left"><TextBlock Text="Placeholder only. Microsoft and Google integrations are outside Group 45 and are not configured from this release surface." Style="{StaticResource LifeOS.Text.Body}" /></Border>
+
+                                <TextBlock Text="About / Diagnostics" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
+                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
                                     <StackPanel>
-                                        <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="{Binding Label}"/>
-                                        <TextBlock Margin="0,10,0,4" Style="{StaticResource LifeOS.CardHeadline}" Text="{Binding Value}" TextWrapping="Wrap"/>
-                                        <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" FontSize="12" Text="{Binding Detail}" TextWrapping="Wrap"/>
+                                        <TextBlock Text="LifeOS Desktop v8.0.0-beta.1" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                        <TextBlock Text="Eight permanent workspaces. Zero obsolete shell routes. Local, review-first and foreground-only." Margin="0,6,0,12" Style="{StaticResource LifeOS.Text.Body}" />
+                                        <WrapPanel>
+                                            <Button Content="Desktop Release" Tag="desktop-release" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.DesktopRelease" />
+                                            <Button Content="Offline Checkpoint" Tag="final-offline-os" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.OfflineCheckpoint" />
+                                            <Button Content="OS Navigation" Tag="os-navigation" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.Navigation" />
+                                        </WrapPanel>
                                     </StackPanel>
                                 </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
 
-                    <ItemsControl x:Name="SectionItems" AutomationProperties.AutomationId="Workspace.Sections">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="0,0,0,18">
-                                    <TextBlock FontSize="19" FontWeight="SemiBold" Text="{Binding Title}"/>
-                                    <TextBlock Margin="0,5,0,12" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="{Binding Description}" TextWrapping="Wrap"/>
-                                    <ItemsControl ItemsSource="{Binding Modules}">
-                                        <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border Tag="WorkspaceModuleCard"
-                                                        Style="{StaticResource LifeOS.Card}"
-                                                        Width="348"
-                                                        Margin="0,0,12,12"
-                                                        AutomationProperties.AutomationId="{Binding AutomationId}">
-                                                    <StackPanel>
-                                                        <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="{Binding Status}"/>
-                                                        <TextBlock Margin="0,10,0,6" Style="{StaticResource LifeOS.CardHeadline}" Text="{Binding Title}" TextWrapping="Wrap"/>
-                                                        <TextBlock MinHeight="48" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="{Binding Description}" TextWrapping="Wrap"/>
-                                                        <Button Margin="0,14,0,0"
-                                                                HorizontalAlignment="Left"
-                                                                Style="{StaticResource LifeOS.FocusableButton}"
-                                                                Content="{Binding ActionLabel}"
-                                                                Tag="{Binding RouteId}"
-                                                                IsEnabled="{Binding CanOpen}"
-                                                                Click="OpenModule_Click"/>
-                                                    </StackPanel>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </ScrollViewer>
+                                <WrapPanel Margin="0,8,0,24">
+                                    <Button Content="Save Settings" Click="SaveSettingsButton_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Save" />
+                                    <Button Content="Reset Approved Defaults" Click="ResetSettingsButton_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Reset" />
+                                    <TextBlock x:Name="SettingsSaveStatusText" Margin="16,10,0,0" Style="{StaticResource LifeOS.Text.Body}" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+
+            <Border x:Name="ContextPanel"
+                    Grid.Column="2"
+                    Background="{DynamicResource LifeOS.Brush.Surface}"
+                    BorderBrush="{DynamicResource LifeOS.Brush.Border}"
+                    BorderThickness="1,0,0,0"
+                    AutomationProperties.AutomationId="Context.Panel">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+                    <Button Content="×" HorizontalAlignment="Right" Width="40" Style="{StaticResource LifeOS.Button}" Click="CloseContextButton_Click" AutomationProperties.AutomationId="Context.Close" />
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="0,10,0,0">
+                            <TextBlock Text="CONTEXT" Style="{StaticResource LifeOS.Text.Caption}" />
+                            <TextBlock x:Name="ContextTitle" Text="Home context" Margin="0,14,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
+                            <TextBlock x:Name="ContextBody" Margin="0,9,0,0" Style="{StaticResource LifeOS.Text.Body}" />
+                            <Separator Margin="0,18" Background="{DynamicResource LifeOS.Brush.Border}" />
+                            <TextBlock Text="Available capability" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                            <ItemsControl x:Name="ContextModulesList" Margin="0,8,0,0">
+                                <ItemsControl.ItemTemplate><DataTemplate><TextBlock Text="{Binding}" Margin="0,3,0,0" Style="{StaticResource LifeOS.Text.Caption}" /></DataTemplate></ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
         </Grid>
 
-        <Border Grid.Column="2"
-                Grid.RowSpan="2"
-                Background="{DynamicResource LifeOS.Brush.Surface}"
-                BorderBrush="{DynamicResource LifeOS.Brush.Border}"
-                BorderThickness="1,0,0,0">
-            <DockPanel Margin="18">
-                <Button DockPanel.Dock="Top" HorizontalAlignment="Right" Style="{StaticResource LifeOS.FocusableButton}" Content="×" Click="ContextButton_Click" AutomationProperties.AutomationId="Context.Close"/>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <StackPanel Margin="0,18,0,0">
-                        <TextBlock Style="{StaticResource LifeOS.SectionTitle}" Text="CONTEXT"/>
-                        <TextBlock x:Name="ContextTitle" Margin="0,12,0,8" Style="{StaticResource LifeOS.CardHeadline}" Text="Home context"/>
-                        <TextBlock x:Name="ContextBody" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap"/>
-                        <Separator Margin="0,18" Background="{DynamicResource LifeOS.Brush.Border}"/>
-                        <TextBlock FontWeight="SemiBold" Text="Workspace contents"/>
-                        <ItemsControl x:Name="ContextModulesList" Margin="0,8,0,0">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Margin="0,0,0,8" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" Text="{Binding}" TextWrapping="Wrap"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                        <Separator Margin="0,10,0,18" Background="{DynamicResource LifeOS.Brush.Border}"/>
-                        <TextBlock FontWeight="SemiBold" Text="Migration boundary"/>
-                        <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" Text="Focused v8 workspace routes open the canonical preserved module and record store. Legacy routes remain internal through Group 44 and are removed in Group 45."/>
-                    </StackPanel>
-                </ScrollViewer>
-            </DockPanel>
-        </Border>
-
-        <Border x:Name="CommandOverlay"
-                Grid.Row="0"
-                Grid.RowSpan="2"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                Panel.ZIndex="1000"
-                Visibility="Collapsed"
-                Background="#99000000"
-                AutomationProperties.AutomationId="Command.Surface"
-                AutomationProperties.Name="Search and commands modal">
-            <Border Style="{StaticResource LifeOS.Card}"
-                    Width="620"
-                    VerticalAlignment="Top"
-                    Margin="0,138,0,0"
-                    FocusManager.IsFocusScope="True"
-                    KeyboardNavigation.TabNavigation="Cycle"
-                    KeyboardNavigation.ControlTabNavigation="Cycle"
-                    KeyboardNavigation.DirectionalNavigation="Contained">
+        <Grid x:Name="CommandOverlay"
+              Visibility="Collapsed"
+              Background="{DynamicResource LifeOS.Brush.Overlay}"
+              AutomationProperties.AutomationId="Command.Modal">
+            <Border Width="680"
+                    MaxWidth="680"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Background="{DynamicResource LifeOS.Brush.SurfaceRaised}"
+                    BorderBrush="{DynamicResource LifeOS.Brush.BorderStrong}"
+                    BorderThickness="1"
+                    CornerRadius="14"
+                    Padding="22">
                 <StackPanel>
-                    <TextBlock FontSize="16" FontWeight="SemiBold" Text="Search and commands"/>
+                    <TextBlock Text="Search and commands" Style="{StaticResource LifeOS.Text.Heading}" />
                     <TextBox x:Name="CommandTextBox"
-                             Margin="0,14,0,12"
-                             Padding="12,10"
-                             FontSize="15"
+                             Margin="0,14,0,0"
+                             FontSize="18"
+                             Padding="12"
+                             Foreground="{DynamicResource LifeOS.Brush.InputText}"
+                             Background="{DynamicResource LifeOS.Brush.Input}"
                              KeyDown="CommandTextBox_KeyDown"
-                             AutomationProperties.AutomationId="Command.Input"/>
-                    <TextBlock Foreground="{DynamicResource LifeOS.Brush.TextSecondary}" TextWrapping="Wrap" Text="Try: Home, Work, Career, Money, Life, Projects, Assistant, Settings, Theme light, Theme dark, Density compact, Density comfortable, Legacy"/>
-                    <Button Margin="0,14,0,0" HorizontalAlignment="Left" Style="{StaticResource LifeOS.FocusableButton}" Content="Close" Click="CloseCommand_Click" AutomationProperties.AutomationId="Command.Close"/>
+                             AutomationProperties.AutomationId="Command.Input" />
+                    <TextBlock Margin="0,12,0,0"
+                               Text="Try: Home, Work, Settings, Theme light, Theme high contrast, Accent teal, Density compact"
+                               Style="{StaticResource LifeOS.Text.Caption}" />
+                    <Button Content="Close" HorizontalAlignment="Left" Margin="0,14,0,0" Style="{StaticResource LifeOS.Button}" Click="CloseCommand_Click" AutomationProperties.AutomationId="Command.Close" />
                 </StackPanel>
             </Border>
-        </Border>
+        </Grid>
     </Grid>
 </Window>

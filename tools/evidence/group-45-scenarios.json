@@ -1,0 +1,58 @@
+{
+  "group": 45,
+  "release": "v8.0.0-beta.1",
+  "captureWidth": 1360,
+  "captureHeight": 820,
+  "expectedCount": 8,
+  "humanApprovalRequired": true,
+  "scenarios": [
+    {
+      "id": "G45-01",
+      "fileName": "01_Final_Home_Dark_Purple.png",
+      "workspace": "Home",
+      "state": "Dark theme; Purple accent; Comfortable density"
+    },
+    {
+      "id": "G45-02",
+      "fileName": "02_Final_Workspace_Light_Theme.png",
+      "workspace": "Work",
+      "state": "Light theme; permanent workspace"
+    },
+    {
+      "id": "G45-03",
+      "fileName": "03_Appearance_Settings.png",
+      "workspace": "Settings",
+      "state": "Appearance section visible"
+    },
+    {
+      "id": "G45-04",
+      "fileName": "04_High_Contrast_Or_Text_Scaling.png",
+      "workspace": "Settings",
+      "state": "High Contrast or approved text scale"
+    },
+    {
+      "id": "G45-05",
+      "fileName": "05_Review_And_Status.png",
+      "workspace": "Home",
+      "state": "Review and system/sync status context"
+    },
+    {
+      "id": "G45-06",
+      "fileName": "06_Emergency_Stop_And_Context.png",
+      "workspace": "Home",
+      "state": "Emergency Stop textual state; context panel open"
+    },
+    {
+      "id": "G45-07",
+      "fileName": "07_Eight_Workspaces_Zero_Obsolete_Routes.png",
+      "workspace": "Settings",
+      "state": "Eight permanent rail destinations; zero obsolete shell routes"
+    },
+    {
+      "id": "G45-08",
+      "fileName": "08_Final_V8_Release_Validation.png",
+      "workspace": "Terminal",
+      "state": "Pack 2 validation; HEAD equals origin/main; clean tree"
+    }
+  ]
+}

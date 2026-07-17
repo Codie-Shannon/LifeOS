@@ -30,6 +30,17 @@ public sealed class MorePage : ContentPage
         var diagnostics = new Button { Text = "Diagnostics", BackgroundColor = Color.FromArgb("#7C5CFC"), TextColor = Colors.White };
         diagnostics.Clicked += async (_, _) => await Navigation.PushAsync(new DiagnosticsPage(foundation));
         layout.Children.Add(diagnostics);
+        var betaClosure = new Button
+        {
+            Text = "Beta closure",
+            BackgroundColor = Color.FromArgb("#7C5CFC"),
+            TextColor = Colors.White
+        };
+
+        betaClosure.Clicked += async (_, _) =>
+            await Navigation.PushAsync(new BetaClosurePage());
+
+        layout.Children.Add(betaClosure);
         Content = new ScrollView { Content = layout };
     }
 }

@@ -1,4 +1,4 @@
-using LifeOS.Mobile.Core.Foundation;
+﻿using LifeOS.Mobile.Core.Foundation;
 using LifeOS.Mobile.Core.Services;
 
 namespace LifeOS.Mobile.Views;
@@ -14,7 +14,17 @@ public sealed class MorePage : ContentPage
         {
             var captured = workspace;
             var button = new Button { Text = captured, BackgroundColor = Color.FromArgb("#292D3A"), TextColor = Colors.White };
-            button.Clicked += async (_, _) => await Navigation.PushAsync(captured == "Settings" ? new SettingsPage(foundation) : new WorkspacePage(captured));
+            button.Clicked += async (_, _) =>
+{
+    Page target = captured switch
+    {
+        "Life" => new LifePage(),
+        "Settings" => new SettingsPage(foundation),
+        _ => new WorkspacePage(captured)
+    };
+
+    await Navigation.PushAsync(target);
+};
             layout.Children.Add(button);
         }
         var diagnostics = new Button { Text = "Diagnostics", BackgroundColor = Color.FromArgb("#7C5CFC"), TextColor = Colors.White };

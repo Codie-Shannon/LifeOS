@@ -15,7 +15,7 @@ public sealed class MobileShell : Shell
             {
                 new ShellContent { Title = "Home", Route = "home", Content = new HomePage(foundation) },
                 new ShellContent { Title = "Work", Route = "work", Content = new WorkPage(foundation) },
-                new ShellContent { Title = "Money", Route = "money", Content = new WorkspacePage("Money") },
+                new ShellContent { Title = "Money", Route = "money", Content = new MoneyPage() },
                 new ShellContent { Title = "Projects", Route = "projects", Content = new WorkspacePage("Projects") },
                 new ShellContent { Title = "More", Route = "more", Content = new MorePage(foundation) }
             }

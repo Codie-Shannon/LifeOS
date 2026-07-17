@@ -66,7 +66,7 @@ public sealed class WorkService
                 now.AddMinutes(-12),
                 "Fresh",
                 CommunicationReviewState.PendingReview,
-                "Normalized Gmail candidate â€¢ provider payload excluded"),
+                "Normalized Gmail candidate - provider payload excluded"),
             new CommunicationCandidate(
                 "outlook-meeting",
                 "Outlook",
@@ -76,7 +76,7 @@ public sealed class WorkService
                 now.AddMinutes(-40),
                 "Fresh",
                 CommunicationReviewState.PendingReview,
-                "Normalized Outlook candidate â€¢ provider payload excluded"),
+                "Normalized Outlook candidate - provider payload excluded"),
             new CommunicationCandidate(
                 "teams-action",
                 "Teams",

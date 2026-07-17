@@ -9,9 +9,9 @@
     <Nullable>enable</Nullable>
     <ApplicationTitle>LifeOS Full Mobile</ApplicationTitle>
     <ApplicationId>nz.itssuperbeast.lifeos.mobile</ApplicationId>
-    <ApplicationDisplayVersion>10.0.0-alpha.1</ApplicationDisplayVersion>
-    <ApplicationVersion>1</ApplicationVersion>
-    <Version>10.0.0-alpha.1</Version>
+    <ApplicationDisplayVersion>10.0.0-alpha.2</ApplicationDisplayVersion>
+    <ApplicationVersion>2</ApplicationVersion>
+    <Version>10.0.0-alpha.2</Version>
     <SupportedOSPlatformVersion>26.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion>26.0</TargetPlatformMinVersion>
   </PropertyGroup>

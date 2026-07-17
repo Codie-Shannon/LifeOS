@@ -1,7 +1,7 @@
-# LifeOS current status
+﻿# LifeOS current status
 
-LifeOS Group 51 is complete and closed at clean baseline `062ccb5df7437be5cd9523681f51d1da5334af52`.
+LifeOS Group 52 is complete and closed at clean baseline `515510afae0b578333ca09e1ae27824e6bb19e89`.
 
-Group 52 Pack 1 establishes **LifeOS Full Mobile** as a separate first-class Android application. It is not Desktop reduced to a phone layout and it is not an expansion of Mobile Companion. The new foundation provides a mobile shell, access to all eight permanent workspaces, encrypted device-local state, deterministic/idempotent outbox contracts, explicit sync states, Emergency Stop, redacted diagnostics, fictional proof data, accessibility-sized controls and a dedicated test project.
+Group 53 Pack 1 builds the Full Mobile Home and daily overview: Today focus, deterministic and explainable priorities, upcoming local-time agenda, waiting/blocked/overdue/review summaries, explicit quick-capture draft/save/cancel flow, offline-safe queued capture, Integration Inbox entry point, freshness status and a large-text accessibility proof.
 
-Provider writes, background autonomous action, silent conflict resolution and full workspace implementations remain disabled. Group 52 screenshots are not committed until Pack 2.
+Provider writes, sensitive notification previews, autonomous prioritization, silent task generation and silent record replacement remain disabled. Group 53 screenshots are not committed until Pack 2.

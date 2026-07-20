@@ -45,6 +45,7 @@ public partial class MainWindow
         "timer-agent",
         "timesheet-evidence",
         "universal-spine",
+        "v11-money-foundation",
         "weekly-close-out",
         "work-pipeline",
         "work-sessions"
@@ -81,7 +82,7 @@ public partial class MainWindow
 
         TextBlock subtitle = new()
         {
-            Text = "Canonical LifeOS module — opened from the permanent v8 workspace",
+            Text = "Canonical LifeOS module â€” opened from the permanent v8 workspace",
             Margin = new Thickness(0, 4, 0, 0),
             FontSize = 13
         };
@@ -96,7 +97,7 @@ public partial class MainWindow
         root.Children.Add(MainContentControl);
 
         Content = root;
-        Title = $"LifeOS — {FormatRouteTitle(routeId)}";
+        Title = $"LifeOS â€” {FormatRouteTitle(routeId)}";
         Width = 1500;
         Height = 860;
         MinWidth = 900;

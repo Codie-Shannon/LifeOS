@@ -130,7 +130,7 @@ public partial class V8ShellWindow : Window
             : new Thickness(16, 0, 0, 0);
 
         ContextButton.Visibility = veryCompactWidth ? Visibility.Collapsed : Visibility.Visible;
-        ProfileButton.Content = veryCompactWidth ? GetProfileInitials() : $"{GetProfileInitials()} ▾";
+        ProfileButton.Content = veryCompactWidth ? GetProfileInitials() : $"{GetProfileInitials()} â–¾";
 
         foreach (Button button in TopBarActions.Children.OfType<Button>())
         {
@@ -265,7 +265,7 @@ public partial class V8ShellWindow : Window
         ContextBody.Text = definition.ContextSummary;
         ContextModulesList.ItemsSource = definition.Sections
             .SelectMany(section => section.Modules)
-            .Select(module => $"{module.Title} — {module.Status}")
+            .Select(module => $"{module.Title} â€” {module.Status}")
             .ToArray();
 
         WorkspaceScrollViewer.ScrollToTop();
@@ -860,6 +860,19 @@ public partial class V8ShellWindow : Window
             OpenIntegrationInbox();
             return;
         }
+        if (string.Equals(
+                routeId,
+                "v11-money-foundation",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            MoneyV11Window moneyWindow = new()
+            {
+                Owner = this
+            };
+
+            moneyWindow.Show();
+            return;
+        }
 
         if (string.Equals(
                 routeId,
@@ -883,7 +896,7 @@ public partial class V8ShellWindow : Window
         MainWindow moduleWindow = new()
         {
             Owner = this,
-            Title = $"LifeOS — {routeId}"
+            Title = $"LifeOS â€” {routeId}"
         };
 
         moduleWindow.OpenV8ModuleWindow(routeId);
@@ -1002,7 +1015,7 @@ public partial class V8ShellWindow : Window
     {
         ProfileButton.Content = ActualWidth <= 1020
             ? GetProfileInitials()
-            : $"{GetProfileInitials()} ▾";
+            : $"{GetProfileInitials()} â–¾";
     }
 
     private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)

@@ -45,6 +45,7 @@ public partial class MainWindow
         "timer-agent",
         "timesheet-evidence",
         "universal-spine",
+        "v11-document-intake",
         "v11-money-foundation",
         "weekly-close-out",
         "work-pipeline",

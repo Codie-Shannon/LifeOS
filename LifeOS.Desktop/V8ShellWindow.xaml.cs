@@ -895,6 +895,12 @@ public partial class V8ShellWindow : Window
         string subtitle = module?.Description ??
             "This module remains inside its parent LifeOS workspace.";
 
+        if (string.Equals(routeId, "v11-document-intake", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(routeId, title, subtitle, new DocumentIntakeV11View());
+            return;
+        }
+
         if (string.Equals(routeId, "v11-money-foundation", StringComparison.OrdinalIgnoreCase))
         {
             ShowEmbeddedModule(routeId, title, subtitle, new MoneyV11View());

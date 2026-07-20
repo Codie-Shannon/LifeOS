@@ -14,6 +14,7 @@ public sealed class MoneyPage : ContentPage
       _content.Children.Add(MoneyVisuals.CardView("Invoices due",$"{overview.Currency} {overview.InvoicesDue:N2}","Due and overdue"));
       _content.Children.Add(MoneyVisuals.CardView("Payments received",$"{overview.Currency} {overview.PaymentsReceived:N2}","Reviewed"));
       _content.Children.Add(MoneyVisuals.CardView("Evidence gaps",overview.EvidenceGaps.ToString(),overview.EvidenceGaps==0?"Complete":"Needs review"));
+      AddAction("Document & evidence intake",()=>Navigation.PushAsync(new DocumentIntakePage()));
       AddAction("Accounts and status",()=>Navigation.PushAsync(new FinancialListPage("Accounts",data.Accounts.Select(x=>$"{x.Name}\n{x.Type} • {x.Currency} {x.Balance:N2} • {x.ReviewState}\nLive connected: {x.IsLiveConnected}"))));
       AddAction("Transactions",()=>Navigation.PushAsync(new FinancialListPage("Transactions",data.Transactions.Select(x=>$"{x.Date:dd MMM} • {x.Description}\n{x.Direction} • {x.Currency} {x.Amount:N2} • {x.ReviewState}\nCategory: {x.CategoryId}"))));
       AddAction("Invoices and payments",()=>Navigation.PushAsync(new FinancialListPage("Invoices",data.Invoices.Select(x=>$"{x.InvoiceNumber} • {x.State}\n{x.Currency} {x.Total:N2} • outstanding {x.Outstanding:N2}\nLinks {x.Links.Count} • evidence {x.Evidence.Count}"))));

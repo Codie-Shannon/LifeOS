@@ -5,4 +5,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>LifeOS.Mobile.Core</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LifeOS.Core\LifeOS.Core.csproj" />
+  </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
-﻿# LifeOS current status
+# LifeOS current status
 
-LifeOS Group 56 is complete and closed at verified baseline `d8d11770e7b3cc851281710dad7cb17e1ae6d574`.
+LifeOS Group 57 is complete and closed at the actual clean synchronized Group 57 Pack 2 repository HEAD recorded by the Group 58 runner.
 
-Group 57 Pack 1 builds the final Full Mobile beta-closure surface: sync health, offline queueing, emergency stop, recovery checkpoints, accessibility audit, performance budget and release-readiness checklist.
+Group 58 Pack 1 builds the LifeOS v11 authoritative financial-record foundation: accounts, transactions, invoices, payments, categories, parties, evidence links, deterministic summaries, manual review and audit-friendly history.
 
-Provider writes, silent merges, destructive recovery, automatic rollback and automatic production approval remain disabled. Group 57 screenshots are not committed until Pack 2.
+Bank feeds, payment initiation, accounting approval, provider writes and autonomous reconciliation remain disabled. Group 58 screenshots are not committed until Pack 2.

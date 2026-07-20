@@ -861,6 +861,15 @@ public partial class V8ShellWindow : Window
             return;
         }
 
+        if (string.Equals(
+                routeId,
+                "v11-money-foundation",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            new MoneyV11Window { Owner = this }.Show();
+            return;
+        }
+
         if (!WorkspaceCatalog.IsRouteAllowed(_activeWorkspace, routeId))
         {
             MessageBox.Show(

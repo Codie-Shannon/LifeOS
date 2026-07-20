@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -183,6 +183,7 @@ internal static class WorkspaceCatalog
                         "Financial views retain their persisted models and safety rules.",
                         new WorkspaceModuleDefinition[]
                         {
+                            Route("v11-money-foundation", "Money v11 Foundation", "Authoritative v11 surface", "Accounts, transactions, invoices, payments, linked evidence, manual confirmation and audit history across the trusted financial model."),
                             Route("money-pressure", "Money Pressure", "Canonical state", "Current balance, paid and pending income, obligations, deductions and safe-to-spend pressure."),
                             Route("money-timeline", "Money Timeline", "Canonical behaviour", "Chronological money events and expected-income timing."),
                             Route("bills-payments", "Bills / Payments", "Canonical state", "Bills, obligations, status and review windows."),

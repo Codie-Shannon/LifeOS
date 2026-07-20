@@ -7,6 +7,7 @@ using LifeOS.Core.FinancialRecords;
 
 namespace LifeOS.Desktop;
 
+// Group 58 hotfix: dark in-shell navigation hover with no system cyan chrome.
 public sealed class MoneyV11View : UserControl
 {
     private readonly FinancialDataset _data = FinancialProofData.Build(
@@ -56,8 +57,11 @@ public sealed class MoneyV11View : UserControl
                 Foreground = Brush("#D9E2F3"),
                 BorderBrush = Brushes.Transparent,
                 BorderThickness = new Thickness(1),
-                Cursor = System.Windows.Input.Cursors.Hand
+                Cursor = System.Windows.Input.Cursors.Hand,
+                Template = NavigationButtonTemplate()
             };
+            button.MouseEnter += (_, _) => ApplyNavigationVisual(button, isHover: true);
+            button.MouseLeave += (_, _) => ApplyNavigationVisual(button, isHover: false);
             button.Click += (_, _) => ShowPage((string)button.Tag);
             _navigation[page] = button;
             nav.Children.Add(button);
@@ -94,6 +98,69 @@ public sealed class MoneyV11View : UserControl
         Grid.SetColumn(main, 1);
         root.Children.Add(main);
         return root;
+    }
+
+
+    private static ControlTemplate NavigationButtonTemplate()
+    {
+        var border = new FrameworkElementFactory(typeof(Border));
+        border.SetBinding(Border.BackgroundProperty, new System.Windows.Data.Binding(nameof(Button.Background))
+        {
+            RelativeSource = new System.Windows.Data.RelativeSource(System.Windows.Data.RelativeSourceMode.TemplatedParent)
+        });
+        border.SetBinding(Border.BorderBrushProperty, new System.Windows.Data.Binding(nameof(Button.BorderBrush))
+        {
+            RelativeSource = new System.Windows.Data.RelativeSource(System.Windows.Data.RelativeSourceMode.TemplatedParent)
+        });
+        border.SetBinding(Border.BorderThicknessProperty, new System.Windows.Data.Binding(nameof(Button.BorderThickness))
+        {
+            RelativeSource = new System.Windows.Data.RelativeSource(System.Windows.Data.RelativeSourceMode.TemplatedParent)
+        });
+        border.SetValue(Border.CornerRadiusProperty, new CornerRadius(0));
+
+        var presenter = new FrameworkElementFactory(typeof(ContentPresenter));
+        presenter.SetBinding(ContentPresenter.ContentProperty, new System.Windows.Data.Binding(nameof(Button.Content))
+        {
+            RelativeSource = new System.Windows.Data.RelativeSource(System.Windows.Data.RelativeSourceMode.TemplatedParent)
+        });
+        presenter.SetBinding(ContentPresenter.MarginProperty, new System.Windows.Data.Binding(nameof(Button.Padding))
+        {
+            RelativeSource = new System.Windows.Data.RelativeSource(System.Windows.Data.RelativeSourceMode.TemplatedParent)
+        });
+        presenter.SetBinding(ContentPresenter.HorizontalAlignmentProperty, new System.Windows.Data.Binding(nameof(Button.HorizontalContentAlignment))
+        {
+            RelativeSource = new System.Windows.Data.RelativeSource(System.Windows.Data.RelativeSourceMode.TemplatedParent)
+        });
+        presenter.SetValue(ContentPresenter.VerticalAlignmentProperty, VerticalAlignment.Center);
+        border.AppendChild(presenter);
+
+        return new ControlTemplate(typeof(Button)) { VisualTree = border };
+    }
+
+    private void ApplyNavigationVisual(Button button, bool isHover)
+    {
+        bool active = string.Equals(button.Tag as string, _pageTitle.Text switch
+        {
+            "Accounts and financial status" => "Accounts",
+            "Transactions" => "Transactions",
+            "Invoices and payments" => "Invoices & payments",
+            "Invoice and payment detail" => "Linked detail",
+            "Manual financial record" => "Manual review",
+            "Audit history and protection" => "Audit & protection",
+            _ => "Overview"
+        }, StringComparison.Ordinal);
+
+        if (active)
+        {
+            button.Background = Brush("#23335A");
+            button.BorderBrush = Brush("#607DFF");
+            button.Foreground = Brushes.White;
+            return;
+        }
+
+        button.Background = isHover ? Brush("#19233B") : Brushes.Transparent;
+        button.BorderBrush = isHover ? Brush("#31405F") : Brushes.Transparent;
+        button.Foreground = isHover ? Brushes.White : Brush("#D9E2F3");
     }
 
     private void ShowPage(string page)

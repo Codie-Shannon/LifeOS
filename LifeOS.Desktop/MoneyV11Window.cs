@@ -7,7 +7,7 @@ using LifeOS.Core.FinancialRecords;
 
 namespace LifeOS.Desktop;
 
-public sealed class MoneyV11Window : Window
+public sealed class MoneyV11View : UserControl
 {
     private readonly FinancialDataset _data = FinancialProofData.Build(
         new DateTimeOffset(2026, 7, 20, 12, 0, 0, TimeSpan.FromHours(12)));
@@ -16,18 +16,11 @@ public sealed class MoneyV11Window : Window
     private readonly TextBlock _pageSubtitle = new();
     private readonly Dictionary<string, Button> _navigation = new(StringComparer.Ordinal);
 
-    public MoneyV11Window()
+    public MoneyV11View()
     {
-        Title = "LifeOS — Money v11 Foundation";
-        Width = 1540;
-        Height = 900;
-        MinWidth = 1120;
-        MinHeight = 720;
-        WindowStartupLocation = WindowStartupLocation.CenterOwner;
         Background = Brush("#0B1020");
         Foreground = Brushes.White;
         FontFamily = new FontFamily("Segoe UI");
-
         Content = BuildShell();
         ShowPage("Overview");
     }

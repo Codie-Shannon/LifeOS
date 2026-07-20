@@ -38,6 +38,9 @@ public partial class V8ShellWindow : Window
     private Group50TeamsView? _group50TeamsView;
     private Group51GoogleWorkspaceView? _group51GoogleWorkspaceView;
     private WorkspaceSnapshot _snapshot = WorkspaceSnapshot.Load();
+    private double _workspaceScrollOffset;
+    private string? _activeModuleRoute;
+    private MainWindow? _embeddedLegacyModuleWindow;
 
     private bool IsCommandOpen => CommandOverlay.Visibility == Visibility.Visible;
 
@@ -229,6 +232,11 @@ public partial class V8ShellWindow : Window
 
     private void NavigateTo(string? requestedWorkspace, bool persist = true)
     {
+        if (_activeModuleRoute is not null)
+        {
+            CloseEmbeddedModule(restoreScroll: false);
+        }
+
         if (!WorkspaceCatalog.TryGet(requestedWorkspace, out WorkspaceDefinition definition))
         {
             definition = WorkspaceCatalog.Get("Home");
@@ -349,6 +357,13 @@ public partial class V8ShellWindow : Window
                 e.Handled = true;
             }
 
+            return;
+        }
+
+        if (e.Key == Key.Escape && _activeModuleRoute is not null)
+        {
+            CloseEmbeddedModule(restoreScroll: true);
+            e.Handled = true;
             return;
         }
 
@@ -852,34 +867,9 @@ public partial class V8ShellWindow : Window
             return;
         }
 
-        if (string.Equals(
-                routeId,
-                "integration-inbox",
-                StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(routeId, "integration-inbox", StringComparison.OrdinalIgnoreCase))
         {
             OpenIntegrationInbox();
-            return;
-        }
-        if (string.Equals(
-                routeId,
-                "v11-money-foundation",
-                StringComparison.OrdinalIgnoreCase))
-        {
-            MoneyV11Window moneyWindow = new()
-            {
-                Owner = this
-            };
-
-            moneyWindow.Show();
-            return;
-        }
-
-        if (string.Equals(
-                routeId,
-                "v11-money-foundation",
-                StringComparison.OrdinalIgnoreCase))
-        {
-            new MoneyV11Window { Owner = this }.Show();
             return;
         }
 
@@ -893,14 +883,94 @@ public partial class V8ShellWindow : Window
             return;
         }
 
-        MainWindow moduleWindow = new()
-        {
-            Owner = this,
-            Title = $"LifeOS â€” {routeId}"
-        };
+        WorkspaceModuleDefinition? module = WorkspaceCatalog.Get(_activeWorkspace)
+            .Sections
+            .SelectMany(section => section.Modules)
+            .FirstOrDefault(candidate => string.Equals(
+                candidate.RouteId,
+                routeId,
+                StringComparison.OrdinalIgnoreCase));
 
-        moduleWindow.OpenV8ModuleWindow(routeId);
-        moduleWindow.Show();
+        string title = module?.Title ?? routeId;
+        string subtitle = module?.Description ??
+            "This module remains inside its parent LifeOS workspace.";
+
+        if (string.Equals(routeId, "v11-money-foundation", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(routeId, title, subtitle, new MoneyV11View());
+            return;
+        }
+
+        MainWindow legacyModule = new()
+        {
+            Title = $"LifeOS — {title}"
+        };
+        legacyModule.OpenV8ModuleWindow(routeId);
+
+        if (legacyModule.Content is not UIElement content)
+        {
+            legacyModule.Close();
+            MessageBox.Show(
+                "The selected module could not be hosted inside this workspace.",
+                "LifeOS module host",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        legacyModule.Content = null;
+        _embeddedLegacyModuleWindow = legacyModule;
+        ShowEmbeddedModule(routeId, title, subtitle, content);
+    }
+
+    private void ShowEmbeddedModule(
+        string routeId,
+        string title,
+        string subtitle,
+        UIElement content)
+    {
+        _workspaceScrollOffset = WorkspaceScrollViewer.VerticalOffset;
+        _activeModuleRoute = routeId;
+
+        ModuleBackButton.Content = $"← Back to {_activeWorkspace}";
+        ModuleHostTitle.Text = title;
+        ModuleHostSubtitle.Text = subtitle;
+        ModuleHostContent.Content = content;
+
+        WorkspaceRoot.Visibility = Visibility.Collapsed;
+        ModuleHostRoot.Visibility = Visibility.Visible;
+        WorkspaceScrollViewer.ScrollToTop();
+    }
+
+    private void ModuleBackButton_Click(object sender, RoutedEventArgs e) =>
+        CloseEmbeddedModule(restoreScroll: true);
+
+    private void CloseEmbeddedModule(bool restoreScroll)
+    {
+        if (_activeModuleRoute is null)
+        {
+            return;
+        }
+
+        ModuleHostContent.Content = null;
+        ModuleHostRoot.Visibility = Visibility.Collapsed;
+        WorkspaceRoot.Visibility = Visibility.Visible;
+
+        _embeddedLegacyModuleWindow?.Close();
+        _embeddedLegacyModuleWindow = null;
+        _activeModuleRoute = null;
+
+        if (restoreScroll)
+        {
+            Dispatcher.BeginInvoke(
+                DispatcherPriority.Loaded,
+                new Action(() => WorkspaceScrollViewer.ScrollToVerticalOffset(
+                    _workspaceScrollOffset)));
+        }
+        else
+        {
+            WorkspaceScrollViewer.ScrollToTop();
+        }
     }
 
     private void ReviewButton_Click(

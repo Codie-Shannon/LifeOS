@@ -50,7 +50,10 @@ public partial class V8ShellWindow : Window
         WorkspaceCatalog.Validate(MainWindow.V8RouteIds);
         InitializeComponent();
 
-        Loaded += Window_Loaded;
+
+
+        ProfileButton.Content = "CS \u25BE";
+Loaded += Window_Loaded;
         SizeChanged += Window_SizeChanged;
 
         ConfigureSettingsControls();
@@ -135,9 +138,7 @@ public partial class V8ShellWindow : Window
             : new Thickness(16, 0, 0, 0);
 
         ContextButton.Visibility = veryCompactWidth ? Visibility.Collapsed : Visibility.Visible;
-        ProfileButton.Content = veryCompactWidth ? GetProfileInitials() : $"{GetProfileInitials()} \u25BE";
-
-        foreach (Button button in TopBarActions.Children.OfType<Button>())
+foreach (Button button in TopBarActions.Children.OfType<Button>())
         {
             button.MinWidth = 0;
             button.Padding = compactWidth
@@ -1102,10 +1103,7 @@ public partial class V8ShellWindow : Window
 
     private void UpdateProfileVisual()
     {
-        ProfileButton.Content = ActualWidth <= 1020
-            ? GetProfileInitials()
-            : $"{GetProfileInitials()} \u25BE";
-    }
+}
 
     private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
     {

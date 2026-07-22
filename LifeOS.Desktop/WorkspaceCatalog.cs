@@ -219,6 +219,7 @@ internal static class WorkspaceCatalog
                             Route("daily-state", "Daily State", "Canonical behaviour", "Current personal state and pressure context."),
                             Route("daily-operating-flow", "Daily Operating Flow", "Canonical behaviour", "A manual, visible operating sequence for the day."),
                             Route("weekly-close-out", "Weekly Close-Out", "Canonical records", "Done, moved, waiting and next-week review."),
+                            Route("v13-grocery-planning", "Grocery Planning", "Canonical records", "Lists, recurring essentials, quantities, priorities and review-first household planning."),
                             Route("timer-agent", "TimerAgent", "Canonical utility", "Desktop-only timing utility inside Life.")
                         })
                 }),

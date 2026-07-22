@@ -912,6 +912,11 @@ public partial class V8ShellWindow : Window
             ShowEmbeddedModule(routeId, title, subtitle, new CareerStudioView());
             return;
         }
+        if (string.Equals(routeId, "v13-grocery-planning", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(routeId, title, subtitle, new GroceryPlanningView());
+            return;
+        }
 
         MainWindow legacyModule = new()
         {

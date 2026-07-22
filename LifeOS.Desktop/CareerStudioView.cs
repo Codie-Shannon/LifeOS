@@ -43,7 +43,7 @@ public sealed class CareerStudioView : UserControl
         nav.Children.Add(Label("Career Studio", 29, "#FFFFFF", FontWeights.Bold, new Thickness(0, 5, 0, 2)));
         nav.Children.Add(Label("Opportunity and application pipeline", 13, "#9AA9C7", FontWeights.Normal, new Thickness(0, 0, 0, 20)));
 
-        foreach (var page in new[] { "Pipeline", "Opportunity detail", "Candidate review", "Application checklist", "Application timeline", "Career profile", "CV variants", "Portfolio evidence", "Cover letter", "Application pack", "Interview preparation", "Follow-ups", "References", "Questions to ask" })
+        foreach (var page in new[] { "Pipeline", "Opportunity detail", "Candidate review", "Application checklist", "Application timeline", "Career profile", "CV variants", "Portfolio evidence", "Cover letter", "Application pack", "Interview preparation", "Follow-ups", "References", "Questions to ask", "Career review", "Coverage report" })
         {
             var button = new Button
             {
@@ -186,7 +186,9 @@ public sealed class CareerStudioView : UserControl
                         "Interview preparation" => ("Interview preparation", "STAR examples, questions, logistics and read-only calendar context.", InterviewPreparation()),
             "Follow-ups" => ("Career follow-ups", "Due, overdue, waiting and completed follow-ups stay review-first.", FollowUps()),
             "References" => ("Reference readiness", "Permission, privacy, freshness and application usage remain explicit.", References()),
-            "Questions to ask" => ("Questions to ask", "User-owned interview questions remain ordered, linked and reviewable.", QuestionsToAsk()),
+                        "Questions to ask" => ("Questions to ask", "User-owned interview questions remain ordered, linked and reviewable.", QuestionsToAsk()),
+            "Career review" => ("Career Review", "Bounded analytics describe trusted LifeOS records, not hiring probability.", CareerReview()),
+            "Coverage report" => ("Evidence and materials coverage", "Coverage remains drillable to authoritative records.", CoverageReport()),
             _ => ("Career opportunity pipeline", "One authoritative pipeline with board filters, closing dates and review-first status.", Pipeline())
         };
     }
@@ -422,6 +424,28 @@ public sealed class CareerStudioView : UserControl
         panel.Children.Add(Card("Linked interview", $"{plan.OpportunityTitle}\nInterview: {plan.InterviewUtc:dd MMM yyyy HH:mm}\nNotes: {plan.Notes}", "USER-OWNED"));
         foreach (var question in plan.Questions.OrderBy(x => x.Order))
             panel.Children.Add(Card($"{question.Order}. {question.Prompt}", $"Category: {question.Category}\nNotes: {question.Notes}\nLinked interview: {question.InterviewId}", question.Answered ? "ANSWERED" : "TO ASK"));
+        return Scroll(panel);
+    }
+
+
+    private UIElement CareerReview()
+    {
+        var panel = Vertical();
+        var review = _closure.Review;
+        panel.Children.Add(Card("Review period", $"{review.Period.StartUtc:dd MMM yyyy} to {review.Period.EndUtc:dd MMM yyyy}\nData state: {review.DataState}\nNo suitability or hiring probability score is produced.", "BOUNDED RECORDS"));
+        panel.Children.Add(Card("Pipeline summary", $"Discovered: {review.Pipeline.OpportunitiesDiscovered}\nPrepared: {review.Pipeline.ApplicationsPrepared}\nSubmitted: {review.Pipeline.ApplicationsSubmitted}\nInterviews: {review.Pipeline.Interviews}\nOffers: {review.Pipeline.Offers}\nClosed outcomes: {review.Pipeline.ClosedOutcomes}", "COUNTS ONLY"));
+        panel.Children.Add(Card("Breakdowns", $"Sources: {string.Join(", ", review.SourceBreakdown.Select(x => $"{x.Key} {x.Value}"))}\nRole families: {string.Join(", ", review.RoleFamilyBreakdown.Select(x => $"{x.Key} {x.Value}"))}\nWork modes: {string.Join(", ", review.WorkModeBreakdown.Select(x => $"{x.Key} {x.Value}"))}\nStages: {string.Join(", ", review.StageBreakdown.Select(x => $"{x.Key} {x.Value}"))}", "DRILLABLE"));
+        panel.Children.Add(Card("Follow-up responsiveness", $"Completed on time: {review.FollowUps.CompletedOnTime}\nOverdue: {review.FollowUps.Overdue}\nWaiting: {review.FollowUps.Waiting}\nAverage response: {review.FollowUps.AverageResponseHours:0.#} hours", "LIFEOS RECORDS"));
+        return Scroll(panel);
+    }
+
+    private UIElement CoverageReport()
+    {
+        var panel = Vertical();
+        var coverage = _closure.Review.Coverage;
+        panel.Children.Add(Card("Evidence coverage", $"Trusted CV facts: {coverage.TrustedFacts}/{coverage.TotalFacts}\nPortfolio proof: {coverage.PortfolioWithEvidence}/{coverage.TotalPortfolio}\nReferences ready: {coverage.ReadyReferences}/{coverage.TotalReferences}\nApplication packs current: {coverage.ReadyPacks}/{coverage.TotalPacks}", "PRIVACY-CONTROLLED"));
+        foreach (var item in coverage.DrillDown)
+            panel.Children.Add(Card(item.Label, $"Status: {item.Status}\nAuthoritative record: {item.RecordId}\nSafe detail: {item.SafeDetail}", "DRILL-DOWN"));
         return Scroll(panel);
     }
 

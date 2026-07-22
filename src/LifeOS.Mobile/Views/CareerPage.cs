@@ -48,6 +48,7 @@ public sealed class CareerPage : ContentPage
         AddAction("Opportunity detail", () => Navigation.PushAsync(new CareerOpportunityPage(_proof.Opportunities[0])));
         AddAction("Application detail", () => Navigation.PushAsync(new CareerApplicationPage(_applications[0])));
         AddAction("Preparation dashboard", () => Navigation.PushAsync(new CareerPreparationPage(_preparation, _closure)));
+        AddAction("Career review", () => Navigation.PushAsync(new CareerReviewPage(_closure)));
     }
 
     private void AddAction(string label, Func<Task> action)

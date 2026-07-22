@@ -11,6 +11,7 @@ public sealed class CareerStudioView : UserControl
     private static readonly DateTimeOffset ProofNow = new(2026, 7, 22, 14, 0, 0, TimeSpan.FromHours(12));
     private readonly CareerStudioProof _proof = CareerProofData.Build(ProofNow);
     private readonly IReadOnlyList<CareerApplication> _applications;
+    private readonly CareerMaterialsProof _materials = CareerMaterialsProofData.Build(ProofNow);
     private readonly ContentControl _content = new();
     private readonly TextBlock _title = new();
     private readonly TextBlock _subtitle = new();
@@ -38,7 +39,7 @@ public sealed class CareerStudioView : UserControl
         nav.Children.Add(Label("Career Studio", 29, "#FFFFFF", FontWeights.Bold, new Thickness(0, 5, 0, 2)));
         nav.Children.Add(Label("Opportunity and application pipeline", 13, "#9AA9C7", FontWeights.Normal, new Thickness(0, 0, 0, 20)));
 
-        foreach (var page in new[] { "Pipeline", "Opportunity detail", "Candidate review", "Application checklist", "Application timeline" })
+        foreach (var page in new[] { "Pipeline", "Opportunity detail", "Candidate review", "Application checklist", "Application timeline", "Career profile", "CV variants", "Portfolio evidence" })
         {
             var button = new Button
             {
@@ -173,6 +174,9 @@ public sealed class CareerStudioView : UserControl
             "Candidate review" => ("Imported and duplicate candidates", "Candidates await review; no silent trust promotion or merge occurs.", CandidateReview()),
             "Application checklist" => ("Application preparation", "Checklist completion and readiness remain explicit.", ApplicationChecklist()),
             "Application timeline" => ("Application timeline", "Status, follow-up and interview context remain auditable.", ApplicationTimeline()),
+            "Career profile" => ("Career profile", "Trusted facts remain separate from presentation wording and carry provenance.", CareerProfile()),
+            "CV variants" => ("Role-specific CV variants", "Requirement relevance, missing proof and unsupported claims are checked before export.", CvVariants()),
+            "Portfolio evidence" => ("Portfolio evidence", "Projects remain linked to trusted Work, Project and document proof.", PortfolioEvidence()),
             _ => ("Career opportunity pipeline", "One authoritative pipeline with board filters, closing dates and review-first status.", Pipeline())
         };
     }
@@ -316,6 +320,36 @@ public sealed class CareerStudioView : UserControl
                 "READ-ONLY CONTEXT"));
         }
 
+        return Scroll(panel);
+    }
+
+
+    private UIElement CareerProfile()
+    {
+        var panel = Vertical();
+        panel.Children.Add(Card("Evidence-backed profile", $"{_materials.Facts.Count} factual records • {_materials.Skills.Count} skill-evidence links\nFacts remain authoritative; wording remains a derivative.", "TRUSTED MATERIALS"));
+        foreach (var fact in _materials.Facts)
+            panel.Children.Add(Card(fact.Category, $"{fact.FactualValue}\nSource: {fact.SourceId}\nEvidence: {(fact.Evidence.Count == 0 ? "None linked" : string.Join(", ", fact.Evidence))}\nOwner review: {Humanize(fact.OwnerReviewState)}", Humanize(fact.TrustState).ToUpperInvariant()));
+        return Scroll(panel);
+    }
+
+    private UIElement CvVariants()
+    {
+        var panel = Vertical();
+        var variant = _materials.Variants[0];
+        panel.Children.Add(Card(variant.Name, $"Focus: {variant.Focus}\nVersion history: {variant.Versions.Count}\nExport: {_materials.Export.Format} derivative v{_materials.Export.Version}\nSource facts remain immutable.", _materials.Review.CanExport ? "EXPORT CHECKED" : "REVIEW REQUIRED"));
+        foreach (var match in _materials.Review.Matches)
+            panel.Children.Add(Card(match.Requirement, $"Matched facts: {(match.MatchedFactIds.Count == 0 ? "None" : string.Join(", ", match.MatchedFactIds))}\nEvidence: {(match.EvidenceIds.Count == 0 ? "Missing" : string.Join(", ", match.EvidenceIds))}", match.IsSupported ? "SUPPORTED" : match.IsRequired ? "BLOCKED" : "UNSUPPORTED WARNING"));
+        foreach (var bullet in variant.Bullets)
+            panel.Children.Add(Card("Reusable evidence-backed bullet", bullet.Text + $"\nFact: {bullet.CareerFactId}", Humanize(bullet.TrustState).ToUpperInvariant()));
+        return Scroll(panel);
+    }
+
+    private UIElement PortfolioEvidence()
+    {
+        var panel = Vertical();
+        foreach (var item in _materials.Portfolio)
+            panel.Children.Add(Card(item.Title, $"{item.Summary}\nRole: {item.Role}\nTechnologies: {string.Join(", ", item.Technologies)}\nDocuments: {string.Join(", ", item.DocumentIds)}\nOutcomes: {string.Join("; ", item.Outcomes)}", Humanize(item.PrivacyState).ToUpperInvariant()));
         return Scroll(panel);
     }
 

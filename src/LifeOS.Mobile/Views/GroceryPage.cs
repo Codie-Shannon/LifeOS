@@ -1,87 +1,501 @@
-﻿using LifeOS.Core.Grocery;
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
+using Microsoft.Maui.Graphics;
 
 namespace LifeOS.Mobile.Views;
 
 public sealed class GroceryPage : ContentPage
 {
-    private readonly GroceryPlanningService _service = new();
-    private readonly (IReadOnlyList<GroceryItem> Items, IReadOnlyList<GroceryList> Lists, IReadOnlyList<RecurringEssential> Essentials) _data = GroceryProofData.Build();
-    private readonly VerticalStackLayout _content = new();
+    private static readonly Color PageBackground = Color.FromArgb("#101010");
+    private static readonly Color CardBackground = Color.FromArgb("#1D1C27");
+    private static readonly Color CardBorder = Color.FromArgb("#353148");
+    private static readonly Color PrimaryText = Colors.White;
+    private static readonly Color SecondaryText = Color.FromArgb("#D0CADB");
+    private static readonly Color Accent = Color.FromArgb("#5168E8");
+    private static readonly Color AccentText = Color.FromArgb("#A990FF");
 
     public GroceryPage()
     {
         Title = "Grocery";
-        BackgroundColor = Color.FromArgb("#101018");
-        Content = new ScrollView { Content = _content };
+        BackgroundColor = PageBackground;
+
+        Content = BuildDashboard();
     }
 
-    protected override void OnAppearing()
+    private View BuildDashboard()
     {
-        base.OnAppearing();
-        var dashboard = _service.BuildDashboard(_data.Lists, _data.Essentials, new DateOnly(2026,7,22));
-        _content.Children.Clear();
-        _content.Padding = new Thickness(12,14,12,30);
-        _content.Spacing = 11;
-        _content.Children.Add(Heading("Grocery dashboard", 28));
-        _content.Children.Add(Text("Review-first planning and in-store execution â€¢ no orders or payments"));
-        _content.Children.Add(Card("Active list", $"{dashboard.ActiveList!.Name}\nState {dashboard.ActiveList.State}\nEstimated {dashboard.ActiveList.Currency} {dashboard.ActiveList.EstimatedTotal:0.00}\n{dashboard.ActiveList.EstimateSource}", "OPEN"));
-        _content.Children.Add(Card("Due essentials", $"{dashboard.DueEssentials.Count} require review\nAccept, defer or skip explicitly", "REVIEW"));
-        _content.Children.Add(Card("Recently completed", $"{dashboard.RecentlyCompleted.Count} recent list", "HISTORY"));
-        AddAction("Open shopping list", () => Navigation.PushAsync(new GroceryShoppingPage(_data.Items, _data.Lists[0])));
-        AddAction("Quick add item", () => DisplayAlert("Quick add", "Text capture creates a local draft item only.", "OK"));
-        AddAction("Review due essentials", () => DisplayAlert("Recurring essentials", "Candidates remain reviewable and are never purchased automatically.", "OK"));
-    }
-
-    private void AddAction(string label, Func<Task> action)
-    {
-        var b = new Button { Text = label, BackgroundColor = Color.FromArgb("#4057D6"), TextColor = Colors.White, CornerRadius = 12, HeightRequest = 48 };
-        b.Clicked += async (_,_) => await action();
-        _content.Children.Add(b);
-    }
-
-    internal static Label Heading(string text, double size) => new() { Text=text, FontSize=size, FontAttributes=FontAttributes.Bold, TextColor=Colors.White };
-    internal static Label Text(string text) => new() { Text=text, FontSize=13, TextColor=Color.FromArgb("#D6D3E6") };
-    internal static Border Card(string title, string body, string badge)
-    {
-        var p = new VerticalStackLayout { Spacing=6 };
-        p.Children.Add(Heading(title, 17)); p.Children.Add(Text(body));
-        p.Children.Add(new Label { Text=badge, FontSize=11, TextColor=Color.FromArgb("#9A7CFF") });
-        return new Border { BackgroundColor=Color.FromArgb("#1B1A25"), Stroke=Color.FromArgb("#343143"), StrokeShape=new RoundRectangle { CornerRadius=14 }, Padding=14, Content=p };
-    }
-}
-
-public sealed class GroceryShoppingPage : ContentPage
-{
-    private GroceryList _list;
-    private readonly IReadOnlyList<GroceryItem> _catalogue;
-    private readonly GroceryPlanningService _service = new();
-    private readonly VerticalStackLayout _content = new();
-
-    public GroceryShoppingPage(IReadOnlyList<GroceryItem> catalogue, GroceryList list)
-    {
-        _catalogue = catalogue; _list = list;
-        Title = "Shopping list"; BackgroundColor = Color.FromArgb("#101018");
-        Content = new ScrollView { Content = _content };
-    }
-
-    protected override void OnAppearing() { base.OnAppearing(); Render(); }
-
-    private void Render()
-    {
-        _content.Children.Clear(); _content.Padding=new Thickness(12,14,12,30); _content.Spacing=10;
-        _content.Children.Add(GroceryPage.Heading(_list.Name, 26));
-        _content.Children.Add(GroceryPage.Text($"Estimated {_list.Currency} {_list.EstimatedTotal:0.00} â€¢ {_list.EstimateSource}"));
-        foreach (var group in _list.Items.GroupBy(i => _catalogue.Single(c => c.Id == i.GroceryItemId).Category))
+        var content = new VerticalStackLayout
         {
-            _content.Children.Add(GroceryPage.Heading(group.Key.ToString(), 19));
-            foreach (var item in group)
+            Padding = new Thickness(10, 14, 10, 24),
+            Spacing = 10
+        };
+
+        content.Add(Heading("Grocery dashboard"));
+
+        content.Add(
+            Body(
+                "Review-first planning and in-store execution \u2022 no orders or payments"));
+
+        content.Add(
+            CreateCard(
+                "Active list",
+                """
+                Weekly household shop
+                State: Shopping
+                Estimated NZD 68.40
+                Manual estimate \u2022 fresh 22 Jul 16:00
+                """,
+                "OPEN"));
+
+        content.Add(
+            CreateCard(
+                "Due essentials",
+                """
+                2 require review
+                Accept, defer or skip explicitly
+                """,
+                "REVIEW"));
+
+        content.Add(
+            CreateCard(
+                "Recently completed",
+                "1 recent list",
+                "HISTORY"));
+
+        var openListButton = PrimaryButton("Open shopping list");
+        openListButton.Clicked += (_, _) =>
+        {
+            Content = BuildShoppingList();
+        };
+
+        var quickAddButton = PrimaryButton("Quick add item");
+        quickAddButton.Clicked += async (_, _) =>
+        {
+            await DisplayAlertAsync(
+                "Quick add",
+                "Quick-add creates a local pending grocery item. It does not place an order.",
+                "OK");
+        };
+
+        var essentialsButton = PrimaryButton("Review due essentials");
+        essentialsButton.Clicked += async (_, _) =>
+        {
+            await DisplayAlertAsync(
+                "Recurring essentials",
+                "Candidates remain reviewable and are never purchased automatically.",
+                "OK");
+        };
+
+        var conflictButton = PrimaryButton("Review offline conflict");
+        conflictButton.Clicked += (_, _) =>
+        {
+            Content = BuildOfflineConflictReview();
+        };
+
+        content.Add(openListButton);
+        content.Add(quickAddButton);
+        content.Add(essentialsButton);
+        content.Add(conflictButton);
+
+        return Scroll(content);
+    }
+
+    private View BuildShoppingList()
+    {
+        var content = new VerticalStackLayout
+        {
+            Padding = new Thickness(10, 14, 10, 28),
+            Spacing = 10
+        };
+
+        var backButton = TextButton("\u2190 Grocery dashboard");
+        backButton.Clicked += (_, _) =>
+        {
+            Content = BuildDashboard();
+        };
+
+        content.Add(backButton);
+        content.Add(Heading("Weekly household shop"));
+
+        content.Add(
+            Body(
+                "Estimated NZD 68.40 \u2022 Manual estimate \u2022 fresh 22 Jul 16:00"));
+
+        content.Add(SectionHeading("Dairy"));
+
+        content.Add(
+            CreateCard(
+                "Milk",
+                """
+                Requested: Milk
+                Quantity: 2 L
+                State: Checked
+                Purchased/substitute: None
+                """,
+                "CHECKED"));
+
+        content.Add(SectionHeading("Bakery"));
+
+        var breadButton = CreateCardButton(
+            "Bread",
+            """
+            Requested: Bread
+            Quantity: 1 loaf
+            State: Substituted
+            Purchased/substitute: Wholemeal loaf
+            User-approved substitute
+            """,
+            "SUBSTITUTED");
+
+        var breadTap = new TapGestureRecognizer();
+
+        breadTap.Tapped += (_, _) =>
+        {
+            Content = BuildSubstitutionDetail();
+        };
+
+        breadButton.GestureRecognizers.Add(breadTap);
+
+        content.Add(breadButton);
+
+        content.Add(SectionHeading("Produce"));
+
+        content.Add(
+            CreateCard(
+                "Bananas",
+                """
+                Requested: Bananas
+                Quantity: 6 each
+                State: Pending
+                Purchased/substitute: None
+                """,
+                "PENDING"));
+
+        content.Add(SectionHeading("Cleaning"));
+
+        content.Add(
+            CreateCard(
+                "Surface cleaner",
+                """
+                Requested: Surface cleaner
+                Quantity: 1 bottle
+                State: Unavailable
+                Purchased/substitute: None
+                Requires explicit review
+                """,
+                "UNAVAILABLE"));
+
+        return Scroll(content);
+    }
+
+    private View BuildSubstitutionDetail()
+    {
+        var content = new VerticalStackLayout
+        {
+            Padding = new Thickness(10, 14, 10, 28),
+            Spacing = 12
+        };
+
+        var backButton = TextButton("\u2190 Shopping list");
+        backButton.Clicked += (_, _) =>
+        {
+            Content = BuildShoppingList();
+        };
+
+        content.Add(backButton);
+        content.Add(Heading("Substitution detail"));
+
+        content.Add(
+            Body(
+                "Requested and purchased values remain separate. No substitution is accepted silently."));
+
+        content.Add(
+            CreateCard(
+                "Original request",
+                """
+                Requested item: Bread
+                Requested quantity: 1 loaf
+                Requested category: Bakery
+                """,
+                "REQUESTED"));
+
+        content.Add(
+            CreateCard(
+                "Chosen substitute",
+                """
+                Purchased/substitute: Wholemeal loaf
+                Result state: Substituted
+                Original request retained: Yes
+                """,
+                "SUBSTITUTE"));
+
+        content.Add(
+            CreateCard(
+                "User decision",
+                """
+                Decision: Explicitly approved by the user
+                Approval source: Mobile shopping action
+                Automatic substitution: No
+                Review required before any replacement: Yes
+                """,
+                "USER APPROVED"));
+
+        content.Add(
+            CreateBoundaryCard(
+                "No autonomous purchase",
+                "This record documents a user-approved in-store substitution. It does not initiate an order or payment."));
+
+        return Scroll(content);
+    }
+
+    private View BuildOfflineConflictReview()
+    {
+        var content = new VerticalStackLayout
+        {
+            Padding = new Thickness(10, 14, 10, 28),
+            Spacing = 12
+        };
+
+        var backButton = TextButton("\u2190 Grocery dashboard");
+        backButton.Clicked += (_, _) =>
+        {
+            Content = BuildDashboard();
+        };
+
+        content.Add(backButton);
+        content.Add(Heading("Offline conflict review"));
+
+        content.Add(
+            Body(
+                "Queued mobile actions remain local until sync. Same-item conflicts require explicit review."));
+
+        content.Add(
+            CreateCard(
+                "Queued mobile action",
+                """
+                Item: Bananas
+                Mobile change: Mark purchased
+                Queue state: Waiting for sync
+                Captured offline: Yes
+                """,
+                "QUEUED"));
+
+        content.Add(
+            CreateCard(
+                "Desktop version",
+                """
+                Item: Bananas
+                Desktop change: Quantity changed from 6 to 8
+                Source freshness: Newer server version
+                """,
+                "DESKTOP"));
+
+        content.Add(
+            CreateCard(
+                "Mobile version",
+                """
+                Item: Bananas
+                Mobile change: Mark purchased at quantity 6
+                Source freshness: Offline queued action
+                """,
+                "MOBILE"));
+
+        content.Add(
+            CreateCard(
+                "Resolution required",
+                """
+                Conflict: Same grocery item changed on Desktop and Mobile
+                Silent overwrite: Blocked
+                Available decisions:
+                \u2022 Keep Desktop version
+                \u2022 Keep Mobile version
+                \u2022 Resolve manually
+                """,
+                "REVIEW REQUIRED"));
+
+        content.Add(
+            CreateBoundaryCard(
+                "No silent overwrite",
+                "LifeOS preserves both versions until the user chooses a resolution."));
+
+        return Scroll(content);
+    }
+
+    private static ScrollView Scroll(View child)
+    {
+        return new ScrollView
+        {
+            BackgroundColor = PageBackground,
+            Content = child
+        };
+    }
+
+    private static Label Heading(string text)
+    {
+        return new Label
+        {
+            Text = text,
+            TextColor = PrimaryText,
+            FontSize = 25,
+            FontAttributes = FontAttributes.Bold,
+            Margin = new Thickness(0, 0, 0, 2)
+        };
+    }
+
+    private static Label SectionHeading(string text)
+    {
+        return new Label
+        {
+            Text = text,
+            TextColor = PrimaryText,
+            FontSize = 18,
+            FontAttributes = FontAttributes.Bold,
+            Margin = new Thickness(0, 2, 0, 0)
+        };
+    }
+
+    private static Label Body(string text)
+    {
+        return new Label
+        {
+            Text = text,
+            TextColor = SecondaryText,
+            FontSize = 13,
+            LineBreakMode = LineBreakMode.WordWrap
+        };
+    }
+
+    private static Border CreateCard(
+        string title,
+        string body,
+        string state)
+    {
+        return new Border
+        {
+            BackgroundColor = CardBackground,
+            Stroke = CardBorder,
+            StrokeThickness = 1,
+            Padding = new Thickness(13),
+            StrokeShape = new RoundRectangle
             {
-                var requested = item.RequestedName;
-                var detail = $"Requested: {requested}\nQuantity: {item.Quantity.Quantity} {item.Quantity.Unit}\nState: {item.State}\nPurchased/substitute: {item.PurchasedName ?? "None"}\n{item.Note}";
-                _content.Children.Add(GroceryPage.Card(requested, detail, item.State.ToString().ToUpperInvariant()));
-            }
-        }
-        _content.Children.Add(GroceryPage.Card("Offline-safe actions", "Check-off, undo, quantity, unavailable, substitute and skip actions queue until replay. Same-item Desktop/Mobile edits require conflict review.", "QUEUED / CONFLICT SAFE"));
+                CornerRadius = new CornerRadius(12)
+            },
+            Content = BuildCardContent(
+                title,
+                body,
+                state)
+        };
+    }
+
+    private static Border CreateCardButton(
+        string title,
+        string body,
+        string state)
+    {
+        var card = new Border
+        {
+            BackgroundColor = CardBackground,
+            Stroke = CardBorder,
+            StrokeThickness = 1,
+            Padding = new Thickness(13),
+            StrokeShape = new RoundRectangle
+            {
+                CornerRadius = new CornerRadius(12)
+            },
+            Content = BuildCardContent(
+                title,
+                $"{body.Trim()}\n\nTap for substitution detail",
+                state)
+        };
+
+        return card;
+    }
+
+    private static View BuildCardContent(
+        string title,
+        string body,
+        string state)
+    {
+        var layout = new VerticalStackLayout
+        {
+            Spacing = 5
+        };
+
+        layout.Add(
+            new Label
+            {
+                Text = title,
+                TextColor = PrimaryText,
+                FontSize = 17,
+                FontAttributes = FontAttributes.Bold
+            });
+
+        layout.Add(
+            new Label
+            {
+                Text = body.Trim(),
+                TextColor = SecondaryText,
+                FontSize = 13,
+                LineBreakMode = LineBreakMode.WordWrap
+            });
+
+        layout.Add(
+            new Label
+            {
+                Text = state,
+                TextColor = AccentText,
+                FontSize = 11,
+                Margin = new Thickness(0, 5, 0, 0)
+            });
+
+        return layout;
+    }
+
+    private static Border CreateBoundaryCard(
+        string title,
+        string body)
+    {
+        return new Border
+        {
+            BackgroundColor = Color.FromArgb("#171720"),
+            Stroke = CardBorder,
+            StrokeThickness = 1,
+            Padding = new Thickness(13),
+            StrokeShape = new RoundRectangle
+            {
+                CornerRadius = new CornerRadius(12)
+            },
+            Content = BuildCardContent(
+                title,
+                body,
+                "BOUNDARY")
+        };
+    }
+
+    private static Button PrimaryButton(string text)
+    {
+        return new Button
+        {
+            Text = text,
+            TextColor = Colors.White,
+            BackgroundColor = Accent,
+            CornerRadius = 10,
+            HeightRequest = 48,
+            FontSize = 13,
+            HorizontalOptions = LayoutOptions.Fill
+        };
+    }
+
+    private static Button TextButton(string text)
+    {
+        return new Button
+        {
+            Text = text,
+            TextColor = AccentText,
+            BackgroundColor = Colors.Transparent,
+            Padding = new Thickness(0),
+            HorizontalOptions = LayoutOptions.Start,
+            FontSize = 14
+        };
     }
 }

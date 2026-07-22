@@ -9,6 +9,7 @@ public sealed class CareerStudioView : UserControl
 {
     private static readonly DateTimeOffset ProofNow = new(2026, 7, 22, 14, 0, 0, TimeSpan.FromHours(12));
     private readonly CareerStudioProof _proof = CareerProofData.Build(ProofNow);
+    private readonly IReadOnlyList<CareerApplication> _applications;
     private readonly ContentControl _content = new();
     private readonly TextBlock _title = new();
     private readonly TextBlock _subtitle = new();
@@ -19,6 +20,7 @@ public sealed class CareerStudioView : UserControl
         Background = Brush("#0B1020");
         Foreground = Brushes.White;
         FontFamily = new FontFamily("Segoe UI");
+        _applications = CareerApplicationProofData.Build(_proof, ProofNow);
         Content = Build();
         Show("Pipeline");
     }
@@ -84,8 +86,8 @@ public sealed class CareerStudioView : UserControl
         {
             "Opportunity detail" => ("Opportunity detail", "Requirements, fit, source and linked evidence remain explicit and editable.", OpportunityDetail()),
             "Candidate review" => ("Imported and duplicate candidates", "Candidates await review; no silent trust promotion or merge occurs.", CandidateReview()),
-            "Application checklist" => ("Application preparation", "Checklist completion and readiness remain explicit.", Placeholder("Application workflow is completed in Commit B.")),
-            "Application timeline" => ("Application timeline", "Status, follow-up and interview context remain auditable.", Placeholder("Application workflow is completed in Commit B.")),
+            "Application checklist" => ("Application preparation", "Checklist completion and readiness remain explicit.", ApplicationChecklist()),
+            "Application timeline" => ("Application timeline", "Status, follow-up and interview context remain auditable.", ApplicationTimeline()),
             _ => ("Career opportunity pipeline", "One authoritative pipeline with board filters, closing dates and review-first status.", Pipeline())
         };
     }
@@ -147,6 +149,43 @@ public sealed class CareerStudioView : UserControl
             panel.Children.Add(Card("Duplicate opportunity candidate",
                 $"{duplicate.ExistingOpportunityId} ↔ {duplicate.CandidateOpportunityId}\nSignals: {string.Join(", ", duplicate.Signals)}\nConfidence: {duplicate.Confidence:P0}\nNo automatic merge, apply, contact or rejection.",
                 duplicate.ReviewState.ToString().ToUpperInvariant()));
+        return Scroll(panel);
+    }
+
+
+    private UIElement ApplicationChecklist()
+    {
+        var application = _applications[0];
+        var panel = Vertical();
+        panel.Children.Add(Card("Explicit readiness state",
+            $"Current state: {application.State}\nOpportunity: {application.OpportunityId}\nRequired items must be completed explicitly.\nLifeOS does not submit applications.",
+            application.State.ToString().ToUpperInvariant()));
+        foreach (var item in application.Checklist)
+            panel.Children.Add(Card(item.Label,
+                $"{item.Type} • Required: {item.IsRequired}\nEvidence: {item.EvidenceLinkId ?? "Not linked"}\nCompletion can be reopened and remains auditable.",
+                item.IsComplete ? "COMPLETE" : "OPEN"));
+        return Scroll(panel);
+    }
+
+    private UIElement ApplicationTimeline()
+    {
+        var application = _applications[0];
+        var panel = Vertical();
+        panel.Children.Add(Card("Application status",
+            $"State: {application.State}\nSubmitted: {application.SubmittedUtc:dd MMM yyyy HH:mm}\nChannel: {application.SubmissionChannel}\nConfirmation: {application.ConfirmationReference}",
+            "EXTERNAL SUBMISSION RECORDED"));
+        foreach (var item in application.Timeline.OrderByDescending(x => x.OccurredUtc))
+            panel.Children.Add(Card(item.ToState.ToString(),
+                $"{item.OccurredUtc:dd MMM yyyy HH:mm}\n{item.SafeSummary}",
+                "AUDIT EVENT"));
+        foreach (var follow in application.FollowUps)
+            panel.Children.Add(Card("Follow-up",
+                $"{follow.Description}\nDue: {follow.DueUtc:dd MMM yyyy HH:mm}\nNo message is sent automatically.",
+                follow.State.ToString().ToUpperInvariant()));
+        foreach (var interview in application.Interviews)
+            panel.Children.Add(Card("Interview context",
+                $"{interview.StartsUtc:dd MMM yyyy HH:mm} • {interview.Format}\nAttendees: {string.Join(", ", interview.AttendeeDisplayNames)}\nPreparation complete: {interview.PreparationComplete}\nCalendar context: {interview.CalendarContextId}",
+                "READ-ONLY CONTEXT"));
         return Scroll(panel);
     }
 

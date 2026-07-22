@@ -10,6 +10,7 @@ public sealed class CareerPage : ContentPage
     private readonly IReadOnlyList<CareerApplication> _applications;
     private readonly CareerMaterialsProof _materials = CareerMaterialsProofData.Build(ProofNow);
     private readonly CareerPreparationProof _preparation;
+    private readonly CareerClosureProof _closure;
     private readonly VerticalStackLayout _content = new();
 
     public CareerPage()
@@ -18,6 +19,7 @@ public sealed class CareerPage : ContentPage
         BackgroundColor = Color.FromArgb("#101018");
         _applications = CareerApplicationProofData.Build(_proof, ProofNow);
         _preparation = CareerPreparationProofData.Build(_materials, _proof, ProofNow);
+        _closure = CareerClosureProofData.Build(ProofNow);
         Content = new ScrollView { Content = _content };
     }
 
@@ -34,18 +36,18 @@ public sealed class CareerPage : ContentPage
         _content.Padding = new Thickness(14, 14, 14, 30);
         _content.Spacing = 12;
         _content.Children.Add(Heading("Career Studio", 31));
-        _content.Children.Add(Text("Review-first opportunities and applications • no autonomous submission or messaging", 14, "#B6B3C8"));
+        _content.Children.Add(Text("Review-first opportunities and applications â€¢ no autonomous submission or messaging", 14, "#B6B3C8"));
         _content.Children.Add(Card("Career dashboard",
             $"Active opportunities {summary.ActiveOpportunities}\nClosing soon {summary.ClosingSoon}\nApplications {summary.ActiveApplications}\nInterviews {summary.Interviews}\nOverdue follow-ups {summary.OverdueFollowUps}\nWaiting on {summary.WaitingOn}",
             "EXECUTION VIEW"));
         foreach (var opportunity in _proof.Opportunities.Take(3))
             _content.Children.Add(Card(opportunity.Title,
-                $"{opportunity.Employer.Name}\n{opportunity.Stage} • {opportunity.WorkMode}\nClosing {(opportunity.ClosingUtc?.ToString("dd MMM") ?? "not supplied")}",
+                $"{opportunity.Employer.Name}\n{opportunity.Stage} â€¢ {opportunity.WorkMode}\nClosing {(opportunity.ClosingUtc?.ToString("dd MMM") ?? "not supplied")}",
                 opportunity.Priority.ToString().ToUpperInvariant()));
 
         AddAction("Opportunity detail", () => Navigation.PushAsync(new CareerOpportunityPage(_proof.Opportunities[0])));
         AddAction("Application detail", () => Navigation.PushAsync(new CareerApplicationPage(_applications[0])));
-        AddAction("Preparation dashboard", () => Navigation.PushAsync(new CareerPreparationPage(_preparation)));
+        AddAction("Preparation dashboard", () => Navigation.PushAsync(new CareerPreparationPage(_preparation, _closure)));
     }
 
     private void AddAction(string label, Func<Task> action)

@@ -13,6 +13,7 @@ public sealed class CareerStudioView : UserControl
     private readonly IReadOnlyList<CareerApplication> _applications;
     private readonly CareerMaterialsProof _materials = CareerMaterialsProofData.Build(ProofNow);
     private readonly CareerPreparationProof _preparation;
+    private readonly CareerClosureProof _closure;
     private readonly ContentControl _content = new();
     private readonly TextBlock _title = new();
     private readonly TextBlock _subtitle = new();
@@ -26,6 +27,7 @@ public sealed class CareerStudioView : UserControl
         FontFamily = new FontFamily("Segoe UI");
         _applications = CareerApplicationProofData.Build(_proof, ProofNow);
         _preparation = CareerPreparationProofData.Build(_materials, _proof, ProofNow);
+        _closure = CareerClosureProofData.Build(ProofNow);
         Content = Build();
         Show("Pipeline");
     }
@@ -41,7 +43,7 @@ public sealed class CareerStudioView : UserControl
         nav.Children.Add(Label("Career Studio", 29, "#FFFFFF", FontWeights.Bold, new Thickness(0, 5, 0, 2)));
         nav.Children.Add(Label("Opportunity and application pipeline", 13, "#9AA9C7", FontWeights.Normal, new Thickness(0, 0, 0, 20)));
 
-        foreach (var page in new[] { "Pipeline", "Opportunity detail", "Candidate review", "Application checklist", "Application timeline", "Career profile", "CV variants", "Portfolio evidence", "Cover letter", "Application pack", "Interview preparation" })
+        foreach (var page in new[] { "Pipeline", "Opportunity detail", "Candidate review", "Application checklist", "Application timeline", "Career profile", "CV variants", "Portfolio evidence", "Cover letter", "Application pack", "Interview preparation", "Follow-ups", "References", "Questions to ask" })
         {
             var button = new Button
             {
@@ -181,7 +183,10 @@ public sealed class CareerStudioView : UserControl
             "Portfolio evidence" => ("Portfolio evidence", "Projects remain linked to trusted Work, Project and document proof.", PortfolioEvidence()),
             "Cover letter" => ("Opportunity-linked cover letter", "Generated, manual, accepted and stale sections stay visibly distinct.", CoverLetter()),
             "Application pack" => ("Application pack", "Current, missing and stale materials are validated for the intended opportunity.", ApplicationPackView()),
-            "Interview preparation" => ("Interview preparation", "STAR examples, questions, logistics and read-only calendar context.", InterviewPreparation()),
+                        "Interview preparation" => ("Interview preparation", "STAR examples, questions, logistics and read-only calendar context.", InterviewPreparation()),
+            "Follow-ups" => ("Career follow-ups", "Due, overdue, waiting and completed follow-ups stay review-first.", FollowUps()),
+            "References" => ("Reference readiness", "Permission, privacy, freshness and application usage remain explicit.", References()),
+            "Questions to ask" => ("Questions to ask", "User-owned interview questions remain ordered, linked and reviewable.", QuestionsToAsk()),
             _ => ("Career opportunity pipeline", "One authoritative pipeline with board filters, closing dates and review-first status.", Pipeline())
         };
     }
@@ -198,8 +203,8 @@ public sealed class CareerStudioView : UserControl
         {
             panel.Children.Add(Card(
                 opportunity.Title,
-                $"{opportunity.Employer.Name}\n{Humanize(opportunity.Stage)} • {Humanize(opportunity.WorkMode)} • {opportunity.Location}\nClosing: {(opportunity.ClosingUtc?.ToString("dd MMM yyyy") ?? "Not supplied")}\nSource: {Humanize(opportunity.Source.Type)} • Fresh {opportunity.FreshnessUtc:dd MMM HH:mm}",
-                $"{Humanize(opportunity.Priority)} • {Humanize(opportunity.Stage)}".ToUpperInvariant()));
+                $"{opportunity.Employer.Name}\n{Humanize(opportunity.Stage)} â€¢ {Humanize(opportunity.WorkMode)} â€¢ {opportunity.Location}\nClosing: {(opportunity.ClosingUtc?.ToString("dd MMM yyyy") ?? "Not supplied")}\nSource: {Humanize(opportunity.Source.Type)} â€¢ Fresh {opportunity.FreshnessUtc:dd MMM HH:mm}",
+                $"{Humanize(opportunity.Priority)} â€¢ {Humanize(opportunity.Stage)}".ToUpperInvariant()));
         }
 
         return Scroll(panel);
@@ -216,7 +221,7 @@ public sealed class CareerStudioView : UserControl
         var left = Vertical();
         left.Children.Add(Card(
             opportunity.Title,
-            $"{opportunity.Employer.Name}\n{opportunity.RoleSummary}\n{Humanize(opportunity.WorkMode)} • {Humanize(opportunity.EmploymentType)}\n{opportunity.SalaryOrRateContext}\nSource: Direct employer listing",
+            $"{opportunity.Employer.Name}\n{opportunity.RoleSummary}\n{Humanize(opportunity.WorkMode)} â€¢ {Humanize(opportunity.EmploymentType)}\n{opportunity.SalaryOrRateContext}\nSource: Direct employer listing",
             "AUTHORITATIVE LOCAL"));
 
         foreach (var requirement in opportunity.Requirements)
@@ -236,7 +241,7 @@ public sealed class CareerStudioView : UserControl
 
         right.Children.Add(Card(
             "History",
-            string.Join("\n", opportunity.History.Select(x => $"{x.OccurredUtc:dd MMM HH:mm} • {x.Action} • {x.SafeSummary}")),
+            string.Join("\n", opportunity.History.Select(x => $"{x.OccurredUtc:dd MMM HH:mm} â€¢ {x.Action} â€¢ {x.SafeSummary}")),
             "AUDITABLE"));
 
         grid.Children.Add(left);
@@ -261,7 +266,7 @@ public sealed class CareerStudioView : UserControl
         {
             panel.Children.Add(Card(
                 "Duplicate opportunity candidate",
-                $"Fictional Engineering Ltd • Software Application Developer\nSignals: {string.Join(", ", duplicate.Signals.Select(Humanize))}\nConfidence: {duplicate.Confidence:P0}\nNo automatic merge, apply, contact or rejection.",
+                $"Fictional Engineering Ltd â€¢ Software Application Developer\nSignals: {string.Join(", ", duplicate.Signals.Select(Humanize))}\nConfidence: {duplicate.Confidence:P0}\nNo automatic merge, apply, contact or rejection.",
                 Humanize(duplicate.ReviewState).ToUpperInvariant()));
         }
 
@@ -284,7 +289,7 @@ public sealed class CareerStudioView : UserControl
         {
             panel.Children.Add(Card(
                 item.Label,
-                $"{Humanize(item.Type)} • Required: {(item.IsRequired ? "Yes" : "No")}\nEvidence: {FriendlyEvidence(item.EvidenceLinkId)}\nCompletion can be reopened and remains auditable.",
+                $"{Humanize(item.Type)} â€¢ Required: {(item.IsRequired ? "Yes" : "No")}\nEvidence: {FriendlyEvidence(item.EvidenceLinkId)}\nCompletion can be reopened and remains auditable.",
                 item.IsComplete ? "COMPLETE" : "OPEN"));
         }
 
@@ -321,7 +326,7 @@ public sealed class CareerStudioView : UserControl
         {
             panel.Children.Add(Card(
                 "Interview context",
-                $"{interview.StartsUtc:dd MMM yyyy HH:mm} • {Humanize(interview.Format)}\nAttendees: Fictional recruiter and hiring panel\nPreparation complete: {(interview.PreparationComplete ? "Yes" : "No")}\nCalendar context: Linked read-only event",
+                $"{interview.StartsUtc:dd MMM yyyy HH:mm} â€¢ {Humanize(interview.Format)}\nAttendees: Fictional recruiter and hiring panel\nPreparation complete: {(interview.PreparationComplete ? "Yes" : "No")}\nCalendar context: Linked read-only event",
                 "READ-ONLY CONTEXT"));
         }
 
@@ -332,7 +337,7 @@ public sealed class CareerStudioView : UserControl
     private UIElement CareerProfile()
     {
         var panel = Vertical();
-        panel.Children.Add(Card("Evidence-backed profile", $"{_materials.Facts.Count} factual records • {_materials.Skills.Count} skill-evidence links\nFacts remain authoritative; wording remains a derivative.", "TRUSTED MATERIALS"));
+        panel.Children.Add(Card("Evidence-backed profile", $"{_materials.Facts.Count} factual records â€¢ {_materials.Skills.Count} skill-evidence links\nFacts remain authoritative; wording remains a derivative.", "TRUSTED MATERIALS"));
         foreach (var fact in _materials.Facts)
             panel.Children.Add(Card(fact.Category, $"{fact.FactualValue}\nSource: {fact.SourceId}\nEvidence: {(fact.Evidence.Count == 0 ? "None linked" : string.Join(", ", fact.Evidence))}\nOwner review: {Humanize(fact.OwnerReviewState)}", Humanize(fact.TrustState).ToUpperInvariant()));
         return Scroll(panel);
@@ -381,13 +386,42 @@ public sealed class CareerStudioView : UserControl
     {
         var plan = _preparation.Interview;
         var panel = Vertical();
-        panel.Children.Add(Card("Interview logistics", $"{plan.StartsUtc:dd MMM yyyy HH:mm} • {plan.Format}\n{plan.Logistics}\nCalendar mutation: disabled", "READ-ONLY CONTEXT"));
+        panel.Children.Add(Card("Interview logistics", $"{plan.StartsUtc:dd MMM yyyy HH:mm} â€¢ {plan.Format}\n{plan.Logistics}\nCalendar mutation: disabled", "READ-ONLY CONTEXT"));
         foreach (var star in plan.StarExamples)
-            panel.Children.Add(Card($"STAR • {star.Title}", $"Situation: {star.Situation}\nTask: {star.Task}\nAction: {star.Action}\nResult: {star.Result}\nEvidence: {string.Join(", ", star.EvidenceIds)}", "USER-AUTHORED"));
+            panel.Children.Add(Card($"STAR â€¢ {star.Title}", $"Situation: {star.Situation}\nTask: {star.Task}\nAction: {star.Action}\nResult: {star.Result}\nEvidence: {string.Join(", ", star.EvidenceIds)}", "USER-AUTHORED"));
         foreach (var q in plan.Questions)
             panel.Children.Add(Card("Likely question", q.Prompt + $"\nSource: {q.Source}", "PREPARATION"));
         foreach (var check in plan.Checks)
             panel.Children.Add(Card(check.Label, "Offline-safe checklist action through the existing queue/conflict boundary.", Humanize(check.State).ToUpperInvariant()));
+        return Scroll(panel);
+    }
+
+
+    private UIElement FollowUps()
+    {
+        var panel = Vertical();
+        panel.Children.Add(Card("Follow-up queue", "No message is sent automatically. Draft wording remains optional and reviewable.", "NO-SEND BOUNDARY"));
+        foreach (var item in _closure.FollowUps.OrderBy(x => x.DueUtc))
+            panel.Children.Add(Card(item.Title, $"{Humanize(item.Type)} â€¢ Due {item.DueUtc:dd MMM yyyy HH:mm}\nOwner: {item.Owner}\nRelated: {item.RelatedRecordId}\nChannel: {item.Channel}\nDraft: {item.DraftNote}\nOutcome: {item.Outcome ?? "Not recorded"}\nHistory: {string.Join("; ", item.History.Select(h => h.Action))}", Humanize(item.Status).ToUpperInvariant()));
+        return Scroll(panel);
+    }
+
+    private UIElement References()
+    {
+        var panel = Vertical();
+        panel.Children.Add(Card("Application pack reference review", "References require explicit permission before inclusion. Private details stay redacted.", "CONSENT-AWARE"));
+        foreach (var reference in _closure.References)
+            panel.Children.Add(Card(reference.DisplayName, $"Relationship: {reference.Relationship}\nRelevant work: {reference.RelevantWork}\nPermission: {Humanize(reference.Permission.State)}\nPreferred contact: {reference.PreferredContactMethod}\nAvailability: {reference.Availability}\nPrivacy: {Humanize(reference.PrivacyState)}\nUsage: {string.Join(", ", reference.UsageHistory.Select(x => x.ApplicationPackId))}\nWarnings: {(reference.ReadinessWarnings.Count == 0 ? "None" : string.Join("; ", reference.ReadinessWarnings))}", reference.CanUseInApplicationPack ? "READY" : "REVIEW REQUIRED"));
+        return Scroll(panel);
+    }
+
+    private UIElement QuestionsToAsk()
+    {
+        var panel = Vertical();
+        var plan = _closure.QuestionsToAsk;
+        panel.Children.Add(Card("Linked interview", $"{plan.OpportunityTitle}\nInterview: {plan.InterviewUtc:dd MMM yyyy HH:mm}\nNotes: {plan.Notes}", "USER-OWNED"));
+        foreach (var question in plan.Questions.OrderBy(x => x.Order))
+            panel.Children.Add(Card($"{question.Order}. {question.Prompt}", $"Category: {question.Category}\nNotes: {question.Notes}\nLinked interview: {question.InterviewId}", question.Answered ? "ANSWERED" : "TO ASK"));
         return Scroll(panel);
     }
 

@@ -1,4 +1,4 @@
-namespace LifeOS.Core.Grocery;
+﻿namespace LifeOS.Core.Grocery;
 
 public enum GroceryCategory { Produce, Bakery, Dairy, Meat, Frozen, Pantry, Drinks, Household, Cleaning, PersonalCare, Custom }
 public enum GroceryListState { Draft, Ready, Shopping, Paused, Completed, Cancelled, Archived }

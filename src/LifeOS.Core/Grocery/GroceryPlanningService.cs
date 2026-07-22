@@ -1,4 +1,4 @@
-﻿namespace LifeOS.Core.Grocery;
+namespace LifeOS.Core.Grocery;
 
 public sealed class GroceryPlanningService
 {
@@ -119,7 +119,7 @@ public static class GroceryProofData
         var lists = new[]
         {
             new GroceryList("weekly", "Weekly household shop", GroceryListState.Shopping, "NZD", 68.40m,
-                new DateTimeOffset(2026,7,22,16,0,0,TimeSpan.FromHours(12)), "Manual estimate â€¢ fresh 22 Jul 16:00", listItems),
+                new DateTimeOffset(2026,7,22,16,0,0,TimeSpan.FromHours(12)), "Manual estimate \u2022 fresh 22 Jul 16:00", listItems),
             new GroceryList("completed", "Top-up shop", GroceryListState.Completed, "NZD", 21.80m,
                 new DateTimeOffset(2026,7,19,12,0,0,TimeSpan.FromHours(12)), "Manual estimate", Array.Empty<GroceryListItem>())
         };

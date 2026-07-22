@@ -34,7 +34,7 @@ public sealed class GroceryPage : ContentPage
 
         content.Add(
             Body(
-                "Review-first planning and in-store execution \u2022 no orders or payments"));
+                "Review-first planning and in-store execution • no orders or payments"));
 
         content.Add(
             CreateCard(
@@ -43,7 +43,7 @@ public sealed class GroceryPage : ContentPage
                 Weekly household shop
                 State: Shopping
                 Estimated NZD 68.40
-                Manual estimate \u2022 fresh 22 Jul 16:00
+                Manual estimate • fresh 22 Jul 16:00
                 """,
                 "OPEN"));
 
@@ -119,7 +119,7 @@ public sealed class GroceryPage : ContentPage
 
         content.Add(
             Body(
-                "Estimated NZD 68.40 \u2022 Manual estimate \u2022 fresh 22 Jul 16:00"));
+                "Estimated NZD 68.40 • Manual estimate • fresh 22 Jul 16:00"));
 
         content.Add(SectionHeading("Dairy"));
 
@@ -307,9 +307,9 @@ public sealed class GroceryPage : ContentPage
                 Conflict: Same grocery item changed on Desktop and Mobile
                 Silent overwrite: Blocked
                 Available decisions:
-                \u2022 Keep Desktop version
-                \u2022 Keep Mobile version
-                \u2022 Resolve manually
+                • Keep Desktop version
+                • Keep Mobile version
+                • Resolve manually
                 """,
                 "REVIEW REQUIRED"));
 

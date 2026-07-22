@@ -20,7 +20,7 @@ public sealed class AssistantPlanningTests
     [Fact] public void Claim_to_source_provenance_is_retained()
     {
         var plan = Build(Response());
-        var evidence = Assert.Single(plan.Blocks.Where(b => b.Type == PlanningBlockType.Evidence));
+        var evidence = Assert.Single(plan.Blocks, b => b.Type == PlanningBlockType.Evidence);
         var source = Assert.Single(evidence.Sources);
         Assert.Equal("rec-1", source.RecordId); Assert.Equal("Fictional register", source.Provenance);
     }

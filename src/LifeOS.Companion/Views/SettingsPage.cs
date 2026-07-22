@@ -34,7 +34,7 @@ public sealed class SettingsPage : ContentPage
             if (_enabled.IsToggled && !await _notifications.RequestPermissionAsync())
             {
                 _enabled.IsToggled = false;
-                await DisplayAlert(
+                await DisplayAlertAsync(
                     "Permission denied",
                     "Notifications remain disabled. Transfers and sync were not started.",
                     "OK");

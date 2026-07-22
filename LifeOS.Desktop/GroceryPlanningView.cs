@@ -23,7 +23,7 @@ public sealed class GroceryPlanningView : UserControl
     private static readonly SolidColorBrush PageBackground = Brush("#0B1020");
     private static readonly SolidColorBrush RailBackground = Brush("#11182B");
     private static readonly SolidColorBrush CardBackground = Brush("#152039");
-    private static readonly SolidColorBrush BorderBrush = Brush("#2A3857");
+    private static readonly SolidColorBrush CardBorderBrush = Brush("#2A3857");
     private static readonly SolidColorBrush PrimaryText = Brush("#FFFFFF");
     private static readonly SolidColorBrush SecondaryText = Brush("#B8C5DF");
     private static readonly SolidColorBrush Accent = Brush("#6C63FF");
@@ -149,7 +149,7 @@ public sealed class GroceryPlanningView : UserControl
         return new Border
         {
             Background = RailBackground,
-            BorderBrush = BorderBrush,
+            BorderBrush = CardBorderBrush,
             BorderThickness = new Thickness(0, 0, 1, 0),
             Child = new ScrollViewer
             {
@@ -174,7 +174,7 @@ public sealed class GroceryPlanningView : UserControl
             VerticalContentAlignment = VerticalAlignment.Center,
             Foreground = PrimaryText,
             Background = ButtonBackground,
-            BorderBrush = BorderBrush,
+            BorderBrush = CardBorderBrush,
             BorderThickness = new Thickness(1),
             FontSize = 14,
             Cursor = System.Windows.Input.Cursors.Hand,
@@ -304,7 +304,7 @@ public sealed class GroceryPlanningView : UserControl
 
             button.BorderBrush = isSelected
                 ? Accent
-                : BorderBrush;
+                : CardBorderBrush;
         }
     }
 
@@ -550,7 +550,7 @@ public sealed class GroceryPlanningView : UserControl
         return new Border
         {
             Background = CardBackground,
-            BorderBrush = BorderBrush,
+            BorderBrush = CardBorderBrush,
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(14),
             Padding = new Thickness(19),
@@ -565,7 +565,7 @@ public sealed class GroceryPlanningView : UserControl
         return new Border
         {
             Background = Brush("#121A2D"),
-            BorderBrush = BorderBrush,
+            BorderBrush = CardBorderBrush,
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(12),
             Padding = new Thickness(14),

@@ -68,10 +68,10 @@ public sealed class HomePage : ContentPage
             await _captureService.SavePendingAsync(_editingCaptureId, _title.Text, _body.Text, _category.SelectedItem?.ToString(), device);
             ClearEditor();
             await RefreshAsync();
-            await DisplayAlert("Saved", "Capture is encrypted locally and queued as Pending. Nothing was sent.", "OK");
+            await DisplayAlertAsync("Saved", "Capture is encrypted locally and queued as Pending. Nothing was sent.", "OK");
         }
         catch (CaptureValidationException ex) { _validation.Text = ex.Message; }
-        catch (Exception ex) { await DisplayAlert("Save failed", ex.Message, "OK"); }
+        catch (Exception ex) { await DisplayAlertAsync("Save failed", ex.Message, "OK"); }
     }
 
     private void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)

@@ -1,4 +1,4 @@
-﻿<Window x:Class="LifeOS.Desktop.V8ShellWindow"
+<Window x:Class="LifeOS.Desktop.V8ShellWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -136,42 +136,58 @@
                                   HorizontalScrollBarVisibility="Disabled">
                         <StackPanel x:Name="NavigationStack" Margin="8,8,8,12">
                             <Button x:Name="HomeNav" Style="{StaticResource LifeOS.NavButton}" Tag="Home" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Home">
-                                <StackPanel><TextBlock Text="âŒ‚" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Home" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="&#x2302;" FontSize="19" HorizontalAlignment="Center" />
+                                    <TextBlock Text="Home" FontSize="11" HorizontalAlignment="Center" />
+                                </StackPanel>
                             </Button>
                             <Button x:Name="WorkNav" Style="{StaticResource LifeOS.NavButton}" Tag="Work" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Work">
-                                <StackPanel><TextBlock Text="â–£" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Work" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="&#x25A3;" FontSize="19" HorizontalAlignment="Center" />
+                                    <TextBlock Text="Work" FontSize="11" HorizontalAlignment="Center" />
+                                </StackPanel>
                             </Button>
                             <Button x:Name="CareerNav" Style="{StaticResource LifeOS.NavButton}" Tag="Career" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Career">
-                                <StackPanel><TextBlock Text="â—†" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Career" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="&#x25C6;" FontSize="19" HorizontalAlignment="Center" />
+                                    <TextBlock Text="Career" FontSize="11" HorizontalAlignment="Center" />
+                                </StackPanel>
                             </Button>
                             <Button x:Name="MoneyNav" Style="{StaticResource LifeOS.NavButton}" Tag="Money" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Money">
-                                <StackPanel><TextBlock Text="$" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Money" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="&#x24;" FontSize="19" HorizontalAlignment="Center" />
+                                    <TextBlock Text="Money" FontSize="11" HorizontalAlignment="Center" />
+                                </StackPanel>
                             </Button>
                             <Button x:Name="LifeNav" Style="{StaticResource LifeOS.NavButton}" Tag="Life" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Life">
-                                <StackPanel><TextBlock Text="â™¥" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Life" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
-                            </Button>
-                            <Button x:Name="HouseholdNav"
-                                    Style="{StaticResource LifeOS.NavButton}"
-                                    Tag="Household"
-                                    Click="WorkspaceNav_Click"
-                                    AutomationProperties.AutomationId="Nav.Household">
                                 <StackPanel>
-                                    <TextBlock Text="⌂"
-                                               FontSize="19"
-                                               HorizontalAlignment="Center" />
-                                    <TextBlock Text="Household"
-                                               FontSize="11"
-                                               HorizontalAlignment="Center" />
+                                    <TextBlock Text="&#x2665;" FontSize="19" HorizontalAlignment="Center" />
+                                    <TextBlock Text="Life" FontSize="11" HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="HouseholdNav" Style="{StaticResource LifeOS.NavButton}" Tag="Household" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Household">
+                                <StackPanel>
+                                    <TextBlock Text="&#x2302;" FontSize="19" HorizontalAlignment="Center" />
+                                    <TextBlock Text="Household" FontSize="11" HorizontalAlignment="Center" />
                                 </StackPanel>
                             </Button>
                             <Button x:Name="ProjectsNav" Style="{StaticResource LifeOS.NavButton}" Tag="Projects" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Projects">
-                                <StackPanel><TextBlock Text="â—‡" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Projects" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="&#x25C7;" FontSize="19" HorizontalAlignment="Center" />
+                                    <TextBlock Text="Projects" FontSize="11" HorizontalAlignment="Center" />
+                                </StackPanel>
                             </Button>
                             <Button x:Name="AssistantNav" Style="{StaticResource LifeOS.NavButton}" Tag="Assistant" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Assistant">
-                                <StackPanel><TextBlock Text="âœ¦" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Assistant" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="&#x2726;" FontSize="19" HorizontalAlignment="Center" />
+                                    <TextBlock Text="Assistant" FontSize="11" HorizontalAlignment="Center" />
+                                </StackPanel>
                             </Button>
                             <Button x:Name="SettingsNav" Style="{StaticResource LifeOS.NavButton}" Tag="Settings" Click="WorkspaceNav_Click" AutomationProperties.AutomationId="Nav.Settings">
-                                <StackPanel><TextBlock Text="âš™" FontSize="19" HorizontalAlignment="Center" /><TextBlock Text="Settings" FontSize="11" HorizontalAlignment="Center" /></StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="&#x2699;" FontSize="19" HorizontalAlignment="Center" />
+                                    <TextBlock Text="Settings" FontSize="11" HorizontalAlignment="Center" />
+                                </StackPanel>
                             </Button>
                         </StackPanel>
                     </ScrollViewer>
@@ -220,10 +236,10 @@
                         </Button>
                         <StackPanel x:Name="TopBarActions" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                             <Button x:Name="ReviewButton" Content="Review 4" Style="{StaticResource LifeOS.Button}" Click="ReviewButton_Click" AutomationProperties.AutomationId="TopBar.Review" />
-                            <Button x:Name="StatusButton" Content="â— Synced" Style="{StaticResource LifeOS.Button}" Click="StatusButton_Click" AutomationProperties.AutomationId="TopBar.Status" />
+                            <Button x:Name="StatusButton" Content="&#x25CF; Synced" Style="{StaticResource LifeOS.Button}" Click="StatusButton_Click" AutomationProperties.AutomationId="TopBar.Status" />
                             <Button x:Name="StopButton" Content="Stop" Style="{StaticResource LifeOS.Button}" Click="StopButton_Click" AutomationProperties.AutomationId="TopBar.EmergencyStop" />
                             <Button x:Name="ContextButton" Content="Context" Style="{StaticResource LifeOS.Button}" Click="ContextButton_Click" AutomationProperties.AutomationId="TopBar.Context" />
-                            <Button x:Name="ProfileButton" Content="CS â–¾" Style="{StaticResource LifeOS.Button}" Click="ProfileButton_Click" AutomationProperties.AutomationId="TopBar.Profile" />
+                            <Button x:Name="ProfileButton" Content="CS &#x25BE;" Style="{StaticResource LifeOS.Button}" Click="ProfileButton_Click" AutomationProperties.AutomationId="TopBar.Profile" />
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -235,7 +251,7 @@
                     <Grid>
                         <StackPanel x:Name="ModuleHostRoot" Margin="24" Visibility="Collapsed">
                             <Button x:Name="ModuleBackButton"
-                                    Content="â† Back"
+                                    Content="&#x2190; Back"
                                     HorizontalAlignment="Left"
                                     Margin="0,0,0,16"
                                     Style="{StaticResource LifeOS.Button}"
@@ -403,7 +419,7 @@
                                 <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
                                     <StackPanel>
                                         <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-                                            <StackPanel><TextBlock Text="Microsoft Files Â· OneDrive + SharePoint" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}"/><TextBlock Text="Bounded selected-drive, selected-folder, selected-site and selected-library metadata sync through the existing Microsoft provider." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Body}"/></StackPanel>
+                                            <StackPanel><TextBlock Text="Microsoft Files &#xB7; OneDrive + SharePoint" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}"/><TextBlock Text="Bounded selected-drive, selected-folder, selected-site and selected-library metadata sync through the existing Microsoft provider." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Body}"/></StackPanel>
                                             <Border Grid.Column="1" Background="{DynamicResource LifeOS.Brush.AccentSoft}" BorderBrush="{DynamicResource LifeOS.Brush.Accent}" BorderThickness="1" CornerRadius="8" Padding="9,5" VerticalAlignment="Top"><TextBlock Text="GROUP 49" FontWeight="SemiBold"/></Border>
                                         </Grid>
                                         <TextBlock Text="Read-only metadata only. No automatic body download and no upload, rename, move, delete, sharing or permission writes." Margin="0,9,0,0" Style="{StaticResource LifeOS.Text.Caption}"/>
@@ -437,7 +453,7 @@
                                 <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
                                     <StackPanel>
                                         <TextBlock Text="LifeOS Desktop v9.0.0-alpha.3" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
-                                        <TextBlock Text="Eight permanent workspaces. Integration Control Centre, Integration Inbox and Microsoft Provider Setup are embedded system surfaces. Read-only, review-first and foreground-only." Margin="0,6,0,12" Style="{StaticResource LifeOS.Text.Body}" />
+                                        <TextBlock Text="Nine permanent workspaces. Integration Control Centre, Integration Inbox and Microsoft Provider Setup are embedded system surfaces. Read-only, review-first and foreground-only." Margin="0,6,0,12" Style="{StaticResource LifeOS.Text.Body}" />
                                         <WrapPanel>
                                             <Button Content="Desktop Release" Tag="desktop-release" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.DesktopRelease" />
                                             <Button Content="Offline Checkpoint" Tag="final-offline-os" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.OfflineCheckpoint" />
@@ -472,7 +488,7 @@
                     AutomationProperties.AutomationId="Context.Panel">
                 <Grid Margin="20">
                     <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
-                    <Button Content="Ã—" HorizontalAlignment="Right" Width="40" Style="{StaticResource LifeOS.Button}" Click="CloseContextButton_Click" AutomationProperties.AutomationId="Context.Close" />
+                    <Button Content="&#xD7;" HorizontalAlignment="Right" Width="40" Style="{StaticResource LifeOS.Button}" Click="CloseContextButton_Click" AutomationProperties.AutomationId="Context.Close" />
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                         <StackPanel Margin="0,10,0,0">
                             <TextBlock Text="CONTEXT" Style="{StaticResource LifeOS.Text.Caption}" />

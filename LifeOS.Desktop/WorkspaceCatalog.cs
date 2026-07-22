@@ -219,8 +219,35 @@ internal static class WorkspaceCatalog
                             Route("daily-state", "Daily State", "Canonical behaviour", "Current personal state and pressure context."),
                             Route("daily-operating-flow", "Daily Operating Flow", "Canonical behaviour", "A manual, visible operating sequence for the day."),
                             Route("weekly-close-out", "Weekly Close-Out", "Canonical records", "Done, moved, waiting and next-week review."),
-                            Route("v13-grocery-planning", "Grocery Planning", "Canonical records", "Lists, recurring essentials, quantities, priorities and review-first household planning."),
                             Route("timer-agent", "TimerAgent", "Canonical utility", "Desktop-only timing utility inside Life.")
+                        })
+                }),
+            new(
+                "Household",
+                "Household",
+                "Grocery planning and recurring essentials",
+                "GROCERY / ESSENTIALS / SHOPPING",
+                "Grocery lists, recurring essentials, quantities, priorities and review-first household planning share one workspace.",
+                "Household keeps planning explicit. Recurring essentials remain reviewable candidates and no purchase, payment or external cart mutation occurs automatically.",
+                new WorkspaceMetricDefinition[]
+                {
+                    Metric("Active lists", "", "1", "Shopping or ready"),
+                    Metric("Due essentials", "", "2", "Review required"),
+                    Metric("Unresolved items", "", "2", "Require attention"),
+                    Metric("Estimated spend", "", "NZD 68.40", "Manual estimate")
+                },
+                new WorkspaceSectionDefinition[]
+                {
+                    new(
+                        "Grocery and household",
+                        "Plan recurring essentials and execute shopping without autonomous ordering.",
+                        new WorkspaceModuleDefinition[]
+                        {
+                            Route(
+                                "v13-grocery-planning",
+                                "Grocery Planning",
+                                "Canonical records",
+                                "Lists, recurring essentials, quantities, priorities and review-first household planning.")
                         })
                 }),
             new(
@@ -370,6 +397,7 @@ internal static class WorkspaceCatalog
             "Career",
             "Money",
             "Life",
+            "Household",
             "Projects",
             "Assistant",
             "Settings"
@@ -380,7 +408,7 @@ internal static class WorkspaceCatalog
                 .SequenceEqual(expectedWorkspaceNames, StringComparer.Ordinal))
         {
             throw new InvalidOperationException(
-                "The v8 workspace catalog must contain the eight locked workspaces in order.");
+                "The workspace catalog must contain the nine locked workspaces in order.");
         }
 
         string[] duplicateModuleIds = All

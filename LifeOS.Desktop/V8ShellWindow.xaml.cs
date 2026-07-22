@@ -21,6 +21,7 @@ public partial class V8ShellWindow : Window
         "Career",
         "Money",
         "Life",
+        "Household",
         "Projects",
         "Assistant",
         "Settings"
@@ -105,6 +106,7 @@ public partial class V8ShellWindow : Window
             CareerNav,
             MoneyNav,
             LifeNav,
+            HouseholdNav,
             ProjectsNav,
             AssistantNav,
             SettingsNav

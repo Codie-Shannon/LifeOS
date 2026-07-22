@@ -1,239 +1,140 @@
 # LifeOS
 
-**A local-first personal operating system for turning work, money, projects, follow-ups, evidence, relationships and daily pressure into visible, reviewable state.**
+**A local-first personal and work operating system for turning work, money, projects, evidence, household activity, integrations, AI review and daily pressure into visible, reviewable state.**
 
-LifeOS is a safety-first platform built around a Windows desktop command centre, a lightweight Android Companion, guarded automation and a source-backed read-only Assistant.
+LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is not a generic task list or template. It is an operations system for controlled review, execution, provenance and evidence.
 
-> **Current checkpoint:** LifeOS Desktop `v7.0.0-beta.1` — v7 complete and closed at beta
+> **Current checkpoint:** LifeOS v13 in progress. Group 64 is complete and synchronized at `50c43c9d8d801322a0e3f01baadab5ff8bbc89cc`; Group 65 is next.
 
-![LifeOS v7 beta release checkpoint](docs/screenshot-groups/group-39-v7-beta-release-checkpoint/01-v7-beta-release-overview.png)
+![LifeOS Group 64 Grocery Planning evidence](docs/screenshot-groups/group-64-grocery-planning-essentials/01-desktop-grocery-overview.png)
 
 ## Product status
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | `v7.0.0-beta.1` — v7 beta complete and closed |
-| **LifeOS Mobile Companion** | `v0.1.0-beta.1` — beta complete and closed |
-| **LifeOS Mobile** | Separate future full mobile application — not started |
-| **LifeOS Website** | Planned public documentation and product site — not started |
-| **LifeOS v8** | Not started |
+| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through v13 Group 64 |
+| **LifeOS Full Mobile** | Built through v10 Group 57 and extended through v13 Group 64 for mobile review, capture, execution and offline-safe grocery workflows |
+| **LifeOS Mobile Companion** | Separate lightweight companion product, beta complete and closed |
+| **LifeOS Website** | Website beta foundation complete through v8 Groups 40-42 |
+| **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
+| **Current release lane** | v13 Household and Grocery; Group 64 complete, Group 65 next |
 
-The Mobile Companion and the future full Mobile application are separate products. They may share contracts and libraries, but they retain different scope, UX and release tracks.
+The Mobile Companion and Full Mobile application are separate products. They can share contracts and libraries, but they retain different scope, UX and release tracks.
 
 ## What LifeOS brings together
 
 - Command Centre pressure and priority visibility
-- projects, work pipeline, follow-ups and waiting-on tracking
-- money pressure, payment attention and planning
+- work records, projects, next actions and proof linkage
+- money records, invoices, payments, financial review and reports
+- document and evidence intake with original preservation
 - agenda, daily state, work sessions and timesheets
-- evidence, receipts, timeline and provenance
-- relationships and contextual records
-- review-first integrations
-- guarded, reversible internal automation
-- source-backed Assistant answers
-- review-only planning blocks
-- controlled review transfer
-- explicit user-controlled durable memory
+- relationship, communication and follow-up context
+- review-first integrations across Google and Microsoft foundations
+- guarded automation, AI review and bounded Assistant workflows
+- Career Studio opportunity, application, materials, preparation and review flows
+- Household and Grocery planning with recurring essentials and mobile shopping execution
 
 ```text
 Important information becomes visible state.
 State affects pressure.
-Pressure feeds the Command Centre.
-Actions remain reviewable and controlled.
+Pressure feeds review.
+Review controls action.
+Evidence preserves trust.
 ```
 
-## v7 read-only Assistant
+## Current capability inventory
 
-The v7 Assistant answers questions from approved local LifeOS sources without gaining an execution path.
+### Shell and workspaces
 
-It can:
+- Desktop shell with in-shell parent workspaces and child modules.
+- Standard rule: child modules open inside the parent workspace and provide back navigation.
+- Work, Career, Money, Life, Household, Projects and integration areas.
+- Dark LifeOS visual language with selected navigation states, badges and boundary cards.
 
-- classify a question before retrieval
-- search only enabled local sources
-- retrieve a bounded set of candidate records
-- rank evidence by relevance, trust, freshness and directness
-- combine evidence across sources while preserving provenance
-- separate facts, inferences, uncertainty and missing data
-- flag stale or conflicting records
-- disclose records selected, excluded and considered
-- generate structured review-only plans
-- transfer confirmed plan payloads into a review queue only
-- use explicit, scoped and revocable memory after user confirmation
+### Desktop
 
-It cannot:
+Desktop is the deep administration surface for detailed review, filtering, reporting, audit, evidence and planning. It includes Work, Money, Documents, Career Studio, Household/Grocery, integrations, Assistant, automation and historical operating modules.
 
-- send email or messages
-- create or change calendar items
-- mutate projects, tasks, money or other trusted LifeOS state
-- approve, confirm or continue orchestration
-- launch scripts, processes, plugins or hidden tools
-- perform external web search or connector writes
-- run autonomously or in the background
-- convert AI output directly into trusted operational state
+### Full Mobile
 
-```text
-question
--> classify intent
--> search enabled local sources
--> retrieve bounded candidates
--> rank evidence
--> detect conflicts, staleness and gaps
--> answer with provenance and uncertainty
--> optionally build a review-only plan
--> optionally transfer one confirmed review artifact
--> optionally use explicit user-confirmed memory
-```
+Full Mobile is a separate .NET Android app. It is not a responsive copy of Desktop. It provides quick capture, review, execution, status and queued offline actions across Home, Work, Money, Documents, Evidence, Projects, Career and Grocery surfaces.
 
-## Approved Assistant sources
+### Mobile Companion
 
-The current source registry includes:
+The Companion remains a lighter product with local quick capture, pairing, delivery acknowledgement, notifications and review-first Desktop intake. It is not interchangeable with Full Mobile.
 
-- Command Centre
-- Follow-Ups
-- Work Pipeline
-- Timeline
-- Evidence
-- Money Pressure and payment attention
-- Waiting On
-- Projects
-- Work Sessions
-- Timesheets
-- Receipts
-- Relationships
-- Agenda
-- Daily State
+### Website
 
-Each source is permission-controlled and can be enabled or disabled independently.
+The Website beta foundation is built as the public product, documentation, evidence and future distribution surface. Later Portal, onboarding, installers, mobile packaging and public launch work remain v18 roadmap items.
 
-## Review-only planning
+### Integrations
 
-The Assistant can assemble structured plans from reusable blocks:
+LifeOS currently keeps provider surfaces read-only and review-first. Google Workspace and Microsoft provider foundations exist for mail, calendar, files and related read models. Guarded writes are deferred to v16.
 
-- Goal
-- Evidence
-- Constraint
-- Step
-- Dependency
-- Risk
-- Decision
-- Verification
-- Handoff
+### Money and documents
 
-Plans remain **Review-only** and **Executable: No**.
+v11 added trusted local financial records, accounts, transactions, invoices, payments, allocations, document/evidence intake, preserved originals, review-first extraction and reporting/export boundaries. There are no bank feeds, payment initiation, accounting-provider writes or automatic reconciliation.
 
-A controlled transfer can create one review artifact only after payload preview, target selection and explicit user confirmation. It cannot create or mutate tasks, projects, Follow-Ups, payments, calendar items, email, automation or orchestration state.
+### Career Studio
 
-## Explicit durable memory
+v12 added opportunity and application pipelines, career evidence, CV and cover-letter materials, interview preparation, follow-ups, references and bounded analytics across Desktop and Full Mobile. LifeOS does not submit applications, message recruiters or fabricate claims.
 
-Assistant memory is:
+### Household and Grocery
 
-- created only after exact preview and explicit confirmation
-- scoped to Global, Workspace, Project, Relationship or Session-limited use
-- classified by type and sensitivity
-- auditable and locally protected
-- visible in the Memory workspace
-- editable through auditable revisions
-- expirable, revocable and deletable
-- disclosed separately from direct source evidence
-
-Current trusted LifeOS records outrank conflicting memory. Expired, revoked and deleted memory is excluded from retrieval.
-
-There is no automatic retention, hidden profiling or latent user model.
+v13 Group 64 added Grocery Planning and recurring essentials across Desktop and Full Mobile: categorized lists, quantities, pack sizes, priorities, required dates, estimate freshness, mobile in-store actions, substitutions and offline conflict review. LifeOS does not automatically order, pay or mutate external carts.
 
 ## Safety model
 
 LifeOS is local-first, review-first and fail-closed.
 
-- imported or generated information is not trusted automatically
-- approval is separate from execution
-- final confirmation is separate from approval
-- stale state is revalidated before controlled execution
-- only explicitly allowlisted reversible internal actions may execute
-- before/after evidence and audit history are retained
-- Emergency Stop remains authoritative
-- external, destructive, communication, financial, script and autonomous AI actions remain blocked
-
-The Assistant cannot bypass review, approval, final-confirmation, orchestration or Emergency Stop boundaries.
-
-## Mobile Companion
-
-The Android Companion is intentionally lightweight and was validated on a Samsung Galaxy S9.
-
-Current beta capabilities:
-
-- encrypted local Quick Capture
-- offline Pending outbox
-- explicit same-LAN pairing with Desktop
-- verified acknowledgement before Delivered state
-- Desktop intake as untrusted evidence requiring review
-- idempotent duplicate handling
-- visible failure and explicit manual retry
-- read-only Agenda and Waiting-on / Work glance
-- privacy-safe opt-in notifications
-- conflict handling
-- pairing reset and revocation
-- no cloud account
-- no background sync or automatic sending
-
-## v7 beta verification
-
-The Group 39 checkpoint completed with:
-
-- **187 Core/Desktop tests passed**
-- **34 Companion tests passed**
-- Desktop Release build passed
-- Android Release build passed
-- NuGet vulnerability scan passed
-- Gitleaks full-history scan passed across 280 commits with no leaks found
-- `git diff --check` passed
-- repository hygiene passed
-- manual end-to-end Assistant beta flow passed
-- review-only planning and controlled transfer passed
-- explicit memory use, revocation and exclusion passed
-- mutation, execution and tool refusal passed
-- exactly 8 fictional-data screenshot proofs committed
-- `HEAD` synchronized with `origin/main`
-- clean working tree
+- Imported or generated information is not trusted automatically.
+- Trust promotion requires explicit review.
+- Conflicts preserve both versions until explicit resolution.
+- Provider reads remain bounded and review-first.
+- Guarded writes do not begin until v16.
+- No autonomous financial posting, payment initiation, career applications, messaging, grocery ordering or destructive evidence handling.
+- Original documents and evidence are preserved; exports and previews are derivatives.
+- Provenance, freshness, confidence and audit history remain visible where relevant.
 
 ## Evidence
 
-### v7 beta release
+Current official evidence is stored under `docs/screenshot-groups/`. Completed groups use exactly eight approved screenshots unless a documented override exists.
 
-- [Group 39 — v7 beta release checkpoint](docs/screenshot-groups/group-39-v7-beta-release-checkpoint/)
-- [Group 38 — memory permissions and safety](docs/screenshot-groups/group-38-v7-memory-permissions-safety/)
-- [Group 37 — review-only planning and review transfer](docs/screenshot-groups/group-37-v7-review-only-planning-review-transfer/)
-- [Group 36 — source expansion and answer quality](docs/screenshot-groups/group-36-v7-source-expansion-answer-quality/)
-- [Group 35 — Assistant foundation and safety boundary](docs/screenshot-groups/group-35-v7-assistant-foundation/)
+Recent evidence:
 
-### Mobile Companion
+- [Group 64 - Grocery planning and recurring essentials](docs/screenshot-groups/group-64-grocery-planning-essentials/)
+- [Group 63 - Career follow-ups, analytics and v12 closure](docs/screenshot-groups/group-63-career-followups-analytics-closure/)
+- [Group 62 - Career materials and interview preparation](docs/screenshot-groups/group-62-career-materials-interview-prep/)
+- [Group 61 - Career opportunity and application pipeline](docs/screenshot-groups/group-61-career-opportunity-application/)
+- [Group 60 - Financial review and reporting](docs/screenshot-groups/group-60-financial-review-reporting/)
+- [Group 59 - Document and evidence intake](docs/screenshot-groups/group-59-document-evidence-intake/)
+- [Group 58 - Money foundation](docs/screenshot-groups/group-58-money-foundation/)
+- [Group 57 - Full Mobile beta closure](docs/screenshot-groups/group-57-full-mobile-beta-closure/)
 
-- [Group 34 — Companion beta checkpoint](docs/screenshot-groups/group-34-companion-beta-checkpoint/)
-
-### Automation release
-
-- [Group 31 — v6 controlled automation beta checkpoint](docs/screenshot-groups/group-31-v6-automation-release-checkpoint/)
-
-All public screenshot demonstrations use fictional records. **Northstar Systems** and **Project Zephyr Quill** are demonstration identities only.
+All public screenshot demonstrations must use fictional, sanitized or explicitly approved proof data.
 
 ## Repository structure
 
 ```text
 LifeOS.Desktop/      WPF desktop application
 LifeOS.Shared/       shared platform services and storage
-src/                 core, Companion and supporting projects
-tests/               Core/Desktop and Companion regression tests
-docs/                status, releases, manual checks and screenshot evidence
-tools/validation/    repository hygiene validation
+src/LifeOS.Core/     domain contracts, services and deterministic rules
+src/LifeOS.Mobile/   full Android mobile application
+src/LifeOS.Companion/ lightweight Android companion application
+src/LifeOS.Website/  public website and documentation surface
+tests/               Core, Mobile, Companion and Website regression tests
+docs/                status, release notes, manual tests and screenshot evidence
+tools/               validation and evidence helpers
 .github/workflows/   continuous integration
 ```
 
 ## Build and validate
 
-### Requirements
+Requirements:
 
 - Windows
 - .NET 10 SDK
-- Android workload only when building the Companion
+- Android workload when building mobile projects
 
 ```powershell
 dotnet restore .\LifeOS.slnx
@@ -247,20 +148,12 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v7 is complete and closed at `v7.0.0-beta.1`.
+LifeOS v13 is active. Group 64 is complete and Group 65 is next.
 
-The Website, documentation extraction, full Mobile application, Group 40 and v8 UI restructuring have not started. Autonomous tools, background Assistant work, external AI actions and operational mutation remain outside the product boundary.
+Upcoming approved work runs through Groups 65-82, covering household inventory and meals, work sessions and invoicing, AI provider control, advanced read models, guarded writes, engineering visibility, packaging, Portal/onboarding and public launch validation.
 
-## Technology
-
-- C#
-- .NET 10
-- WPF
-- .NET MAUI
-- local encrypted storage
-- GitHub Actions
-- evidence-driven release validation
+Optional post-82 public branding/name migration, telemetry, extension SDK and cloud sync work remains unapproved planning only.
 
 ## Author
 
-Built by **Codie Shannon** in Whakatāne, New Zealand.
+Built by **Codie Shannon** in Whakatane, New Zealand.

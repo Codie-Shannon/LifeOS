@@ -1,62 +1,128 @@
 {
-  "desktopVersion": "9.0.0-alpha.5",
-  "desktopReleaseName": "Group 51 Complete Google Workspace",
-  "desktopGroup": 51,
-  "desktopStatus": "complete-and-closed",
-  "desktopBaselineVersion": "8.0.0-beta.1",
-  "websiteVersion": "0.3.0-beta.1",
-  "websiteStatus": "complete-and-closed",
-  "companionVersion": "0.1.0-beta.1",
-  "companionStatus": "complete-and-closed",
-  "integrationControlCentreEnabled": true,
-  "integrationInboxV9Started": true,
-  "integrationInboxV9Complete": true,
-  "microsoftProviderImplemented": true,
-  "microsoftProviderConfiguredLocally": true,
-  "microsoftLiveReadProofComplete": true,
-  "microsoftMailReadImplemented": true,
-  "microsoftCalendarReadImplemented": true,
-  "microsoftAttachmentBodyDownloadEnabled": false,
-  "liveProvidersEnabled": true,
-  "oauthConsentEnabled": true,
-  "backgroundSyncEnabled": false,
-  "externalWritesEnabled": false,
-  "group46EvidenceCount": 8,
-  "group47EvidenceCount": 8,
-  "group48EvidenceCount": 8,
-  "nextGroupStarted": true,
-  "microsoftFilesReadImplemented": true,
-  "microsoftOneDriveMetadataImplemented": true,
-  "microsoftSharePointMetadataImplemented": true,
-  "microsoftFileBodyDownloadEnabled": false,
-  "group49EvidenceCount": 8,
-  "googleWorkspaceProviderImplemented": true,
-  "googleWorkspaceSingleProjectBoundary": true,
-  "googleWorkspaceGmailReadImplemented": true,
-  "googleWorkspaceCalendarReadImplemented": true,
-  "googleWorkspaceDriveReadImplemented": true,
-  "googleWorkspaceContactsReadImplemented": true,
-  "googleWorkspaceTasksReadImplemented": true,
-  "googleWorkspaceExternalWritesEnabled": false,
-  "googleWorkspaceFileBodyDownloadEnabled": false,
-  "group50EvidenceCount": 8,
-  "group51EvidenceCount": 8,
-  "fullMobileVersion": "10.0.0-beta.1",
-  "fullMobileReleaseName": "Group 57 Full Mobile beta closure",
-  "fullMobileGroup": 57,
-  "fullMobileStatus": "complete-and-closed",
-  "fullMobileSeparateFromCompanion": true,
-  "fullMobileProviderWritesEnabled": false,
-  "fullMobileEmergencyStopEnabled": true,
-  "fullMobileEvidenceCount": 8,
-  "moneyVersion": "11.0.0-alpha.1",
-  "moneyReleaseName": "Group 58 Money foundation",
-  "moneyGroup": 58,
-  "moneyStatus": "pack-1-built",
-  "moneyAuthoritativeFinancialModel": true,
-  "moneyBankFeedsEnabled": false,
-  "moneyPaymentInitiationEnabled": false,
-  "moneyAccountingProviderWritesEnabled": false,
-  "moneyAutonomousReconciliationEnabled": false,
-  "group58EvidenceCount": 0
+  "currentRelease": "v13",
+  "currentReleaseName": "Household and Grocery",
+  "currentSemanticVersion": "13.0.0-alpha.1",
+  "currentStatus": "active",
+  "latestCompletedGroup": 64,
+  "latestCompletedGroupName": "Grocery planning and recurring essentials",
+  "latestCompletedHead": "50c43c9d8d801322a0e3f01baadab5ff8bbc89cc",
+  "nextGroup": 65,
+  "nextGroupName": "Household inventory, meals, stores and price context",
+  "roadmapApprovedThroughGroup": 82,
+  "desktop": {
+    "status": "active-current",
+    "role": "deep-administration-review-planning-audit-reporting",
+    "currentThroughGroup": 64,
+    "detachedModuleWindowsAllowed": false,
+    "childModulesOpenInParentWorkspace": true
+  },
+  "fullMobile": {
+    "status": "built-and-active",
+    "releaseFamily": "v10",
+    "initialBetaClosureGroup": 57,
+    "currentThroughGroup": 64,
+    "separateFromCompanion": true,
+    "offlineQueueEnabled": true,
+    "silentConflictOverwriteAllowed": false
+  },
+  "mobileCompanion": {
+    "status": "complete-and-closed",
+    "version": "0.1.0-beta.1",
+    "separateFromFullMobile": true
+  },
+  "website": {
+    "status": "beta-foundation-complete",
+    "version": "0.3.0-beta.1",
+    "completionGroup": 42,
+    "portalOnboardingDistributionGroup": 81
+  },
+  "sharedCore": {
+    "status": "active",
+    "authoritativeContracts": true,
+    "deterministicValidation": true,
+    "provenanceAuditConflictBoundaries": true
+  },
+  "completedReleaseLanes": [
+    {
+      "release": "Early foundations",
+      "groups": "1-23",
+      "status": "complete"
+    },
+    {
+      "release": "v5",
+      "groups": "24-26",
+      "status": "complete"
+    },
+    {
+      "release": "v6",
+      "groups": "27-31",
+      "status": "complete"
+    },
+    {
+      "release": "Mobile Companion",
+      "groups": "32-34",
+      "status": "complete"
+    },
+    {
+      "release": "v7",
+      "groups": "35-39",
+      "status": "complete"
+    },
+    {
+      "release": "v8",
+      "groups": "40-45",
+      "status": "complete"
+    },
+    {
+      "release": "v9",
+      "groups": "46-51",
+      "status": "complete"
+    },
+    {
+      "release": "v10",
+      "groups": "52-57",
+      "status": "complete"
+    },
+    {
+      "release": "v11",
+      "groups": "58-60",
+      "status": "complete"
+    },
+    {
+      "release": "v12",
+      "groups": "61-63",
+      "status": "complete"
+    },
+    {
+      "release": "v13",
+      "groups": "64",
+      "status": "active"
+    }
+  ],
+  "safetyBoundaries": {
+    "reviewFirst": true,
+    "silentTrustPromotionAllowed": false,
+    "silentConflictResolutionAllowed": false,
+    "providerWritesEnabled": false,
+    "providerWritesRoadmapGroup": 73,
+    "guardedWritesRelease": "v16",
+    "bankFeedsEnabled": false,
+    "paymentInitiationEnabled": false,
+    "accountingProviderWritesEnabled": false,
+    "autonomousReconciliationEnabled": false,
+    "autonomousCareerApplicationsEnabled": false,
+    "autonomousMessagingEnabled": false,
+    "automaticGroceryOrderingEnabled": false,
+    "externalCartMutationEnabled": false,
+    "destructiveEvidenceHandlingEnabled": false
+  },
+  "evidence": {
+    "latestScreenshotGroup": "docs/screenshot-groups/group-64-grocery-planning-essentials",
+    "officialScreenshotsPerGroup": 8,
+    "privateContextPdfsCommitted": false
+  },
+  "internalNotes": {
+    "publicBrandingReviewRequiredBeforeLaunch": true,
+    "brandMigrationIsApprovedRoadmapWork": false
+  }
 }

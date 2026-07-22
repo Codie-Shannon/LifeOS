@@ -1,193 +1,190 @@
 # LifeOS Version History
 
-## v5.0.0-alpha.5 â€” Authenticated Read-Only Gmail Connector
+This file summarizes the release lineage without rewriting historical evidence. Older release notes and screenshot groups remain the detailed source for each group.
 
-- Added one private/testing-mode authenticated Gmail connector using exact `gmail.readonly`.
-- Added explicit browser authorization and connected/disconnected/cache-cleared lifecycle states.
-- Added profile-required manual searches bounded to 31 days.
-- Added default cap 25 and hard maximum cap 100.
-- Added visible generated Gmail query and reviewable noise exclusions.
-- Added bounded list/get retrieval, safe inert snippet normalization, message/thread references, provenance, and audit.
-- Routed Gmail results through the existing provider-neutral Email Radar evidence and candidate-review pipeline.
-- Verified a safe real Gmail test message, confirmed timeline entry, repeated-search duplicate detection, disconnect, and retained evidence.
-- Kept sending, drafts, mailbox mutation, attachments, active HTML, remote content, background scanning, scheduled searches, automatic Follow-Ups, automatic Work Pipeline mutation, Outlook, IMAP/POP3, and AI interpretation inactive.
-- Verified 91 passing tests and a successful Release build.
+## Current
 
-## v5.0.0-alpha.4 â€” Email Radar Foundation
+LifeOS v13 is active. Group 64 is complete and synchronized at `50c43c9d8d801322a0e3f01baadab5ff8bbc89cc`; Group 65 is next.
 
-- Centralized formal version metadata and aligned visible/current-state surfaces.
-- Added user-guided Email Radar profiles.
-- Added safe local JSON/CSV communication evidence preview and confirmation.
-- Added deterministic candidate matching with visible reasons.
-- Added explicit confirm/reject review and duplicate suspicion.
-- Added confirmed-only communication timelines and review-first waiting-on suggestions.
-- Kept Gmail, Outlook, mailbox scanning, sending, background work, AI interpretation, automatic Follow-Ups, and automatic Work Pipeline mutation inactive.
-- Verified 80 passing tests and a successful Release build.
+## v13 - Household and Grocery
 
-## v5.0-alpha - Connector Foundation and First Live Read-Only Connector
+### Group 64 - Grocery planning and recurring essentials
 
-- Activated local CSV, JSON, and ICS imports into read-only Integration Inbox previews.
-- Added explicit import confirmation, duplicate protection, source provenance, and preserved audit history.
-- Added one authenticated Google Calendar connector using `calendar.readonly`.
-- Kept refresh explicit, manual, user-confirmed, and capped at 31 days.
-- Routed provider events through the existing review-first Integration Inbox intake boundary.
-- Verified real event retrieval, untrusted preview creation, repeated-refresh duplicate suspicion, and explicit disconnect with local token-cache deletion.
-- Kept calendar writes, inbox scanning, background polling, scheduled refresh, automatic acceptance/linking, and automatic LifeOS module mutation inactive.
+- Added Desktop Grocery Planning overview, categorized lists and recurring essentials.
+- Added estimated spend with source and freshness context.
+- Added Full Mobile Grocery dashboard, in-store shopping list and substitution detail.
+- Added offline same-item conflict review.
+- Kept requested and purchased items separate.
+- Kept automatic purchasing, payment and external-cart mutation disabled.
+- Closed Group 64 with approved screenshot evidence.
 
-## v4.9 - Integration Inbox + v5 Readiness
+## v12 - Career Studio
 
-- Added review-first integration previews.
-- Added source lanes and v5 connector-readiness matrix.
-- Completed the v4 operating spine.
+### Groups 61-63
 
-## v4.8 - Command Centre Pressure Engine
+- Added Career Studio opportunity and application pipeline.
+- Added employers, recruiters, sources, role requirements and fit review.
+- Added application stages, preparation checklist, timeline, follow-ups and interview context.
+- Added evidence-backed career profile, facts, skills, employment, education, achievements and project proof.
+- Added CV variants, cover-letter drafts, application packs and interview preparation.
+- Added consent-aware references, questions to ask and bounded Career Review analytics.
+- Added purpose-built Desktop and Full Mobile surfaces.
+- Kept autonomous submission, recruiter messaging, external profile mutation, fabricated claims and hiring prediction disabled.
 
-- Ranked reviewed module signals into act-now, review-first, waiting/do-not-chase, and protected lanes.
-- Added pressure scoring, suppression rules, and next-safest-action output.
+## v11 - Money, Documents and Financial Review
 
-## v4.7 - Weekly Close-Out
+### Groups 58-60
 
-- Added deliberate close-now, roll-forward, waiting, money, proof, receipt, and work review lanes.
+- Added authoritative financial records: accounts, transactions, categories, parties, invoices, payments and allocations.
+- Added deterministic financial summaries, evidence links, manual review and audit-friendly history.
+- Added original-preserving document/evidence intake for receipts, invoices, statements, contracts, quotes, timesheets, payment proof and general evidence.
+- Added extraction/classification suggestions that remain untrusted until reviewed.
+- Added financial review candidates, discrepancy handling, reports, derivative exports and evidence-completeness review.
+- Kept bank feeds, payment initiation, accounting-provider writes, automatic reconciliation and accounting advice disabled.
 
-## v4.6 - Receipt OCR / Evidence-to-Item
+## v10 - Full Mobile Release Family
 
-- Added source-gated receipt evidence candidates and trusted manual acceptance.
+### Groups 52-57
 
-## v4.5 - Work Pipeline
+- Added the separate Full Mobile application.
+- Added purpose-built mobile dashboards, detail navigation, quick capture, review, execution and status surfaces.
+- Added mobile Work, Money, Life, Projects, Evidence and integration review surfaces.
+- Added queued offline action and conflict boundaries.
+- Closed Full Mobile beta while keeping it separate from the lightweight Mobile Companion.
+- Kept silent replay, overwrite and trust promotion disabled.
 
-- Added active, blocked, waiting, invoice-ready, payment-expected, proof-gap, and opportunity states.
+## v9 - Provider Foundations
 
-## v4.4 - Agenda + Payment Calendar
+### Groups 46-51
 
-- Unified time commitments, due dates, payment dates, expected-income dates, and review windows.
+- Added Integration Control Centre and review-first Integration Inbox foundations.
+- Added Microsoft provider setup and read-only mail/calendar/files-oriented read models.
+- Added Teams-oriented foundation read models.
+- Added Google Workspace provider foundation for Gmail, Calendar, Drive, Contacts and Tasks.
+- Kept provider surfaces read-only and review-first.
+- Kept external writes, broad provider mutation and background autonomous sync disabled.
 
-## v4.3 - Money Profile / Hidden Deductions / Safe-to-Spend
+## v8 - Website and Desktop Shell
 
-- Added hidden reserves, buffers, expected-money exclusion, and safe-to-spend confidence.
+### Groups 40-45
 
-## v4.2 - Bills / Upcoming Payments / Pay Later
+- Added static-first Website foundation.
+- Added documentation extraction and public knowledge foundation.
+- Completed Website beta foundation at `v0.3.0-beta.1`.
+- Added Desktop shell and workspace restructuring.
+- Added permanent in-shell navigation rule: modules open inside parent workspace and detached module windows are prohibited.
+- Completed v8 Desktop shell/workspace release.
 
-- Added stateful obligations, BNPL load, hidden deductions, and payment evidence gates.
+## v7 - Assistant Beta
 
-## v4.1 - Item Type / State Engine
+### Groups 35-39
 
-- Added the shared item/state, trust, evidence, transition, and pressure model.
+- Added source-backed, read-only Assistant foundation.
+- Added source expansion, explainable ranking and answer quality.
+- Added review-only planning and controlled review transfer.
+- Added explicit user-confirmed durable memory with expiry, revocation, deletion and audit.
+- Closed v7 Assistant beta at `v7.0.0-beta.1`.
+- Kept tools, execution, background autonomy, external search and operational mutation disabled.
 
-## v4.0 - Spine Recovery Map
+## Mobile Companion
 
-- Restored the complete LifeOS operating spine and sequenced v4 before real integrations.
+### Groups 32-34
 
-## v3.9 - Final Offline OS
+- Added lightweight Android Companion product.
+- Added encrypted local Quick Capture, pending outbox, pairing, delivery acknowledgement, Desktop intake and notifications.
+- Closed Companion beta at `v0.1.0-beta.1`.
+- Kept Companion separate from Full Mobile.
 
-- Completed the integration-ready offline operating-system checkpoint.
+## v6 - Controlled Automation
 
-## v3.5 - Search / Knowledge
-
-- Added local search profiles and reviewable knowledge items.
-
-## v3.0 - OS Navigation / Core Modules
-
-- Added broader operating-system navigation and core module structure.
-
-## v2.1 - Universal Spine
-
-- Added the shared cross-module operating spine.
-
-## v2.0 - Paid Desktop Release
-
-- Completed the paid-work, money, proof, safety, and desktop release foundation.
-
-## v1.x - Foundation
-
-- Established local-first storage, daily flow, evidence, relationships, paid work, settings, safety, and theme foundations.
-## v5.0.0-beta.1 — Group 26
-
-v5 integration release checkpoint.
-
-- unified five-lane integration readiness
-- manual, read-only and review-first connector model
-- Google Calendar and Gmail read-only lifecycle alignment
-- retained evidence after disconnect/cache clear
-- release-validation matrix
-- privacy-safe screenshot proof
-- 97 tests passed
-- Release build passed
-
-## v6.0.0-alpha.1 — Group 27
-
-Controlled automation foundation.
+### Groups 27-31
 
 - Added provider-neutral automation rules disabled by default.
 - Added deterministic local triggers and conditions.
-- Required reviewed or trusted LifeOS state for current rule evaluation.
-- Added manual dry-run evaluation with visible expected/actual pass-fail explanations.
-- Added explicit proposed action, target, risk, approval and capability policy.
-- Added proposal review with explicit approve/reject decisions.
-- Kept approval separate from execution; approved proposals remain `executed: No`.
-- Added stable duplicate-proposal detection and prior-proposal linkage.
-- Blocked high-risk communication, external-write, financial, destructive, calendar and script capabilities.
-- Added retained inert audit and local JSON persistence with backup recovery.
-- Added seven privacy-safe fictional screenshot proofs.
-- Verified 112 passing tests, a successful Release build and `git diff --check`.
-- Kept background workers, scheduling, timers, startup execution, automatic retry, operational mutation, scripts, plugins and AI inactive.
+- Added manual dry-run evaluation and visible proposed actions.
+- Added proposal review, guarded internal execution, final confirmation, undo and recovery.
+- Added Emergency Stop and fail-closed hardening.
+- Closed v6 controlled automation beta.
+- Kept background workers, timers, startup execution, automatic retries, external mutation, scripts, provider writes and autonomous AI inactive.
 
+## v5 - Integration Foundation
 
-## v6.0.0-alpha.3 — Group 28
+### Groups 24-26
 
-Controlled orchestration and recovery.
+- Added Email Radar foundation.
+- Added local CSV, JSON and ICS read-only Integration Inbox previews.
+- Added explicit import confirmation, source provenance, duplicate protection and audit history.
+- Added authenticated read-only Google Calendar and Gmail connector lifecycle foundations.
+- Closed v5 integration release checkpoint.
+- Kept writes, sending, inbox scanning, background polling, scheduled refresh, automatic acceptance/linking and automatic LifeOS mutation inactive.
 
-- Added a persisted global execution gate that starts paused.
-- Kept dry-run evaluation and approval available while final execution is paused.
-- Preserved the approval boundary: approval records intent and remains `ApprovedNotExecuted`.
-- Added a separate final execution preview and explicit final confirmation.
-- Added immediate eligibility revalidation before execution.
-- Added one typed allowlisted Low-risk reversible internal review-note handler.
-- Retained exact before and after snapshots, execution identity, timestamps, source references and audit.
-- Added idempotent duplicate-execution prevention.
-- Added explicit Undo with exact prior-state restoration and retained history.
-- Added stale-source detection that blocks execution and requires reevaluation.
-- Kept Medium Follow-Up draft proposals proposal-only.
-- Kept High-risk communication and external-write actions blocked by policy.
-- Added seven privacy-safe fictional screenshot proofs.
-- Verified 116 passing tests, a successful Release build, `git diff --check`, guarded-execution validation, synchronized push and clean working tree.
-- Kept background workers, scheduling, timers, startup execution, automatic retries, external mutation, scripts, processes, plugins and AI inactive.
+## v4 Operating Spine
 
+### v4.9 - Integration Inbox and readiness
 
-## Group 29 — Controlled orchestration and recovery
+- Added review-first integration previews.
+- Added source lanes and connector-readiness matrix.
+- Completed the v4 operating spine.
 
-Schedules now create review intent only. Due occurrences enter a visible queue, runs require explicit Start, and every Low-risk reversible internal step requires its own exact preview and confirmation. Progress pauses between steps; failure recovery is explicit and persisted. No unattended execution or external writes are enabled.
+### v4.8 - Command Centre Pressure Engine
 
-<!-- GROUP29 START -->
-## v6.0.0-alpha.3 — Screenshot Group 29
+- Ranked reviewed module signals into act-now, review-first, waiting/do-not-chase and protected lanes.
+- Added pressure scoring, suppression rules and next-safest-action output.
 
-- controlled orchestration plans and ordered internal steps
-- deterministic Manual-only, one-time and weekly review scheduling
-- singular due occurrences
-- explicit Start and per-step confirmation
-- checkpoints and restart-safe paused recovery
-- explicit retry, cancellation and run-scoped rollback
-- migration from Group 28 local automation state
-- eight approved fictional-data screenshots
-- no unattended execution or external writes
-<!-- GROUP29 END -->
+### v4.7 - Weekly Close-Out
 
-## v6.0.0-alpha.4 — Screenshot Group 30
-- Automation hardening, persisted health and sanitized incident visibility.
-- Distinct fail-closed Emergency Stop with explicit reset and no automatic resume.
-- Exact-scope failure containment, explicit retry and reverse-order rollback review.
-- Manual, foreground-only controlled automation remains mandatory.
+- Added deliberate close-now, roll-forward, waiting, money, proof, receipt and work review lanes.
 
+### v4.6 - Receipt OCR / Evidence-to-Item
 
-## v6.0.0-beta.1 — Group 31
+- Added source-gated receipt evidence candidates and trusted manual acceptance.
 
-Controlled automation release checkpoint: persisted readiness, v6 store migration and malformed-state recovery hardening, restart safety validation and beta release evidence. No automation-surface expansion.
+### v4.5 - Work Pipeline
 
-## v7.0.0-beta.1 — Group 39
+- Added active, blocked, waiting, invoice-ready, payment-expected, proof-gap and opportunity states.
 
-v7 Assistant beta release checkpoint.
+### v4.4 - Agenda and Payment Calendar
 
-- Unified source-backed answers, explainable ranking, review-only planning, controlled review transfer and explicit scoped memory into one coherent beta flow.
-- Re-proved no mutation, execution, autonomous tools, background work or external writes.
-- Advanced Desktop release identity to `v7.0.0-beta.1`; Companion remains separate at `v0.1.0-beta.1`.
-- Added full regression, security, hygiene and exact eight-screenshot release evidence gates.
-- Kept Website, full Mobile, v8 and Group 40 unstarted.
+- Unified time commitments, due dates, payment dates, expected-income dates and review windows.
+
+### v4.3 - Money Profile / Hidden Deductions / Safe-to-Spend
+
+- Added hidden reserves, buffers, expected-money exclusion and safe-to-spend confidence.
+
+### v4.2 - Bills / Upcoming Payments / Pay Later
+
+- Added stateful obligations, BNPL load, hidden deductions and payment evidence gates.
+
+### v4.1 - Item Type / State Engine
+
+- Added shared item/state, trust, evidence, transition and pressure model.
+
+### v4.0 - Spine Recovery Map
+
+- Restored the complete LifeOS operating spine and sequenced v4 before real integrations.
+
+## v1-v3 Foundations
+
+### v3.9 - Final Offline OS
+
+- Completed the integration-ready offline operating-system checkpoint.
+
+### v3.5 - Search / Knowledge
+
+- Added local search profiles and reviewable knowledge items.
+
+### v3.0 - OS Navigation / Core Modules
+
+- Added broader operating-system navigation and core module structure.
+
+### v2.1 - Universal Spine
+
+- Added the shared cross-module operating spine.
+
+### v2.0 - Paid Desktop Release
+
+- Completed the paid-work, money, proof, safety and desktop release foundation.
+
+### v1.x - Foundation
+
+- Established local-first storage, daily flow, evidence, relationships, paid work, settings, safety and theme foundations.

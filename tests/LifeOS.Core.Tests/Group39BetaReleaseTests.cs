@@ -11,11 +11,11 @@ public sealed class Group39BetaReleaseTests
     private static readonly DateTimeOffset Now = new(2026, 7, 14, 8, 0, 0, TimeSpan.Zero);
 
     [Fact]
-    public void Release_identity_is_v7_beta_1()
+    public void Release_identity_is_current_v13()
     {
-        Assert.Equal("7.0.0-beta.1", ProductVersion.Semantic);
-        Assert.Equal("v7.0.0-beta.1", ProductVersion.Display);
-        Assert.Equal("v7 Assistant beta release checkpoint", ProductVersion.ReleaseName);
+        Assert.Equal("13.0.0-alpha.1", ProductVersion.Semantic);
+        Assert.Equal("v13.0.0-alpha.1", ProductVersion.Display);
+        Assert.Equal("v13 Household and Grocery planning", ProductVersion.ReleaseName);
     }
 
     [Fact]

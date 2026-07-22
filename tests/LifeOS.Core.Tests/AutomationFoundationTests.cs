@@ -7,11 +7,11 @@ namespace LifeOS.Core.Tests;
 public sealed class AutomationFoundationTests
 {
     [Fact]
-    public void ProductVersion_IsAlignedForGroup29()
+    public void ProductVersion_IsCurrentV13()
     {
-        Assert.Equal("7.0.0-beta.1", LifeOS.Core.ProductVersion.Semantic);
-        Assert.Equal("v7.0.0-beta.1", LifeOS.Core.ProductVersion.Display);
-        Assert.Equal("v7 Assistant beta release checkpoint", LifeOS.Core.ProductVersion.ReleaseName);
+        Assert.Equal("13.0.0-alpha.1", LifeOS.Core.ProductVersion.Semantic);
+        Assert.Equal("v13.0.0-alpha.1", LifeOS.Core.ProductVersion.Display);
+        Assert.Equal("v13 Household and Grocery planning", LifeOS.Core.ProductVersion.ReleaseName);
     }
 
     [Fact] public void NewRule_IsDisabledByDefault() => Assert.False(new AutomationRule().IsEnabled);

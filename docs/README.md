@@ -4,65 +4,63 @@ This directory is the durable source of truth for LifeOS status, release history
 
 ## Current authoritative documents
 
-- [`current-status.md`](current-status.md) — current Desktop, Companion and roadmap state.
-- [`lifeos-version-state.json`](lifeos-version-state.json) — machine-readable version and boundary state.
-- [`release-notes/v7.0-beta-group-39.md`](release-notes/v7.0-beta-group-39.md) — v7 beta closure record.
-- [`screenshot-groups/group-39-v7-beta-release-checkpoint/`](screenshot-groups/group-39-v7-beta-release-checkpoint/) — current screenshot evidence.
-- [`manual-tests/group-39/`](manual-tests/group-39/) — current manual verification.
-- [`version-history.md`](version-history.md) — consolidated milestone history.
-- [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — broader roadmap.
+- [`current-status.md`](current-status.md) - current product and roadmap state.
+- [`lifeos-version-state.json`](lifeos-version-state.json) - machine-readable version, group and boundary state.
+- [`version-history.md`](version-history.md) - consolidated milestone history.
+- [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) - approved compressed roadmap through Group 82.
+- [`release-notes/lifeos-v13.md`](release-notes/lifeos-v13.md) - current v13 Group 64 release note.
+- [`screenshot-groups/group-64-grocery-planning-essentials/`](screenshot-groups/group-64-grocery-planning-essentials/) - latest completed screenshot evidence.
 
 ## Current product state
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | `v7.0.0-beta.1`, complete and closed |
-| Mobile Companion | `v0.1.0-beta.1`, complete and closed |
-| Full Mobile | Not started |
-| Website | Not started |
-| Group 40 / v8 | Not started |
+| LifeOS Desktop | Current deep administration, review, audit and planning surface through v13 Group 64 |
+| Full Mobile | Built and extended through v13 Group 64 for capture, review, execution, status and offline-safe mobile flows |
+| Mobile Companion | Separate lightweight companion product, beta complete and closed |
+| Website | Website beta foundation complete through v8 Groups 40-42 |
+| Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
+| Current release | v13 active; Group 64 complete; Group 65 next |
 
-The complete v7 Assistant lane is now closed at beta.
+## Recent release lanes
 
-It includes:
+- **v13 / Group 64** - Grocery Planning and recurring essentials across Desktop and Full Mobile.
+- **v12 / Groups 61-63** - Career Studio opportunity, application, materials, preparation, follow-ups and analytics.
+- **v11 / Groups 58-60** - Money foundation, document/evidence intake, financial review and reporting.
+- **v10 / Groups 52-57** - Full Mobile release family.
+- **v9 / Groups 46-51** - Microsoft and Google read-only integration foundations.
+- **v8 / Groups 40-45** - Website beta foundation and Desktop shell/workspace integration.
+- **v7 / Groups 35-39** - Assistant beta release family.
 
-- approved-source retrieval
-- bounded intent classification
-- explainable ranking and provenance
-- stale, conflict, missing-data and uncertainty handling
-- review-only planning blocks
-- controlled review transfer
-- explicit user-confirmed durable memory
-- expiry, revocation, deletion and audit
-- no tools, execution, background autonomy or external writes
+## Current evidence
 
-Plans remain `Review-only` and `Executable: No`. Memory cannot authorize action, and trusted current records outrank conflicting memory.
+Recent official screenshot groups:
 
-## Recent screenshot groups
-
-- [`Group 39 — v7 beta release checkpoint`](screenshot-groups/group-39-v7-beta-release-checkpoint/)
-- [`Group 38 — memory permissions and safety`](screenshot-groups/group-38-v7-memory-permissions-safety/)
-- [`Group 37 — review-only planning and review transfer`](screenshot-groups/group-37-v7-review-only-planning-review-transfer/)
-- [`Group 36 — source expansion and answer quality`](screenshot-groups/group-36-v7-source-expansion-answer-quality/)
-- [`Group 35 — Assistant foundation`](screenshot-groups/group-35-v7-assistant-foundation/)
-- [`Group 34 — Mobile Companion beta checkpoint`](screenshot-groups/group-34-companion-beta-checkpoint/)
-- [`Group 31 — v6 controlled automation beta checkpoint`](screenshot-groups/group-31-v6-automation-release-checkpoint/)
+- [`Group 64 - Grocery planning and recurring essentials`](screenshot-groups/group-64-grocery-planning-essentials/)
+- [`Group 63 - Career follow-ups, analytics and closure`](screenshot-groups/group-63-career-followups-analytics-closure/)
+- [`Group 62 - Career materials and interview preparation`](screenshot-groups/group-62-career-materials-interview-prep/)
+- [`Group 61 - Career opportunity and application pipeline`](screenshot-groups/group-61-career-opportunity-application/)
+- [`Group 60 - Financial review and reporting`](screenshot-groups/group-60-financial-review-reporting/)
+- [`Group 59 - Document and evidence intake`](screenshot-groups/group-59-document-evidence-intake/)
+- [`Group 58 - Money foundation`](screenshot-groups/group-58-money-foundation/)
+- [`Group 57 - Full Mobile beta closure`](screenshot-groups/group-57-full-mobile-beta-closure/)
 
 ## Documentation organization
 
-- `release-notes/` — immutable historical group and version records.
-- `screenshot-groups/` — approved screenshot evidence and evidence descriptions.
-- `manual-tests/` — manual verification instructions and results.
-- `automation/` — v6 controlled automation architecture and safety documentation.
-- `integrations/` — connector contracts, readiness and setup documentation.
-- `mobile-companion/` — Companion-specific implementation and beta records.
+- `release-notes/` - historical group and version records.
+- `screenshot-groups/` - approved screenshot evidence and evidence descriptions.
+- `manual-tests/` - manual verification instructions and results.
+- `automation/` - controlled automation architecture and safety documentation.
+- `integrations/` - connector contracts, readiness and setup documentation.
+- `mobile-companion/` - Companion-specific implementation and beta records.
+- `website/` - Website design, deployment and boundary documentation.
 
 ## Documentation rules
 
 - Current-state documents describe the current product state only.
-- Historical release notes and screenshot groups remain unchanged.
+- Historical release notes and screenshot groups remain unchanged unless correcting their own local metadata.
 - Manual tests belong under `docs/manual-tests/`.
 - Screenshot evidence belongs under `docs/screenshot-groups/`.
-- All public demonstration data must be fictional or explicitly sanitized.
-- Handoff, context-drop and pre-screenshot continuity files must never be committed.
-- Build-chat PDFs and delivery ZIPs are temporary chat artifacts, not repository files.
+- Public demonstration data must be fictional, sanitized or explicitly approved.
+- Private context PDFs, handoff notes, pre-screenshot continuity files and delivery ZIPs must not be committed.
+- Provider secrets, tokens, private payloads and personal data must never appear in proof.

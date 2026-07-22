@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -904,6 +904,12 @@ public partial class V8ShellWindow : Window
         if (string.Equals(routeId, "v11-money-foundation", StringComparison.OrdinalIgnoreCase))
         {
             ShowEmbeddedModule(routeId, title, subtitle, new MoneyV11View());
+            return;
+        }
+
+        if (string.Equals(routeId, "v12-career-studio", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(routeId, title, subtitle, new CareerStudioView());
             return;
         }
 

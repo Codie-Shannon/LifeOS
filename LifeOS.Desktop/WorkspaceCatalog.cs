@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -157,7 +157,7 @@ internal static class WorkspaceCatalog
                         {
                             Native("career-profile", "Profile", "Native workspace surface", "Role direction, strengths and career positioning without client-work fields."),
                             Native("career-cvs", "CVs", "Native workspace surface", "CV versions and role-specific evidence."),
-                            Native("career-applications", "Applications", "Native workspace surface", "Application status and next actions separate from Work Pipeline."),
+                            Route("v12-career-studio", "Career Studio", "Canonical records", "Authoritative opportunity and application pipeline with review-first imported candidates."),
                             Native("career-interviews", "Interviews", "Native workspace surface", "Interview preparation and follow-up structure."),
                             Route("relationship-radar", "Relationship Radar", "Canonical records", "Relationship and follow-up records where they support career activity.")
                         })

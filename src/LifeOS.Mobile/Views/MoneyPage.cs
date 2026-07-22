@@ -37,6 +37,7 @@ public sealed class MoneyPage : ContentPage
         _content.Children.Add(MoneyVisuals.CardView("Payments received", $"{overview.Currency} {overview.PaymentsReceived:N2}", "Reviewed"));
         _content.Children.Add(MoneyVisuals.CardView("Evidence gaps", overview.EvidenceGaps.ToString(), overview.EvidenceGaps == 0 ? "Complete" : "Needs review"));
         AddAction("Financial review summary", () => Navigation.PushAsync(new FinancialReviewPage()));
+        AddAction("Compact financial reports", () => Navigation.PushAsync(new FinancialReportsPage()));
         AddAction("Document & evidence intake", () => Navigation.PushAsync(new DocumentIntakePage()));
         AddAction("Accounts and status", () => Navigation.PushAsync(new FinancialListPage("Accounts", data.Accounts.Select(x => $"{x.Name}\n{x.Type} • {x.Currency} {x.Balance:N2} • {x.ReviewState}\nLive connected: {x.IsLiveConnected}"))));
         AddAction("Transactions", () => Navigation.PushAsync(new FinancialListPage("Transactions", data.Transactions.Select(x => $"{x.Date:dd MMM} • {x.Description}\n{x.Direction} • {x.Currency} {x.Amount:N2} • {x.ReviewState}\nCategory: {x.CategoryId}"))));

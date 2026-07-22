@@ -41,6 +41,7 @@ public sealed class MoneyV11View : UserControl
         foreach (var page in new[]
         {
             "Overview", "Review queue", "Review detail", "Resolve candidate",
+            "Reports", "Evidence report", "Export preview",
             "Accounts", "Transactions", "Invoices & payments", "Linked detail",
             "Manual review", "Audit & protection"
         })
@@ -97,6 +98,9 @@ public sealed class MoneyV11View : UserControl
             "Review queue" => ("Financial review queue", "Unmatched, allocation, duplicate, mismatch and evidence-gap candidates remain review-only.", ReviewQueue()),
             "Review detail" => ("Review candidate detail", "Trusted financial records and preserved evidence are compared side by side.", ReviewDetail()),
             "Resolve candidate" => ("Explicit candidate resolution", "Trusted-state actions require confirmation and every result is auditable.", ResolveCandidate()),
+            "Reports" => ("Financial reports", "Bounded reporting periods with explicit currency grouping and trusted-record drill-down.", Reports()),
+            "Evidence report" => ("Evidence completeness", "Complete, missing, pending-review and conflicting evidence remain visible and drillable.", EvidenceReport()),
+            "Export preview" => ("Safe export preview", "CSV and PDF outputs are explicit derivatives with destination, confirmation and redaction controls.", ExportPreview()),
             "Accounts" => ("Accounts and financial status", "Manual and tracked accounts never pretend to be live-connected.", Accounts()),
             "Transactions" => ("Transactions", "Searchable records with category, direction and explicit review state.", Transactions()),
             "Invoices & payments" => ("Invoices and payments", "Due, overdue, paid and partially paid states remain deterministic.", Invoices()),
@@ -196,6 +200,40 @@ public sealed class MoneyV11View : UserControl
     }
 
 
+    private UIElement Reports()
+    {
+        var service = new FinancialReportingService();
+        var report = service.Build(_proof.FinancialRecords, _proof.Candidates, new FinancialReportFilter(new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31)), ProofNow);
+        var panel = Vertical();
+        panel.Children.Add(Card("Bounded period", $"01 Jan 2026 to 31 Dec 2026\n{report.FreshnessNote}", "NO MIXED-CURRENCY TOTAL"));
+        foreach (var group in report.CurrencyGroups)
+            panel.Children.Add(Card($"{group.Currency} financial summary", $"Income {group.Income:N2}\nExpenses {group.Expenses:N2}\nOutstanding invoices {group.OutstandingInvoices:N2}\nPayments received {group.PaymentsReceived:N2}\nTrusted-record rows {group.TransactionCount + group.InvoiceCount + group.PaymentCount}", "DRILL-DOWN READY"));
+        panel.Children.Add(Card("Unresolved review candidates", report.UnresolvedCandidates.Count.ToString(CultureInfo.InvariantCulture), "REVIEW-FIRST"));
+        return Scroll(panel);
+    }
+
+    private UIElement EvidenceReport()
+    {
+        var report = new FinancialReportingService().Build(_proof.FinancialRecords, _proof.Candidates, new FinancialReportFilter(new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31)), ProofNow);
+        var panel = Vertical();
+        foreach (var state in Enum.GetValues<EvidenceCompletenessState>())
+            panel.Children.Add(Metric(state.ToString(), report.Evidence.Count(x => x.State == state).ToString(CultureInfo.InvariantCulture), "Linked preserved evidence"));
+        foreach (var item in report.Evidence.Take(10))
+            panel.Children.Add(Card($"{item.RecordType} • {item.Label}", $"{item.Explanation}\nRecord {item.RecordId}\nLinked Work/Project records: {item.Links.Count}", item.State.ToString()));
+        return Scroll(panel);
+    }
+
+    private UIElement ExportPreview()
+    {
+        var service = new FinancialReportingService();
+        var report = service.Build(_proof.FinancialRecords, _proof.Candidates, new FinancialReportFilter(new DateOnly(2026, 1, 1), new DateOnly(2026, 12, 31)), ProofNow);
+        var preview = service.Preview(report, new FinancialExportRequest(FinancialExportFormat.Pdf, @"C:\Exports", false, true, ["summary", "evidence", "review-candidates"]));
+        var panel = Vertical();
+        panel.Children.Add(Card("Export preview", $"{preview.FileName}\n{preview.MediaType}\nDestination: {preview.Destination}\nEstimated size: {preview.EstimatedBytes:N0} bytes", "NOT EXPORTED"));
+        panel.Children.Add(Card("Privacy controls", $"Redaction enabled: {preview.RedactionEnabled}\nSections: {string.Join(", ", preview.Sections)}\n{preview.Warning}", "CONFIRMATION REQUIRED"));
+        panel.Children.Add(Card("Failure and cancellation", "Cancel leaves no derivative. Failed exports return a safe error and authoritative records remain unchanged.", "DERIVATIVE ONLY"));
+        return Scroll(panel);
+    }
     private UIElement Accounts()
     {
         var panel = Vertical();

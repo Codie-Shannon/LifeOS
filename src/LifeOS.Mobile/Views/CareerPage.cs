@@ -8,6 +8,8 @@ public sealed class CareerPage : ContentPage
     private static readonly DateTimeOffset ProofNow = new(2026, 7, 22, 14, 0, 0, TimeSpan.FromHours(12));
     private readonly CareerStudioProof _proof = CareerProofData.Build(ProofNow);
     private readonly IReadOnlyList<CareerApplication> _applications;
+    private readonly CareerMaterialsProof _materials = CareerMaterialsProofData.Build(ProofNow);
+    private readonly CareerPreparationProof _preparation;
     private readonly VerticalStackLayout _content = new();
 
     public CareerPage()
@@ -15,6 +17,7 @@ public sealed class CareerPage : ContentPage
         Title = "Career";
         BackgroundColor = Color.FromArgb("#101018");
         _applications = CareerApplicationProofData.Build(_proof, ProofNow);
+        _preparation = CareerPreparationProofData.Build(_materials, _proof, ProofNow);
         Content = new ScrollView { Content = _content };
     }
 
@@ -42,6 +45,7 @@ public sealed class CareerPage : ContentPage
 
         AddAction("Opportunity detail", () => Navigation.PushAsync(new CareerOpportunityPage(_proof.Opportunities[0])));
         AddAction("Application detail", () => Navigation.PushAsync(new CareerApplicationPage(_applications[0])));
+        AddAction("Preparation dashboard", () => Navigation.PushAsync(new CareerPreparationPage(_preparation)));
     }
 
     private void AddAction(string label, Func<Task> action)

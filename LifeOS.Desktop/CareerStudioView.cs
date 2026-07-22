@@ -12,6 +12,7 @@ public sealed class CareerStudioView : UserControl
     private readonly CareerStudioProof _proof = CareerProofData.Build(ProofNow);
     private readonly IReadOnlyList<CareerApplication> _applications;
     private readonly CareerMaterialsProof _materials = CareerMaterialsProofData.Build(ProofNow);
+    private readonly CareerPreparationProof _preparation;
     private readonly ContentControl _content = new();
     private readonly TextBlock _title = new();
     private readonly TextBlock _subtitle = new();
@@ -24,6 +25,7 @@ public sealed class CareerStudioView : UserControl
         Foreground = Brushes.White;
         FontFamily = new FontFamily("Segoe UI");
         _applications = CareerApplicationProofData.Build(_proof, ProofNow);
+        _preparation = CareerPreparationProofData.Build(_materials, _proof, ProofNow);
         Content = Build();
         Show("Pipeline");
     }
@@ -39,7 +41,7 @@ public sealed class CareerStudioView : UserControl
         nav.Children.Add(Label("Career Studio", 29, "#FFFFFF", FontWeights.Bold, new Thickness(0, 5, 0, 2)));
         nav.Children.Add(Label("Opportunity and application pipeline", 13, "#9AA9C7", FontWeights.Normal, new Thickness(0, 0, 0, 20)));
 
-        foreach (var page in new[] { "Pipeline", "Opportunity detail", "Candidate review", "Application checklist", "Application timeline", "Career profile", "CV variants", "Portfolio evidence" })
+        foreach (var page in new[] { "Pipeline", "Opportunity detail", "Candidate review", "Application checklist", "Application timeline", "Career profile", "CV variants", "Portfolio evidence", "Cover letter", "Application pack", "Interview preparation" })
         {
             var button = new Button
             {
@@ -177,6 +179,9 @@ public sealed class CareerStudioView : UserControl
             "Career profile" => ("Career profile", "Trusted facts remain separate from presentation wording and carry provenance.", CareerProfile()),
             "CV variants" => ("Role-specific CV variants", "Requirement relevance, missing proof and unsupported claims are checked before export.", CvVariants()),
             "Portfolio evidence" => ("Portfolio evidence", "Projects remain linked to trusted Work, Project and document proof.", PortfolioEvidence()),
+            "Cover letter" => ("Opportunity-linked cover letter", "Generated, manual, accepted and stale sections stay visibly distinct.", CoverLetter()),
+            "Application pack" => ("Application pack", "Current, missing and stale materials are validated for the intended opportunity.", ApplicationPackView()),
+            "Interview preparation" => ("Interview preparation", "STAR examples, questions, logistics and read-only calendar context.", InterviewPreparation()),
             _ => ("Career opportunity pipeline", "One authoritative pipeline with board filters, closing dates and review-first status.", Pipeline())
         };
     }
@@ -350,6 +355,39 @@ public sealed class CareerStudioView : UserControl
         var panel = Vertical();
         foreach (var item in _materials.Portfolio)
             panel.Children.Add(Card(item.Title, $"{item.Summary}\nRole: {item.Role}\nTechnologies: {string.Join(", ", item.Technologies)}\nDocuments: {string.Join(", ", item.DocumentIds)}\nOutcomes: {string.Join("; ", item.Outcomes)}", Humanize(item.PrivacyState).ToUpperInvariant()));
+        return Scroll(panel);
+    }
+
+
+    private UIElement CoverLetter()
+    {
+        var panel = Vertical();
+        panel.Children.Add(Card("Requirement-to-evidence mapping", $"Opportunity: {_preparation.CoverLetter.OpportunityId}\nCV variant: {_preparation.CoverLetter.CVVariantId}\nVersion: {_preparation.CoverLetter.Version}\nNo section is promoted to fact automatically.", "REVIEWABLE DRAFT"));
+        foreach (var section in _preparation.CoverLetter.Sections)
+            panel.Children.Add(Card(section.Heading, $"{section.Text}\nSource facts: {(section.SourceFactIds.Count == 0 ? "Manual wording" : string.Join(", ", section.SourceFactIds))}", Humanize(section.State).ToUpperInvariant()));
+        return Scroll(panel);
+    }
+
+    private UIElement ApplicationPackView()
+    {
+        var panel = Vertical();
+        panel.Children.Add(Card("Pack readiness", $"Opportunity owner: {_preparation.Pack.OpportunityId}\nVersion: {_preparation.Pack.Version}\nRequired materials must be present and current.", _preparation.Pack.IsReady ? "READY FOR USER REVIEW" : "BLOCKED"));
+        foreach (var item in _preparation.Pack.Items)
+            panel.Children.Add(Card(item.Label, $"Type: {Humanize(item.Type)}\nRequired: {(item.Required ? "Yes" : "No")}\nMaterial: {item.MaterialId ?? "Missing"}", Humanize(item.Freshness).ToUpperInvariant()));
+        return Scroll(panel);
+    }
+
+    private UIElement InterviewPreparation()
+    {
+        var plan = _preparation.Interview;
+        var panel = Vertical();
+        panel.Children.Add(Card("Interview logistics", $"{plan.StartsUtc:dd MMM yyyy HH:mm} • {plan.Format}\n{plan.Logistics}\nCalendar mutation: disabled", "READ-ONLY CONTEXT"));
+        foreach (var star in plan.StarExamples)
+            panel.Children.Add(Card($"STAR • {star.Title}", $"Situation: {star.Situation}\nTask: {star.Task}\nAction: {star.Action}\nResult: {star.Result}\nEvidence: {string.Join(", ", star.EvidenceIds)}", "USER-AUTHORED"));
+        foreach (var q in plan.Questions)
+            panel.Children.Add(Card("Likely question", q.Prompt + $"\nSource: {q.Source}", "PREPARATION"));
+        foreach (var check in plan.Checks)
+            panel.Children.Add(Card(check.Label, "Offline-safe checklist action through the existing queue/conflict boundary.", Humanize(check.State).ToUpperInvariant()));
         return Scroll(panel);
     }
 

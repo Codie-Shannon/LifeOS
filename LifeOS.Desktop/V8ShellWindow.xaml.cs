@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -135,7 +135,7 @@ public partial class V8ShellWindow : Window
             : new Thickness(16, 0, 0, 0);
 
         ContextButton.Visibility = veryCompactWidth ? Visibility.Collapsed : Visibility.Visible;
-        ProfileButton.Content = veryCompactWidth ? GetProfileInitials() : $"{GetProfileInitials()} â–¾";
+        ProfileButton.Content = veryCompactWidth ? GetProfileInitials() : $"{GetProfileInitials()} \u25BE";
 
         foreach (Button button in TopBarActions.Children.OfType<Button>())
         {
@@ -1104,7 +1104,7 @@ public partial class V8ShellWindow : Window
     {
         ProfileButton.Content = ActualWidth <= 1020
             ? GetProfileInitials()
-            : $"{GetProfileInitials()} â–¾";
+            : $"{GetProfileInitials()} \u25BE";
     }
 
     private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)

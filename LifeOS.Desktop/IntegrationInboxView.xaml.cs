@@ -1,7 +1,9 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using LifeOS.Core.IntegrationControlCentre;
 using LifeOS.Core.IntegrationInbox;
+using LifeOS.Core.MicrosoftProvider;
 
 namespace LifeOS.Desktop;
 
@@ -19,6 +21,7 @@ public partial class IntegrationInboxView : UserControl
 
     private readonly string _storePath;
     private readonly IntegrationInboxV9Service _service;
+    private readonly HashSet<string> _connectedAccountIds;
     private string? _selectedCandidateId;
     private IntegrationBatchReviewPreview? _batchPreview;
 
@@ -34,9 +37,20 @@ public partial class IntegrationInboxView : UserControl
                     DateTimeOffset.UtcNow),
                 DateTimeOffset.UtcNow);
         _service = new IntegrationInboxV9Service(state);
+        _connectedAccountIds = MicrosoftProviderStore.LoadState()
+            .Accounts
+            .Where(account =>
+                account.ConnectionState ==
+                IntegrationConnectionState.Connected)
+            .Select(account => account.Id)
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .ToHashSet(StringComparer.Ordinal);
+
+        ScopeComboBox.ItemsSource = ReviewScopeOption.Options;
+        ScopeComboBox.SelectedItem = ReviewScopeOption.CurrentItems;
 
         ApplyDensity(compactDensity);
-        RefreshAll(DefaultSelectedCandidateId);
+        RefreshAll();
     }
 
     public event EventHandler? BackRequested;
@@ -48,17 +62,37 @@ public partial class IntegrationInboxView : UserControl
         InboxTabs.Height = compactDensity ? 590 : 640;
     }
 
-    public int CurrentReviewCount => _service.GetReviewCount();
+    public int CurrentReviewCount => _service.State.Candidates.Count(
+        candidate =>
+            IsCandidateVisible(candidate, ReviewScopeKind.CurrentItems) &&
+            IsReviewable(candidate));
 
     private void RefreshAll(string? selectedCandidateId = null)
     {
-        IntegrationInboxV9Summary summary = _service.GetSummary();
-        TotalText.Text = summary.Total.ToString();
-        ReviewCountText.Text = summary.ReviewCount.ToString();
-        DuplicateCountText.Text = summary.DuplicateCount.ToString();
-        ConflictCountText.Text = summary.ConflictCount.ToString();
+        ReviewScopeOption scope =
+            ScopeComboBox.SelectedItem as ReviewScopeOption ??
+            ReviewScopeOption.CurrentItems;
 
-        CandidateListView[] candidateViews = _service.State.Candidates
+        IntegrationCandidate[] visibleCandidates = _service.State.Candidates
+            .Where(candidate => IsCandidateVisible(candidate, scope.Kind))
+            .ToArray();
+
+        TotalText.Text = visibleCandidates.Length.ToString();
+        ReviewCountText.Text = visibleCandidates.Count(IsReviewable).ToString();
+        DuplicateCountText.Text = visibleCandidates.Count(candidate =>
+            candidate.Status ==
+            IntegrationCandidateStatus.DuplicateSuspected).ToString();
+        ConflictCountText.Text = visibleCandidates.Count(candidate =>
+            candidate.Status ==
+            IntegrationCandidateStatus.Conflict).ToString();
+
+        ScopeBannerText.Text = _connectedAccountIds.Count > 0
+            ? "CURRENT ACCOUNT · READ-ONLY"
+            : "LOCAL REVIEW · NO CONNECTED ACCOUNT";
+        QueueHeadingText.Text = scope.Heading;
+        QueueDescriptionText.Text = scope.Description;
+
+        CandidateListView[] candidateViews = visibleCandidates
             .OrderBy(candidate => StatusSort(candidate.Status))
             .ThenByDescending(candidate => candidate.Provenance.ImportedTimestampUtc)
             .Select(candidate => new CandidateListView(
@@ -72,6 +106,7 @@ public partial class IntegrationInboxView : UserControl
 
         string desiredId = selectedCandidateId
             ?? _selectedCandidateId
+            ?? candidateViews.FirstOrDefault()?.Id
             ?? DefaultSelectedCandidateId;
 
         CandidateListView? selectedView = candidateViews.FirstOrDefault(
@@ -88,8 +123,53 @@ public partial class IntegrationInboxView : UserControl
         PopulateBatchAndAccepted();
         PopulateSourceAndAudit();
 
-        ReviewCountChanged?.Invoke(summary.ReviewCount);
+        ReviewCountChanged?.Invoke(visibleCandidates.Count(IsReviewable));
     }
+
+    private void ScopeComboBox_SelectionChanged(
+        object sender,
+        SelectionChangedEventArgs e)
+    {
+        if (!IsLoaded)
+        {
+            return;
+        }
+
+        _selectedCandidateId = null;
+        RefreshAll();
+    }
+
+    private bool IsCandidateVisible(
+        IntegrationCandidate candidate,
+        ReviewScopeKind scope)
+    {
+        bool isCurrentAccount =
+            _connectedAccountIds.Contains(candidate.Provenance.AccountId);
+        bool isSuggestion =
+            candidate.Provenance.CapabilityId.EndsWith(
+                "-suggestion",
+                StringComparison.OrdinalIgnoreCase);
+        bool isActive = IsReviewable(candidate);
+
+        return scope switch
+        {
+            ReviewScopeKind.CurrentItems =>
+                isCurrentAccount && !isSuggestion && isActive,
+            ReviewScopeKind.Suggestions =>
+                isCurrentAccount && isSuggestion && isActive,
+            ReviewScopeKind.HistoryAndDemo =>
+                !isCurrentAccount || !isActive,
+            ReviewScopeKind.All => true,
+            _ => false
+        };
+    }
+
+    private static bool IsReviewable(IntegrationCandidate candidate) =>
+        candidate.Status is
+            IntegrationCandidateStatus.New or
+            IntegrationCandidateStatus.NeedsReview or
+            IntegrationCandidateStatus.DuplicateSuspected or
+            IntegrationCandidateStatus.Conflict;
 
     private void CandidateListBox_SelectionChanged(
         object sender,
@@ -516,6 +596,48 @@ public partial class IntegrationInboxView : UserControl
         hash.Length <= 16
             ? hash
             : $"{hash[..8]}…{hash[^8..]}";
+
+    private enum ReviewScopeKind
+    {
+        CurrentItems,
+        Suggestions,
+        HistoryAndDemo,
+        All
+    }
+
+    private sealed record ReviewScopeOption(
+        ReviewScopeKind Kind,
+        string Label,
+        string Heading,
+        string Description)
+    {
+        public static ReviewScopeOption CurrentItems { get; } =
+            new(
+                ReviewScopeKind.CurrentItems,
+                "Current account · original items",
+                "Current mail and calendar",
+                "Original items from the connected account that still need a decision.");
+
+        public static IReadOnlyList<ReviewScopeOption> Options { get; } =
+        [
+            CurrentItems,
+            new(
+                ReviewScopeKind.Suggestions,
+                "Current account · suggestions",
+                "Suggested follow-ups",
+                "Derived suggestions are separated from their source messages and events."),
+            new(
+                ReviewScopeKind.HistoryAndDemo,
+                "History and demo evidence",
+                "Historical and demo evidence",
+                "Retained proof records and resolved current-account items."),
+            new(
+                ReviewScopeKind.All,
+                "Everything",
+                "All integration candidates",
+                "Full engineering view across current, historical and demo records.")
+        ];
+    }
 
     private sealed record CandidateListView(
         string Id,

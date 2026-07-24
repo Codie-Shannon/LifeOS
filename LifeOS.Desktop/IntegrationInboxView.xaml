@@ -186,7 +186,8 @@
                         BorderThickness="1"
                         CornerRadius="9"
                         Padding="12,8">
-                    <TextBlock Text="FICTIONAL CANDIDATES · NO LIVE PROVIDER SYNC"
+                    <TextBlock x:Name="ScopeBannerText"
+                               Text="REVIEW-FIRST · READ-ONLY"
                                FontWeight="SemiBold" />
                 </Border>
                 <Button Content="Back to Settings"
@@ -257,16 +258,34 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <StackPanel>
-                                <TextBlock Text="Mixed fictional candidates" Style="{StaticResource Inbox.Heading}" />
-                                <TextBlock Text="Message, calendar, contact, file, task, financial and generic provider records share one review contract."
-                                           Margin="0,6,0,12"
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBlock x:Name="QueueHeadingText"
+                                           Text="Current connected account"
+                                           Style="{StaticResource Inbox.Heading}" />
+                                <TextBlock x:Name="QueueDescriptionText"
+                                           Grid.Row="1"
+                                           Text="Original mail and calendar items awaiting review."
+                                           Margin="0,6,0,10"
                                            Style="{StaticResource Inbox.Caption}" />
-                            </StackPanel>
+                                <ComboBox x:Name="ScopeComboBox"
+                                          Grid.Row="2"
+                                          Margin="0,0,0,12"
+                                          MinHeight="36"
+                                          DisplayMemberPath="Label"
+                                          SelectionChanged="ScopeComboBox_SelectionChanged"
+                                          AutomationProperties.AutomationId="IntegrationInboxV9.Scope" />
+                            </Grid>
                             <ListBox x:Name="CandidateListBox"
                                      Grid.Row="1"
                                      BorderThickness="0"
                                      Background="Transparent"
+                                     HorizontalContentAlignment="Stretch"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                      SelectionChanged="CandidateListBox_SelectionChanged"
                                      AutomationProperties.AutomationId="IntegrationInboxV9.CandidateList">
                                 <ListBox.ItemTemplate>
@@ -309,31 +328,38 @@
                                        Margin="0,12,0,0"
                                        Style="{StaticResource Inbox.Body}" />
 
-                            <Border Style="{StaticResource Inbox.Card}" Margin="0,16,0,12">
-                                <StackPanel>
-                                    <TextBlock Text="Provenance and freshness" Style="{StaticResource Inbox.Subheading}" />
-                                    <TextBlock x:Name="ProvenanceText" Margin="0,9,0,0" Style="{StaticResource Inbox.Body}" />
-                                    <TextBlock x:Name="RawReferenceText" Margin="0,8,0,0" Style="{StaticResource Inbox.Caption}" />
-                                </StackPanel>
-                            </Border>
+                            <Expander Header="Technical details"
+                                      Margin="0,16,0,12"
+                                      IsExpanded="False"
+                                      AutomationProperties.AutomationId="IntegrationInboxV9.TechnicalDetails">
+                                <StackPanel Margin="0,10,0,0">
+                                    <Border Style="{StaticResource Inbox.Card}" Margin="0,0,0,12">
+                                        <StackPanel>
+                                            <TextBlock Text="Provenance and freshness" Style="{StaticResource Inbox.Subheading}" />
+                                            <TextBlock x:Name="ProvenanceText" Margin="0,9,0,0" Style="{StaticResource Inbox.Body}" />
+                                            <TextBlock x:Name="RawReferenceText" Margin="0,8,0,0" Style="{StaticResource Inbox.Caption}" />
+                                        </StackPanel>
+                                    </Border>
 
-                            <TextBlock Text="Normalized fields" Style="{StaticResource Inbox.Subheading}" />
-                            <ItemsControl x:Name="DetailFieldItems" Margin="0,8,0,0">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Style="{StaticResource Inbox.Card}" Margin="0,0,0,8">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="190" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
-                                                <TextBlock Grid.Column="1" Text="{Binding Value}" Style="{StaticResource Inbox.Body}" />
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                                    <TextBlock Text="Normalized fields" Style="{StaticResource Inbox.Subheading}" />
+                                    <ItemsControl x:Name="DetailFieldItems" Margin="0,8,0,0">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Style="{StaticResource Inbox.Card}" Margin="0,0,0,8">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="190" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                                        <TextBlock Grid.Column="1" Text="{Binding Value}" Style="{StaticResource Inbox.Body}" />
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Expander>
 
                             <WrapPanel Margin="0,8,0,0">
                                 <Button Content="Accept"

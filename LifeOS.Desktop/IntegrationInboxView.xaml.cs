@@ -98,7 +98,7 @@ public partial class IntegrationInboxView : UserControl
             .Select(candidate => new CandidateListView(
                 candidate.Id,
                 candidate.Title,
-                $"{FormatEnum(candidate.Type)} · {FormatEnum(candidate.Status)}",
+                $"{FormatCandidateType(candidate.Type)} · {FormatCandidateStatus(candidate.Status)}",
                 $"{candidate.Provenance.ProviderDisplayName} · {candidate.Provenance.AccountDisplayName}"))
             .ToArray();
 
@@ -189,8 +189,8 @@ public partial class IntegrationInboxView : UserControl
     {
         DetailTitleText.Text = candidate.Title;
         DetailTypeText.Text =
-            $"{FormatEnum(candidate.Type)} · candidate {candidate.Id}";
-        DetailStatusText.Text = FormatEnum(candidate.Status);
+            $"{FormatCandidateType(candidate.Type)} · {candidate.Provenance.ProviderDisplayName}";
+        DetailStatusText.Text = FormatCandidateStatus(candidate.Status);
         DetailSummaryText.Text = candidate.Summary;
 
         IntegrationCandidateProvenance provenance = candidate.Provenance;
@@ -578,6 +578,26 @@ public partial class IntegrationInboxView : UserControl
         timestampUtc
             .ToLocalTime()
             .ToString("yyyy-MM-dd HH:mm");
+
+    private static string FormatCandidateType(
+        IntegrationCandidateType type) =>
+        type switch
+        {
+            IntegrationCandidateType.Message => "Email",
+            IntegrationCandidateType.CalendarEvent => "Calendar event",
+            IntegrationCandidateType.GenericProviderRecord => "Suggestion",
+            _ => FormatEnum(type)
+        };
+
+    private static string FormatCandidateStatus(
+        IntegrationCandidateStatus status) =>
+        status switch
+        {
+            IntegrationCandidateStatus.New => "Needs review",
+            IntegrationCandidateStatus.NeedsReview => "Needs review",
+            IntegrationCandidateStatus.DuplicateSuspected => "Possible duplicate",
+            _ => FormatEnum(status)
+        };
 
     private static string FormatEnum<T>(T value)
         where T : struct, Enum =>

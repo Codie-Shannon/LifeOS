@@ -232,7 +232,7 @@
                 <StackPanel>
                     <TextBlock Text="External writes" Style="{StaticResource Inbox.Caption}" />
                     <TextBlock Text="0" Margin="0,8,0,0" FontSize="24" FontWeight="SemiBold" />
-                    <TextBlock Text="Disabled for Group 47" Margin="0,5,0,0" Style="{StaticResource Inbox.Caption}" />
+                    <TextBlock Text="Always blocked in review mode" Margin="0,5,0,0" Style="{StaticResource Inbox.Caption}" />
                 </StackPanel>
             </Border>
         </WrapPanel>

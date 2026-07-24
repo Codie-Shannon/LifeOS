@@ -25,6 +25,7 @@ public partial class MainWindow
         "evidence-vault",
         "final-offline-os",
         "follow-ups",
+        "google-calendar",
         "integration-inbox",
         "item-state-engine",
         "lifeos-spine",
@@ -85,7 +86,7 @@ public partial class MainWindow
 
         TextBlock subtitle = new()
         {
-            Text = "Canonical LifeOS module ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â opened from the permanent v8 workspace",
+            Text = "Canonical LifeOS module - opened from the permanent v8 workspace",
             Margin = new Thickness(0, 4, 0, 0),
             FontSize = 13
         };
@@ -100,7 +101,7 @@ public partial class MainWindow
         root.Children.Add(MainContentControl);
 
         Content = root;
-        Title = $"LifeOS ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â {FormatRouteTitle(routeId)}";
+        Title = $"LifeOS - {FormatRouteTitle(routeId)}";
         Width = 1500;
         Height = 860;
         MinWidth = 900;
@@ -176,6 +177,9 @@ public partial class MainWindow
                 break;
             case "follow-ups":
                 ShowFollowUpsPage();
+                break;
+            case "google-calendar":
+                ShowIntegrationInboxPage();
                 break;
             case "integration-inbox":
                 ShowIntegrationInboxPage();

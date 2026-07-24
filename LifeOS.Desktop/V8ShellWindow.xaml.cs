@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using LifeOS.Core;
 using LifeOS.Shared.V8;
 using LifeOS.Core.IntegrationInbox;
 
@@ -50,7 +51,8 @@ public partial class V8ShellWindow : Window
         WorkspaceCatalog.Validate(MainWindow.V8RouteIds);
         InitializeComponent();
 
-
+        Title = $"LifeOS Desktop {ProductVersion.Display}";
+        AboutVersionText.Text = Title;
 
         ProfileButton.Content = "CS \u25BE";
 Loaded += Window_Loaded;
@@ -276,7 +278,7 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         ContextBody.Text = definition.ContextSummary;
         ContextModulesList.ItemsSource = definition.Sections
             .SelectMany(section => section.Modules)
-            .Select(module => $"{module.Title} â€” {module.Status}")
+            .Select(module => $"{module.Title} - {module.Status}")
             .ToArray();
 
         WorkspaceScrollViewer.ScrollToTop();
@@ -446,6 +448,30 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         {
             CloseCommand();
             NavigateTo(workspace);
+            e.Handled = true;
+            return;
+        }
+
+        var moduleMatch =
+            WorkspaceOrder
+                .SelectMany(workspaceName => WorkspaceCatalog.Get(workspaceName)
+                    .Sections
+                    .SelectMany(section => section.Modules)
+                    .Select(module => new { Workspace = workspaceName, Module = module }))
+                .FirstOrDefault(candidate =>
+                    !string.IsNullOrWhiteSpace(candidate.Module.RouteId) &&
+                    (string.Equals(candidate.Module.Title, command, StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(candidate.Module.RouteId, command, StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(
+                         candidate.Module.RouteId.Replace('-', ' '),
+                         command,
+                         StringComparison.OrdinalIgnoreCase)));
+
+        if (moduleMatch is not null)
+        {
+            CloseCommand();
+            NavigateTo(moduleMatch.Workspace);
+            OpenModule(moduleMatch.Module.RouteId!);
             e.Handled = true;
             return;
         }
@@ -864,6 +890,11 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
             return;
         }
 
+        OpenModule(routeId);
+    }
+
+    private void OpenModule(string routeId)
+    {
         if (routeId.StartsWith("workspace:", StringComparison.OrdinalIgnoreCase))
         {
             NavigateTo(routeId["workspace:".Length..]);

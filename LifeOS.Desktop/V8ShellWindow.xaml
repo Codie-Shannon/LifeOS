@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="LifeOS Desktop v9.0.0-alpha.3"
+        Title="LifeOS Desktop"
         Width="1680"
         Height="920"
         MinWidth="900"
@@ -452,7 +452,7 @@
                                 <TextBlock Text="About / Diagnostics" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
                                 <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
                                     <StackPanel>
-                                        <TextBlock Text="LifeOS Desktop v9.0.0-alpha.3" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
+                                        <TextBlock x:Name="AboutVersionText" Text="LifeOS Desktop" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
                                         <TextBlock Text="Nine permanent workspaces. Integration Control Centre, Integration Inbox and Microsoft Provider Setup are embedded system surfaces. Read-only, review-first and foreground-only." Margin="0,6,0,12" Style="{StaticResource LifeOS.Text.Body}" />
                                         <WrapPanel>
                                             <Button Content="Desktop Release" Tag="desktop-release" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.DesktopRelease" />
@@ -529,7 +529,7 @@
                              KeyDown="CommandTextBox_KeyDown"
                              AutomationProperties.AutomationId="Command.Input" />
                     <TextBlock Margin="0,12,0,0"
-                               Text="Try: Home, Work, Settings, Theme light, Theme high contrast, Accent teal, Density compact"
+                               Text="Try: Home, Work, Integration Inbox, Google Calendar, Theme light, Accent teal, Density compact"
                                Style="{StaticResource LifeOS.Text.Caption}" />
                     <Button Content="Close" HorizontalAlignment="Left" Margin="0,14,0,0" Style="{StaticResource LifeOS.Button}" Click="CloseCommand_Click" AutomationProperties.AutomationId="Command.Close" />
                 </StackPanel>

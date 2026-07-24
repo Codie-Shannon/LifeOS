@@ -572,7 +572,7 @@ public partial class MainWindow
 
         var pipelineSignalsPanel = CreateInfoPanel(
             "Pipeline command signals",
-            FormatReasons(summary.WorkPipeline.CommandCentreSignals.Select(signal => $"{signal.Label}: {signal.Value} â€” {signal.Detail}")));
+            FormatReasons(summary.WorkPipeline.CommandCentreSignals.Select(signal => $"{signal.Label}: {signal.Value} - {signal.Detail}")));
 
         pipelineSignalsPanel.Margin = new Thickness(0, 16, 0, 0);
         root.Children.Add(pipelineSignalsPanel);

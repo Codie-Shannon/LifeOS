@@ -301,6 +301,7 @@ internal static class WorkspaceCatalog
                             Route("memory", "Memory", "Explicit and revocable", "User-confirmed memory with scope, audit, expiry, revocation and deletion."),
                             Route("search-knowledge", "Search / Knowledge", "Canonical behaviour", "Local search and knowledge surfaces."),
                             Route("integration-inbox", "Integration Inbox", "Review-first", "Untrusted imported records remain separate from trusted operational state."),
+                            Route("google-calendar", "Google Calendar", "Read-only connector", "Connect, disconnect and manually refresh bounded Google Calendar previews."),
                             Route("email-radar", "Email Radar", "Read-only review", "Local email evidence without sending or external mutation.")
                         })
                 }),

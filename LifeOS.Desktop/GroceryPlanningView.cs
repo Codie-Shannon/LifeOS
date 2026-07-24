@@ -9,6 +9,7 @@ public sealed class GroceryPlanningView : UserControl
 {
     private readonly GroceryPlanningService _service = new();
     private readonly HouseholdInventoryService _inventoryService = new();
+    private readonly HouseholdWorkflowService _workflowService = new();
 
     private readonly (
         IReadOnlyList<GroceryItem> Items,
@@ -21,6 +22,14 @@ public sealed class GroceryPlanningView : UserControl
         IReadOnlyList<StoreProfile> Stores,
         IReadOnlyList<MealRecipe> Recipes) _household =
             HouseholdInventoryProofData.Build();
+
+    private readonly (
+        IReadOnlyList<HouseholdRoutine> Routines,
+        IReadOnlyList<HouseholdAssignment> Assignments,
+        IReadOnlyList<HouseholdReceiptCandidate> Receipts,
+        IReadOnlyList<HouseholdSpendReview> SpendReviews,
+        IReadOnlyList<V13ClosureCheck> ClosureChecks) _workflow =
+            HouseholdWorkflowProofData.Build();
 
     private readonly ContentControl _content = new();
 
@@ -94,7 +103,7 @@ public sealed class GroceryPlanningView : UserControl
 
         navigation.Children.Add(
             Text(
-                "LIFEOS v13 - Group 65",
+                "LIFEOS v13 - Group 66",
                 12,
                 SecondaryText));
 
@@ -143,6 +152,26 @@ public sealed class GroceryPlanningView : UserControl
             NavigationButton(
                 "Store profiles",
                 ShowStoreProfiles));
+
+        navigation.Children.Add(
+            NavigationButton(
+                "Household routines",
+                ShowHouseholdRoutines));
+
+        navigation.Children.Add(
+            NavigationButton(
+                "Replenishment review",
+                ShowReplenishmentReview));
+
+        navigation.Children.Add(
+            NavigationButton(
+                "Receipts & spending",
+                ShowReceiptsAndSpending));
+
+        navigation.Children.Add(
+            NavigationButton(
+                "v13 closure",
+                ShowV13Closure));
 
         navigation.Children.Add(
             NavigationButton(
@@ -385,6 +414,27 @@ public sealed class GroceryPlanningView : UserControl
                 Review candidates: {inventory.ReviewCandidates.Count}
                 """,
                 "GROUP 65"));
+
+        HouseholdWorkflowDashboard workflow =
+            _workflowService.BuildDashboard(
+                _workflow.Routines,
+                _workflow.Assignments,
+                _workflow.Receipts,
+                _workflow.SpendReviews,
+                _workflow.ClosureChecks,
+                new DateOnly(2026, 7, 22));
+
+        panel.Children.Add(
+            Card(
+                "Shared household workflow",
+                $"""
+                Due routines: {workflow.DueRoutines.Count}
+                Assignments: {workflow.Assignments.Count(assignment => assignment.RequiresReview)} review
+                Receipts: {workflow.ReceiptCandidates.Count(candidate => candidate.RequiresReview)} review
+                Spend reviews: {workflow.SpendReviews.Count(review => review.RequiresReview)} review
+                v13 closure: {workflow.ClosureState}
+                """,
+                "GROUP 66"));
 
         panel.Children.Add(
             Card(
@@ -657,6 +707,195 @@ public sealed class GroceryPlanningView : UserControl
 
         _content.Content = Scroll(panel);
     }
+
+    private void ShowHouseholdRoutines()
+    {
+        SetSelectedNavigation("Household routines");
+
+        HouseholdWorkflowDashboard dashboard =
+            BuildWorkflowDashboard();
+
+        var panel = Page(
+            "Household routines",
+            "Shared checks and assignments remain explicit review states.");
+
+        foreach (HouseholdRoutine routine in dashboard.DueRoutines)
+        {
+            panel.Children.Add(
+                Card(
+                    routine.Title,
+                    $"""
+                    Area: {routine.Area}
+                    Cadence: every {routine.CadenceDays} days
+                    Next due: {routine.NextDue:dd MMM yyyy}
+                    State: {routine.State}
+                    Assigned to: {routine.AssignedTo ?? "Unassigned"}
+                    Source: {routine.SourceEvidence}
+                    """,
+                    routine.State.ToString().ToUpperInvariant()));
+        }
+
+        foreach (HouseholdAssignment assignment in dashboard.Assignments)
+        {
+            panel.Children.Add(
+                Card(
+                    $"Assignment: {assignment.RoutineId}",
+                    $"""
+                    Assigned to: {assignment.AssignedTo}
+                    Proposed for: {assignment.ProposedFor:dd MMM yyyy}
+                    State: {assignment.State}
+                    Requires review: {assignment.RequiresReview}
+                    Source: {assignment.SourceEvidence}
+                    """,
+                    assignment.State.ToString().ToUpperInvariant()));
+        }
+
+        _content.Content = Scroll(panel);
+    }
+
+    private void ShowReplenishmentReview()
+    {
+        SetSelectedNavigation("Replenishment review");
+
+        HouseholdInventoryDashboard inventory =
+            _inventoryService.BuildDashboard(
+                _household.Inventory,
+                _household.Stores,
+                _household.Recipes,
+                new DateOnly(2026, 7, 22));
+
+        HouseholdWorkflowDashboard workflow = BuildWorkflowDashboard();
+
+        var panel = Page(
+            "Replenishment review",
+            "Inventory gaps, routines and meal needs can suggest review candidates only.");
+
+        foreach (HouseholdInventoryCandidate candidate in _inventoryService.BuildGroceryReviewCandidates(inventory))
+        {
+            panel.Children.Add(
+                Card(
+                    candidate.Title,
+                    $"""
+                    Kind: {candidate.Kind}
+                    Suggested target: {candidate.SuggestedTarget}
+                    Suggested action: {candidate.SuggestedAction}
+                    Source: {candidate.SourceEvidence}
+                    Requires review: {candidate.RequiresReview}
+                    """,
+                    "REVIEW ONLY"));
+        }
+
+        panel.Children.Add(
+            Card(
+                "Routine connection",
+                $"""
+                Due household routines: {workflow.DueRoutines.Count}
+                Replenishment suggestions stay separate from grocery-list mutation.
+                """,
+                "NO AUTO LIST"));
+
+        panel.Children.Add(
+            Card(
+                "Replenishment boundary",
+                workflow.Boundary,
+                "NO ORDER"));
+
+        _content.Content = Scroll(panel);
+    }
+
+    private void ShowReceiptsAndSpending()
+    {
+        SetSelectedNavigation("Receipts & spending");
+
+        HouseholdWorkflowDashboard dashboard = BuildWorkflowDashboard();
+
+        var panel = Page(
+            "Receipt and spending review",
+            "Household receipts and planned-vs-actual spending remain review candidates.");
+
+        foreach (HouseholdReceiptCandidate receipt in dashboard.ReceiptCandidates)
+        {
+            panel.Children.Add(
+                Card(
+                    receipt.Title,
+                    $"""
+                    Amount: {receipt.Currency} {receipt.Amount:0.00}
+                    Captured on: {receipt.CapturedOn:dd MMM yyyy}
+                    State: {receipt.State}
+                    Document target: {receipt.SuggestedDocumentTarget}
+                    Money target: {receipt.SuggestedMoneyTarget}
+                    Requires review: {receipt.RequiresReview}
+                    Source: {receipt.SourceEvidence}
+                    """,
+                    "RECEIPT REVIEW"));
+        }
+
+        foreach (HouseholdSpendReview review in dashboard.SpendReviews)
+        {
+            panel.Children.Add(
+                Card(
+                    review.Category,
+                    $"""
+                    Planned: {review.Currency} {review.PlannedAmount:0.00}
+                    Actual: {review.Currency} {review.ActualAmount:0.00}
+                    State: {review.State}
+                    Requires review: {review.RequiresReview}
+                    Source: {review.SourceEvidence}
+                    """,
+                    review.State.ToString().ToUpperInvariant()));
+        }
+
+        _content.Content = Scroll(panel);
+    }
+
+    private void ShowV13Closure()
+    {
+        SetSelectedNavigation("v13 closure");
+
+        HouseholdWorkflowDashboard dashboard = BuildWorkflowDashboard();
+
+        var panel = Page(
+            "v13 household release closure",
+            "Group 66 closes the household/grocery release after proof and validation are captured.");
+
+        panel.Children.Add(
+            Card(
+                "Closure state",
+                $"""
+                State: {dashboard.ClosureState}
+                Pending proof blocks release closure until screenshots and validation are complete.
+                """,
+                dashboard.ClosureState.ToString().ToUpperInvariant()));
+
+        foreach (V13ClosureCheck check in dashboard.ClosureChecks)
+        {
+            panel.Children.Add(
+                Card(
+                    check.Title,
+                    $"""
+                    Passed: {check.Passed}
+                    Evidence: {check.Evidence}
+                    """,
+                    check.Passed ? "PASSED" : "PENDING"));
+        }
+
+        panel.Children.Add(
+            Card(
+                "Release boundary",
+                dashboard.Boundary,
+                "FAIL CLOSED"));
+
+        _content.Content = Scroll(panel);
+    }
+
+    private HouseholdWorkflowDashboard BuildWorkflowDashboard() =>
+        _workflowService.BuildDashboard(
+            _workflow.Routines,
+            _workflow.Assignments,
+            _workflow.Receipts,
+            _workflow.SpendReviews,
+            _workflow.ClosureChecks,
+            new DateOnly(2026, 7, 22));
 
     private static StackPanel Page(
         string title,

@@ -6,7 +6,8 @@ LifeOS is currently in the v13 Household and Grocery release lane.
 
 - Group 64 completed Grocery Planning and recurring essentials.
 - Group 65 adds household inventory, meal ingredients, store profiles and price-context boundaries.
-- Group 66 is next.
+- Group 66 closes v13 with shared household routines, replenishment review, receipt/spending review and release closure checks.
+- Group 67 starts the v14 work-session and billable-records lane.
 
 ## Group 65 scope
 
@@ -15,6 +16,14 @@ LifeOS is currently in the v13 Household and Grocery release lane.
 - Store profiles remain planning context only.
 - Desktop and Full Mobile now expose Group 65 household inventory review surfaces.
 - No inventory, meal or store signal can order, pay, trust prices, mutate external carts or mutate grocery lists automatically.
+
+## Group 66 scope
+
+- Household routines and assignments remain explicit review states.
+- Replenishment review connects inventory, meal and routine signals without changing grocery lists automatically.
+- Household receipt candidates suggest Document and Money targets without mutating either system.
+- Planned-vs-actual household spending is review context, not advice or payment initiation.
+- v13 closure checks remain fail-closed until evidence and validation are captured.
 
 ## Validation expectation
 

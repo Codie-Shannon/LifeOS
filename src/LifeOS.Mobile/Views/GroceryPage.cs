@@ -69,6 +69,17 @@ public sealed class GroceryPage : ContentPage
 
         content.Add(
             CreateCard(
+                "Shared household review",
+                """
+                Due routines: 2
+                Receipts: 2 review
+                Spend reviews: 1 review
+                v13 closure needs proof
+                """,
+                "GROUP 66"));
+
+        content.Add(
+            CreateCard(
                 "Recently completed",
                 "1 recent list",
                 "HISTORY"));
@@ -103,6 +114,18 @@ public sealed class GroceryPage : ContentPage
             Content = BuildInventoryReview();
         };
 
+        var routinesButton = PrimaryButton("Review household routines");
+        routinesButton.Clicked += (_, _) =>
+        {
+            Content = BuildHouseholdRoutineReview();
+        };
+
+        var spendingButton = PrimaryButton("Review receipts and spending");
+        spendingButton.Clicked += (_, _) =>
+        {
+            Content = BuildReceiptAndSpendingReview();
+        };
+
         var conflictButton = PrimaryButton("Review offline conflict");
         conflictButton.Clicked += (_, _) =>
         {
@@ -113,6 +136,8 @@ public sealed class GroceryPage : ContentPage
         content.Add(quickAddButton);
         content.Add(essentialsButton);
         content.Add(inventoryButton);
+        content.Add(routinesButton);
+        content.Add(spendingButton);
         content.Add(conflictButton);
 
         return Scroll(content);
@@ -275,6 +300,130 @@ public sealed class GroceryPage : ContentPage
             CreateBoundaryCard(
                 "No automatic grocery mutation",
                 "Inventory and meal gaps cannot order, pay, trust prices or alter grocery lists without explicit review."));
+
+        return Scroll(content);
+    }
+
+    private View BuildHouseholdRoutineReview()
+    {
+        var content = new VerticalStackLayout
+        {
+            Padding = new Thickness(10, 14, 10, 28),
+            Spacing = 12
+        };
+
+        var backButton = TextButton("\u2190 Grocery dashboard");
+        backButton.Clicked += (_, _) =>
+        {
+            Content = BuildDashboard();
+        };
+
+        content.Add(backButton);
+        content.Add(Heading("Household routines"));
+
+        content.Add(
+            Body(
+                "Shared assignments and replenishment checks require explicit review."));
+
+        content.Add(
+            CreateCard(
+                "Fridge and freezer check",
+                """
+                Area: Kitchen
+                State: Overdue
+                Assigned to: CS
+                Source: Synthetic household routine
+                """,
+                "OVERDUE"));
+
+        content.Add(
+            CreateCard(
+                "Bin night reset",
+                """
+                Area: Household
+                State: Due soon
+                Assigned to: Unassigned
+                Source: Synthetic household routine
+                """,
+                "DUE SOON"));
+
+        content.Add(
+            CreateCard(
+                "Assignment: fridge-check",
+                """
+                Assigned to: CS
+                State: Proposed
+                Requires review: True
+                Explicit acceptance required
+                """,
+                "REVIEW"));
+
+        content.Add(
+            CreateBoundaryCard(
+                "No automatic assignment",
+                "Household assignments, routine completion and replenishment suggestions stay review-first."));
+
+        return Scroll(content);
+    }
+
+    private View BuildReceiptAndSpendingReview()
+    {
+        var content = new VerticalStackLayout
+        {
+            Padding = new Thickness(10, 14, 10, 28),
+            Spacing = 12
+        };
+
+        var backButton = TextButton("\u2190 Grocery dashboard");
+        backButton.Clicked += (_, _) =>
+        {
+            Content = BuildDashboard();
+        };
+
+        content.Add(backButton);
+        content.Add(Heading("Receipts and spending"));
+
+        content.Add(
+            Body(
+                "Receipt links and planned-vs-actual spend are review candidates, not Money or Document mutations."));
+
+        content.Add(
+            CreateCard(
+                "Local supermarket receipt",
+                """
+                Amount: NZD 74.30
+                State: Needs review
+                Documents target: receipt evidence candidate
+                Money target: grocery spend candidate
+                """,
+                "RECEIPT REVIEW"));
+
+        content.Add(
+            CreateCard(
+                "Groceries",
+                """
+                Planned: NZD 90.00
+                Actual: NZD 93.20
+                State: Over plan
+                Requires review: True
+                """,
+                "OVER PLAN"));
+
+        content.Add(
+            CreateCard(
+                "v13 closure",
+                """
+                Desktop proof: ready
+                Mobile proof: ready
+                Screenshot pack: pending capture
+                Validation: pending final run
+                """,
+                "CLOSURE"));
+
+        content.Add(
+            CreateBoundaryCard(
+                "No automatic posting",
+                "Receipt candidates cannot mutate Documents or Money and cannot initiate payments."));
 
         return Scroll(content);
     }

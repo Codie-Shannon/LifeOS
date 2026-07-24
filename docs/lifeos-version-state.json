@@ -2,17 +2,17 @@
   "currentRelease": "v13",
   "currentReleaseName": "Household and Grocery",
   "currentSemanticVersion": "13.0.0-alpha.1",
-  "currentStatus": "active",
-  "latestCompletedGroup": 65,
-  "latestCompletedGroupName": "Household inventory, meals, stores and price context",
-  "latestCompletedHead": "326f8e69bc31907073b7e36f7f2b9a4c0b804f9c",
-  "nextGroup": 66,
-  "nextGroupName": "Household routines and replenishment review",
+  "currentStatus": "v13-closing",
+  "latestCompletedGroup": 66,
+  "latestCompletedGroupName": "Shared household workflows, receipts, spending review and v13 closure",
+  "latestCompletedHead": "pending-current-commit",
+  "nextGroup": 67,
+  "nextGroupName": "Time tracking, work sessions and billable records",
   "roadmapApprovedThroughGroup": 82,
   "desktop": {
     "status": "active-current",
     "role": "deep-administration-review-planning-audit-reporting",
-    "currentThroughGroup": 65,
+    "currentThroughGroup": 66,
     "detachedModuleWindowsAllowed": false,
     "childModulesOpenInParentWorkspace": true
   },
@@ -20,7 +20,7 @@
     "status": "built-and-active",
     "releaseFamily": "v10",
     "initialBetaClosureGroup": 57,
-    "currentThroughGroup": 65,
+    "currentThroughGroup": 66,
     "separateFromCompanion": true,
     "offlineQueueEnabled": true,
     "silentConflictOverwriteAllowed": false
@@ -95,8 +95,8 @@
     },
     {
       "release": "v13",
-      "groups": "64-65",
-      "status": "active"
+      "groups": "64-66",
+      "status": "complete"
     }
   ],
   "safetyBoundaries": {
@@ -117,8 +117,8 @@
     "destructiveEvidenceHandlingEnabled": false
   },
   "evidence": {
-    "latestScreenshotGroup": "docs/screenshot-groups/group-65-household-inventory-meals-stores",
-    "officialScreenshotsPerGroup": 8,
+    "latestScreenshotGroup": "docs/screenshot-groups/group-66-shared-household-workflows-v13-closure",
+    "officialScreenshotsPerGroup": 9,
     "privateContextPdfsCommitted": false
   },
   "internalNotes": {

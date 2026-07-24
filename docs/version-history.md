@@ -4,9 +4,18 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v13 is active. Group 65 adds household inventory, meal ingredients, store profiles and price-context boundaries on top of Group 64 grocery planning.
+LifeOS v13 is closing at Group 66 with shared household workflows, receipt/spend review and release closure proof.
 
 ## v13 - Household and Grocery
+
+### Group 66 - Shared household workflows, receipts, spending review and v13 closure
+
+- Added household routines, shared assignments and replenishment review.
+- Added household receipt candidates linked to Document and Money targets as review-only suggestions.
+- Added planned-vs-actual household spending review.
+- Added Desktop and Full Mobile household workflow review surfaces.
+- Added v13 release closure checks.
+- Closed v13 Household and Grocery while keeping routines, receipts, spending and replenishment review-first.
 
 ### Group 65 - Household inventory, meals, stores and price context
 

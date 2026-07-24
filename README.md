@@ -4,7 +4,7 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is not a generic task list or template. It is an operations system for controlled review, execution, provenance and evidence.
 
-> **Current checkpoint:** LifeOS v13 in progress. Group 65 adds household inventory, meal ingredient gaps, store profiles and review-first price context.
+> **Current checkpoint:** LifeOS v13 Group 66 closes Household and Grocery with shared routines, replenishment review, receipt/spending review and release proof.
 
 ![LifeOS Group 64 Grocery Planning evidence](docs/screenshot-groups/group-64-grocery-planning-essentials/01-desktop-grocery-overview.png)
 
@@ -12,12 +12,12 @@ LifeOS is a safety-first platform built by Codie Shannon around purpose-built De
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through v13 Group 65 |
-| **LifeOS Full Mobile** | Built through v10 Group 57 and extended through v13 Group 65 for mobile review, capture, execution and offline-safe household/grocery workflows |
+| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through v13 Group 66 |
+| **LifeOS Full Mobile** | Built through v10 Group 57 and extended through v13 Group 66 for mobile review, capture, execution and offline-safe household/grocery workflows |
 | **LifeOS Mobile Companion** | Separate lightweight companion product, beta complete and closed |
 | **LifeOS Website** | Website beta foundation complete through v8 Groups 40-42 |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v13 Household and Grocery; Group 65 implemented, Group 66 next |
+| **Current release lane** | v13 Household and Grocery; Group 66 implemented, Group 67 next |
 
 The Mobile Companion and Full Mobile application are separate products. They can share contracts and libraries, but they retain different scope, UX and release tracks.
 
@@ -81,7 +81,7 @@ v12 added opportunity and application pipelines, career evidence, CV and cover-l
 
 ### Household and Grocery
 
-v13 Groups 64-65 added Grocery Planning, recurring essentials and household inventory across Desktop and Full Mobile: categorized lists, quantities, pack sizes, priorities, required dates, estimate freshness, mobile in-store actions, substitutions, offline conflict review, stock states, meal ingredient gaps, store profiles and price-context boundaries. LifeOS does not automatically order, pay, trust prices, mutate grocery lists or mutate external carts.
+v13 Groups 64-66 added Grocery Planning, recurring essentials, household inventory and shared household workflows across Desktop and Full Mobile: categorized lists, quantities, pack sizes, priorities, required dates, estimate freshness, mobile in-store actions, substitutions, offline conflict review, stock states, meal ingredient gaps, store profiles, shared routines, assignments, replenishment review, receipt candidates, planned-vs-actual spending and v13 closure checks. LifeOS does not automatically order, pay, trust prices, mutate grocery lists, mutate Documents/Money or mutate external carts.
 
 ## Safety model
 
@@ -148,7 +148,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v13 is active. Group 65 is implemented and Group 66 is next.
+LifeOS v13 is complete through Group 66. Group 67 starts the v14 time tracking, work sessions and billable records lane.
 
 Upcoming approved work runs through Groups 65-82, covering household inventory and meals, work sessions and invoicing, AI provider control, advanced read models, guarded writes, engineering visibility, packaging, Portal/onboarding and public launch validation.
 

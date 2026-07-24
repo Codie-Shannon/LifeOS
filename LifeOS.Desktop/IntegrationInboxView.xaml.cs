@@ -118,6 +118,12 @@ public partial class IntegrationInboxView : UserControl
         CandidateListBox.SelectedItem =
             selectedView ?? candidateViews.FirstOrDefault();
 
+        if (CandidateListBox.SelectedItem is null)
+        {
+            _selectedCandidateId = null;
+            PopulateEmptyState(scope);
+        }
+
         PopulateDuplicateReview();
         PopulateConflictReview();
         PopulateBatchAndAccepted();
@@ -177,12 +183,31 @@ public partial class IntegrationInboxView : UserControl
     {
         if (CandidateListBox.SelectedItem is not CandidateListView selected)
         {
+            _selectedCandidateId = null;
             return;
         }
 
         _selectedCandidateId = selected.Id;
+        CandidateActionPanel.Visibility = Visibility.Visible;
+        TechnicalDetailsExpander.Visibility = Visibility.Visible;
         PopulateCandidateDetail(
             _service.GetRequiredCandidate(selected.Id));
+    }
+
+    private void PopulateEmptyState(ReviewScopeOption scope)
+    {
+        DetailTitleText.Text = "All caught up";
+        DetailTypeText.Text = scope.Label;
+        DetailStatusText.Text = "Complete";
+        DetailSummaryText.Text =
+            "There are no remaining items in this review queue.";
+        ProvenanceText.Text = string.Empty;
+        RawReferenceText.Text = string.Empty;
+        DetailFieldItems.ItemsSource = Array.Empty<FieldView>();
+        CandidateActionPanel.Visibility = Visibility.Collapsed;
+        TechnicalDetailsExpander.IsExpanded = false;
+        TechnicalDetailsExpander.Visibility = Visibility.Collapsed;
+        ActionStatusText.Text = string.Empty;
     }
 
     private void PopulateCandidateDetail(IntegrationCandidate candidate)

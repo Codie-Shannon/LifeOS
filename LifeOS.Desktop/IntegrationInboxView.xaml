@@ -328,7 +328,8 @@
                                        Margin="0,12,0,0"
                                        Style="{StaticResource Inbox.Body}" />
 
-                            <Expander Header="Technical details"
+                            <Expander x:Name="TechnicalDetailsExpander"
+                                      Header="Technical details"
                                       Margin="0,16,0,12"
                                       IsExpanded="False"
                                       AutomationProperties.AutomationId="IntegrationInboxV9.TechnicalDetails">
@@ -361,7 +362,8 @@
                                 </StackPanel>
                             </Expander>
 
-                            <WrapPanel Margin="0,8,0,0">
+                            <WrapPanel x:Name="CandidateActionPanel"
+                                       Margin="0,8,0,0">
                                 <Button Content="Accept"
                                         Style="{StaticResource Inbox.Button}"
                                         Click="AcceptButton_Click"

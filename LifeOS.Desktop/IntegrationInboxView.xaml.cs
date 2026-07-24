@@ -611,6 +611,8 @@ public partial class IntegrationInboxView : UserControl
         string Heading,
         string Description)
     {
+        public override string ToString() => Label;
+
         public static ReviewScopeOption CurrentItems { get; } =
             new(
                 ReviewScopeKind.CurrentItems,

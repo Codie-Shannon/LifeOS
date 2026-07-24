@@ -35,6 +35,8 @@ secrets/
 *.p12
 *.pem
 *.key
+*.keystore
+*.jks
 
 # LifeOS connector and private runtime state
 connector-config/

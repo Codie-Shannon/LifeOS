@@ -58,6 +58,17 @@ public sealed class GroceryPage : ContentPage
 
         content.Add(
             CreateCard(
+                "Household inventory",
+                """
+                Out: 1
+                Low: 1
+                Unknown: 1
+                Meal gaps require review
+                """,
+                "GROUP 65"));
+
+        content.Add(
+            CreateCard(
                 "Recently completed",
                 "1 recent list",
                 "HISTORY"));
@@ -86,6 +97,12 @@ public sealed class GroceryPage : ContentPage
                 "OK");
         };
 
+        var inventoryButton = PrimaryButton("Review household inventory");
+        inventoryButton.Clicked += (_, _) =>
+        {
+            Content = BuildInventoryReview();
+        };
+
         var conflictButton = PrimaryButton("Review offline conflict");
         conflictButton.Clicked += (_, _) =>
         {
@@ -95,6 +112,7 @@ public sealed class GroceryPage : ContentPage
         content.Add(openListButton);
         content.Add(quickAddButton);
         content.Add(essentialsButton);
+        content.Add(inventoryButton);
         content.Add(conflictButton);
 
         return Scroll(content);
@@ -184,6 +202,79 @@ public sealed class GroceryPage : ContentPage
                 Requires explicit review
                 """,
                 "UNAVAILABLE"));
+
+        return Scroll(content);
+    }
+
+    private View BuildInventoryReview()
+    {
+        var content = new VerticalStackLayout
+        {
+            Padding = new Thickness(10, 14, 10, 28),
+            Spacing = 12
+        };
+
+        var backButton = TextButton("\u2190 Grocery dashboard");
+        backButton.Clicked += (_, _) =>
+        {
+            Content = BuildDashboard();
+        };
+
+        content.Add(backButton);
+        content.Add(Heading("Household inventory"));
+
+        content.Add(
+            Body(
+                "Stock state, meals and store context are review-first planning signals."));
+
+        content.Add(
+            CreateCard(
+                "Milk",
+                """
+                Category: Dairy
+                Stock state: Low
+                On hand: 0.5 L
+                Expires: 23 Jul 2026
+                Review before adding to a list
+                """,
+                "LOW"));
+
+        content.Add(
+            CreateCard(
+                "Bread",
+                """
+                Category: Bakery
+                Stock state: Out
+                Meal impact: Simple breakfast
+                Review candidate only
+                """,
+                "OUT"));
+
+        content.Add(
+            CreateCard(
+                "Rice",
+                """
+                Category: Pantry
+                Stock state: Overstocked
+                On hand: 3 kg
+                Do not buy more
+                """,
+                "OVERSTOCKED"));
+
+        content.Add(
+            CreateCard(
+                "Rice bowl: Sauce",
+                """
+                Required recipe ingredient missing from inventory
+                Suggested target: Meal ingredients
+                Manual review required before any list change
+                """,
+                "INGREDIENT GAP"));
+
+        content.Add(
+            CreateBoundaryCard(
+                "No automatic grocery mutation",
+                "Inventory and meal gaps cannot order, pay, trust prices or alter grocery lists without explicit review."));
 
         return Scroll(content);
     }

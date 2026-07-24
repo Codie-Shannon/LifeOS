@@ -3,16 +3,16 @@
   "currentReleaseName": "Household and Grocery",
   "currentSemanticVersion": "13.0.0-alpha.1",
   "currentStatus": "active",
-  "latestCompletedGroup": 64,
-  "latestCompletedGroupName": "Grocery planning and recurring essentials",
-  "latestCompletedHead": "50c43c9d8d801322a0e3f01baadab5ff8bbc89cc",
-  "nextGroup": 65,
-  "nextGroupName": "Household inventory, meals, stores and price context",
+  "latestCompletedGroup": 65,
+  "latestCompletedGroupName": "Household inventory, meals, stores and price context",
+  "latestCompletedHead": "pending-current-commit",
+  "nextGroup": 66,
+  "nextGroupName": "Household routines and replenishment review",
   "roadmapApprovedThroughGroup": 82,
   "desktop": {
     "status": "active-current",
     "role": "deep-administration-review-planning-audit-reporting",
-    "currentThroughGroup": 64,
+    "currentThroughGroup": 65,
     "detachedModuleWindowsAllowed": false,
     "childModulesOpenInParentWorkspace": true
   },
@@ -20,7 +20,7 @@
     "status": "built-and-active",
     "releaseFamily": "v10",
     "initialBetaClosureGroup": 57,
-    "currentThroughGroup": 64,
+    "currentThroughGroup": 65,
     "separateFromCompanion": true,
     "offlineQueueEnabled": true,
     "silentConflictOverwriteAllowed": false
@@ -95,7 +95,7 @@
     },
     {
       "release": "v13",
-      "groups": "64",
+      "groups": "64-65",
       "status": "active"
     }
   ],
@@ -117,7 +117,7 @@
     "destructiveEvidenceHandlingEnabled": false
   },
   "evidence": {
-    "latestScreenshotGroup": "docs/screenshot-groups/group-64-grocery-planning-essentials",
+    "latestScreenshotGroup": "docs/screenshot-groups/group-65-household-inventory-meals-stores",
     "officialScreenshotsPerGroup": 8,
     "privateContextPdfsCommitted": false
   },

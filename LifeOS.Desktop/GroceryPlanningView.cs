@@ -8,12 +8,19 @@ namespace LifeOS.Desktop;
 public sealed class GroceryPlanningView : UserControl
 {
     private readonly GroceryPlanningService _service = new();
+    private readonly HouseholdInventoryService _inventoryService = new();
 
     private readonly (
         IReadOnlyList<GroceryItem> Items,
         IReadOnlyList<GroceryList> Lists,
         IReadOnlyList<RecurringEssential> Essentials) _data =
             GroceryProofData.Build();
+
+    private readonly (
+        IReadOnlyList<HouseholdInventoryItem> Inventory,
+        IReadOnlyList<StoreProfile> Stores,
+        IReadOnlyList<MealRecipe> Recipes) _household =
+            HouseholdInventoryProofData.Build();
 
     private readonly ContentControl _content = new();
 
@@ -87,7 +94,7 @@ public sealed class GroceryPlanningView : UserControl
 
         navigation.Children.Add(
             Text(
-                "LIFEOS v13",
+                "LIFEOS v13 - Group 65",
                 12,
                 SecondaryText));
 
@@ -121,6 +128,21 @@ public sealed class GroceryPlanningView : UserControl
             NavigationButton(
                 "Recurring essentials",
                 ShowEssentials));
+
+        navigation.Children.Add(
+            NavigationButton(
+                "Household inventory",
+                ShowInventory));
+
+        navigation.Children.Add(
+            NavigationButton(
+                "Meal ingredients",
+                ShowMealIngredients));
+
+        navigation.Children.Add(
+            NavigationButton(
+                "Store profiles",
+                ShowStoreProfiles));
 
         navigation.Children.Add(
             NavigationButton(
@@ -345,6 +367,25 @@ public sealed class GroceryPlanningView : UserControl
                 """,
                 "REVIEW REQUIRED"));
 
+        HouseholdInventoryDashboard inventory =
+            _inventoryService.BuildDashboard(
+                _household.Inventory,
+                _household.Stores,
+                _household.Recipes,
+                new DateOnly(2026, 7, 22));
+
+        panel.Children.Add(
+            Card(
+                "Household inventory context",
+                $"""
+                Out: {inventory.OutCount}
+                Low: {inventory.LowCount}
+                Unknown: {inventory.UnknownCount}
+                Overstocked: {inventory.OverstockedCount}
+                Review candidates: {inventory.ReviewCandidates.Count}
+                """,
+                "GROUP 65"));
+
         panel.Children.Add(
             Card(
                 "Planning boundary",
@@ -459,6 +500,160 @@ public sealed class GroceryPlanningView : UserControl
                 "Review-first boundary",
                 "No grocery item, recurring essential or template creates a purchase, payment or external cart automatically.",
                 "LOCAL ONLY"));
+
+        _content.Content = Scroll(panel);
+    }
+
+    private void ShowInventory()
+    {
+        SetSelectedNavigation("Household inventory");
+
+        HouseholdInventoryDashboard dashboard =
+            _inventoryService.BuildDashboard(
+                _household.Inventory,
+                _household.Stores,
+                _household.Recipes,
+                new DateOnly(2026, 7, 22));
+
+        var panel = Page(
+            "Household inventory",
+            "Stock state, expiry and cupboard checks become review candidates, not automatic purchases.");
+
+        panel.Children.Add(
+            Card(
+                "Inventory summary",
+                $"""
+                Out: {dashboard.OutCount}
+                Low: {dashboard.LowCount}
+                Enough: {dashboard.EnoughCount}
+                Overstocked: {dashboard.OverstockedCount}
+                Unknown: {dashboard.UnknownCount}
+                """,
+                "STOCK STATES"));
+
+        foreach (HouseholdInventoryItem item in _household.Inventory)
+        {
+            panel.Children.Add(
+                Card(
+                    item.Name,
+                    $"""
+                    Category: {item.Category}
+                    Stock state: {item.StockState}
+                    On hand: {item.OnHand:0.##} {item.Unit}
+                    Storage: {item.StorageLocation ?? "Not set"}
+                    Last checked: {item.LastChecked?.ToString("dd MMM yyyy") ?? "Needs check"}
+                    Expires: {item.ExpiresOn?.ToString("dd MMM yyyy") ?? "Not set"}
+                    Source: {item.SourceEvidence}
+                    """,
+                    item.StockState.ToString().ToUpperInvariant()));
+        }
+
+        panel.Children.Add(
+            Card(
+                "Inventory boundary",
+                dashboard.Boundary,
+                "REVIEW FIRST"));
+
+        _content.Content = Scroll(panel);
+    }
+
+    private void ShowMealIngredients()
+    {
+        SetSelectedNavigation("Meal ingredients");
+
+        HouseholdInventoryDashboard dashboard =
+            _inventoryService.BuildDashboard(
+                _household.Inventory,
+                _household.Stores,
+                _household.Recipes,
+                new DateOnly(2026, 7, 22));
+
+        var panel = Page(
+            "Meal ingredient planning",
+            "Recipes can reveal ingredient gaps, but they cannot clone grocery items without review.");
+
+        foreach (MealRecipe recipe in dashboard.Recipes)
+        {
+            string ingredients = string.Join(
+                Environment.NewLine,
+                recipe.Ingredients.Select(
+                    item =>
+                        $"- {item.Name}: {item.Quantity.Quantity:0.##} {item.Quantity.Unit} ({(item.Required ? "required" : "optional")})"));
+
+            panel.Children.Add(
+                Card(
+                    recipe.Name,
+                    $"""
+                    Source: {recipe.SourceEvidence}
+                    Ingredients:
+                    {ingredients}
+                    """,
+                    "MEAL PLAN"));
+        }
+
+        foreach (
+            HouseholdInventoryCandidate candidate in dashboard.ReviewCandidates.Where(
+                candidate => candidate.Kind == HouseholdInventoryCandidateKind.RecipeIngredientGap))
+        {
+            panel.Children.Add(
+                Card(
+                    candidate.Title,
+                    $"""
+                    Suggested target: {candidate.SuggestedTarget}
+                    Suggested action: {candidate.SuggestedAction}
+                    Source: {candidate.SourceEvidence}
+                    Requires review: {candidate.RequiresReview}
+                    """,
+                    "INGREDIENT GAP"));
+        }
+
+        _content.Content = Scroll(panel);
+    }
+
+    private void ShowStoreProfiles()
+    {
+        SetSelectedNavigation("Store profiles");
+
+        HouseholdInventoryDashboard dashboard =
+            _inventoryService.BuildDashboard(
+                _household.Inventory,
+                _household.Stores,
+                _household.Recipes,
+                new DateOnly(2026, 7, 22));
+
+        var panel = Page(
+            "Store profiles and price context",
+            "Store profiles help planning only. They are not live feeds, trusted prices or cart writes.");
+
+        foreach (StoreProfile store in dashboard.StoreProfiles)
+        {
+            panel.Children.Add(
+                Card(
+                    store.Name,
+                    $"""
+                    Kind: {store.Kind}
+                    Area: {store.Area ?? "Not set"}
+                    Strong categories: {string.Join(", ", store.StrongCategories)}
+                    Price context only: {store.PriceContextOnly}
+                    Source: {store.SourceEvidence}
+                    """,
+                    "CONTEXT ONLY"));
+        }
+
+        foreach (
+            HouseholdInventoryCandidate candidate in dashboard.ReviewCandidates.Where(
+                candidate => candidate.Kind == HouseholdInventoryCandidateKind.StorePriceContext))
+        {
+            panel.Children.Add(
+                Card(
+                    candidate.Title,
+                    $"""
+                    Suggested action: {candidate.SuggestedAction}
+                    Source: {candidate.SourceEvidence}
+                    Requires review: {candidate.RequiresReview}
+                    """,
+                    "NOT TRUSTED"));
+        }
 
         _content.Content = Scroll(panel);
     }

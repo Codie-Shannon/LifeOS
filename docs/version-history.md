@@ -4,9 +4,18 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v13 is active. Group 64 is complete and synchronized at `50c43c9d8d801322a0e3f01baadab5ff8bbc89cc`; Group 65 is next.
+LifeOS v13 is active. Group 65 adds household inventory, meal ingredients, store profiles and price-context boundaries on top of Group 64 grocery planning.
 
 ## v13 - Household and Grocery
+
+### Group 65 - Household inventory, meals, stores and price context
+
+- Added household inventory records with out, low, enough, overstocked and unknown stock states.
+- Added review candidates for low/out/unknown stock, expiring items and meal ingredient gaps.
+- Added store profiles as planning context only, not trusted price feeds.
+- Added Desktop inventory, meal ingredient and store profile views.
+- Added Full Mobile inventory review proof surface.
+- Kept inventory, meals and store context review-first with no automatic ordering, payment, external cart mutation or grocery-list mutation.
 
 ### Group 64 - Grocery planning and recurring essentials
 

@@ -7,11 +7,11 @@
     <SingleProject>true</SingleProject>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ApplicationTitle>LifeOS Full Mobile</ApplicationTitle>
+    <ApplicationTitle>Life Control OS</ApplicationTitle>
     <ApplicationId>nz.itssuperbeast.lifeos.mobile</ApplicationId>
-    <ApplicationDisplayVersion>10.0.0-alpha.2</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>13.0.0-alpha.1</ApplicationDisplayVersion>
     <ApplicationVersion>2</ApplicationVersion>
-    <Version>10.0.0-alpha.2</Version>
+    <Version>13.0.0-alpha.1</Version>
     <SupportedOSPlatformVersion>26.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion>26.0</TargetPlatformMinVersion>
   </PropertyGroup>

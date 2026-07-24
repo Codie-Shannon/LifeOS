@@ -8,7 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ApplicationTitle>Life Control OS</ApplicationTitle>
-    <ApplicationId>nz.itssuperbeast.lifeos.mobile</ApplicationId>
+    <ApplicationId>nz.codieshannon.lifeos.mobile</ApplicationId>
     <ApplicationDisplayVersion>13.0.0-alpha.1</ApplicationDisplayVersion>
     <ApplicationVersion>2</ApplicationVersion>
     <Version>13.0.0-alpha.1</Version>

@@ -2,5 +2,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-  <application android:allowBackup="false" android:fullBackupContent="false" android:usesCleartextTraffic="false" android:label="LifeOS Full Mobile" />
+  <application android:allowBackup="false" android:fullBackupContent="false" android:usesCleartextTraffic="false" android:label="Life Control OS" />
 </manifest>

@@ -1,18 +1,18 @@
 {
-    "currentRelease":  "v22",
-    "currentReleaseName":  "Money Integrations",
-    "currentSemanticVersion":  "22.0.0-alpha.1",
+    "currentRelease":  "v23",
+    "currentReleaseName":  "Grocery Intelligence",
+    "currentSemanticVersion":  "23.0.0-alpha.1",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  98,
-    "latestCompletedGroupName":  "Money integration safety closure",
-    "latestCompletedHead":  "7a323ac",
-    "nextGroup":  99,
-    "nextGroupName":  "Supermarket lookup consent",
+    "latestCompletedGroup":  103,
+    "latestCompletedGroupName":  "NZ grocery lookup closure",
+    "latestCompletedHead":  "generated-pack-checkpoint",
+    "nextGroup":  104,
+    "nextGroupName":  "Screenshot intake utility",
     "roadmapApprovedThroughGroup":  120,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  98,
+                    "currentThroughGroup":  103,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -20,7 +20,7 @@
                        "status":  "built-and-active",
                        "releaseFamily":  "v10",
                        "initialBetaClosureGroup":  57,
-                       "currentThroughGroup":  98,
+                       "currentThroughGroup":  103,
                        "separateFromCompanion":  true,
                        "offlineQueueEnabled":  true,
                        "silentConflictOverwriteAllowed":  false
@@ -136,6 +136,11 @@
                                   {
                                       "release":  "v22",
                                       "groups":  "95-98",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v23",
+                                      "groups":  "99-103",
                                       "status":  "complete"
                                   }
                               ],

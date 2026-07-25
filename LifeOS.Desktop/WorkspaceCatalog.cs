@@ -250,7 +250,8 @@ internal static class WorkspaceCatalog
                                 "v13-grocery-planning",
                                 "Grocery Planning",
                                 "Canonical records",
-                                "Lists, recurring essentials, quantities, priorities and review-first household planning.")
+                                "Lists, recurring essentials, quantities, priorities and review-first household planning."),
+                            Route("grocery-lookup", "NZ Grocery Price Lookup", "SG-76 ready", "Consent-based nearby-store lookup, visible worker status, sourced price comparisons and manual fallback.")
                         })
                 }),
             new(

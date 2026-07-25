@@ -29,6 +29,7 @@ public partial class MainWindow
         "final-offline-os",
         "follow-ups",
         "google-calendar",
+        "grocery-lookup",
         "guarded-providers",
         "integration-inbox",
         "intelligence",
@@ -198,6 +199,9 @@ public partial class MainWindow
                 break;
             case "google-calendar":
                 ShowIntegrationInboxPage();
+                break;
+            case "grocery-lookup":
+                ShowProductLanePage(routeId);
                 break;
             case "guarded-providers":
                 ShowProductLanePage(routeId);

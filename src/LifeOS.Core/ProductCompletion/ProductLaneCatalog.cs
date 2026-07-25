@@ -200,6 +200,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Zip receipt", "Confirmed", "NZD 120 remaining - duplicate scan passed", false),
                     new ProductLaneAction("Xero export contract", "Read-only", "CSV/Xero export available; provider write disabled", false),
                     new ProductLaneAction("Bank payment action", "Blocked", "Payment initiation is outside product-complete scope", false)
+                }),
+            ["grocery-lookup"] = new(
+                "grocery-lookup",
+                "SG-76",
+                "NZ Grocery Price Lookup",
+                "Groups 99-103 - consent, visible worker, retailer adapters and price intelligence",
+                "Lookup runs only after retailer and location consent. Every price shows source, timestamp and confidence; carts, orders and payments never change.",
+                new[]
+                {
+                    new ProductLaneMetric("Location", "Whanganui", "Nearest town enabled"),
+                    new ProductLaneMetric("Retailers", "3", "New World, PaknSave, Woolworths"),
+                    new ProductLaneMetric("Fresh prices", "9", "Within 24 hours"),
+                    new ProductLaneMetric("Cart mutations", "0", "Hard boundary")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Standard milk 2L", "NZD 3.90", "PaknSave - captured 12:00 - 88% confidence", true),
+                    new ProductLaneAction("White bread loaf", "Compare 3", "Similar products across permitted nearby stores", true),
+                    new ProductLaneAction("Woolworths adapter", "Manual fallback", "Provider path unavailable; visible manual entry offered", false),
+                    new ProductLaneAction("Background refresh", "Off", "Can be enabled explicitly from grocery settings", false)
                 })
         };
 

@@ -117,8 +117,8 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-                     "latestScreenshotGroup":  "docs/screenshot-groups/group-66-shared-household-workflows-v13-closure",
-                     "officialScreenshotsPerGroup":  9,
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-67-68-work-time-billable-records",
+        "officialScreenshotsPerGroup":  8,
                      "privateContextPdfsCommitted":  false
                  },
     "internalNotes":  {

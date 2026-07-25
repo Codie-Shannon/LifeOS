@@ -1,36 +1,37 @@
-# LifeOS Desktop v25.0.0-alpha.1 Release Notes
+# LifeOS Desktop v26.0.0-beta.1 Release Notes
 
-LifeOS Desktop v25 completes Privacy, Export, Backup and Controls across
-Groups 108-111.
+LifeOS Desktop v26 completes Website Packaging and Onboarding across
+Groups 112-116.
 
 ## Release theme
 
-**Explicit permission and recoverable control**
+**Factual public packaging with private-beta boundaries**
 
 ## Added
 
-- Independently permissioned sensitive categories.
-- Sanitized crash-report controls with 90-day default retention.
-- Credential-rejecting, SHA-256 integrity-checked backups.
-- Explicit restore previews and schema validation.
-- Audited global Emergency Stop.
-- Reachable Privacy, Backup & Emergency Control module in Settings.
+- Reachable Website & Product Packaging module in Settings.
+- Public product homepage and product-boundary presentation.
+- Neutral local-first onboarding with optional providers.
+- Factual portfolio case study.
+- Updated public documentation, roadmap and release identity.
+- Social-preview packaging for the private beta.
 
 ## Safety boundaries
 
-- A timestamped grant is required for sensitive-category access.
-- Credential-like fields cannot enter backup payloads.
-- Restore is a separate reviewed action.
-- Clearing Emergency Stop does not reconnect providers automatically.
+- Public copy remains beta-labelled and factual.
+- Private paths and notes cannot enter public packaging.
+- Unsupported production claims fail validation.
+- The Website exposes no account, payment or private-dashboard surface.
 
 ## Validation
 
-- 411 Core tests passed.
+- 418 Core tests passed.
+- 28 Website tests passed.
 - 54 Mobile tests passed.
-- Desktop and Android Release builds completed cleanly.
+- Website publish plus Desktop and Android Release builds completed cleanly.
 - Official evidence is in
-  [`screenshot-groups/group-108-111-privacy-export-backup-controls`](screenshot-groups/group-108-111-privacy-export-backup-controls/).
+  [`screenshot-groups/group-112-116-website-packaging-onboarding`](screenshot-groups/group-112-116-website-packaging-onboarding/).
 
 ## Next
 
-Group 112 begins v26 Website Packaging and Onboarding.
+Group 117 begins the v27 product-complete release candidate.

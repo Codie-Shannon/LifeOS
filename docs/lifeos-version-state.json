@@ -5,7 +5,7 @@
     "currentStatus":  "private-beta",
     "latestCompletedGroup":  116,
     "latestCompletedGroupName":  "Website packaging closure",
-    "latestCompletedHead":  "generated-pack-checkpoint",
+    "latestCompletedHead":  "24f5f1a",
     "nextGroup":  117,
     "nextGroupName":  "End-to-end desktop pass",
     "roadmapApprovedThroughGroup":  120,
@@ -177,7 +177,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-108-111-privacy-export-backup-controls",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-112-116-website-packaging-onboarding",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

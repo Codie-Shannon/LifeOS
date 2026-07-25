@@ -4,7 +4,17 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v25.0.0-alpha.1 is complete through Group 111. Privacy, Export, Backup and Controls is closed, Group 112 is next, and the approved roadmap runs through Group 120.
+LifeOS v26.0.0-beta.1 is complete through Group 116. Website Packaging and Onboarding is closed, Group 117 is next, and the approved roadmap runs through Group 120.
+
+## v26 - Public Packaging
+
+### Groups 112-116
+
+- Completed factual private-beta Website packaging.
+- Added neutral local-first onboarding with optional providers.
+- Added public documentation and roadmap migration.
+- Added a verified-behavior portfolio case study.
+- Added public-route, private-path and unsupported-claim safeguards.
 
 ## v25 - Privacy Control Plane
 

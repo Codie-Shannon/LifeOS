@@ -1,28 +1,28 @@
 # LifeOS current status
 
-LifeOS is current through **v25.0.0-alpha.1 / Group 111** at repository checkpoint `6f52229`.
+LifeOS is current through **v26.0.0-beta.1 / Group 116** at repository checkpoint `24f5f1a`.
 
-Groups 108-111 close Privacy, Export, Backup and Controls. Group 112 is next, and the approved roadmap runs through Group 120.
+Groups 112-116 close Website Packaging and Onboarding. Group 117 is next, and the approved roadmap runs through Group 120.
 
 ## Current product state
 
 | Product | Status |
 |---|---|
-| Desktop | Deep administration, review, planning, audit and reporting through Group 111 |
-| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 111 |
+| Desktop | Deep administration, review, planning, audit and reporting through Group 116 |
+| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 116 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
-| Website | Public product/documentation/evidence beta foundation complete; packaging and onboarding planned |
+| Website | Public product, documentation, onboarding and factual portfolio packaging complete for private beta |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest completed capability
 
-Groups 108-111 complete Privacy, Export, Backup and Controls:
+Groups 112-116 complete Website Packaging and Onboarding:
 
-- independently permissioned sensitive categories
-- optional sanitized crash reports with a 90-day default
-- credential-rejecting, integrity-checked backup envelopes
-- explicit restore previews and schema validation
-- audited global Emergency Stop with providers left disconnected
+- factual private-beta product positioning
+- neutral local-first onboarding with optional providers
+- public documentation and roadmap migration
+- a portfolio case study grounded in verified behavior
+- public-route and private-path packaging safeguards
 
 This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Native Intelligence, Scheduled Communications and Social Review lanes.
 
@@ -39,12 +39,13 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
-- Core tests: 411 passed
+- Core tests: 418 passed
+- Website tests: 28 passed
 - Mobile tests: 54 passed
 - Desktop Release build: clean
 - Android Release build: clean with signed private-beta artifacts
-- Latest evidence: [`group-108-111-privacy-export-backup-controls`](screenshot-groups/group-108-111-privacy-export-backup-controls/)
+- Latest evidence: [`group-112-116-website-packaging-onboarding`](screenshot-groups/group-112-116-website-packaging-onboarding/)
 
 ## Next approved work
 
-Group 112 begins v26 Website Packaging and Onboarding. The remaining approved lanes run through the Group 120 product-complete release candidate.
+Group 117 begins the v27 product-complete release candidate. The approved roadmap runs through Group 120.

@@ -4,20 +4,20 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v25.0.0-alpha.1 is complete through Group 111, closing the Privacy, Export, Backup and Controls lane. Group 112 begins Website Packaging and Onboarding.
+> **Current checkpoint:** LifeOS v26.0.0-beta.1 is complete through Group 116, closing Website Packaging and Onboarding. Group 117 begins the product-complete release candidate.
 
-![LifeOS v25 Privacy Control Plane](docs/screenshot-groups/group-108-111-privacy-export-backup-controls/02-desktop-privacy-control-overview.png)
+![LifeOS v26 Public Packaging](docs/screenshot-groups/group-112-116-website-packaging-onboarding/05-website-homepage.png)
 
 ## Product status
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through Group 111 |
-| **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 111, including offline-safe capture, review and execution |
+| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through Group 116 |
+| **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 116, including offline-safe capture, review and execution |
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
-| **LifeOS Website** | Public product and documentation beta foundation complete; packaging and onboarding planned for Groups 112-116 |
+| **LifeOS Website** | Public product, documentation, onboarding and factual portfolio packaging complete for private beta |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v25 Privacy Control Plane complete; Group 112 next; roadmap approved through Group 120 |
+| **Current release lane** | v26 Public Packaging complete; Group 117 next; roadmap approved through Group 120 |
 
 Full Mobile and Mobile Companion are separate products. They can share contracts and libraries, but retain different scope, UX and release tracks.
 
@@ -93,6 +93,7 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 112-116 - Website Packaging and Onboarding](docs/screenshot-groups/group-112-116-website-packaging-onboarding/)
 - [Groups 108-111 - Privacy, Export, Backup and Controls](docs/screenshot-groups/group-108-111-privacy-export-backup-controls/)
 - [Groups 104-107 - Evidence Automation and Proof Tooling](docs/screenshot-groups/group-104-107-evidence-automation-proof-tooling/)
 - [Groups 99-103 - New Zealand Grocery Lookup Worker](docs/screenshot-groups/group-99-103-nz-grocery-lookup-worker/)
@@ -143,11 +144,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v25 is complete through Group 111. Group 112 starts the v26 Website Packaging and Onboarding lane.
+LifeOS v26 is complete through Group 116. Group 117 starts the v27 product-complete release-candidate lane.
 
 Approved work continues through Group 120:
 
-- Groups 112-116: Website packaging and onboarding
 - Groups 117-120: Product-complete release candidate
 
 ## Author

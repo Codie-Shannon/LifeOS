@@ -9,21 +9,22 @@ This directory is the durable source of truth for LifeOS status, release history
 - [`version-history.md`](version-history.md) — consolidated milestone history
 - [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 120
 - [`LIFEOS_DESKTOP_RELEASE_NOTES.md`](LIFEOS_DESKTOP_RELEASE_NOTES.md) — current Desktop release notes
-- [`screenshot-groups/group-108-111-privacy-export-backup-controls/`](screenshot-groups/group-108-111-privacy-export-backup-controls/) — latest completed screenshot evidence
+- [`screenshot-groups/group-112-116-website-packaging-onboarding/`](screenshot-groups/group-112-116-website-packaging-onboarding/) — latest completed screenshot evidence
 
 ## Current product state
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | Current through v25 Group 111 |
-| Full Mobile | Built and aligned through v25 Group 111 |
+| LifeOS Desktop | Current through v26 Group 116 |
+| Full Mobile | Built and aligned through v26 Group 116 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
-| Website | Beta foundation complete; packaging/onboarding approved for Groups 112-116 |
+| Website | Private-beta product, documentation, onboarding and portfolio packaging complete |
 | Shared Core | Active authoritative contract, validation, provenance, audit and safety layer |
-| Current release | v25 Privacy Control Plane complete; Group 112 next |
+| Current release | v26 Public Packaging complete; Group 117 next |
 
 ## Recent release lanes
 
+- **v26 / Groups 112-116** - Website Packaging and Onboarding
 - **v25 / Groups 108-111** - Privacy, Export, Backup and Controls
 - **v24 / Groups 104-107** - Evidence Automation and Proof Tooling
 - **v23 / Groups 99-103** - New Zealand Grocery Lookup Worker
@@ -41,6 +42,7 @@ This directory is the durable source of truth for LifeOS status, release history
 
 ## Current evidence
 
+- [`Groups 112-116 - Website Packaging and Onboarding`](screenshot-groups/group-112-116-website-packaging-onboarding/)
 - [`Groups 108-111 - Privacy, Export, Backup and Controls`](screenshot-groups/group-108-111-privacy-export-backup-controls/)
 - [`Groups 104-107 - Evidence Automation and Proof Tooling`](screenshot-groups/group-104-107-evidence-automation-proof-tooling/)
 - [`Groups 99-103 - New Zealand Grocery Lookup Worker`](screenshot-groups/group-99-103-nz-grocery-lookup-worker/)

@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v25.0.0-alpha.1 active.
-- Group 111 complete.
-- Group 112 next.
+- LifeOS v26.0.0-beta.1 active.
+- Group 116 complete.
+- Group 117 next.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation

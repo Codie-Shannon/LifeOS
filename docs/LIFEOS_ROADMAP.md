@@ -4,9 +4,9 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v25.0.0-alpha.1 is complete through Group 111. Group 112 is next.**
+**LifeOS v26.0.0-beta.1 is complete through Group 116. Group 117 is next.**
 
-Groups 108-111 closed Privacy, Export, Backup and Controls with category permissions, credential-safe backups, restore validation and audited Emergency Stop behavior.
+Groups 112-116 closed Website Packaging and Onboarding with factual private-beta copy, optional-provider onboarding, public documentation migration, portfolio presentation and public packaging safeguards.
 
 ## Product architecture
 
@@ -51,17 +51,11 @@ Groups 108-111 closed Privacy, Export, Backup and Controls with category permiss
 | v23 | 99-103 | New Zealand Grocery Lookup Worker |
 | v24 | 104-107 | Evidence Automation and Proof Tooling |
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
+| v26 | 112-116 | Website Packaging and Onboarding |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
 ## Approved roadmap
-
-### v26 / Groups 112-116 — Website packaging and onboarding
-
-- Public Website completion.
-- Product onboarding and support documentation.
-- Desktop and mobile packaging/distribution preparation.
-- Domain, brand and company details finalized when available.
 
 ### v27 / Groups 117-120 — Product-complete release candidate
 

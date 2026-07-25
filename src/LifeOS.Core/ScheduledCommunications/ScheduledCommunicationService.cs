@@ -140,7 +140,9 @@ public sealed class ScheduledCommunicationService
                communication.State == ScheduledCommunicationState.Approved &&
                communication.ApprovedAt is not null &&
                communication.ScheduledFor <= now &&
-               !quietHours.Contains(TimeOnly.FromDateTime(now.LocalDateTime));
+               // Quiet hours apply to the wall-clock time carried by the caller's
+               // explicit offset, not to the timezone configured on this machine.
+               !quietHours.Contains(TimeOnly.FromDateTime(now.DateTime));
     }
 
     public ScheduledCommunication MarkSent(

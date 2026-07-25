@@ -203,7 +203,10 @@ public sealed class WorkTimeService
         DateTimeOffset now)
     {
         WorkTimeEntry[] selected = entries
-            .Where(entry => DateOnly.FromDateTime(entry.StartedAt.LocalDateTime) == date)
+            // StartedAt.DateTime preserves the wall-clock date represented by the
+            // entry's own offset. LocalDateTime would instead convert through the
+            // machine timezone, making summaries differ between NZ and UTC runners.
+            .Where(entry => DateOnly.FromDateTime(entry.StartedAt.DateTime) == date)
             .ToArray();
 
         TimeSpan total = TimeSpan.FromTicks(selected.Sum(entry => entry.Duration(now).Ticks));

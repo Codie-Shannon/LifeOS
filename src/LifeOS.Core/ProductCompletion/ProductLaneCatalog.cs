@@ -140,6 +140,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Supplier summary", "Ask first", "Optional OpenAI enrichment; Work category permitted", true),
                     new ProductLaneAction("Health data suggestion", "Blocked", "Sensitive category permission is off", false),
                     new ProductLaneAction("External AI setup", "Configured", "OpenAI primary; switch off, ask or capped anytime", false)
+                }),
+            ["communications"] = new(
+                "communications",
+                "SG-73",
+                "Scheduled Communications",
+                "Groups 87-90 - SMS and email scheduling, unified review, quiet hours and safety closure",
+                "Every scheduled SMS or email requires explicit approval. Editing or rescheduling revokes approval; quiet hours and Emergency Stop always apply.",
+                new[]
+                {
+                    new ProductLaneMetric("Drafts", "4", "SMS, Gmail and Outlook"),
+                    new ProductLaneMetric("Approved", "1", "Due after quiet hours"),
+                    new ProductLaneMetric("Quiet hours", "21:00-07:00", "Local time"),
+                    new ProductLaneMetric("Sent automatically", "0", "Approval required")
+                },
+                new[]
+                {
+                    new ProductLaneAction("SMS: appointment reminder", "Draft", "Phone bridge - approve, edit, cancel or reschedule", true),
+                    new ProductLaneAction("Email: supplier follow-up", "Approved", "Outlook - scheduled 08:30 with source proof", false),
+                    new ProductLaneAction("Gmail: weekly summary", "Needs review", "Draft changed; previous approval was revoked", true),
+                    new ProductLaneAction("Communication Emergency Stop", "Ready", "Immediately blocks every channel", false)
                 })
         };
 

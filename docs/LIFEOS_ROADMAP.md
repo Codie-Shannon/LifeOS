@@ -4,9 +4,9 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v22.0.0-alpha.1 is complete through Group 98. Group 99 is next.**
+**LifeOS v23.0.0-alpha.1 is complete through Group 103. Group 104 is next.**
 
-Groups 95-98 closed Pay-Later and Money Integrations with source-backed candidates, explicit confirmation, duplicate review and read-only provider contracts. Payment initiation and autonomous reconciliation remain disabled.
+Groups 99-103 closed the New Zealand Grocery Lookup Worker with explicit location consent, comparable prices, visible freshness and manual fallback. Automatic ordering and external-cart mutation remain disabled.
 
 ## Product architecture
 
@@ -48,17 +48,11 @@ Groups 95-98 closed Pay-Later and Money Integrations with source-backed candidat
 | v20 | 87-90 | Scheduled Communications |
 | v21 | 91-94 | Social and Messaging Integrations |
 | v22 | 95-98 | Pay-Later and Money Integrations |
+| v23 | 99-103 | New Zealand Grocery Lookup Worker |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
 ## Approved roadmap
-
-### v23 / Groups 99-103 — New Zealand grocery lookup worker
-
-- User-selected location or optional mobile location.
-- Nearest-town pricing where the user opts in.
-- Comparable-product and store-price context.
-- Source, freshness and confidence visibility; no automatic ordering.
 
 ### v24 / Groups 104-107 — Evidence automation and proof tooling
 

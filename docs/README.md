@@ -9,21 +9,22 @@ This directory is the durable source of truth for LifeOS status, release history
 - [`version-history.md`](version-history.md) — consolidated milestone history
 - [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 120
 - [`LIFEOS_DESKTOP_RELEASE_NOTES.md`](LIFEOS_DESKTOP_RELEASE_NOTES.md) — current Desktop release notes
-- [`screenshot-groups/group-95-98-pay-later-money-integrations/`](screenshot-groups/group-95-98-pay-later-money-integrations/) — latest completed screenshot evidence
+- [`screenshot-groups/group-99-103-nz-grocery-lookup-worker/`](screenshot-groups/group-99-103-nz-grocery-lookup-worker/) — latest completed screenshot evidence
 
 ## Current product state
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | Current through v22 Group 98 |
-| Full Mobile | Built and aligned through v22 Group 98 |
+| LifeOS Desktop | Current through v23 Group 103 |
+| Full Mobile | Built and aligned through v23 Group 103 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Beta foundation complete; packaging/onboarding approved for Groups 112-116 |
 | Shared Core | Active authoritative contract, validation, provenance, audit and safety layer |
-| Current release | v22 Money Integrations complete; Group 99 next |
+| Current release | v23 Grocery Intelligence complete; Group 104 next |
 
 ## Recent release lanes
 
+- **v23 / Groups 99-103** - New Zealand Grocery Lookup Worker
 - **v22 / Groups 95-98** — Pay-Later and Money Integrations
 - **v21 / Groups 91-94** — Social and Messaging Integrations
 - **v20 / Groups 87-90** — Scheduled Communications
@@ -38,6 +39,7 @@ This directory is the durable source of truth for LifeOS status, release history
 
 ## Current evidence
 
+- [`Groups 99-103 - New Zealand Grocery Lookup Worker`](screenshot-groups/group-99-103-nz-grocery-lookup-worker/)
 - [`Groups 95-98 — Pay-Later and Money Integrations`](screenshot-groups/group-95-98-pay-later-money-integrations/)
 - [`Groups 91-94 — Social and Messaging Integrations`](screenshot-groups/group-91-94-social-messaging-integrations/)
 - [`Groups 87-90 — Scheduled Communications`](screenshot-groups/group-87-90-scheduled-communications/)

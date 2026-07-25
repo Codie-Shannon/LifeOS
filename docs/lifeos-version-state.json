@@ -5,7 +5,7 @@
     "currentStatus":  "active-development",
     "latestCompletedGroup":  103,
     "latestCompletedGroupName":  "NZ grocery lookup closure",
-    "latestCompletedHead":  "generated-pack-checkpoint",
+    "latestCompletedHead":  "2610420",
     "nextGroup":  104,
     "nextGroupName":  "Screenshot intake utility",
     "roadmapApprovedThroughGroup":  120,
@@ -162,7 +162,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-95-98-pay-later-money-integrations",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-99-103-nz-grocery-lookup-worker",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

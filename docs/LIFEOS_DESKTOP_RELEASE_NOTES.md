@@ -1,37 +1,39 @@
-# LifeOS Desktop v22.0.0-alpha.1 Release Notes
+# LifeOS Desktop v23.0.0-alpha.1 Release Notes
 
-LifeOS Desktop v22 completes Pay-Later and Money Integrations across Groups 95-98.
+LifeOS Desktop v23 completes the New Zealand Grocery Lookup Worker across
+Groups 99-103.
 
 ## Release theme
 
-**Evidence-backed money context without payment authority**
+**Consent-based local grocery intelligence without purchase authority**
 
 ## Added
 
-- Afterpay and Zip evidence parsing into review candidates.
-- Duplicate statement detection without silent merging.
-- Explicit candidate confirmation.
-- Confirmed next deductions excluded from safe-money calculations.
-- Read-only CSV/Xero export contract.
-- Pay-Later & Money Integration Review in the Money workspace.
+- User-selected location and optional nearest-town pricing.
+- Explicit retailer and location consent.
+- Comparable-product and store-price context.
+- Source, capture time, freshness and confidence visibility.
+- Visible worker status and manual fallback.
+- NZ Grocery Price Lookup in the Household workspace.
 
 ## Safety boundaries
 
-- Email evidence creates candidates only.
-- Unconfirmed and duplicate records do not change safe money.
-- No payment initiation.
-- No autonomous reconciliation.
-- Accounting-provider writes remain disabled.
-- Source references and review state remain visible.
+- Lookup starts only after explicit consent.
+- Future-dated evidence cannot count as fresh.
+- Provider failures remain visible and offer manual fallback.
+- Background refresh is off by default.
+- No automatic ordering, substitution, payment or cart mutation.
 
 ## Validation
 
-- 394 Core tests passed.
+- 399 Core tests passed.
 - 54 Mobile tests passed.
 - Desktop Release build completed cleanly.
 - Android Release build completed cleanly.
-- Official evidence is in [`screenshot-groups/group-95-98-pay-later-money-integrations`](screenshot-groups/group-95-98-pay-later-money-integrations/).
+- Official evidence is in
+  [`screenshot-groups/group-99-103-nz-grocery-lookup-worker`](screenshot-groups/group-99-103-nz-grocery-lookup-worker/).
 
 ## Next
 
-Group 99 begins v23 New Zealand Grocery Lookup Worker. The approved roadmap continues through Group 120.
+Group 104 begins v24 Evidence Automation and Proof Tooling. The approved
+roadmap continues through Group 120.

@@ -4,7 +4,17 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v22.0.0-alpha.1 is complete through Group 98. Pay-Later and Money Integrations is closed, Group 99 is next, and the approved roadmap runs through Group 120.
+LifeOS v23.0.0-alpha.1 is complete through Group 103. The New Zealand Grocery Lookup Worker is closed, Group 104 is next, and the approved roadmap runs through Group 120.
+
+## v23 - Grocery Intelligence
+
+### Groups 99-103
+
+- Added consent-based retailer and location selection.
+- Added optional nearest-town pricing.
+- Added comparable-product and store-price context.
+- Exposed source, freshness and confidence for every price.
+- Kept automatic ordering and external-cart mutation disabled.
 
 ## v22 - Money Integrations
 

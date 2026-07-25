@@ -1,28 +1,29 @@
 # LifeOS current status
 
-LifeOS is current through **v22.0.0-alpha.1 / Group 98** at repository checkpoint `7a323ac`.
+LifeOS is current through **v23.0.0-alpha.1 / Group 103** at repository checkpoint `2610420`.
 
-Groups 95-98 close Pay-Later and Money Integrations. Group 99 is next, and the approved roadmap runs through Group 120.
+Groups 99-103 close the New Zealand Grocery Lookup Worker. Group 104 is next, and the approved roadmap runs through Group 120.
 
 ## Current product state
 
 | Product | Status |
 |---|---|
-| Desktop | Deep administration, review, planning, audit and reporting through Group 98 |
-| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 98 |
+| Desktop | Deep administration, review, planning, audit and reporting through Group 103 |
+| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 103 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Public product/documentation/evidence beta foundation complete; packaging and onboarding planned |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest completed capability
 
-Groups 95-98 complete Pay-Later and Money Integrations:
+Groups 99-103 complete the New Zealand Grocery Lookup Worker:
 
-- source-backed Afterpay and Zip parsing candidates
-- duplicate statements retained for explicit review
-- confirmed deductions excluded from safe-money calculations
-- read-only CSV/Xero export contract
-- no payment initiation or autonomous reconciliation
+- explicit retailer and location consent
+- user-selected or optional nearest-town pricing
+- comparable-product and retailer-price context
+- visible source, capture time, freshness and confidence
+- manual fallback when a provider path is unavailable
+- no automatic ordering, payment or external-cart mutation
 
 This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Native Intelligence, Scheduled Communications and Social Review lanes.
 
@@ -39,12 +40,12 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
-- Core tests: 386 passed
+- Core tests: 399 passed
 - Mobile tests: 54 passed
 - Desktop Release build: clean
 - Android Release build: clean with signed private-beta artifacts
-- Latest evidence: [`group-95-98-pay-later-money-integrations`](screenshot-groups/group-95-98-pay-later-money-integrations/)
+- Latest evidence: [`group-99-103-nz-grocery-lookup-worker`](screenshot-groups/group-99-103-nz-grocery-lookup-worker/)
 
 ## Next approved work
 
-Group 99 begins v23 New Zealand Grocery Lookup Worker. The remaining approved lanes run through the Group 120 product-complete release candidate.
+Group 104 begins v24 Evidence Automation and Proof Tooling. The remaining approved lanes run through the Group 120 product-complete release candidate.

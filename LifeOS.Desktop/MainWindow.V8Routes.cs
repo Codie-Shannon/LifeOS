@@ -26,6 +26,7 @@ public partial class MainWindow
         "final-offline-os",
         "follow-ups",
         "google-calendar",
+        "guarded-providers",
         "integration-inbox",
         "item-state-engine",
         "lifeos-spine",
@@ -182,6 +183,9 @@ public partial class MainWindow
                 break;
             case "google-calendar":
                 ShowIntegrationInboxPage();
+                break;
+            case "guarded-providers":
+                ShowProductLanePage(routeId);
                 break;
             case "integration-inbox":
                 ShowIntegrationInboxPage();

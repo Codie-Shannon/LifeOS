@@ -61,6 +61,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Imported supplier call", "Needs review", "Calendar source - accept, defer or reject", true),
                     new ProductLaneAction("Household appointment", "Accepted", "11:30 - Work to Household boundary shown", false),
                     new ProductLaneAction("Close v14 operating lane", "Blocked", "Link the remaining Career administration proof first", true)
+                }),
+            ["guarded-providers"] = new(
+                "guarded-providers",
+                "SG-69",
+                "Guarded Provider Contracts",
+                "Groups 73-76 - connector registry, Integration Inbox v2, permission gates and v15 closure",
+                "Provider data remains an untrusted preview. Writes are disabled by default, decisions are audited, and Emergency Stop wins.",
+                new[]
+                {
+                    new ProductLaneMetric("Providers", "6", "Manual setup available"),
+                    new ProductLaneMetric("Needs review", "4", "Source-backed candidates"),
+                    new ProductLaneMetric("Duplicates", "1", "Never silently merged"),
+                    new ProductLaneMetric("External writes", "0", "Disabled by default")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Google Calendar event", "New", "Read-only source - accept, defer, reject or link", true),
+                    new ProductLaneAction("Outlook message follow-up", "Conflict", "Field-level difference requires a decision", true),
+                    new ProductLaneAction("Xero import contract", "Setup later", "Read-only placeholder; no credentials stored", false),
+                    new ProductLaneAction("Emergency Stop", "Ready", "Stops provider intake and all external writes", false)
                 })
         };
 

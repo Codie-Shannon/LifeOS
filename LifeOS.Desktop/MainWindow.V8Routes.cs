@@ -21,6 +21,7 @@ public partial class MainWindow
         "daily-operating-flow",
         "daily-state",
         "desktop-release",
+        "documentation-hub",
         "email-radar",
         "evidence-vault",
         "final-offline-os",
@@ -168,6 +169,9 @@ public partial class MainWindow
                 break;
             case "desktop-release":
                 ShowDesktopReleasePage();
+                break;
+            case "documentation-hub":
+                ShowProductLanePage(routeId);
                 break;
             case "email-radar":
                 ShowEmailRadarPage();

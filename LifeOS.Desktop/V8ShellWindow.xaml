@@ -455,6 +455,7 @@
                                         <TextBlock x:Name="AboutVersionText" Text="LifeOS Desktop" FontSize="{DynamicResource LifeOS.FontSize.Subheading}" FontWeight="SemiBold" Foreground="{DynamicResource LifeOS.Brush.TextPrimary}" />
                                         <TextBlock Text="Nine permanent workspaces. Integration Control Centre, Integration Inbox and Microsoft Provider Setup are embedded system surfaces. Read-only, review-first and foreground-only." Margin="0,6,0,12" Style="{StaticResource LifeOS.Text.Body}" />
                                         <WrapPanel>
+                                            <Button Content="Documentation Hub" Tag="documentation-hub" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.DocumentationHub" />
                                             <Button Content="Desktop Release" Tag="desktop-release" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.DesktopRelease" />
                                             <Button Content="Offline Checkpoint" Tag="final-offline-os" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.OfflineCheckpoint" />
                                             <Button Content="OS Navigation" Tag="os-navigation" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.Navigation" />

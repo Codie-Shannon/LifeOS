@@ -81,6 +81,25 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Outlook message follow-up", "Conflict", "Field-level difference requires a decision", true),
                     new ProductLaneAction("Xero import contract", "Setup later", "Read-only placeholder; no credentials stored", false),
                     new ProductLaneAction("Emergency Stop", "Ready", "Stops provider intake and all external writes", false)
+                }),
+            ["documentation-hub"] = new(
+                "documentation-hub",
+                "SG-70",
+                "Documentation & Packaging Hub",
+                "Groups 77-79 - concise in-app help, website documentation and release-asset links",
+                "Public, beta and internal audiences are separated. Private paths, account details and handoff notes never enter public copy.",
+                new[]
+                {
+                    new ProductLaneMetric("Public guides", "12", "Website-owned"),
+                    new ProductLaneMetric("In-app help", "8", "Concise entries"),
+                    new ProductLaneMetric("Release links", "5", "Version-aligned"),
+                    new ProductLaneMetric("Boundary checks", "3", "All passing")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Move long-form connector guide", "Ready", "Website destination selected; app retains a short setup link", false),
+                    new ProductLaneAction("Release screenshot index", "Linked", "Stable repo evidence path without local machine details", false),
+                    new ProductLaneAction("Public copy scan", "Passed", "No private handoff notes, credentials or absolute paths", false)
                 })
         };
 

@@ -1,37 +1,36 @@
-# LifeOS Desktop v24.0.0-alpha.1 Release Notes
+# LifeOS Desktop v25.0.0-alpha.1 Release Notes
 
-LifeOS Desktop v24 completes Evidence Automation and Proof Tooling across
-Groups 104-107.
+LifeOS Desktop v25 completes Privacy, Export, Backup and Controls across
+Groups 108-111.
 
 ## Release theme
 
-**Repeatable proof without altering originals**
+**Explicit permission and recoverable control**
 
 ## Added
 
-- Old-evidence exclusion during screenshot intake.
-- Stable group-prefixed screenshot naming.
-- Copy-only evidence export.
-- Evidence PDF generation from approved PNG files.
-- Fail-closed completion gates.
-- Reachable Evidence Automation module in Settings.
+- Independently permissioned sensitive categories.
+- Sanitized crash-report controls with 90-day default retention.
+- Credential-rejecting, SHA-256 integrity-checked backups.
+- Explicit restore previews and schema validation.
+- Audited global Emergency Stop.
+- Reachable Privacy, Backup & Emergency Control module in Settings.
 
 ## Safety boundaries
 
-- Original evidence is never renamed or overwritten.
-- Empty or incomplete proof cannot pass the completion gate.
-- Repository export reports zero canonical mutations.
-- Generated PDFs remain derivative evidence.
+- A timestamped grant is required for sensitive-category access.
+- Credential-like fields cannot enter backup payloads.
+- Restore is a separate reviewed action.
+- Clearing Emergency Stop does not reconnect providers automatically.
 
 ## Validation
 
-- 403 Core tests passed.
+- 411 Core tests passed.
 - 54 Mobile tests passed.
 - Desktop and Android Release builds completed cleanly.
-- Evidence PDF smoke test completed successfully.
 - Official evidence is in
-  [`screenshot-groups/group-104-107-evidence-automation-proof-tooling`](screenshot-groups/group-104-107-evidence-automation-proof-tooling/).
+  [`screenshot-groups/group-108-111-privacy-export-backup-controls`](screenshot-groups/group-108-111-privacy-export-backup-controls/).
 
 ## Next
 
-Group 108 begins v25 Privacy, Export, Backup and Controls.
+Group 112 begins v26 Website Packaging and Onboarding.

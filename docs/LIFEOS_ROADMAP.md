@@ -4,9 +4,9 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v24.0.0-alpha.1 is complete through Group 107. Group 108 is next.**
+**LifeOS v25.0.0-alpha.1 is complete through Group 111. Group 112 is next.**
 
-Groups 104-107 closed Evidence Automation and Proof Tooling with stable intake, copy-only export, generated evidence PDFs and fail-closed completion gates. Original evidence remains unchanged.
+Groups 108-111 closed Privacy, Export, Backup and Controls with category permissions, credential-safe backups, restore validation and audited Emergency Stop behavior.
 
 ## Product architecture
 
@@ -50,17 +50,11 @@ Groups 104-107 closed Evidence Automation and Proof Tooling with stable intake, 
 | v22 | 95-98 | Pay-Later and Money Integrations |
 | v23 | 99-103 | New Zealand Grocery Lookup Worker |
 | v24 | 104-107 | Evidence Automation and Proof Tooling |
+| v25 | 108-111 | Privacy, Export, Backup and Controls |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
 ## Approved roadmap
-
-### v25 / Groups 108-111 — Privacy, export, backup and controls
-
-- User-controlled privacy and retention settings.
-- Sanitized opt-in diagnostics.
-- Backup, restore and derivative export boundaries.
-- Account, permission and recovery controls.
 
 ### v26 / Groups 112-116 — Website packaging and onboarding
 

@@ -4,7 +4,16 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v24.0.0-alpha.1 is complete through Group 107. Evidence Automation and Proof Tooling is closed, Group 108 is next, and the approved roadmap runs through Group 120.
+LifeOS v25.0.0-alpha.1 is complete through Group 111. Privacy, Export, Backup and Controls is closed, Group 112 is next, and the approved roadmap runs through Group 120.
+
+## v25 - Privacy Control Plane
+
+### Groups 108-111
+
+- Added independently permissioned sensitive categories.
+- Added credential-rejecting, integrity-checked backups.
+- Added explicit restore preview and schema validation.
+- Added audited global Emergency Stop and reconnection boundaries.
 
 ## v24 - Evidence Automation
 

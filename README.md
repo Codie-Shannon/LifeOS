@@ -4,20 +4,20 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v24.0.0-alpha.1 is complete through Group 107, closing the Evidence Automation and Proof Tooling lane. Group 108 begins Privacy, Export, Backup and Controls.
+> **Current checkpoint:** LifeOS v25.0.0-alpha.1 is complete through Group 111, closing the Privacy, Export, Backup and Controls lane. Group 112 begins Website Packaging and Onboarding.
 
-![LifeOS v24 Evidence Automation](docs/screenshot-groups/group-104-107-evidence-automation-proof-tooling/02-desktop-evidence-automation-overview.png)
+![LifeOS v25 Privacy Control Plane](docs/screenshot-groups/group-108-111-privacy-export-backup-controls/02-desktop-privacy-control-overview.png)
 
 ## Product status
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through Group 107 |
-| **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 107, including offline-safe capture, review and execution |
+| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through Group 111 |
+| **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 111, including offline-safe capture, review and execution |
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
 | **LifeOS Website** | Public product and documentation beta foundation complete; packaging and onboarding planned for Groups 112-116 |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v24 Evidence Automation complete; Group 108 next; roadmap approved through Group 120 |
+| **Current release lane** | v25 Privacy Control Plane complete; Group 112 next; roadmap approved through Group 120 |
 
 Full Mobile and Mobile Companion are separate products. They can share contracts and libraries, but retain different scope, UX and release tracks.
 
@@ -93,6 +93,7 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 108-111 - Privacy, Export, Backup and Controls](docs/screenshot-groups/group-108-111-privacy-export-backup-controls/)
 - [Groups 104-107 - Evidence Automation and Proof Tooling](docs/screenshot-groups/group-104-107-evidence-automation-proof-tooling/)
 - [Groups 99-103 - New Zealand Grocery Lookup Worker](docs/screenshot-groups/group-99-103-nz-grocery-lookup-worker/)
 - [Groups 95-98 — Pay-Later and Money Integrations](docs/screenshot-groups/group-95-98-pay-later-money-integrations/)
@@ -142,11 +143,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v24 is complete through Group 107. Group 108 starts the v25 Privacy, Export, Backup and Controls lane.
+LifeOS v25 is complete through Group 111. Group 112 starts the v26 Website Packaging and Onboarding lane.
 
 Approved work continues through Group 120:
 
-- Groups 108-111: Privacy, export, backup and controls
 - Groups 112-116: Website packaging and onboarding
 - Groups 117-120: Product-complete release candidate
 

@@ -41,6 +41,15 @@ public sealed class MorePage : ContentPage
             await Navigation.PushAsync(new BetaClosurePage());
 
         layout.Children.Add(betaClosure);
+        var productReadiness = new Button
+        {
+            Text = "Private beta readiness",
+            BackgroundColor = Color.FromArgb("#304860"),
+            TextColor = Colors.White
+        };
+        productReadiness.Clicked += async (_, _) =>
+            await Navigation.PushAsync(new ProductReadinessPage());
+        layout.Children.Add(productReadiness);
         Content = new ScrollView { Content = layout };
     }
 }

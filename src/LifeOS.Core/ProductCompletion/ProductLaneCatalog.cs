@@ -100,6 +100,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Move long-form connector guide", "Ready", "Website destination selected; app retains a short setup link", false),
                     new ProductLaneAction("Release screenshot index", "Linked", "Stable repo evidence path without local machine details", false),
                     new ProductLaneAction("Public copy scan", "Passed", "No private handoff notes, credentials or absolute paths", false)
+                }),
+            ["beta-readiness"] = new(
+                "beta-readiness",
+                "SG-71",
+                "Private Beta Readiness",
+                "Groups 80-82 - setup choices, portal distribution and closed-beta validation",
+                "Core local value never requires an external provider. Optional setup supports now, later or decline and can be changed in Settings.",
+                new[]
+                {
+                    new ProductLaneMetric("Core modules", "8/8", "Locally ready"),
+                    new ProductLaneMetric("Optional providers", "2", "Configured later"),
+                    new ProductLaneMetric("Platforms", "3", "Desktop, mobile, web"),
+                    new ProductLaneMetric("Release checks", "7/7", "Closed-beta gate")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Core local setup", "Ready", "Review queues, work, household and money operate offline", false),
+                    new ProductLaneAction("External AI", "Declined", "Native intelligence remains available; change anytime", false),
+                    new ProductLaneAction("Private beta distribution", "Ready", "Dedicated test identities and signed Android build", false),
+                    new ProductLaneAction("Close baseline", "Review", "Confirm release notes and screenshot evidence before closure", true)
                 })
         };
 

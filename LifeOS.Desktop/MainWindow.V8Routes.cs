@@ -16,6 +16,7 @@ public partial class MainWindow
         "agenda",
         "assistant",
         "automation-centre",
+        "beta-readiness",
         "bills-payments",
         "command-centre",
         "daily-operating-flow",
@@ -154,6 +155,9 @@ public partial class MainWindow
                 break;
             case "automation-centre":
                 ShowAutomationCentrePage();
+                break;
+            case "beta-readiness":
+                ShowProductLanePage(routeId);
                 break;
             case "bills-payments":
                 ShowBillsPaymentsPage();

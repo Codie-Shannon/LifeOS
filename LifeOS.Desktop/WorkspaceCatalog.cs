@@ -334,6 +334,7 @@ internal static class WorkspaceCatalog
                         new WorkspaceModuleDefinition[]
                         {
                             Route("settings-safety", "Settings / Safety", "Canonical settings", "Underlying safety profile and local settings evidence."),
+                            Route("beta-readiness", "Private Beta Readiness", "SG-71 ready", "Setup now/later/decline choices and desktop/mobile/web release validation."),
                             Route("documentation-hub", "Documentation & Packaging Hub", "SG-70 ready", "Audience-safe website documentation, concise in-app help and versioned release links."),
                             Route("automation-centre", "Automation Centre", "Emergency Stop protected", "Guarded, manual, foreground-only automation and recovery controls."),
                             Route("desktop-release", "Desktop Release", "Diagnostics", "Release readiness and platform checkpoint evidence."),

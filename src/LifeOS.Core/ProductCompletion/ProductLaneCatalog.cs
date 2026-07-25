@@ -160,6 +160,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Email: supplier follow-up", "Approved", "Outlook - scheduled 08:30 with source proof", false),
                     new ProductLaneAction("Gmail: weekly summary", "Needs review", "Draft changed; previous approval was revoked", true),
                     new ProductLaneAction("Communication Emergency Stop", "Ready", "Immediately blocks every channel", false)
+                }),
+            ["social-publishing"] = new(
+                "social-publishing",
+                "SG-74",
+                "Social & Messenger Review",
+                "Groups 91-94 - Meta capability mapping, scheduled drafts and transparent fallback",
+                "Official APIs are preferred. Unsupported actions show their limitation and use an explicit browser-assisted or manual handoff; nothing posts invisibly.",
+                new[]
+                {
+                    new ProductLaneMetric("Drafts", "3", "Page, group and Messenger"),
+                    new ProductLaneMetric("API ready", "1", "Page publishing"),
+                    new ProductLaneMetric("Browser handoff", "2", "Visible fallback"),
+                    new ProductLaneMetric("Published", "0", "Provider confirmation required")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Facebook Page release note", "Draft", "Official API capability; approval still required", true),
+                    new ProductLaneAction("Community group update", "Browser handoff", "API limitation shown before opening the browser", true),
+                    new ProductLaneAction("Messenger reply", "Needs review", "Source-backed draft with recipient and consent status", true),
+                    new ProductLaneAction("Provider limitation log", "Visible", "No fake claims for unsupported profile posting", false)
                 })
         };
 

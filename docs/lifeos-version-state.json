@@ -1,18 +1,18 @@
 {
-    "currentRelease":  "v20",
-    "currentReleaseName":  "Scheduled Communications",
-    "currentSemanticVersion":  "20.0.0-alpha.1",
+    "currentRelease":  "v21",
+    "currentReleaseName":  "Social Review",
+    "currentSemanticVersion":  "21.0.0-alpha.1",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  90,
-    "latestCompletedGroupName":  "Communication safety closure",
-    "latestCompletedHead":  "a62a6e9",
-    "nextGroup":  91,
-    "nextGroupName":  "Facebook and Meta contract planning",
+    "latestCompletedGroup":  94,
+    "latestCompletedGroupName":  "Social integration closure",
+    "latestCompletedHead":  "generated-pack-checkpoint",
+    "nextGroup":  95,
+    "nextGroupName":  "Pay-later parser foundation",
     "roadmapApprovedThroughGroup":  120,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  90,
+                    "currentThroughGroup":  94,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -20,7 +20,7 @@
                        "status":  "built-and-active",
                        "releaseFamily":  "v10",
                        "initialBetaClosureGroup":  57,
-                       "currentThroughGroup":  90,
+                       "currentThroughGroup":  94,
                        "separateFromCompanion":  true,
                        "offlineQueueEnabled":  true,
                        "silentConflictOverwriteAllowed":  false
@@ -126,6 +126,11 @@
                                   {
                                       "release":  "v20",
                                       "groups":  "87-90",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v21",
+                                      "groups":  "91-94",
                                       "status":  "complete"
                                   }
                               ],

@@ -301,6 +301,7 @@ internal static class WorkspaceCatalog
                         {
                             Route("assistant", "Assistant", "Preserved safety boundary", "Source-backed answers, evidence disclosure, uncertainty and review-only planning."),
                             Route("communications", "Scheduled Communications", "SG-73 ready", "SMS and email drafts, explicit approvals, quiet hours, edit/cancel/reschedule, audit and Emergency Stop."),
+                            Route("social-publishing", "Social & Messenger Review", "SG-74 ready", "Meta capability mapping, scheduled drafts, approvals, visible browser fallback and provider confirmation."),
                             Route("intelligence", "Native Intelligence & Optional AI", "SG-72 ready", "Deterministic ranking, optional provider settings, category permissions, cost caps and review-first suggestions."),
                             Route("memory", "Memory", "Explicit and revocable", "User-confirmed memory with scope, audit, expiry, revocation and deletion."),
                             Route("search-knowledge", "Search / Knowledge", "Canonical behaviour", "Local search and knowledge surfaces."),

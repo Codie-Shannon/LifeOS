@@ -49,6 +49,7 @@ public partial class MainWindow
         "relationship-radar",
         "search-knowledge",
         "settings-safety",
+        "social-publishing",
         "timer-agent",
         "timesheet-evidence",
         "universal-spine",
@@ -256,6 +257,9 @@ public partial class MainWindow
                 break;
             case "settings-safety":
                 ShowSettingsSafetyThemePage();
+                break;
+            case "social-publishing":
+                ShowProductLanePage(routeId);
                 break;
             case "timer-agent":
                 ShowModulePage(LifeOSModuleKind.TimerAgent);

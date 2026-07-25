@@ -120,6 +120,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("External AI", "Declined", "Native intelligence remains available; change anytime", false),
                     new ProductLaneAction("Private beta distribution", "Ready", "Dedicated test identities and signed Android build", false),
                     new ProductLaneAction("Close baseline", "Review", "Confirm release notes and screenshot evidence before closure", true)
+                }),
+            ["intelligence"] = new(
+                "intelligence",
+                "SG-72",
+                "Native Intelligence & Optional AI",
+                "Groups 83-86 - deterministic ranking, provider controls and review-first suggestions",
+                "Native rules always work offline. External AI is optional, category-scoped, cost-controlled and cannot mutate LifeOS directly.",
+                new[]
+                {
+                    new ProductLaneMetric("Native suggestions", "6", "No paid AI required"),
+                    new ProductLaneMetric("AI mode", "Ask", "Confirm every request"),
+                    new ProductLaneMetric("Monthly cap", "NZD 5", "NZD 0.42 used"),
+                    new ProductLaneMetric("Needs review", "4", "No automatic mutation")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Power bill follow-up", "High confidence", "Native rule: due tomorrow from confirmed source", true),
+                    new ProductLaneAction("Supplier summary", "Ask first", "Optional OpenAI enrichment; Work category permitted", true),
+                    new ProductLaneAction("Health data suggestion", "Blocked", "Sensitive category permission is off", false),
+                    new ProductLaneAction("External AI setup", "Configured", "OpenAI primary; switch off, ask or capped anytime", false)
                 })
         };
 

@@ -30,6 +30,7 @@ public partial class MainWindow
         "google-calendar",
         "guarded-providers",
         "integration-inbox",
+        "intelligence",
         "item-state-engine",
         "lifeos-spine",
         "memory",
@@ -197,6 +198,9 @@ public partial class MainWindow
                 break;
             case "integration-inbox":
                 ShowIntegrationInboxPage();
+                break;
+            case "intelligence":
+                ShowProductLanePage(routeId);
                 break;
             case "item-state-engine":
                 ShowItemStateEnginePage();

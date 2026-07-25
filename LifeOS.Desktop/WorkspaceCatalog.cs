@@ -300,6 +300,7 @@ internal static class WorkspaceCatalog
                         new WorkspaceModuleDefinition[]
                         {
                             Route("assistant", "Assistant", "Preserved safety boundary", "Source-backed answers, evidence disclosure, uncertainty and review-only planning."),
+                            Route("intelligence", "Native Intelligence & Optional AI", "SG-72 ready", "Deterministic ranking, optional provider settings, category permissions, cost caps and review-first suggestions."),
                             Route("memory", "Memory", "Explicit and revocable", "User-confirmed memory with scope, audit, expiry, revocation and deletion."),
                             Route("search-knowledge", "Search / Knowledge", "Canonical behaviour", "Local search and knowledge surfaces."),
                             Route("integration-inbox", "Integration Inbox", "Review-first", "Untrusted imported records remain separate from trusted operational state."),

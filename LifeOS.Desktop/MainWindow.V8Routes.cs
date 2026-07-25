@@ -52,7 +52,8 @@ public partial class MainWindow
         "v13-grocery-planning",
         "weekly-close-out",
         "work-pipeline",
-        "work-sessions"
+        "work-sessions",
+        "work-time"
     };
 
     public static IReadOnlyCollection<string> V8RouteIds => FinalV8RouteIds;
@@ -249,6 +250,9 @@ public partial class MainWindow
                 break;
             case "work-sessions":
                 ShowWorkSessionsPage();
+                break;
+            case "work-time":
+                ShowProductLanePage(routeId);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(

@@ -130,6 +130,7 @@ internal static class WorkspaceCatalog
                             Route("work-pipeline", "Work Pipeline", "Canonical records", "Active work, opportunities, stages, waiting-on state, invoice readiness and expected value."),
                             Route("follow-ups", "Follow-Ups", "Canonical records", "People, contexts, due dates, priority, money links and next actions."),
                             Route("paid-work-centre", "Paid Work Centre", "Canonical behaviour", "Billable work, invoice readiness, payment state and proof-led delivery."),
+                            Route("work-time", "Work Time & Billable Records", "SG-67 ready", "Timers, pause/resume, manual entries, daily totals, billable classification and exportable source proof."),
                             Route("work-sessions", "Work Sessions", "Canonical records", "Hours, rates, billable state, descriptions and session evidence."),
                             Route("timesheet-evidence", "Timesheet Evidence", "Canonical behaviour", "Review timesheet-ready work without copying or rewriting source records.")
                         })

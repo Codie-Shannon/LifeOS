@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 using LifeOS.Core;
 using LifeOS.Core.Assistant;
 using LifeOS.Core.AssistantMemory;
@@ -13,9 +13,9 @@ public sealed class Group39BetaReleaseTests
     [Fact]
     public void Release_identity_is_current_v13()
     {
-        Assert.Equal("13.0.0-alpha.1", ProductVersion.Semantic);
-        Assert.Equal("v13.0.0-alpha.1", ProductVersion.Display);
-        Assert.Equal("v13 Household and Grocery planning", ProductVersion.ReleaseName);
+        Assert.Equal("14.0.0-alpha.1", ProductVersion.Semantic);
+        Assert.Equal("v14.0.0-alpha.1", ProductVersion.Display);
+        Assert.Equal("v14 Work Time", ProductVersion.ReleaseName);
     }
 
     [Fact]
@@ -75,4 +75,3 @@ public sealed class Group39BetaReleaseTests
         return new ReviewOnlyPlanningService().Build(new PlanningRequest("Create a review-only recovery plan for fictional Project Zephyr Quill.", response, Now));
     }
 }
-

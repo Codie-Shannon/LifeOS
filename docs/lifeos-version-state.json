@@ -1,128 +1,128 @@
 {
-  "currentRelease": "v13",
-  "currentReleaseName": "Household and Grocery",
-  "currentSemanticVersion": "13.0.0-alpha.1",
-  "currentStatus": "v13-closing",
-  "latestCompletedGroup": 66,
-  "latestCompletedGroupName": "Shared household workflows, receipts, spending review and v13 closure",
-  "latestCompletedHead": "908396a20f1b42d225a50feb5bb247a9bd88f53f",
-  "nextGroup": 67,
-  "nextGroupName": "Time tracking, work sessions and billable records",
-  "roadmapApprovedThroughGroup": 82,
-  "desktop": {
-    "status": "active-current",
-    "role": "deep-administration-review-planning-audit-reporting",
-    "currentThroughGroup": 66,
-    "detachedModuleWindowsAllowed": false,
-    "childModulesOpenInParentWorkspace": true
-  },
-  "fullMobile": {
-    "status": "built-and-active",
-    "releaseFamily": "v10",
-    "initialBetaClosureGroup": 57,
-    "currentThroughGroup": 66,
-    "separateFromCompanion": true,
-    "offlineQueueEnabled": true,
-    "silentConflictOverwriteAllowed": false
-  },
-  "mobileCompanion": {
-    "status": "complete-and-closed",
-    "version": "0.1.0-beta.1",
-    "separateFromFullMobile": true
-  },
-  "website": {
-    "status": "beta-foundation-complete",
-    "version": "0.3.0-beta.1",
-    "completionGroup": 42,
-    "portalOnboardingDistributionGroup": 81
-  },
-  "sharedCore": {
-    "status": "active",
-    "authoritativeContracts": true,
-    "deterministicValidation": true,
-    "provenanceAuditConflictBoundaries": true
-  },
-  "completedReleaseLanes": [
-    {
-      "release": "Early foundations",
-      "groups": "1-23",
-      "status": "complete"
-    },
-    {
-      "release": "v5",
-      "groups": "24-26",
-      "status": "complete"
-    },
-    {
-      "release": "v6",
-      "groups": "27-31",
-      "status": "complete"
-    },
-    {
-      "release": "Mobile Companion",
-      "groups": "32-34",
-      "status": "complete"
-    },
-    {
-      "release": "v7",
-      "groups": "35-39",
-      "status": "complete"
-    },
-    {
-      "release": "v8",
-      "groups": "40-45",
-      "status": "complete"
-    },
-    {
-      "release": "v9",
-      "groups": "46-51",
-      "status": "complete"
-    },
-    {
-      "release": "v10",
-      "groups": "52-57",
-      "status": "complete"
-    },
-    {
-      "release": "v11",
-      "groups": "58-60",
-      "status": "complete"
-    },
-    {
-      "release": "v12",
-      "groups": "61-63",
-      "status": "complete"
-    },
-    {
-      "release": "v13",
-      "groups": "64-66",
-      "status": "complete"
-    }
-  ],
-  "safetyBoundaries": {
-    "reviewFirst": true,
-    "silentTrustPromotionAllowed": false,
-    "silentConflictResolutionAllowed": false,
-    "providerWritesEnabled": false,
-    "providerWritesRoadmapGroup": 73,
-    "guardedWritesRelease": "v16",
-    "bankFeedsEnabled": false,
-    "paymentInitiationEnabled": false,
-    "accountingProviderWritesEnabled": false,
-    "autonomousReconciliationEnabled": false,
-    "autonomousCareerApplicationsEnabled": false,
-    "autonomousMessagingEnabled": false,
-    "automaticGroceryOrderingEnabled": false,
-    "externalCartMutationEnabled": false,
-    "destructiveEvidenceHandlingEnabled": false
-  },
-  "evidence": {
-    "latestScreenshotGroup": "docs/screenshot-groups/group-66-shared-household-workflows-v13-closure",
-    "officialScreenshotsPerGroup": 9,
-    "privateContextPdfsCommitted": false
-  },
-  "internalNotes": {
-    "publicBrandingReviewRequiredBeforeLaunch": true,
-    "brandMigrationIsApprovedRoadmapWork": false
-  }
+    "currentRelease":  "v14",
+    "currentReleaseName":  "Work Time",
+    "currentSemanticVersion":  "14.0.0-alpha.1",
+    "currentStatus":  "active-development",
+    "latestCompletedGroup":  68,
+    "latestCompletedGroupName":  "Time tracking and billable records",
+    "latestCompletedHead":  "generated-pack-checkpoint",
+    "nextGroup":  69,
+    "nextGroupName":  "Calendar-linked operating day",
+    "roadmapApprovedThroughGroup":  120,
+    "desktop":  {
+                    "status":  "active-current",
+                    "role":  "deep-administration-review-planning-audit-reporting",
+                    "currentThroughGroup":  68,
+                    "detachedModuleWindowsAllowed":  false,
+                    "childModulesOpenInParentWorkspace":  true
+                },
+    "fullMobile":  {
+                       "status":  "built-and-active",
+                       "releaseFamily":  "v10",
+                       "initialBetaClosureGroup":  57,
+                       "currentThroughGroup":  68,
+                       "separateFromCompanion":  true,
+                       "offlineQueueEnabled":  true,
+                       "silentConflictOverwriteAllowed":  false
+                   },
+    "mobileCompanion":  {
+                            "status":  "complete-and-closed",
+                            "version":  "0.1.0-beta.1",
+                            "separateFromFullMobile":  true
+                        },
+    "website":  {
+                    "status":  "beta-foundation-complete",
+                    "version":  "0.3.0-beta.1",
+                    "completionGroup":  42,
+                    "portalOnboardingDistributionGroup":  81
+                },
+    "sharedCore":  {
+                       "status":  "active",
+                       "authoritativeContracts":  true,
+                       "deterministicValidation":  true,
+                       "provenanceAuditConflictBoundaries":  true
+                   },
+    "completedReleaseLanes":  [
+                                  {
+                                      "release":  "Early foundations",
+                                      "groups":  "1-23",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v5",
+                                      "groups":  "24-26",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v6",
+                                      "groups":  "27-31",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "Mobile Companion",
+                                      "groups":  "32-34",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v7",
+                                      "groups":  "35-39",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v8",
+                                      "groups":  "40-45",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v9",
+                                      "groups":  "46-51",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v10",
+                                      "groups":  "52-57",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v11",
+                                      "groups":  "58-60",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v12",
+                                      "groups":  "61-63",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v13",
+                                      "groups":  "64-66",
+                                      "status":  "complete"
+                                  }
+                              ],
+    "safetyBoundaries":  {
+                             "reviewFirst":  true,
+                             "silentTrustPromotionAllowed":  false,
+                             "silentConflictResolutionAllowed":  false,
+                             "providerWritesEnabled":  false,
+                             "providerWritesRoadmapGroup":  73,
+                             "guardedWritesRelease":  "v16",
+                             "bankFeedsEnabled":  false,
+                             "paymentInitiationEnabled":  false,
+                             "accountingProviderWritesEnabled":  false,
+                             "autonomousReconciliationEnabled":  false,
+                             "autonomousCareerApplicationsEnabled":  false,
+                             "autonomousMessagingEnabled":  false,
+                             "automaticGroceryOrderingEnabled":  false,
+                             "externalCartMutationEnabled":  false,
+                             "destructiveEvidenceHandlingEnabled":  false
+                         },
+    "evidence":  {
+                     "latestScreenshotGroup":  "docs/screenshot-groups/group-66-shared-household-workflows-v13-closure",
+                     "officialScreenshotsPerGroup":  9,
+                     "privateContextPdfsCommitted":  false
+                 },
+    "internalNotes":  {
+                          "publicBrandingReviewRequiredBeforeLaunch":  true,
+                          "brandMigrationIsApprovedRoadmapWork":  false
+                      }
 }

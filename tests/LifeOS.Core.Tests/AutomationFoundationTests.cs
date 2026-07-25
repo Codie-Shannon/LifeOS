@@ -1,4 +1,4 @@
-﻿using LifeOS.Core.Automation;
+using LifeOS.Core.Automation;
 using LifeOS.Shared.Automation;
 using Xunit;
 
@@ -9,9 +9,9 @@ public sealed class AutomationFoundationTests
     [Fact]
     public void ProductVersion_IsCurrentV13()
     {
-        Assert.Equal("13.0.0-alpha.1", LifeOS.Core.ProductVersion.Semantic);
-        Assert.Equal("v13.0.0-alpha.1", LifeOS.Core.ProductVersion.Display);
-        Assert.Equal("v13 Household and Grocery planning", LifeOS.Core.ProductVersion.ReleaseName);
+        Assert.Equal("14.0.0-alpha.1", LifeOS.Core.ProductVersion.Semantic);
+        Assert.Equal("v14.0.0-alpha.1", LifeOS.Core.ProductVersion.Display);
+        Assert.Equal("v14 Work Time", LifeOS.Core.ProductVersion.ReleaseName);
     }
 
     [Fact] public void NewRule_IsDisabledByDefault() => Assert.False(new AutomationRule().IsEnabled);

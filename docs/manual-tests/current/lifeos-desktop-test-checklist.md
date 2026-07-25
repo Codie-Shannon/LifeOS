@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v13 active.
-- Group 64 complete.
-- Group 65 next.
+- LifeOS v20.0.0-alpha.1 active.
+- Group 90 complete.
+- Group 91 next.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation
@@ -51,6 +51,11 @@ Confirm these current areas open and show fictional/sanitized state:
 - Household / Grocery Planning
 - Integration control and review-first inbox
 - Assistant and automation boundary surfaces
+- Work Time and Operating Day Work Proof
+- Documentation and Packaging Hub
+- Closed Beta readiness
+- Native Intelligence and Optional AI
+- Scheduled Communications
 
 ## Full Mobile smoke checks
 
@@ -73,7 +78,7 @@ Confirm LifeOS does not perform:
 
 - automatic trust promotion
 - silent conflict overwrite
-- provider writes before v16
+- provider writes while external write capabilities are disabled
 - bank feeds or payment initiation
 - automatic accounting reconciliation
 - autonomous career applications or recruiter messaging
@@ -94,7 +99,6 @@ git diff --check
 Expected:
 
 ```text
-main is synchronized with origin/main.
 Working tree is clean after commit.
-Exactly eight approved screenshots exist for the official group unless an explicit override is documented.
+The standard eight approved screenshots exist, or a genuine-capture override is documented.
 ```

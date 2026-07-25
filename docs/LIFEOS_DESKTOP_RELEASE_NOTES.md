@@ -1,64 +1,47 @@
-# LifeOS Desktop v1.3.5 Release Notes
+# LifeOS Desktop v20.0.0-alpha.1 Release Notes
 
-LifeOS Desktop v1.3.5 completes the v1.3 visibility pass.
+LifeOS Desktop v20 completes Scheduled Communications across Groups 87-90.
 
 ## Release theme
 
-**Unified Command Centre + Evidence Vault Foundation**
+**Reviewable communication timing without autonomous sending**
 
-LifeOS now has visible desktop pages for the new v1.1–v1.3 foundations:
+## Added
 
-- Daily State
-- Timesheet Evidence
-- Evidence Vault
+- Scheduled Communications overview and review surfaces.
+- Source-backed communication suggestions with visible timing and readiness context.
+- Explicit review and confirmation boundaries.
+- Communication safety closure and release proof.
+- Shared contracts used by Desktop and Full Mobile.
+- Audit-friendly states that keep proposed, reviewed and completed activity distinct.
 
-## Added since v0.9
+## Included foundations
 
-### v1.0 — Unified Command Centre
+This checkpoint also includes the completed release lanes for:
 
-- Command Centre signal model
-- Command Centre snapshot building
-- Today / next action direction
-- stronger “what matters now” structure
+- work time, billable records and operating-day proof
+- guarded provider contracts
+- documentation and packaging readiness
+- closed-beta validation
+- deterministic native intelligence and optional AI review
 
-### v1.1 — Daily State
+## Safety boundaries
 
-- passive waiting rules
-- do-not-chase state
-- scheduled communication model
-- daily state Command Centre integration
+- No automatic sending.
+- No autonomous messaging.
+- No silent recipient, content or schedule changes.
+- No provider write occurs without an enabled capability and explicit confirmation.
+- External provider writes remain disabled at this checkpoint.
+- Imported and generated suggestions remain untrusted until reviewed.
 
-### v1.2 — Timesheet Evidence
+## Validation
 
-- timesheet evidence model
-- accepted time bucket rules
-- proof-linked work signals
-- timesheet/proof pressure in Command Centre
+- 386 Core tests passed.
+- 54 Mobile tests passed.
+- Desktop Release build completed cleanly.
+- Android Release build completed cleanly with signed private-beta artifacts.
+- Official evidence is in [`screenshot-groups/group-87-90-scheduled-communications`](screenshot-groups/group-87-90-scheduled-communications/).
 
-### v1.3 — Evidence Vault
+## Next
 
-- metadata-first evidence model
-- local Evidence Vault storage
-- evidence linking fields
-- evidence pressure signals
-
-### v1.3.5 — Visible pages
-
-- Daily State page exposed in sidebar
-- Timesheet Evidence page exposed in sidebar
-- Evidence Vault page exposed in sidebar
-- v1.3 screenshots and README updated
-
-## Boundaries
-
-Not included in v1.3.5:
-
-- Receipt OCR
-- Relationship Radar
-- Outlook/Gmail integration
-- mobile app
-- cloud sync
-- automatic sending
-- accounting/bank integration
-
-These remain roadmap items for future versions.
+Group 91 begins v21 Social and Messaging Integrations. The approved roadmap continues through Group 120.

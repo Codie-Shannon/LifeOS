@@ -5,7 +5,7 @@
     "currentStatus":  "active-development",
     "latestCompletedGroup":  90,
     "latestCompletedGroupName":  "Communication safety closure",
-    "latestCompletedHead":  "generated-pack-checkpoint",
+    "latestCompletedHead":  "a62a6e9",
     "nextGroup":  91,
     "nextGroupName":  "Facebook and Meta contract planning",
     "roadmapApprovedThroughGroup":  120,
@@ -97,6 +97,36 @@
                                       "release":  "v13",
                                       "groups":  "64-66",
                                       "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v14",
+                                      "groups":  "67-72",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v15",
+                                      "groups":  "73-76",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v16",
+                                      "groups":  "77-79",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v18",
+                                      "groups":  "80-82",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v19",
+                                      "groups":  "83-86",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v20",
+                                      "groups":  "87-90",
+                                      "status":  "complete"
                                   }
                               ],
     "safetyBoundaries":  {
@@ -119,6 +149,7 @@
     "evidence":  {
         "latestScreenshotGroup":  "docs/screenshot-groups/group-87-90-scheduled-communications",
         "officialScreenshotsPerGroup":  8,
+        "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false
                  },
     "internalNotes":  {

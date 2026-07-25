@@ -2,37 +2,39 @@
 
 **A local-first personal and work operating system for turning work, money, projects, evidence, household activity, integrations, AI review and daily pressure into visible, reviewable state.**
 
-LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is not a generic task list or template. It is an operations system for controlled review, execution, provenance and evidence.
+LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v13 Group 66 closes Household and Grocery with shared routines, replenishment review, receipt/spending review and release proof.
+> **Current checkpoint:** LifeOS v20.0.0-alpha.1 is complete through Group 90, closing the Scheduled Communications lane. Group 91 begins Social and Messaging Integrations.
 
-![LifeOS Group 64 Grocery Planning evidence](docs/screenshot-groups/group-64-grocery-planning-essentials/01-desktop-grocery-overview.png)
+![LifeOS v20 Scheduled Communications](docs/screenshot-groups/group-87-90-scheduled-communications/02-desktop-scheduled-communications-overview.png)
 
 ## Product status
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through v13 Group 66 |
-| **LifeOS Full Mobile** | Built through v10 Group 57 and extended through v13 Group 66 for mobile review, capture, execution and offline-safe household/grocery workflows |
-| **LifeOS Mobile Companion** | Separate lightweight companion product, beta complete and closed |
-| **LifeOS Website** | Website beta foundation complete through v8 Groups 40-42 |
+| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through Group 90 |
+| **LifeOS Full Mobile** | Purpose-built Android application through Group 90, including offline-safe capture, review and execution |
+| **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
+| **LifeOS Website** | Public product and documentation beta foundation complete; packaging and onboarding planned for Groups 112-116 |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v13 Household and Grocery; Group 66 implemented, Group 67 next |
+| **Current release lane** | v20 Scheduled Communications complete; Group 91 next; roadmap approved through Group 120 |
 
-The Mobile Companion and Full Mobile application are separate products. They can share contracts and libraries, but they retain different scope, UX and release tracks.
+Full Mobile and Mobile Companion are separate products. They can share contracts and libraries, but retain different scope, UX and release tracks.
 
 ## What LifeOS brings together
 
 - Command Centre pressure and priority visibility
-- work records, projects, next actions and proof linkage
+- work records, sessions, billable time, projects, next actions and proof linkage
 - money records, invoices, payments, financial review and reports
 - document and evidence intake with original preservation
-- agenda, daily state, work sessions and timesheets
+- agenda, daily state, household, grocery and shared-routine workflows
 - relationship, communication and follow-up context
-- review-first integrations across Google and Microsoft foundations
-- guarded automation, AI review and bounded Assistant workflows
-- Career Studio opportunity, application, materials, preparation and review flows
-- Household and Grocery planning with recurring essentials and mobile shopping execution
+- Google and Microsoft provider foundations with review-first integration intake
+- guarded provider contracts, explicit approval boundaries and audit
+- native deterministic intelligence plus optional provider-backed AI review
+- scheduled-communication proposals without silent or automatic sending
+- Career Studio opportunity, application, materials and preparation flows
+- documentation, packaging, validation and closed-beta readiness tooling
 
 ```text
 Important information becomes visible state.
@@ -42,90 +44,78 @@ Review controls action.
 Evidence preserves trust.
 ```
 
-## Current capability inventory
-
-### Shell and workspaces
-
-- Desktop shell with in-shell parent workspaces and child modules.
-- Standard rule: child modules open inside the parent workspace and provide back navigation.
-- Work, Career, Money, Life, Household, Projects and integration areas.
-- Dark LifeOS visual language with selected navigation states, badges and boundary cards.
+## Product surfaces
 
 ### Desktop
 
-Desktop is the deep administration surface for detailed review, filtering, reporting, audit, evidence and planning. It includes Work, Money, Documents, Career Studio, Household/Grocery, integrations, Assistant, automation and historical operating modules.
+The deep administration surface for detailed review, filtering, reporting, audit, evidence and planning across Work, Career, Money, Life, Household, Projects, integrations, Assistant and Settings.
 
 ### Full Mobile
 
-Full Mobile is a separate .NET Android app. It is not a responsive copy of Desktop. It provides quick capture, review, execution, status and queued offline actions across Home, Work, Money, Documents, Evidence, Projects, Career and Grocery surfaces.
+A separate .NET Android application—not a responsive copy of Desktop—for quick capture, review, execution, status and queued offline actions.
 
 ### Mobile Companion
 
-The Companion remains a lighter product with local quick capture, pairing, delivery acknowledgement, notifications and review-first Desktop intake. It is not interchangeable with Full Mobile.
+A lighter product for local quick capture, pairing, delivery acknowledgement, notifications and review-first Desktop intake. It is not interchangeable with Full Mobile.
 
 ### Website
 
-The Website beta foundation is built as the public product, documentation, evidence and future distribution surface. Later Portal, onboarding, installers, mobile packaging and public launch work remain v18 roadmap items.
+The public product, documentation and evidence foundation. Website packaging, onboarding and distribution are approved for Groups 112-116; product-complete release-candidate work follows in Groups 117-120.
 
-### Integrations
+## Current capability lanes
 
-LifeOS currently keeps provider surfaces read-only and review-first. Google Workspace and Microsoft provider foundations exist for mail, calendar, files and related read models. Guarded writes are deferred to v16.
-
-### Money and documents
-
-v11 added trusted local financial records, accounts, transactions, invoices, payments, allocations, document/evidence intake, preserved originals, review-first extraction and reporting/export boundaries. There are no bank feeds, payment initiation, accounting-provider writes or automatic reconciliation.
-
-### Career Studio
-
-v12 added opportunity and application pipelines, career evidence, CV and cover-letter materials, interview preparation, follow-ups, references and bounded analytics across Desktop and Full Mobile. LifeOS does not submit applications, message recruiters or fabricate claims.
-
-### Household and Grocery
-
-v13 Groups 64-66 added Grocery Planning, recurring essentials, household inventory and shared household workflows across Desktop and Full Mobile: categorized lists, quantities, pack sizes, priorities, required dates, estimate freshness, mobile in-store actions, substitutions, offline conflict review, stock states, meal ingredient gaps, store profiles, shared routines, assignments, replenishment review, receipt candidates, planned-vs-actual spending and v13 closure checks. LifeOS does not automatically order, pay, trust prices, mutate grocery lists, mutate Documents/Money or mutate external carts.
+- **Work and operating day:** work sessions, billable records, timesheet proof and operating-day review.
+- **Money and documents:** trusted local financial records, preserved evidence, review-first extraction and derivative reporting/export.
+- **Career Studio:** opportunity and application pipelines, evidence-backed materials, interview preparation and bounded analytics.
+- **Household and Grocery:** inventory, meals, stores, recurring essentials, shared routines, receipt candidates and spending review.
+- **Provider integrations:** normalized, source-backed candidates with explicit review, duplicate detection, conflict handling and provenance.
+- **Guarded provider contracts:** permission, preview, confirmation, audit, cancellation and Emergency Stop boundaries; external writes remain disabled at the current checkpoint.
+- **Native intelligence and optional AI:** deterministic local insights remain primary; external AI is optional, bounded and review-first.
+- **Scheduled communications:** proposals, timing, readiness and audit are modeled without automatic sending or autonomous messaging.
+- **Product readiness:** documentation and packaging hub, closed-beta baseline, release proof and validation tooling.
 
 ## Safety model
 
 LifeOS is local-first, review-first and fail-closed.
 
 - Imported or generated information is not trusted automatically.
-- Trust promotion requires explicit review.
+- Trust promotion and authoritative linking require explicit review.
 - Conflicts preserve both versions until explicit resolution.
-- Provider reads remain bounded and review-first.
-- Guarded writes do not begin until v16.
+- Provider access is bounded; external writes remain disabled.
 - No autonomous financial posting, payment initiation, career applications, messaging, grocery ordering or destructive evidence handling.
 - Original documents and evidence are preserved; exports and previews are derivatives.
 - Provenance, freshness, confidence and audit history remain visible where relevant.
+- AI cannot silently mutate authoritative LifeOS state.
 
 ## Evidence
 
-Current official evidence is stored under `docs/screenshot-groups/`. Completed groups use exactly eight approved screenshots unless a documented override exists.
+Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-groups/). The standard target is eight approved screenshots per screenshot group; a group may document a smaller genuine-capture override when the available product surfaces do not support eight distinct truthful views.
 
 Recent evidence:
 
-- [Group 64 - Grocery planning and recurring essentials](docs/screenshot-groups/group-64-grocery-planning-essentials/)
-- [Group 63 - Career follow-ups, analytics and v12 closure](docs/screenshot-groups/group-63-career-followups-analytics-closure/)
-- [Group 62 - Career materials and interview preparation](docs/screenshot-groups/group-62-career-materials-interview-prep/)
-- [Group 61 - Career opportunity and application pipeline](docs/screenshot-groups/group-61-career-opportunity-application/)
-- [Group 60 - Financial review and reporting](docs/screenshot-groups/group-60-financial-review-reporting/)
-- [Group 59 - Document and evidence intake](docs/screenshot-groups/group-59-document-evidence-intake/)
-- [Group 58 - Money foundation](docs/screenshot-groups/group-58-money-foundation/)
-- [Group 57 - Full Mobile beta closure](docs/screenshot-groups/group-57-full-mobile-beta-closure/)
+- [Groups 87-90 — Scheduled Communications](docs/screenshot-groups/group-87-90-scheduled-communications/)
+- [Groups 83-86 — Native Intelligence and Optional AI](docs/screenshot-groups/group-83-86-native-intelligence/)
+- [Groups 80-82 — Closed Beta Baseline](docs/screenshot-groups/group-80-82-closed-beta-baseline/)
+- [Groups 77-79 — Documentation and Packaging Hub](docs/screenshot-groups/group-77-79-documentation-packaging-hub/)
+- [Groups 73-76 — Guarded Provider Contracts](docs/screenshot-groups/group-73-76-guarded-provider-contracts/)
+- [Groups 69-72 — Operating Day Work Proof](docs/screenshot-groups/group-69-72-operating-day-work-proof/)
+- [Groups 67-68 — Work Time and Billable Records](docs/screenshot-groups/group-67-68-work-time-billable-records/)
 
-All public screenshot demonstrations must use fictional, sanitized or explicitly approved proof data.
+All public demonstrations must use fictional, sanitized or explicitly approved proof data.
 
 ## Repository structure
 
 ```text
-LifeOS.Desktop/      WPF desktop application
-LifeOS.Shared/       shared platform services and storage
-src/LifeOS.Core/     domain contracts, services and deterministic rules
-src/LifeOS.Mobile/   full Android mobile application
+LifeOS.Desktop/       WPF desktop application
+LifeOS.Shared/        shared platform services and storage
+src/LifeOS.Core/      domain contracts, services and deterministic rules
+src/LifeOS.Mobile/    full Android mobile application
 src/LifeOS.Companion/ lightweight Android companion application
-src/LifeOS.Website/  public website and documentation surface
-tests/               Core, Mobile, Companion and Website regression tests
-docs/                status, release notes, manual tests and screenshot evidence
-tools/               validation and evidence helpers
-.github/workflows/   continuous integration
+src/LifeOS.Website/   public website and documentation surface
+tests/                Core, Mobile, Companion and Website regression tests
+docs/                 status, release notes, manual tests and screenshot evidence
+tools/                validation, packaging and evidence helpers
+.github/workflows/    continuous integration
 ```
 
 ## Build and validate
@@ -148,11 +138,17 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v13 is complete through Group 66. Group 67 starts the v14 time tracking, work sessions and billable records lane.
+LifeOS v20 is complete through Group 90. Group 91 starts the v21 Social and Messaging Integrations lane.
 
-Upcoming approved work runs through Groups 65-82, covering household inventory and meals, work sessions and invoicing, AI provider control, advanced read models, guarded writes, engineering visibility, packaging, Portal/onboarding and public launch validation.
+Approved work continues through Group 120:
 
-Optional post-82 public branding/name migration, telemetry, extension SDK and cloud sync work remains unapproved planning only.
+- Groups 91-94: Social and messaging integrations
+- Groups 95-98: Pay-later and money integrations
+- Groups 99-103: New Zealand grocery lookup worker
+- Groups 104-107: Evidence automation and proof tooling
+- Groups 108-111: Privacy, export, backup and controls
+- Groups 112-116: Website packaging and onboarding
+- Groups 117-120: Product-complete release candidate
 
 ## Author
 

@@ -4,7 +4,62 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v13 is closing at Group 66 with shared household workflows, receipt/spend review and release closure proof.
+LifeOS v20.0.0-alpha.1 is complete through Group 90. Scheduled Communications is closed, Group 91 is next, and the approved roadmap runs through Group 120.
+
+## v20 - Scheduled Communications
+
+### Groups 87-90
+
+- Added source-backed scheduled-communication proposals and review surfaces.
+- Added timing, readiness, confirmation and audit context.
+- Added Desktop and Full Mobile proof coverage.
+- Kept automatic sending, autonomous messaging and silent authoritative mutation disabled.
+
+## v19 - Native Intelligence and Optional AI
+
+### Groups 83-86
+
+- Added deterministic native intelligence as the primary product behavior.
+- Added bounded optional AI-provider review with visible provenance and controls.
+- Added explainable recommendations and explicit acceptance boundaries.
+- Kept silent provider switching and AI-driven authoritative mutation disabled.
+
+## v18 - Closed Beta Baseline
+
+### Groups 80-82
+
+- Added closed-beta readiness, product validation and release proof.
+- Added Desktop and Full Mobile beta-facing status surfaces.
+- Strengthened accessibility, privacy and packaging checks.
+- Established the validated baseline for later product-completion lanes.
+
+## v16 - Documentation and Packaging Hub
+
+### Groups 77-79
+
+- Added a central documentation and packaging readiness surface.
+- Added release artifacts, validation state and proof navigation.
+- Added product-readiness visibility across Desktop and Full Mobile.
+
+v17 was not used as a completed release lane.
+
+## v15 - Guarded Provider Contracts
+
+### Groups 73-76
+
+- Added provider-neutral write proposals, permission and confirmation contracts.
+- Added audit, cancellation, capability revocation and Emergency Stop boundaries.
+- Kept external provider writes disabled at the completed checkpoint.
+
+## v14 - Work Time and Operating Day Work Proof
+
+### Groups 67-72
+
+- Added authoritative work sessions, timers, manual entries and billable records.
+- Added project, client, task, timesheet and proof linkage.
+- Added operating-day review and income/invoice preparation context.
+- Added Desktop and Full Mobile workflows with offline/conflict boundaries.
+- Kept autonomous invoicing, payment chasing and silent time mutation disabled.
 
 ## v13 - Household and Grocery
 

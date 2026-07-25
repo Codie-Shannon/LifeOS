@@ -1,40 +1,50 @@
 # LifeOS current status
 
-LifeOS is current through **v13 Group 64** at repository HEAD `50c43c9d8d801322a0e3f01baadab5ff8bbc89cc`.
+LifeOS is current through **v20.0.0-alpha.1 / Group 90** at repository checkpoint `a62a6e9`.
 
-`main` is synchronized with `origin/main`, and Group 64 is the latest completed evidence group. LifeOS v13 remains active, with Group 65 next.
+Groups 87-90 close the Scheduled Communications release lane. Group 91 is next, and the approved roadmap runs through Group 120.
 
 ## Current product state
 
 | Product | Status |
 |---|---|
-| Desktop | Current deep administration, review, planning, audit and reporting surface through Group 64 |
-| Full Mobile | Built and extended through Group 64 for quick capture, review, execution, status, Career, Money, Documents and Grocery workflows |
-| Mobile Companion | Separate lightweight companion product, beta complete and closed |
-| Website | Public product/documentation/evidence beta foundation complete |
+| Desktop | Deep administration, review, planning, audit and reporting through Group 90 |
+| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows through Group 90 |
+| Mobile Companion | Separate lightweight companion product; beta complete and closed |
+| Website | Public product/documentation/evidence beta foundation complete; packaging and onboarding planned |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest completed capability
 
-Group 64 completes Grocery Planning and recurring essentials:
+Groups 87-90 complete Scheduled Communications:
 
-- Desktop grocery overview, categorized lists and recurring-essential review.
-- Full Mobile grocery dashboard, in-store shopping list and substitution review.
-- Estimated spend with source and freshness context.
-- Requested and purchased items kept separate.
-- Offline same-item conflict review.
-- No automatic ordering, payment or external-cart mutation.
+- source-backed communication suggestions and scheduling context
+- explicit review, readiness and confirmation boundaries
+- Desktop and Full Mobile proof surfaces
+- visible audit and safety state
+- no automatic sending, autonomous messaging or silent authoritative mutation
+
+This builds on completed Work Time, Operating Day Work Proof, Guarded Provider Contracts, Documentation and Packaging, Closed Beta, and Native Intelligence lanes.
 
 ## Current boundaries
 
-- Provider integrations remain primarily read-only and review-first.
-- Guarded provider writes are deferred to v16.
-- No bank feeds, payment initiation, accounting-provider writes or automatic reconciliation.
+- Provider reads and imported candidates remain bounded and review-first.
+- Guarded provider contracts exist, but external provider writes remain disabled.
+- No bank feeds, payment initiation, accounting-provider writes or autonomous reconciliation.
 - No autonomous career applications, recruiter messaging or fabricated career claims.
-- No automatic grocery purchase or silent substitution.
+- No automatic grocery purchase, silent substitution or external-cart mutation.
+- Optional AI cannot silently change authoritative state.
+- Scheduled communications are proposals until explicitly reviewed; automatic sending is disabled.
 - Original documents and evidence are preserved; exports and previews are derivatives.
-- Provenance, freshness, confidence and audit history remain visible where relevant.
+
+## Validation baseline
+
+- Core tests: 386 passed
+- Mobile tests: 54 passed
+- Desktop Release build: clean
+- Android Release build: clean with signed private-beta artifacts
+- Latest evidence: [`group-87-90-scheduled-communications`](screenshot-groups/group-87-90-scheduled-communications/)
 
 ## Next approved work
 
-Group 65 begins the next v13 Household lane: household inventory, meal planning, store profiles and price observations across Desktop and Full Mobile.
+Group 91 begins v21 Social and Messaging Integrations. The remaining approved lanes run through the Group 120 product-complete release candidate.

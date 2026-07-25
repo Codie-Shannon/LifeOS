@@ -1,12 +1,12 @@
 # LifeOS Roadmap
 
-This is the current approved compressed roadmap. Historical roadmap files and release notes remain in Git history and older release records, but this file now reflects the current v13+ plan.
+This is the current approved compressed roadmap. Historical plans remain in Git history and release evidence; this file describes the current checkpoint and approved path through product completion.
 
 ## Current release
 
-**LifeOS v13 is active. Group 64 is complete and Group 65 is next.**
+**LifeOS v20.0.0-alpha.1 is complete through Group 90. Group 91 is next.**
 
-Group 64 completed Grocery Planning and recurring essentials across Desktop and Full Mobile. The roadmap now continues through Group 82.
+Groups 87-90 closed Scheduled Communications with reviewable proposals, timing, readiness, audit and explicit safety boundaries. Automatic sending and autonomous messaging remain disabled.
 
 ## Product architecture
 
@@ -16,180 +16,89 @@ Group 64 completed Grocery Planning and recurring essentials across Desktop and 
 | Desktop | Deep administration, review, audit, detail, filtering, reporting and planning |
 | Full Mobile | Rapid capture, review, execution, status and queued offline actions |
 | Mobile Companion | Separate lightweight companion product |
-| Website / Portal | Public product, documentation, evidence, onboarding, distribution and support surface |
+| Website | Public product, documentation, evidence, onboarding, distribution and support surface |
 
 ## Permanent product rules
 
-- Review first; explicit user confirmation before trusted-state mutation.
-- No silent trust promotion.
-- No silent conflict resolution.
-- No autonomous Assistant execution.
-- No secrets, tokens or provider payloads in proof.
-- No destructive evidence or original-media handling.
+- Review first; explicit confirmation precedes trusted-state mutation.
+- No silent trust promotion or conflict resolution.
+- No autonomous Assistant execution or silent AI mutation.
+- No secrets, tokens, provider payloads or personal data in proof.
+- No destructive handling of original evidence.
 - No automatic reconciliation, financial posting or payment initiation.
-- No autonomous applications, recruiter messaging or fabricated career claims.
+- No autonomous applications, recruiter messaging or fabricated claims.
 - No automatic grocery ordering or silent substitution.
 - Exports are derivatives; authoritative source records remain unchanged.
-- Provenance, freshness, confidence and audit history remain visible where relevant.
+- Provenance, freshness, confidence and audit remain visible where relevant.
 
 ## Completed release history
 
 | Release lane | Groups | Outcome |
 |---|---:|---|
-| Early foundations | 1-23 | Core LifeOS foundations, workspaces, records, evidence patterns and application architecture |
-| v5 | Through 26 | Integration foundation, read-only connectors and release checkpoint |
-| v6 | 27-31 | Controlled automation, orchestration, recovery and beta checkpoint |
-| Mobile Companion | 32-34 | Lightweight Android Companion beta |
-| v7 | 35-39 | Assistant source-backed review, planning, transfer, memory and beta checkpoint |
-| v8 | 40-45 | Website beta foundation and Desktop shell/workspace integration |
-| v9 | 46-51 | Microsoft and Google read-only integration foundations |
-| v10 | 52-57 | Full Mobile release family |
-| v11 | 58-60 | Money, documents, review/reporting and release closure |
-| v12 | 61-63 | Career Studio complete release family |
-| v13 | 64 complete | Grocery planning and recurring essentials; v13 continues at Group 65 |
+| Early foundations | 1-23 | Core workspaces, records, evidence patterns and application architecture |
+| v5-v10 | 24-57 | Integrations, automation, Companion, Assistant, Website/Desktop shell, provider foundations and Full Mobile |
+| v11 | 58-60 | Money, Documents and Financial Review |
+| v12 | 61-63 | Career Studio |
+| v13 | 64-66 | Household and Grocery |
+| v14 | 67-72 | Work Time, Billable Records and Operating Day Work Proof |
+| v15 | 73-76 | Guarded Provider Contracts |
+| v16 | 77-79 | Documentation and Packaging Hub |
+| v18 | 80-82 | Closed Beta Baseline |
+| v19 | 83-86 | Native Intelligence and Optional AI |
+| v20 | 87-90 | Scheduled Communications |
 
-## Approved compressed roadmap
+Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
-### v13 / Group 65 - Household inventory, meals, stores and price context
+## Approved roadmap
 
-- Household inventory and stock levels.
-- Meal planning and recipe/ingredient relationships.
-- Store profiles and price observations.
-- Desktop deep planning plus Full Mobile capture/use.
-- No nutrition diagnosis or automatic purchasing.
+### v21 / Groups 91-94 — Social and messaging integrations
 
-### v13 / Group 66 - Shared household workflows, receipts, spending review and v13 closure
+- Facebook and Meta contract planning.
+- Provider-neutral social and messaging review models.
+- Explicit identity, consent, scope and provenance boundaries.
+- No silent posting, sending or account mutation.
 
-- Shared assignments and household review.
-- Receipt linkage into Documents and Money.
-- Planned vs actual household spending.
-- Privacy, accessibility and regression.
-- v13 release closure.
+### v22 / Groups 95-98 — Pay-later and money integrations
 
-### v14 / Group 67 - Time tracking, work sessions and billable records
+- Afterpay, Zip and related obligation context.
+- Reviewable balances, schedules and totals.
+- Evidence and freshness boundaries.
+- No payment initiation or autonomous reconciliation.
 
-- Authoritative work-session model.
-- Timers and manual entries.
-- Project/client/task linkage.
-- Desktop administration plus Full Mobile quick tracking.
-- Offline/conflict boundaries.
+### v23 / Groups 99-103 — New Zealand grocery lookup worker
 
-### v14 / Group 68 - Invoice preparation, income, payment status and v14 closure
+- User-selected location or optional mobile location.
+- Nearest-town pricing where the user opts in.
+- Comparable-product and store-price context.
+- Source, freshness and confidence visibility; no automatic ordering.
 
-- Timesheet summaries.
-- Invoice preparation candidates.
-- Work income and expected/received status.
-- Money linkage.
-- No autonomous invoicing or payment chasing.
-- v14 closure.
+### v24 / Groups 104-107 — Evidence automation and proof tooling
 
-### v15 / Group 69 - AI provider control and model routing
+- Repeatable proof capture and validation helpers.
+- Evidence manifests, traceability and quality checks.
+- Reviewable automation with no fabricated proof.
 
-- Provider registry and capability matrix.
-- Model selection and routing.
-- Cost, privacy and context limits.
-- Prompt/result provenance.
-- No silent provider switching.
+### v25 / Groups 108-111 — Privacy, export, backup and controls
 
-### v15 / Group 70 - Teams advanced read models and workflow suggestions
+- User-controlled privacy and retention settings.
+- Sanitized opt-in diagnostics.
+- Backup, restore and derivative export boundaries.
+- Account, permission and recovery controls.
 
-- Teams conversations, meetings and files read models.
-- Review-first workflow suggestions.
-- No sending or meeting mutation.
-- Cross-link to Work, Career and Projects.
+### v26 / Groups 112-116 — Website packaging and onboarding
 
-### v15 / Group 71 - Power Automate and Power BI read-only foundations
+- Public Website completion.
+- Product onboarding and support documentation.
+- Desktop and mobile packaging/distribution preparation.
+- Domain, brand and company details finalized when available.
 
-- Flow/run visibility.
-- Dataset/report visibility.
-- Review and health status.
-- No flow execution or report mutation.
+### v27 / Groups 117-120 — Product-complete release candidate
 
-### v15 / Group 72 - Cross-provider AI review, safety and v15 closure
+- Cross-product regression, accessibility and security validation.
+- Installer and private-beta release readiness.
+- Final evidence, known limitations and release candidate.
+- Public launch follows private-beta feedback and explicit release approval.
 
-- Provider comparison.
-- Human review.
-- AI audit/provenance.
-- Fallback and failure behavior.
-- v15 closure.
+## Beyond Group 120
 
-### v16 / Group 73 - Guarded email and communication writes
-
-- Draft-first email writes.
-- Explicit recipient/content confirmation.
-- No silent send.
-- Audit and rollback boundaries.
-
-### v16 / Group 74 - Guarded calendar and task writes
-
-- Create/update proposals.
-- Conflict checks.
-- Explicit final confirmation.
-- Audit and recovery.
-
-### v16 / Group 75 - Guarded files, contacts and Teams writes
-
-- Scoped file/contact/team actions.
-- Preview and permission checks.
-- No broad or destructive mutation.
-
-### v16 / Group 76 - Write audit, rollback boundaries, Emergency Stop and v16 closure
-
-- Global write ledger.
-- Cancellation/recovery.
-- Emergency Stop.
-- Capability revocation.
-- v16 closure.
-
-### v17 / Group 77 - Repository, issue and pull-request visibility
-
-- GitHub/repository read models.
-- Issues, PRs, reviews and status.
-- Project/work linkage.
-- No autonomous merge.
-
-### v17 / Group 78 - Build, CI/CD and deployment monitoring
-
-- Pipeline/run visibility.
-- Test/deployment status.
-- Failure triage.
-- Release evidence.
-
-### v17 / Group 79 - Engineering evidence, guarded automation and v17 closure
-
-- Engineering proof packs.
-- Review-first automation proposals.
-- No uncontrolled deployment.
-- v17 closure.
-
-### v18 / Group 80 - Windows installer, mobile packaging and update channels
-
-- Desktop installer.
-- Android packaging.
-- Version/update channels.
-- Signing/release boundaries.
-
-### v18 / Group 81 - Portal, onboarding, docs and distribution
-
-- Public Portal.
-- Onboarding.
-- Documentation.
-- Distribution and support flows.
-- Public brand/name migration readiness.
-
-### v18 / Group 82 - Security, privacy, release validation and public launch
-
-- Threat/privacy review.
-- Final accessibility and regression.
-- Release validation.
-- Public launch.
-- Evidence and known limitations.
-
-## Optional post-82 horizon
-
-These are planning candidates only and are not approved roadmap work:
-
-- Public rebrand and historical codename migration.
-- Post-launch stabilization, crash diagnostics, opt-in telemetry and support bundles.
-- Extension/plugin SDK with sandboxing, capability permissions and developer docs.
-- Optional cloud sync or service tier with user-controlled encryption, conflict policy and account recovery.
+Post-launch stabilization, public rollout, telemetry expansion, extension SDKs and optional cloud services require separate approval. They are not implicitly authorized by this roadmap.

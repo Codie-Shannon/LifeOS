@@ -1,18 +1,18 @@
 {
-    "currentRelease":  "v23",
-    "currentReleaseName":  "Grocery Intelligence",
-    "currentSemanticVersion":  "23.0.0-alpha.1",
+    "currentRelease":  "v24",
+    "currentReleaseName":  "Evidence Automation",
+    "currentSemanticVersion":  "24.0.0-alpha.1",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  103,
-    "latestCompletedGroupName":  "NZ grocery lookup closure",
-    "latestCompletedHead":  "2610420",
-    "nextGroup":  104,
-    "nextGroupName":  "Screenshot intake utility",
+    "latestCompletedGroup":  107,
+    "latestCompletedGroupName":  "Evidence tooling closure",
+    "latestCompletedHead":  "generated-pack-checkpoint",
+    "nextGroup":  108,
+    "nextGroupName":  "Privacy and category permissions",
     "roadmapApprovedThroughGroup":  120,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  103,
+                    "currentThroughGroup":  107,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -20,7 +20,7 @@
                        "status":  "built-and-active",
                        "releaseFamily":  "v10",
                        "initialBetaClosureGroup":  57,
-                       "currentThroughGroup":  103,
+                       "currentThroughGroup":  107,
                        "separateFromCompanion":  true,
                        "offlineQueueEnabled":  true,
                        "silentConflictOverwriteAllowed":  false
@@ -141,6 +141,11 @@
                                   {
                                       "release":  "v23",
                                       "groups":  "99-103",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v24",
+                                      "groups":  "104-107",
                                       "status":  "complete"
                                   }
                               ],

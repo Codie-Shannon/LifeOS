@@ -9,9 +9,9 @@ public sealed class AutomationFoundationTests
     [Fact]
     public void ProductVersion_IsCurrentV13()
     {
-        Assert.Equal("23.0.0-alpha.1", LifeOS.Core.ProductVersion.Semantic);
-        Assert.Equal("v23.0.0-alpha.1", LifeOS.Core.ProductVersion.Display);
-        Assert.Equal("v23 Grocery Intelligence", LifeOS.Core.ProductVersion.ReleaseName);
+        Assert.Equal("24.0.0-alpha.1", LifeOS.Core.ProductVersion.Semantic);
+        Assert.Equal("v24.0.0-alpha.1", LifeOS.Core.ProductVersion.Display);
+        Assert.Equal("v24 Evidence Automation", LifeOS.Core.ProductVersion.ReleaseName);
     }
 
     [Fact] public void NewRule_IsDisabledByDefault() => Assert.False(new AutomationRule().IsEnabled);

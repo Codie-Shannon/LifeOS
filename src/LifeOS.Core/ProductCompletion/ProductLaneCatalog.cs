@@ -220,6 +220,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("White bread loaf", "Compare 3", "Similar products across permitted nearby stores", true),
                     new ProductLaneAction("Woolworths adapter", "Manual fallback", "Provider path unavailable; visible manual entry offered", false),
                     new ProductLaneAction("Background refresh", "Off", "Can be enabled explicitly from grocery settings", false)
+                }),
+            ["evidence-automation"] = new(
+                "evidence-automation",
+                "SG-77",
+                "Evidence Automation",
+                "Groups 104-107 - screenshot intake, PDF generation and repository completion gates",
+                "Evidence tools copy and rename proof without altering originals. A group cannot close until screenshots, builds, tests, notes and repository checks are present.",
+                new[]
+                {
+                    new ProductLaneMetric("New screenshots", "8", "Old folder excluded"),
+                    new ProductLaneMetric("Stable names", "8/8", "Group-prefixed"),
+                    new ProductLaneMetric("Gate checks", "8", "All required"),
+                    new ProductLaneMetric("Repo mutations", "0", "Export is copy-only")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Screenshot intake", "Ready", "Scans selected folder and excludes old evidence", false),
+                    new ProductLaneAction("Evidence PDF", "Ready", "Builds a visual pack from approved PNG files", false),
+                    new ProductLaneAction("Completion gate", "Blocked", "Pack 2 screenshots are intentionally pending", true),
+                    new ProductLaneAction("Repo-safe export", "Verified", "Original files and canonical repository remain unchanged", false)
                 })
         };
 

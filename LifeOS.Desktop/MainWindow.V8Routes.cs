@@ -25,6 +25,7 @@ public partial class MainWindow
         "desktop-release",
         "documentation-hub",
         "email-radar",
+        "evidence-automation",
         "evidence-vault",
         "final-offline-os",
         "follow-ups",
@@ -187,6 +188,9 @@ public partial class MainWindow
                 break;
             case "email-radar":
                 ShowEmailRadarPage();
+                break;
+            case "evidence-automation":
+                ShowProductLanePage(routeId);
                 break;
             case "evidence-vault":
                 ShowEvidenceVaultPage();

@@ -180,6 +180,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Community group update", "Browser handoff", "API limitation shown before opening the browser", true),
                     new ProductLaneAction("Messenger reply", "Needs review", "Source-backed draft with recipient and consent status", true),
                     new ProductLaneAction("Provider limitation log", "Visible", "No fake claims for unsupported profile posting", false)
+                }),
+            ["pay-later-insights"] = new(
+                "pay-later-insights",
+                "SG-75",
+                "Pay-Later & Money Integration Review",
+                "Groups 95-98 - Afterpay/Zip parsing, safe-money exclusion and read-only contracts",
+                "Email evidence creates candidates only. Safe money changes after confirmation; banking/accounting contracts cannot reconcile or initiate payments.",
+                new[]
+                {
+                    new ProductLaneMetric("Remaining", "NZD 360", "Confirmed Afterpay + Zip"),
+                    new ProductLaneMetric("Next deductions", "NZD 90", "Excluded from safe money"),
+                    new ProductLaneMetric("Needs review", "2", "Source-backed candidates"),
+                    new ProductLaneMetric("Payments initiated", "0", "Hard boundary")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Afterpay statement", "Candidate", "NZD 240 remaining - next NZD 60 - source retained", true),
+                    new ProductLaneAction("Zip receipt", "Confirmed", "NZD 120 remaining - duplicate scan passed", false),
+                    new ProductLaneAction("Xero export contract", "Read-only", "CSV/Xero export available; provider write disabled", false),
+                    new ProductLaneAction("Bank payment action", "Blocked", "Payment initiation is outside product-complete scope", false)
                 })
         };
 

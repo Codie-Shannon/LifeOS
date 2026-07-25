@@ -192,6 +192,7 @@ internal static class WorkspaceCatalog
                             Route("money-profile", "Money Profile", "Canonical state", "Buffers, hidden deductions and safe-to-spend planning."),
                             Route("payment-calendar", "Payment Calendar", "Canonical behaviour", "Due dates, expected income and payment attention."),
                             Route("pay-later", "Pay Later", "Canonical records", "BNPL obligations, due dates, pressure and notes."),
+                            Route("pay-later-insights", "Pay-Later & Money Integration Review", "SG-75 ready", "Afterpay/Zip evidence parsing, duplicate review, safe-money exclusion and read-only bank/accounting boundaries."),
                             Route("receipt-evidence", "Receipt Evidence", "Canonical records", "Receipts and payment proof retained as evidence.")
                         })
                 }),

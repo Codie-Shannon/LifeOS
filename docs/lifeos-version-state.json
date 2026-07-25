@@ -1,18 +1,18 @@
 {
-    "currentRelease":  "v21",
-    "currentReleaseName":  "Social Review",
-    "currentSemanticVersion":  "21.0.0-alpha.1",
+    "currentRelease":  "v22",
+    "currentReleaseName":  "Money Integrations",
+    "currentSemanticVersion":  "22.0.0-alpha.1",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  94,
-    "latestCompletedGroupName":  "Social integration closure",
-    "latestCompletedHead":  "3bf3be6",
-    "nextGroup":  95,
-    "nextGroupName":  "Pay-later parser foundation",
+    "latestCompletedGroup":  98,
+    "latestCompletedGroupName":  "Money integration safety closure",
+    "latestCompletedHead":  "generated-pack-checkpoint",
+    "nextGroup":  99,
+    "nextGroupName":  "Supermarket lookup consent",
     "roadmapApprovedThroughGroup":  120,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  94,
+                    "currentThroughGroup":  98,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -20,7 +20,7 @@
                        "status":  "built-and-active",
                        "releaseFamily":  "v10",
                        "initialBetaClosureGroup":  57,
-                       "currentThroughGroup":  94,
+                       "currentThroughGroup":  98,
                        "separateFromCompanion":  true,
                        "offlineQueueEnabled":  true,
                        "silentConflictOverwriteAllowed":  false
@@ -131,6 +131,11 @@
                                   {
                                       "release":  "v21",
                                       "groups":  "91-94",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v22",
+                                      "groups":  "95-98",
                                       "status":  "complete"
                                   }
                               ],

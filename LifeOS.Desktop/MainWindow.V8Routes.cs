@@ -41,6 +41,7 @@ public partial class MainWindow
         "operating-day",
         "os-navigation",
         "paid-work-centre",
+        "pay-later-insights",
         "pay-later",
         "payment-calendar",
         "projects",
@@ -233,6 +234,9 @@ public partial class MainWindow
                 break;
             case "paid-work-centre":
                 ShowPaidWorkCentrePage();
+                break;
+            case "pay-later-insights":
+                ShowProductLanePage(routeId);
                 break;
             case "pay-later":
                 ShowPayLaterPage();

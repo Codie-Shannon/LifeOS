@@ -7,9 +7,9 @@ public static class PublicContent
 
     public static IReadOnlyList<ProductStatus> Products { get; } =
     [
-        new("Desktop", "v26.0.0-beta.1", "Private beta", "The full local operating environment for planning, review, evidence and guarded execution.", "/product/desktop"),
+        new("Desktop", "v27.0.0-rc.1", "Release candidate", "The full local operating environment for planning, review, evidence and guarded execution.", "/product/desktop"),
         new("Mobile Companion", "v0.1.0-beta.1", "Beta complete", "A deliberately lightweight companion for capture, glance, review, outbox and send-to-desktop.", "/product/companion"),
-        new("Full Mobile", "v26.0.0-beta.1", "Private beta", "A separate purpose-built Android application for capture, review, execution and offline-safe workflows.", "/roadmap")
+        new("Full Mobile", "v27.0.0-rc.1", "Release candidate", "A separate purpose-built Android application for capture, review, execution and offline-safe workflows.", "/roadmap")
     ];
 
     public static IReadOnlyList<AudiencePath> Audiences { get; } =
@@ -21,8 +21,8 @@ public static class PublicContent
 
     public static IReadOnlyList<ProofMetric> ProofMetrics { get; } =
     [
-        new("22", "Website tests", "Documentation and launch-readiness baseline"),
-        new("418", "Core tests", "Validated through Group 116"),
+        new("28", "Website tests", "Documentation and release-candidate baseline"),
+        new("422", "Core tests", "Validated through Group 120"),
         new("54", "Full Mobile tests", "Android private-beta baseline"),
         new("Clean", "Security posture", "Release, vulnerability and secret scans")
     ];
@@ -135,6 +135,7 @@ public static class PublicContent
         new("/evidence", "Evidence", "Development proof"), new("/roadmap", "Roadmap", "Product tracks"),
         new("/access", "Early Access", "Preview waitlist boundary"), new("/about", "About", "Product and creator"),
         new("/privacy", "Privacy", "Website privacy boundary"), new("/downloads", "Downloads", "Future GitHub Releases boundary"),
-        new("/onboarding", "Onboarding", "Private-beta onboarding"), new("/case-study", "Case Study", "Factual portfolio case study")
+        new("/onboarding", "Onboarding", "Private-beta onboarding"), new("/case-study", "Case Study", "Factual portfolio case study"),
+        new("/release-candidate", "Release Candidate", "Product-complete candidate boundary")
     }.Concat(Docs.Select(x => new RouteEntry(x.Route, x.Title, x.Summary))).ToArray();
 }

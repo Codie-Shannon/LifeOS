@@ -50,6 +50,15 @@ public sealed class MorePage : ContentPage
         productReadiness.Clicked += async (_, _) =>
             await Navigation.PushAsync(new ProductReadinessPage());
         layout.Children.Add(productReadiness);
+        var productComplete = new Button
+        {
+            Text = "Product-complete candidate",
+            BackgroundColor = Color.FromArgb("#304860"),
+            TextColor = Colors.White
+        };
+        productComplete.Clicked += async (_, _) =>
+            await Navigation.PushAsync(new ProductCompletePage());
+        layout.Children.Add(productComplete);
         Content = new ScrollView { Content = layout };
     }
 }

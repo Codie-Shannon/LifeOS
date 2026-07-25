@@ -69,6 +69,8 @@ AppData/
 ~$*
 .DS_Store
 Thumbs.db
+__pycache__/
+*.pyc
 
 # Build-chat handoffs are forbidden
 *HANDOFF*

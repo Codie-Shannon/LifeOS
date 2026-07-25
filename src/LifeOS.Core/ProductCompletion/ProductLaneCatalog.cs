@@ -280,6 +280,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Public onboarding", "Ready", "Local-first core plus setup now/later/decline", false),
                     new ProductLaneAction("Portfolio case study", "Ready", "Problem, approach, verified result and technology surfaces", false),
                     new ProductLaneAction("Packaging boundary scan", "Passed", "Internal and private-beta assets remain separated", false)
+                }),
+            ["release-candidate"] = new(
+                "release-candidate",
+                "SG-80",
+                "Product-Complete Release Candidate",
+                "Groups 117-120 - end-to-end passes, hardening and final closure decision",
+                "Candidate status requires desktop, mobile, website, documentation, evidence and repository checks. A release tag still requires explicit owner approval.",
+                new[]
+                {
+                    new ProductLaneMetric("Surfaces", "6/6", "End-to-end checked"),
+                    new ProductLaneMetric("Core tests", "422", "Cumulative suite"),
+                    new ProductLaneMetric("External writes", "0", "Review-first defaults"),
+                    new ProductLaneMetric("Release tag", "Waiting", "Owner approval required")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Desktop end-to-end pass", "Ready", "Dashboard through queues, settings, exports and evidence", false),
+                    new ProductLaneAction("Mobile end-to-end pass", "Ready", "Household, work, money, communications and offline state", false),
+                    new ProductLaneAction("Website and documentation", "Ready", "Public/private boundaries and beta status verified", false),
+                    new ProductLaneAction("Create release candidate tag", "Needs approval", "Final screenshots and owner decision required", true)
                 })
         };
 

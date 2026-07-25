@@ -13,9 +13,9 @@ public sealed class Group39BetaReleaseTests
     [Fact]
     public void Release_identity_is_current_v13()
     {
-        Assert.Equal("26.0.0-beta.1", ProductVersion.Semantic);
-        Assert.Equal("v26.0.0-beta.1", ProductVersion.Display);
-        Assert.Equal("v26 Public Packaging", ProductVersion.ReleaseName);
+        Assert.Equal("27.0.0-rc.1", ProductVersion.Semantic);
+        Assert.Equal("v27.0.0-rc.1", ProductVersion.Display);
+        Assert.Equal("v27 Product-Complete Candidate", ProductVersion.ReleaseName);
     }
 
     [Fact]

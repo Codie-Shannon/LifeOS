@@ -6,15 +6,15 @@ public sealed class PublicContentTests
 {
     [Fact] public void Required_routes_are_unique_and_present()
     {
-        string[] required = ["/", "/product", "/product/desktop", "/product/companion", "/solutions", "/solutions/businesses", "/solutions/individuals", "/solutions/technical-reviewers", "/safety", "/docs", "/docs/guides", "/docs/concepts", "/docs/modules", "/docs/releases", "/evidence", "/roadmap", "/access", "/about", "/privacy"];
+        string[] required = ["/", "/product", "/product/desktop", "/product/companion", "/solutions", "/solutions/businesses", "/solutions/individuals", "/solutions/technical-reviewers", "/safety", "/docs", "/docs/guides", "/docs/concepts", "/docs/modules", "/docs/releases", "/evidence", "/roadmap", "/access", "/about", "/privacy", "/release-candidate"];
         Assert.Equal(PublicContent.Routes.Count, PublicContent.Routes.Select(x => x.Path).Distinct(StringComparer.OrdinalIgnoreCase).Count());
         Assert.All(required, route => Assert.Contains(PublicContent.Routes, x => x.Path == route));
     }
     [Fact] public void Product_boundaries_are_explicit()
     {
-        Assert.Contains(PublicContent.Products, x => x.Name == "Desktop" && x.State == "Private beta" && x.Version == "v26.0.0-beta.1");
+        Assert.Contains(PublicContent.Products, x => x.Name == "Desktop" && x.State == "Release candidate" && x.Version == "v27.0.0-rc.1");
         Assert.Contains(PublicContent.Products, x => x.Name == "Mobile Companion" && x.State == "Beta complete");
-        Assert.Contains(PublicContent.Products, x => x.Name == "Full Mobile" && x.State == "Private beta" && x.Version == "v26.0.0-beta.1");
+        Assert.Contains(PublicContent.Products, x => x.Name == "Full Mobile" && x.State == "Release candidate" && x.Version == "v27.0.0-rc.1");
     }
     [Fact] public void Docs_have_required_metadata()
     {

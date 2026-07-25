@@ -51,6 +51,7 @@ public partial class MainWindow
         "proof-tracker",
         "public-packaging",
         "receipt-evidence",
+        "release-candidate",
         "relationship-radar",
         "search-knowledge",
         "settings-safety",
@@ -268,6 +269,9 @@ public partial class MainWindow
                 break;
             case "receipt-evidence":
                 ShowReceiptEvidencePage();
+                break;
+            case "release-candidate":
+                ShowProductLanePage(routeId);
                 break;
             case "relationship-radar":
                 ShowRelationshipRadarPage();

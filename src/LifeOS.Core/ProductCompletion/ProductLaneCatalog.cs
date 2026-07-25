@@ -240,6 +240,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Evidence PDF", "Ready", "Builds a visual pack from approved PNG files", false),
                     new ProductLaneAction("Completion gate", "Blocked", "Pack 2 screenshots are intentionally pending", true),
                     new ProductLaneAction("Repo-safe export", "Verified", "Original files and canonical repository remain unchanged", false)
+                }),
+            ["control-plane"] = new(
+                "control-plane",
+                "SG-78",
+                "Privacy, Backup & Emergency Control",
+                "Groups 108-111 - category permissions, export/restore and global control",
+                "Sensitive categories are independently permissioned. Backups exclude credentials and validate integrity. Emergency Stop disconnects providers and records every decision.",
+                new[]
+                {
+                    new ProductLaneMetric("Categories", "6", "Independent permissions"),
+                    new ProductLaneMetric("Crash reports", "Off", "90-day retention if enabled"),
+                    new ProductLaneMetric("Backup integrity", "Valid", "SHA-256 checked"),
+                    new ProductLaneMetric("Emergency Stop", "Ready", "Providers stay disconnected")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Money category", "Allowed", "Granted explicitly; revoke from Settings", false),
+                    new ProductLaneAction("Health category", "Blocked", "No permission granted", false),
+                    new ProductLaneAction("Restore preview", "Needs review", "Schema and integrity passed; apply is a separate action", true),
+                    new ProductLaneAction("Global Emergency Stop", "Ready", "Stops automations and disconnects every provider", false)
                 })
         };
 

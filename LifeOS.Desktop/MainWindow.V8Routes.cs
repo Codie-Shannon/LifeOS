@@ -20,6 +20,7 @@ public partial class MainWindow
         "bills-payments",
         "command-centre",
         "communications",
+        "control-plane",
         "daily-operating-flow",
         "daily-state",
         "desktop-release",
@@ -172,6 +173,9 @@ public partial class MainWindow
                 ShowCommandCentre();
                 break;
             case "communications":
+                ShowProductLanePage(routeId);
+                break;
+            case "control-plane":
                 ShowProductLanePage(routeId);
                 break;
             case "daily-operating-flow":

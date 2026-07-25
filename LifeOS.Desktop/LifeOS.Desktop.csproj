@@ -15,8 +15,8 @@
   </PropertyGroup>
 
   <PropertyGroup Label="CurrentProductVersion">
-    <Version>24.0.0-alpha.1</Version>
-    <AssemblyVersion>24.0.0.0</AssemblyVersion>
-    <FileVersion>24.0.0.0</FileVersion>
-    <InformationalVersion>24.0.0-alpha.1</InformationalVersion>
+    <Version>25.0.0-alpha.1</Version>
+    <AssemblyVersion>25.0.0.0</AssemblyVersion>
+    <FileVersion>25.0.0.0</FileVersion>
+    <InformationalVersion>25.0.0-alpha.1</InformationalVersion>
   </PropertyGroup></Project>

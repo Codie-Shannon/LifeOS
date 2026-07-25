@@ -9,9 +9,9 @@
     <Nullable>enable</Nullable>
     <ApplicationTitle>Life Control OS</ApplicationTitle>
     <ApplicationId>nz.codieshannon.lifeos.mobile</ApplicationId>
-    <ApplicationDisplayVersion>24.0.0-alpha.1</ApplicationDisplayVersion>
-    <ApplicationVersion>13</ApplicationVersion>
-    <Version>24.0.0-alpha.1</Version>
+    <ApplicationDisplayVersion>25.0.0-alpha.1</ApplicationDisplayVersion>
+    <ApplicationVersion>14</ApplicationVersion>
+    <Version>25.0.0-alpha.1</Version>
     <SupportedOSPlatformVersion>26.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion>26.0</TargetPlatformMinVersion>
   </PropertyGroup>

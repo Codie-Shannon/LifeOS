@@ -1,30 +1,30 @@
 # LifeOS current status
 
-LifeOS is current through **v20.0.0-alpha.1 / Group 90** at repository checkpoint `a62a6e9`.
+LifeOS is current through **v21.0.0-alpha.1 / Group 94** at repository checkpoint `3bf3be6`.
 
-Groups 87-90 close the Scheduled Communications release lane. Group 91 is next, and the approved roadmap runs through Group 120.
+Groups 91-94 close Social and Messaging Integrations. Group 95 is next, and the approved roadmap runs through Group 120.
 
 ## Current product state
 
 | Product | Status |
 |---|---|
-| Desktop | Deep administration, review, planning, audit and reporting through Group 90 |
-| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows through Group 90 |
+| Desktop | Deep administration, review, planning, audit and reporting through Group 94 |
+| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 94 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Public product/documentation/evidence beta foundation complete; packaging and onboarding planned |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest completed capability
 
-Groups 87-90 complete Scheduled Communications:
+Groups 91-94 complete Social and Messaging Integrations:
 
-- source-backed communication suggestions and scheduling context
-- explicit review, readiness and confirmation boundaries
-- Desktop and Full Mobile proof surfaces
-- visible audit and safety state
-- no automatic sending, autonomous messaging or silent authoritative mutation
+- Meta capability mapping with official API preference
+- explicit browser-assisted or manual fallback for unsupported actions
+- Facebook Page, Community group and Messenger review records
+- provider confirmation required before claiming publication
+- no invisible posting, autonomous messaging or silent authoritative mutation
 
-This builds on completed Work Time, Operating Day Work Proof, Guarded Provider Contracts, Documentation and Packaging, Closed Beta, and Native Intelligence lanes.
+This builds on completed Work Time, Guarded Provider Contracts, Documentation and Packaging, Closed Beta, Native Intelligence and Scheduled Communications lanes.
 
 ## Current boundaries
 
@@ -43,8 +43,8 @@ This builds on completed Work Time, Operating Day Work Proof, Guarded Provider C
 - Mobile tests: 54 passed
 - Desktop Release build: clean
 - Android Release build: clean with signed private-beta artifacts
-- Latest evidence: [`group-87-90-scheduled-communications`](screenshot-groups/group-87-90-scheduled-communications/)
+- Latest evidence: [`group-91-94-social-messaging-integrations`](screenshot-groups/group-91-94-social-messaging-integrations/)
 
 ## Next approved work
 
-Group 91 begins v21 Social and Messaging Integrations. The remaining approved lanes run through the Group 120 product-complete release candidate.
+Group 95 begins v22 Pay-later and Money Integrations. The remaining approved lanes run through the Group 120 product-complete release candidate.

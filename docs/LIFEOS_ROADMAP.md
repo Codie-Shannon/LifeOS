@@ -4,9 +4,9 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v20.0.0-alpha.1 is complete through Group 90. Group 91 is next.**
+**LifeOS v21.0.0-alpha.1 is complete through Group 94. Group 95 is next.**
 
-Groups 87-90 closed Scheduled Communications with reviewable proposals, timing, readiness, audit and explicit safety boundaries. Automatic sending and autonomous messaging remain disabled.
+Groups 91-94 closed Social and Messaging Integrations with official API preference, visible limitations, explicit browser/manual handoffs and provider confirmation boundaries. Invisible posting and autonomous messaging remain disabled.
 
 ## Product architecture
 
@@ -46,17 +46,11 @@ Groups 87-90 closed Scheduled Communications with reviewable proposals, timing, 
 | v18 | 80-82 | Closed Beta Baseline |
 | v19 | 83-86 | Native Intelligence and Optional AI |
 | v20 | 87-90 | Scheduled Communications |
+| v21 | 91-94 | Social and Messaging Integrations |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
 ## Approved roadmap
-
-### v21 / Groups 91-94 — Social and messaging integrations
-
-- Facebook and Meta contract planning.
-- Provider-neutral social and messaging review models.
-- Explicit identity, consent, scope and provenance boundaries.
-- No silent posting, sending or account mutation.
 
 ### v22 / Groups 95-98 — Pay-later and money integrations
 

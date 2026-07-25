@@ -4,7 +4,17 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v20.0.0-alpha.1 is complete through Group 90. Scheduled Communications is closed, Group 91 is next, and the approved roadmap runs through Group 120.
+LifeOS v21.0.0-alpha.1 is complete through Group 94. Social and Messaging Integrations is closed, Group 95 is next, and the approved roadmap runs through Group 120.
+
+## v21 - Social Review
+
+### Groups 91-94
+
+- Added Meta capability mapping with official API preference.
+- Added Facebook Page, Community group and Messenger review records.
+- Added explicit browser-assisted or manual handoffs for unsupported actions.
+- Required review and provider confirmation before claiming publication.
+- Kept invisible posting, autonomous messaging and silent mutation disabled.
 
 ## v20 - Scheduled Communications
 

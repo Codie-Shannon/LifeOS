@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v23.0.0-alpha.1 active.
-- Group 103 complete.
-- Group 104 next.
+- LifeOS v24.0.0-alpha.1 active.
+- Group 107 complete.
+- Group 108 next.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation
@@ -59,6 +59,7 @@ Confirm these current areas open and show fictional/sanitized state:
 - Social & Messenger Review
 - Pay-Later & Money Integration Review
 - NZ Grocery Price Lookup
+- Evidence Automation
 
 ## Full Mobile smoke checks
 

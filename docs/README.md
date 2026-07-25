@@ -9,21 +9,22 @@ This directory is the durable source of truth for LifeOS status, release history
 - [`version-history.md`](version-history.md) — consolidated milestone history
 - [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 120
 - [`LIFEOS_DESKTOP_RELEASE_NOTES.md`](LIFEOS_DESKTOP_RELEASE_NOTES.md) — current Desktop release notes
-- [`screenshot-groups/group-99-103-nz-grocery-lookup-worker/`](screenshot-groups/group-99-103-nz-grocery-lookup-worker/) — latest completed screenshot evidence
+- [`screenshot-groups/group-104-107-evidence-automation-proof-tooling/`](screenshot-groups/group-104-107-evidence-automation-proof-tooling/) — latest completed screenshot evidence
 
 ## Current product state
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | Current through v23 Group 103 |
-| Full Mobile | Built and aligned through v23 Group 103 |
+| LifeOS Desktop | Current through v24 Group 107 |
+| Full Mobile | Built and aligned through v24 Group 107 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Beta foundation complete; packaging/onboarding approved for Groups 112-116 |
 | Shared Core | Active authoritative contract, validation, provenance, audit and safety layer |
-| Current release | v23 Grocery Intelligence complete; Group 104 next |
+| Current release | v24 Evidence Automation complete; Group 108 next |
 
 ## Recent release lanes
 
+- **v24 / Groups 104-107** - Evidence Automation and Proof Tooling
 - **v23 / Groups 99-103** - New Zealand Grocery Lookup Worker
 - **v22 / Groups 95-98** — Pay-Later and Money Integrations
 - **v21 / Groups 91-94** — Social and Messaging Integrations
@@ -39,6 +40,7 @@ This directory is the durable source of truth for LifeOS status, release history
 
 ## Current evidence
 
+- [`Groups 104-107 - Evidence Automation and Proof Tooling`](screenshot-groups/group-104-107-evidence-automation-proof-tooling/)
 - [`Groups 99-103 - New Zealand Grocery Lookup Worker`](screenshot-groups/group-99-103-nz-grocery-lookup-worker/)
 - [`Groups 95-98 — Pay-Later and Money Integrations`](screenshot-groups/group-95-98-pay-later-money-integrations/)
 - [`Groups 91-94 — Social and Messaging Integrations`](screenshot-groups/group-91-94-social-messaging-integrations/)

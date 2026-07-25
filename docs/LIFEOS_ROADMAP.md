@@ -4,9 +4,9 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v23.0.0-alpha.1 is complete through Group 103. Group 104 is next.**
+**LifeOS v24.0.0-alpha.1 is complete through Group 107. Group 108 is next.**
 
-Groups 99-103 closed the New Zealand Grocery Lookup Worker with explicit location consent, comparable prices, visible freshness and manual fallback. Automatic ordering and external-cart mutation remain disabled.
+Groups 104-107 closed Evidence Automation and Proof Tooling with stable intake, copy-only export, generated evidence PDFs and fail-closed completion gates. Original evidence remains unchanged.
 
 ## Product architecture
 
@@ -49,16 +49,11 @@ Groups 99-103 closed the New Zealand Grocery Lookup Worker with explicit locatio
 | v21 | 91-94 | Social and Messaging Integrations |
 | v22 | 95-98 | Pay-Later and Money Integrations |
 | v23 | 99-103 | New Zealand Grocery Lookup Worker |
+| v24 | 104-107 | Evidence Automation and Proof Tooling |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
 ## Approved roadmap
-
-### v24 / Groups 104-107 — Evidence automation and proof tooling
-
-- Repeatable proof capture and validation helpers.
-- Evidence manifests, traceability and quality checks.
-- Reviewable automation with no fabricated proof.
 
 ### v25 / Groups 108-111 — Privacy, export, backup and controls
 

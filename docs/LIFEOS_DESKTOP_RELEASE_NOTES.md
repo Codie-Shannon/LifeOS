@@ -1,39 +1,37 @@
-# LifeOS Desktop v23.0.0-alpha.1 Release Notes
+# LifeOS Desktop v24.0.0-alpha.1 Release Notes
 
-LifeOS Desktop v23 completes the New Zealand Grocery Lookup Worker across
-Groups 99-103.
+LifeOS Desktop v24 completes Evidence Automation and Proof Tooling across
+Groups 104-107.
 
 ## Release theme
 
-**Consent-based local grocery intelligence without purchase authority**
+**Repeatable proof without altering originals**
 
 ## Added
 
-- User-selected location and optional nearest-town pricing.
-- Explicit retailer and location consent.
-- Comparable-product and store-price context.
-- Source, capture time, freshness and confidence visibility.
-- Visible worker status and manual fallback.
-- NZ Grocery Price Lookup in the Household workspace.
+- Old-evidence exclusion during screenshot intake.
+- Stable group-prefixed screenshot naming.
+- Copy-only evidence export.
+- Evidence PDF generation from approved PNG files.
+- Fail-closed completion gates.
+- Reachable Evidence Automation module in Settings.
 
 ## Safety boundaries
 
-- Lookup starts only after explicit consent.
-- Future-dated evidence cannot count as fresh.
-- Provider failures remain visible and offer manual fallback.
-- Background refresh is off by default.
-- No automatic ordering, substitution, payment or cart mutation.
+- Original evidence is never renamed or overwritten.
+- Empty or incomplete proof cannot pass the completion gate.
+- Repository export reports zero canonical mutations.
+- Generated PDFs remain derivative evidence.
 
 ## Validation
 
-- 399 Core tests passed.
+- 403 Core tests passed.
 - 54 Mobile tests passed.
-- Desktop Release build completed cleanly.
-- Android Release build completed cleanly.
+- Desktop and Android Release builds completed cleanly.
+- Evidence PDF smoke test completed successfully.
 - Official evidence is in
-  [`screenshot-groups/group-99-103-nz-grocery-lookup-worker`](screenshot-groups/group-99-103-nz-grocery-lookup-worker/).
+  [`screenshot-groups/group-104-107-evidence-automation-proof-tooling`](screenshot-groups/group-104-107-evidence-automation-proof-tooling/).
 
 ## Next
 
-Group 104 begins v24 Evidence Automation and Proof Tooling. The approved
-roadmap continues through Group 120.
+Group 108 begins v25 Privacy, Export, Backup and Controls.

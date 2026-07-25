@@ -5,7 +5,7 @@
     "currentStatus":  "active-development",
     "latestCompletedGroup":  107,
     "latestCompletedGroupName":  "Evidence tooling closure",
-    "latestCompletedHead":  "generated-pack-checkpoint",
+    "latestCompletedHead":  "375aa8e",
     "nextGroup":  108,
     "nextGroupName":  "Privacy and category permissions",
     "roadmapApprovedThroughGroup":  120,
@@ -167,7 +167,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-99-103-nz-grocery-lookup-worker",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-104-107-evidence-automation-proof-tooling",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

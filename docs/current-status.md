@@ -1,29 +1,28 @@
 # LifeOS current status
 
-LifeOS is current through **v23.0.0-alpha.1 / Group 103** at repository checkpoint `2610420`.
+LifeOS is current through **v24.0.0-alpha.1 / Group 107** at repository checkpoint `375aa8e`.
 
-Groups 99-103 close the New Zealand Grocery Lookup Worker. Group 104 is next, and the approved roadmap runs through Group 120.
+Groups 104-107 close Evidence Automation and Proof Tooling. Group 108 is next, and the approved roadmap runs through Group 120.
 
 ## Current product state
 
 | Product | Status |
 |---|---|
-| Desktop | Deep administration, review, planning, audit and reporting through Group 103 |
-| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 103 |
+| Desktop | Deep administration, review, planning, audit and reporting through Group 107 |
+| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 107 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Public product/documentation/evidence beta foundation complete; packaging and onboarding planned |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest completed capability
 
-Groups 99-103 complete the New Zealand Grocery Lookup Worker:
+Groups 104-107 complete Evidence Automation and Proof Tooling:
 
-- explicit retailer and location consent
-- user-selected or optional nearest-town pricing
-- comparable-product and retailer-price context
-- visible source, capture time, freshness and confidence
-- manual fallback when a provider path is unavailable
-- no automatic ordering, payment or external-cart mutation
+- old screenshot evidence excluded from intake
+- stable group-prefixed screenshot naming
+- copy-only export that preserves originals
+- evidence PDF generation from approved PNG files
+- fail-closed completion gates for required proof
 
 This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Native Intelligence, Scheduled Communications and Social Review lanes.
 
@@ -40,12 +39,12 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
-- Core tests: 399 passed
+- Core tests: 403 passed
 - Mobile tests: 54 passed
 - Desktop Release build: clean
 - Android Release build: clean with signed private-beta artifacts
-- Latest evidence: [`group-99-103-nz-grocery-lookup-worker`](screenshot-groups/group-99-103-nz-grocery-lookup-worker/)
+- Latest evidence: [`group-104-107-evidence-automation-proof-tooling`](screenshot-groups/group-104-107-evidence-automation-proof-tooling/)
 
 ## Next approved work
 
-Group 104 begins v24 Evidence Automation and Proof Tooling. The remaining approved lanes run through the Group 120 product-complete release candidate.
+Group 108 begins v25 Privacy, Export, Backup and Controls. The remaining approved lanes run through the Group 120 product-complete release candidate.

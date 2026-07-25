@@ -4,7 +4,16 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v23.0.0-alpha.1 is complete through Group 103. The New Zealand Grocery Lookup Worker is closed, Group 104 is next, and the approved roadmap runs through Group 120.
+LifeOS v24.0.0-alpha.1 is complete through Group 107. Evidence Automation and Proof Tooling is closed, Group 108 is next, and the approved roadmap runs through Group 120.
+
+## v24 - Evidence Automation
+
+### Groups 104-107
+
+- Added old-evidence exclusion and stable screenshot naming.
+- Added copy-only evidence export that preserves originals.
+- Added generated evidence PDFs from approved PNG files.
+- Added fail-closed completion gates for required proof.
 
 ## v23 - Grocery Intelligence
 

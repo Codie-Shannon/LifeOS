@@ -4,9 +4,9 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v21.0.0-alpha.1 is complete through Group 94. Group 95 is next.**
+**LifeOS v22.0.0-alpha.1 is complete through Group 98. Group 99 is next.**
 
-Groups 91-94 closed Social and Messaging Integrations with official API preference, visible limitations, explicit browser/manual handoffs and provider confirmation boundaries. Invisible posting and autonomous messaging remain disabled.
+Groups 95-98 closed Pay-Later and Money Integrations with source-backed candidates, explicit confirmation, duplicate review and read-only provider contracts. Payment initiation and autonomous reconciliation remain disabled.
 
 ## Product architecture
 
@@ -47,17 +47,11 @@ Groups 91-94 closed Social and Messaging Integrations with official API preferen
 | v19 | 83-86 | Native Intelligence and Optional AI |
 | v20 | 87-90 | Scheduled Communications |
 | v21 | 91-94 | Social and Messaging Integrations |
+| v22 | 95-98 | Pay-Later and Money Integrations |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
 ## Approved roadmap
-
-### v22 / Groups 95-98 — Pay-later and money integrations
-
-- Afterpay, Zip and related obligation context.
-- Reviewable balances, schedules and totals.
-- Evidence and freshness boundaries.
-- No payment initiation or autonomous reconciliation.
 
 ### v23 / Groups 99-103 — New Zealand grocery lookup worker
 

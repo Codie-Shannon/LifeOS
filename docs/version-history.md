@@ -4,7 +4,17 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v21.0.0-alpha.1 is complete through Group 94. Social and Messaging Integrations is closed, Group 95 is next, and the approved roadmap runs through Group 120.
+LifeOS v22.0.0-alpha.1 is complete through Group 98. Pay-Later and Money Integrations is closed, Group 99 is next, and the approved roadmap runs through Group 120.
+
+## v22 - Money Integrations
+
+### Groups 95-98
+
+- Added source-backed Afterpay and Zip parsing candidates.
+- Added explicit duplicate review and confirmation.
+- Excluded only confirmed deductions from safe-money calculations.
+- Added read-only CSV/Xero export boundaries.
+- Kept payment initiation and autonomous reconciliation disabled.
 
 ## v21 - Social Review
 

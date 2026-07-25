@@ -1,37 +1,37 @@
-# LifeOS Desktop v21.0.0-alpha.1 Release Notes
+# LifeOS Desktop v22.0.0-alpha.1 Release Notes
 
-LifeOS Desktop v21 completes Social and Messaging Integrations across Groups 91-94.
+LifeOS Desktop v22 completes Pay-Later and Money Integrations across Groups 95-98.
 
 ## Release theme
 
-**Transparent social review without invisible posting**
+**Evidence-backed money context without payment authority**
 
 ## Added
 
-- Meta capability mapping with official API preference.
-- Social & Messenger Review in the Assistant workspace.
-- Facebook Page release-note drafts with explicit approval.
-- Community group browser handoffs that disclose API limitations first.
-- Source-backed Messenger reply candidates with recipient and consent context.
-- Provider limitation records and confirmation-gated publication state.
+- Afterpay and Zip evidence parsing into review candidates.
+- Duplicate statement detection without silent merging.
+- Explicit candidate confirmation.
+- Confirmed next deductions excluded from safe-money calculations.
+- Read-only CSV/Xero export contract.
+- Pay-Later & Money Integration Review in the Money workspace.
 
 ## Safety boundaries
 
-- No invisible posting.
-- No autonomous messaging.
-- No fake support claims for unsupported profile or group actions.
-- Browser-assisted and manual paths remain explicit.
-- Drafts require review and publication requires provider confirmation.
-- Published count remains zero until confirmation exists.
+- Email evidence creates candidates only.
+- Unconfirmed and duplicate records do not change safe money.
+- No payment initiation.
+- No autonomous reconciliation.
+- Accounting-provider writes remain disabled.
+- Source references and review state remain visible.
 
 ## Validation
 
-- 390 Core tests passed.
+- 394 Core tests passed.
 - 54 Mobile tests passed.
 - Desktop Release build completed cleanly.
 - Android Release build completed cleanly.
-- Official evidence is in [`screenshot-groups/group-91-94-social-messaging-integrations`](screenshot-groups/group-91-94-social-messaging-integrations/).
+- Official evidence is in [`screenshot-groups/group-95-98-pay-later-money-integrations`](screenshot-groups/group-95-98-pay-later-money-integrations/).
 
 ## Next
 
-Group 95 begins v22 Pay-later and Money Integrations. The approved roadmap continues through Group 120.
+Group 99 begins v23 New Zealand Grocery Lookup Worker. The approved roadmap continues through Group 120.

@@ -4,20 +4,20 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v21.0.0-alpha.1 is complete through Group 94, closing the Social and Messaging Integrations lane. Group 95 begins Pay-later and Money Integrations.
+> **Current checkpoint:** LifeOS v22.0.0-alpha.1 is complete through Group 98, closing the Pay-Later and Money Integrations lane. Group 99 begins the New Zealand Grocery Lookup Worker.
 
-![LifeOS v21 Social and Messenger Review](docs/screenshot-groups/group-91-94-social-messaging-integrations/02-desktop-social-review-overview.png)
+![LifeOS v22 Pay-Later and Money Integration Review](docs/screenshot-groups/group-95-98-pay-later-money-integrations/02-desktop-pay-later-review-overview.png)
 
 ## Product status
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through Group 94 |
-| **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 94, including offline-safe capture, review and execution |
+| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through Group 98 |
+| **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 98, including offline-safe capture, review and execution |
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
 | **LifeOS Website** | Public product and documentation beta foundation complete; packaging and onboarding planned for Groups 112-116 |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v21 Social Review complete; Group 95 next; roadmap approved through Group 120 |
+| **Current release lane** | v22 Money Integrations complete; Group 99 next; roadmap approved through Group 120 |
 
 Full Mobile and Mobile Companion are separate products. They can share contracts and libraries, but retain different scope, UX and release tracks.
 
@@ -93,6 +93,7 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 95-98 — Pay-Later and Money Integrations](docs/screenshot-groups/group-95-98-pay-later-money-integrations/)
 - [Groups 91-94 — Social and Messaging Integrations](docs/screenshot-groups/group-91-94-social-messaging-integrations/)
 - [Groups 87-90 — Scheduled Communications](docs/screenshot-groups/group-87-90-scheduled-communications/)
 - [Groups 83-86 — Native Intelligence and Optional AI](docs/screenshot-groups/group-83-86-native-intelligence/)
@@ -139,11 +140,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v21 is complete through Group 94. Group 95 starts the v22 Pay-later and Money Integrations lane.
+LifeOS v22 is complete through Group 98. Group 99 starts the v23 New Zealand Grocery Lookup Worker lane.
 
 Approved work continues through Group 120:
 
-- Groups 95-98: Pay-later and money integrations
 - Groups 99-103: New Zealand grocery lookup worker
 - Groups 104-107: Evidence automation and proof tooling
 - Groups 108-111: Privacy, export, backup and controls

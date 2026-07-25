@@ -9,21 +9,22 @@ This directory is the durable source of truth for LifeOS status, release history
 - [`version-history.md`](version-history.md) — consolidated milestone history
 - [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 120
 - [`LIFEOS_DESKTOP_RELEASE_NOTES.md`](LIFEOS_DESKTOP_RELEASE_NOTES.md) — current Desktop release notes
-- [`screenshot-groups/group-91-94-social-messaging-integrations/`](screenshot-groups/group-91-94-social-messaging-integrations/) — latest completed screenshot evidence
+- [`screenshot-groups/group-95-98-pay-later-money-integrations/`](screenshot-groups/group-95-98-pay-later-money-integrations/) — latest completed screenshot evidence
 
 ## Current product state
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | Current through v21 Group 94 |
-| Full Mobile | Built and aligned through v21 Group 94 |
+| LifeOS Desktop | Current through v22 Group 98 |
+| Full Mobile | Built and aligned through v22 Group 98 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Beta foundation complete; packaging/onboarding approved for Groups 112-116 |
 | Shared Core | Active authoritative contract, validation, provenance, audit and safety layer |
-| Current release | v21 Social Review complete; Group 95 next |
+| Current release | v22 Money Integrations complete; Group 99 next |
 
 ## Recent release lanes
 
+- **v22 / Groups 95-98** — Pay-Later and Money Integrations
 - **v21 / Groups 91-94** — Social and Messaging Integrations
 - **v20 / Groups 87-90** — Scheduled Communications
 - **v19 / Groups 83-86** — Native Intelligence and Optional AI
@@ -37,6 +38,7 @@ This directory is the durable source of truth for LifeOS status, release history
 
 ## Current evidence
 
+- [`Groups 95-98 — Pay-Later and Money Integrations`](screenshot-groups/group-95-98-pay-later-money-integrations/)
 - [`Groups 91-94 — Social and Messaging Integrations`](screenshot-groups/group-91-94-social-messaging-integrations/)
 - [`Groups 87-90 — Scheduled Communications`](screenshot-groups/group-87-90-scheduled-communications/)
 - [`Groups 83-86 — Native Intelligence and Optional AI`](screenshot-groups/group-83-86-native-intelligence/)

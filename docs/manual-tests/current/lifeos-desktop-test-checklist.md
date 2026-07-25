@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v21.0.0-alpha.1 active.
-- Group 94 complete.
-- Group 95 next.
+- LifeOS v22.0.0-alpha.1 active.
+- Group 98 complete.
+- Group 99 next.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation
@@ -57,6 +57,7 @@ Confirm these current areas open and show fictional/sanitized state:
 - Native Intelligence and Optional AI
 - Scheduled Communications
 - Social & Messenger Review
+- Pay-Later & Money Integration Review
 
 ## Full Mobile smoke checks
 

@@ -1,30 +1,30 @@
 # LifeOS current status
 
-LifeOS is current through **v21.0.0-alpha.1 / Group 94** at repository checkpoint `3bf3be6`.
+LifeOS is current through **v22.0.0-alpha.1 / Group 98** at repository checkpoint `7a323ac`.
 
-Groups 91-94 close Social and Messaging Integrations. Group 95 is next, and the approved roadmap runs through Group 120.
+Groups 95-98 close Pay-Later and Money Integrations. Group 99 is next, and the approved roadmap runs through Group 120.
 
 ## Current product state
 
 | Product | Status |
 |---|---|
-| Desktop | Deep administration, review, planning, audit and reporting through Group 94 |
-| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 94 |
+| Desktop | Deep administration, review, planning, audit and reporting through Group 98 |
+| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 98 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Public product/documentation/evidence beta foundation complete; packaging and onboarding planned |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest completed capability
 
-Groups 91-94 complete Social and Messaging Integrations:
+Groups 95-98 complete Pay-Later and Money Integrations:
 
-- Meta capability mapping with official API preference
-- explicit browser-assisted or manual fallback for unsupported actions
-- Facebook Page, Community group and Messenger review records
-- provider confirmation required before claiming publication
-- no invisible posting, autonomous messaging or silent authoritative mutation
+- source-backed Afterpay and Zip parsing candidates
+- duplicate statements retained for explicit review
+- confirmed deductions excluded from safe-money calculations
+- read-only CSV/Xero export contract
+- no payment initiation or autonomous reconciliation
 
-This builds on completed Work Time, Guarded Provider Contracts, Documentation and Packaging, Closed Beta, Native Intelligence and Scheduled Communications lanes.
+This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Native Intelligence, Scheduled Communications and Social Review lanes.
 
 ## Current boundaries
 
@@ -43,8 +43,8 @@ This builds on completed Work Time, Guarded Provider Contracts, Documentation an
 - Mobile tests: 54 passed
 - Desktop Release build: clean
 - Android Release build: clean with signed private-beta artifacts
-- Latest evidence: [`group-91-94-social-messaging-integrations`](screenshot-groups/group-91-94-social-messaging-integrations/)
+- Latest evidence: [`group-95-98-pay-later-money-integrations`](screenshot-groups/group-95-98-pay-later-money-integrations/)
 
 ## Next approved work
 
-Group 95 begins v22 Pay-later and Money Integrations. The remaining approved lanes run through the Group 120 product-complete release candidate.
+Group 99 begins v23 New Zealand Grocery Lookup Worker. The remaining approved lanes run through the Group 120 product-complete release candidate.

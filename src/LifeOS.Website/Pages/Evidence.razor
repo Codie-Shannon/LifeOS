@@ -1,13 +1,35 @@
 @page "/evidence"
-<SeoHead Title="Evidence and Development Proof" Description="Inspect LifeOS milestones, tests, builds, scans, screenshots and defects fixed." CanonicalPath="/evidence" />
-<PageIntro Eyebrow="Evidence · Development Proof" Title="The product should be judged by what can be inspected." Summary="Current capability, historical milestones and planned work are labelled separately. Public proof uses fictional or sanitized records." />
-<section class="proof-strip standalone"><div class="page-shell proof-grid">@foreach (var metric in PublicContent.ProofMetrics) { <article><strong>@metric.Value</strong><span>@metric.Label</span><small>@metric.Detail</small></article> }</div></section>
-<section class="page-shell section"><div class="section-heading"><p class="eyebrow">Release map</p><h2>Current, historical and planned are not interchangeable.</h2></div><div class="milestone-grid">
-  <article><StatusBadge Text="CURRENT" Kind="success" /><h3>Website v0.3 beta</h3><p>Public routes, real documentation, evidence, SEO, accessibility and Cloudflare deployment foundations.</p><a href="/docs/releases/group-41">Documentation foundation →</a></article>
-  <article><StatusBadge Text="HISTORICAL" Kind="neutral" /><h3>Desktop v7 beta</h3><p>Full local operating environment with 187 Core/Desktop tests and guarded execution boundaries.</p><a href="/docs/modules/desktop">Desktop overview →</a></article>
-  <article><StatusBadge Text="HISTORICAL" Kind="neutral" /><h3>Companion v0.1 beta</h3><p>Lightweight capture, glance, review, outbox and send-to-desktop application with 34 tests.</p><a href="/docs/modules/mobile-companion">Companion module →</a></article>
-  <article><StatusBadge Text="PLANNED" Kind="warning" /><h3>Full Mobile and Portal</h3><p>Separate future products. Neither is available, downloadable or represented as current capability.</p><a href="/roadmap">Roadmap →</a></article>
-</div></section>
-<section class="page-shell section"><div class="evidence-columns"><article><p class="eyebrow">Repository proof</p><h2>Release gates</h2><ul class="check-list"><li>Release builds and automated tests</li><li>Cloudflare static publish output</li><li>NuGet vulnerability scan</li><li>Gitleaks secret scan</li><li>Broken-link and public-output checks</li><li>Clean origin synchronization</li></ul></article><article><p class="eyebrow">Public proof boundary</p><h2>Inspectable without leaking private state</h2><ul class="check-list"><li>Approved fictional or sanitized identities</li><li>No client data or local records</li><li>No local endpoints, machine names or raw logs</li><li>No secrets, tokens or waitlist submissions</li><li>No installers or binaries in Website assets</li></ul></article></div></section>
-<section class="page-shell section"><div class="defect-panel"><div><p class="eyebrow">Defects found and re-verified</p><h2>Testing is allowed to find problems.</h2><p><strong>Companion notification defect:</strong> bounded, fixed and re-tested on the device workflow.</p><p><strong>Companion documentation defect:</strong> a missing Modules entry was found during screenshot review, hotfixed and protected with regression coverage.</p></div><div class="defect-flow"><span>FOUND</span><b>→</b><span>BOUNDED</span><b>→</b><span>FIXED</span><b>→</b><span>RE-VERIFIED</span></div></div></section>
-<section class="page-shell section"><SafetyCallout Label="Evidence boundary" Title="Proof supports a claim; it does not erase product limits." Text="Screenshots, tests and release records demonstrate reviewed behavior. They do not turn Planned work into available capability or expose private records." /></section>
+<SeoHead Title="Evidence and Development Proof"
+         Description="Inspect LifeOS milestones, tests, builds, scans, screenshots and defects fixed."
+         CanonicalPath="/evidence" />
+<PageIntro Eyebrow="Evidence · Development Proof"
+           Title="The product should be judged by what can be inspected."
+           Summary="Current capability, historical milestones and planned work are labelled separately. Public proof uses fictional or sanitized records." />
+<section class="proof-strip standalone">
+  <div class="page-shell proof-grid">
+    @foreach (var metric in PublicContent.ProofMetrics)
+    {
+      <article><strong>@metric.Value</strong><span>@metric.Label</span><small>@metric.Detail</small></article>
+    }
+  </div>
+</section>
+<section class="page-shell section">
+  <div class="section-heading"><p class="eyebrow">Release map</p><h2>Current, historical and planned are not interchangeable.</h2></div>
+  <div class="milestone-grid">
+    <article><StatusBadge Text="CURRENT" Kind="success" /><h3>LifeOS v26 private beta</h3><p>Website packaging, onboarding, factual case study and public-boundary validation through Group 116.</p><a href="/case-study">Case study →</a></article>
+    <article><StatusBadge Text="COMPLETE" Kind="success" /><h3>Desktop and Full Mobile</h3><p>Separate purpose-built products aligned through Group 116 with review-first and offline-safe boundaries.</p><a href="/product">Product overview →</a></article>
+    <article><StatusBadge Text="HISTORICAL" Kind="neutral" /><h3>Companion v0.1 beta</h3><p>Lightweight capture, glance, review, outbox and send-to-desktop application.</p><a href="/docs/modules/mobile-companion">Companion module →</a></article>
+    <article><StatusBadge Text="NEXT" Kind="warning" /><h3>v27 Release Candidate</h3><p>Final cross-product validation and explicit owner approval remain required.</p><a href="/roadmap">Roadmap →</a></article>
+  </div>
+</section>
+<section class="page-shell section">
+  <div class="evidence-columns">
+    <article><p class="eyebrow">Repository proof</p><h2>Release gates</h2><ul class="check-list"><li>Release builds and automated tests</li><li>Static Website publish output</li><li>Vulnerability and secret scans</li><li>Broken-link and public-output checks</li><li>Clean origin synchronization</li></ul></article>
+    <article><p class="eyebrow">Public proof boundary</p><h2>Inspectable without leaking private state</h2><ul class="check-list"><li>Approved fictional or sanitized identities</li><li>No client data or local records</li><li>No local endpoints, machine names or raw logs</li><li>No secrets, tokens or waitlist submissions</li><li>No installers or binaries in Website assets</li></ul></article>
+  </div>
+</section>
+<section class="page-shell section">
+  <SafetyCallout Label="Evidence boundary"
+                 Title="Proof supports a claim; it does not erase product limits."
+                 Text="Screenshots, tests and release records demonstrate reviewed behavior. They do not turn planned work into available capability or expose private records." />
+</section>

@@ -1,18 +1,18 @@
 {
-    "currentRelease":  "v25",
-    "currentReleaseName":  "Privacy Control Plane",
-    "currentSemanticVersion":  "25.0.0-alpha.1",
-    "currentStatus":  "active-development",
-    "latestCompletedGroup":  111,
-    "latestCompletedGroupName":  "Settings and control-plane closure",
-    "latestCompletedHead":  "6f52229",
-    "nextGroup":  112,
-    "nextGroupName":  "Website shell uplift",
+    "currentRelease":  "v26",
+    "currentReleaseName":  "Public Packaging",
+    "currentSemanticVersion":  "26.0.0-beta.1",
+    "currentStatus":  "private-beta",
+    "latestCompletedGroup":  116,
+    "latestCompletedGroupName":  "Website packaging closure",
+    "latestCompletedHead":  "generated-pack-checkpoint",
+    "nextGroup":  117,
+    "nextGroupName":  "End-to-end desktop pass",
     "roadmapApprovedThroughGroup":  120,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  111,
+                    "currentThroughGroup":  116,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -20,7 +20,7 @@
                        "status":  "built-and-active",
                        "releaseFamily":  "v10",
                        "initialBetaClosureGroup":  57,
-                       "currentThroughGroup":  111,
+                       "currentThroughGroup":  116,
                        "separateFromCompanion":  true,
                        "offlineQueueEnabled":  true,
                        "silentConflictOverwriteAllowed":  false
@@ -151,6 +151,11 @@
                                   {
                                       "release":  "v25",
                                       "groups":  "108-111",
+                                      "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v26",
+                                      "groups":  "112-116",
                                       "status":  "complete"
                                   }
                               ],

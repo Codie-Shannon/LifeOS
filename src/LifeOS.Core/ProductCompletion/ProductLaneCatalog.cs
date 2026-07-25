@@ -260,6 +260,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Health category", "Blocked", "No permission granted", false),
                     new ProductLaneAction("Restore preview", "Needs review", "Schema and integrity passed; apply is a separate action", true),
                     new ProductLaneAction("Global Emergency Stop", "Ready", "Stops automations and disconnects every provider", false)
+                }),
+            ["public-packaging"] = new(
+                "public-packaging",
+                "SG-79",
+                "Website & Product Packaging",
+                "Groups 112-116 - website uplift, onboarding, documentation migration and case study",
+                "Public copy is factual and beta-labelled. Internal paths, private notes and unsupported production claims are excluded automatically.",
+                new[]
+                {
+                    new ProductLaneMetric("Public routes", "34", "Product, docs and releases"),
+                    new ProductLaneMetric("Onboarding steps", "3", "Neutral and optional"),
+                    new ProductLaneMetric("Private leaks", "0", "Boundary validated"),
+                    new ProductLaneMetric("Status", "Private beta", "No fake claims")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Website product shell", "Ready", "LifeOS product, docs, roadmap and releases", false),
+                    new ProductLaneAction("Public onboarding", "Ready", "Local-first core plus setup now/later/decline", false),
+                    new ProductLaneAction("Portfolio case study", "Ready", "Problem, approach, verified result and technology surfaces", false),
+                    new ProductLaneAction("Packaging boundary scan", "Passed", "Internal and private-beta assets remain separated", false)
                 })
         };
 

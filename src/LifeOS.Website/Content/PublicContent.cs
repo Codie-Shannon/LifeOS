@@ -3,13 +3,13 @@ namespace LifeOS.Website.Content;
 public static class PublicContent
 {
     public const string PrimaryMessage = "A local-first personal operating system that turns work, money, projects, evidence and daily pressure into visible, reviewable state.";
-    public static readonly DateOnly LastUpdated = new(2026, 7, 16);
+    public static readonly DateOnly LastUpdated = new(2026, 7, 25);
 
     public static IReadOnlyList<ProductStatus> Products { get; } =
     [
-        new("Desktop", "v7.0.0-beta.1", "Beta complete", "The full local operating environment for planning, review, evidence and guarded execution.", "/product/desktop"),
+        new("Desktop", "v26.0.0-beta.1", "Private beta", "The full local operating environment for planning, review, evidence and guarded execution.", "/product/desktop"),
         new("Mobile Companion", "v0.1.0-beta.1", "Beta complete", "A deliberately lightweight companion for capture, glance, review, outbox and send-to-desktop.", "/product/companion"),
-        new("Full Mobile", "Future track", "Planned", "A separate broader mobile application. It is not part of the current release.", "/roadmap")
+        new("Full Mobile", "v26.0.0-beta.1", "Private beta", "A separate purpose-built Android application for capture, review, execution and offline-safe workflows.", "/roadmap")
     ];
 
     public static IReadOnlyList<AudiencePath> Audiences { get; } =
@@ -22,8 +22,8 @@ public static class PublicContent
     public static IReadOnlyList<ProofMetric> ProofMetrics { get; } =
     [
         new("22", "Website tests", "Documentation and launch-readiness baseline"),
-        new("187", "Core + Desktop tests", "Existing v7 baseline"),
-        new("34", "Companion tests", "Existing beta baseline"),
+        new("418", "Core tests", "Validated through Group 116"),
+        new("54", "Full Mobile tests", "Android private-beta baseline"),
         new("Clean", "Security posture", "Release, vulnerability and secret scans")
     ];
 
@@ -31,12 +31,12 @@ public static class PublicContent
 
     public static IReadOnlyList<DocEntry> Docs { get; } =
     [
-        new("getting-started", "Getting Started", "Understand LifeOS purpose, the product split and the safest first steps.", "User", "Guide", "Platform", "v8 / Website v0.3 beta", LastUpdated, "/docs/guides/getting-started", "Public",
+        new("getting-started", "Getting Started", "Understand LifeOS purpose, the product split and the safest first steps.", "User", "Guide", "Platform", "v26 private beta", LastUpdated, "/docs/guides/getting-started", "Public",
             ["start", "overview", "onboarding", "local-first", "product split"],
-            [S("What LifeOS is", PrimaryMessage), S("Choose the right product", "Desktop is the full local operating environment. Mobile Companion is intentionally lightweight. Full Mobile is a separate planned application."), S("Start safely", "Review current state before changing it, keep evidence attached to important decisions and treat unavailable states as real boundaries rather than invitations to bypass them.")],
+            [S("What LifeOS is", PrimaryMessage), S("Choose the right product", "Desktop is the full local operating environment. Full Mobile is a separate purpose-built Android application. Mobile Companion remains intentionally lightweight."), S("Start safely", "Review current state before changing it, keep evidence attached to important decisions and treat unavailable states as real boundaries rather than invitations to bypass them.")],
             ["desktop-overview", "product-release-boundaries", "operating-philosophy"], []),
 
-        new("desktop-overview", "Desktop Overview", "Major Desktop workspaces and the current v7 beta boundary.", "User", "Module", "Desktop", "v7.0.0-beta.1", LastUpdated, "/docs/modules/desktop", "Public",
+        new("desktop-overview", "Desktop Overview", "Major Desktop workspaces and the current private-beta boundary.", "User", "Module", "Desktop", "v26.0.0-beta.1", LastUpdated, "/docs/modules/desktop", "Public",
             ["desktop", "workspaces", "command centre", "money", "projects", "follow-ups"],
             [S("Operating environment", "Desktop is the full local LifeOS environment for planning, review, evidence and guarded execution."), S("Major workspaces", "Command Centre, work, money, projects, follow-ups, evidence, integrations, automation review and Assistant planning expose visible state without pretending every action is automatic."), S("Current boundary", "Desktop remains usable offline and does not require the public Website to perform immediate work or show safety-critical guidance.")],
             ["assistant", "controlled-automation", "evidence-provenance"], ["/evidence"]),
@@ -61,17 +61,17 @@ public static class PublicContent
             [S("Evidence over claims", "Important product claims should point to release state, tests, screenshots or review records."), S("Provenance", "Source-backed records retain enough origin context for a reviewer to understand where information came from and what has changed."), S("Public proof", "Website examples use fictional or sanitized identities. Private client data, raw logs and local records are excluded from public output.")],
             ["assistant", "controlled-automation"], ["/evidence", "/docs/releases/group-41"]),
 
-        new("integrations", "Integrations", "Read-only connectors, review inbox and safe disconnect behaviour.", "Technical reviewer", "Module", "Desktop", "v7 beta", LastUpdated, "/docs/modules/integrations", "Public",
+        new("integrations", "Integrations", "Read-only connectors, review inbox and safe disconnect behaviour.", "Technical reviewer", "Module", "Desktop", "v26 beta", LastUpdated, "/docs/modules/integrations", "Public",
             ["integration", "connector", "read-only", "review inbox", "disconnect"],
             [S("Read-only first", "Calendar, Gmail and local imports enter LifeOS through bounded read-only paths before any future write capability is considered."), S("Review Inbox", "Imported candidates remain separate from operational records until reviewed."), S("Disconnect safely", "Disconnecting a source stops future access without rewriting historical proof or pretending that previously imported records never existed.")],
             ["controlled-automation", "evidence-provenance", "troubleshooting-recovery"], []),
 
-        new("controlled-automation", "Controlled Automation", "Proposal, approval, final confirmation, execution gates, rollback and Emergency Stop.", "Technical reviewer", "Module", "Desktop", "v7 beta", LastUpdated, "/docs/modules/automation", "Public",
+        new("controlled-automation", "Controlled Automation", "Proposal, approval, final confirmation, execution gates, rollback and Emergency Stop.", "Technical reviewer", "Module", "Desktop", "v26 beta", LastUpdated, "/docs/modules/automation", "Public",
             ["automation", "approval", "execution gate", "rollback", "emergency stop"],
             [S("Proposal before execution", "Automation begins as a visible proposal with scope, dependencies, evidence and expected effects."), S("Approval and confirmation", "Approval is not execution. A final confirmation and readiness gate remain required for consequential work."), S("Containment", "Rollback and Emergency Stop exist to contain failure. No automation receives unbounded autonomous authority.")],
             ["assistant", "operating-philosophy", "evidence-provenance"], ["/evidence"]),
 
-        new("assistant", "Assistant", "Source-backed answers, review-only planning, explicit memory and a no-execution boundary.", "User", "Module", "Desktop", "v7.0.0-beta.1", LastUpdated, "/docs/modules/assistant", "Public",
+        new("assistant", "Assistant", "Source-backed answers, review-only planning, explicit memory and a no-execution boundary.", "User", "Module", "Desktop", "v26.0.0-beta.1", LastUpdated, "/docs/modules/assistant", "Public",
             ["assistant", "source-backed", "planning", "memory", "no execution"],
             [S("Source-backed answers", "The Assistant searches only enabled read-only sources and separates facts, assumptions, gaps and conflicts."), S("Review-only planning", "Answers can become editable planning blocks and one controlled review artifact. They do not become tasks, payments, messages or automation runs automatically."), S("Explicit memory", "Durable memory is created only through explicit review and confirmation. The Assistant cannot execute tools, scripts or external writes.")],
             ["controlled-automation", "evidence-provenance", "desktop-overview"], ["/evidence"]),
@@ -81,9 +81,9 @@ public static class PublicContent
             [S("Start with visible state", "Capture the current error and preserve evidence before resetting anything."), S("Offline or stale", "Keep local work available, label stale data clearly and retry only through the normal bounded path."), S("Malformed local state", "Prefer validated backups and narrow recovery tools. Do not delete unknown files or bypass safety checks merely to make the error disappear.")],
             ["operating-philosophy", "mobile-companion-guide"], []),
 
-        new("product-release-boundaries", "Product and Release Boundaries", "Desktop, Companion, Full Mobile, Website and future Portal separation.", "Business evaluator", "Release", "Platform", "Website v0.2", LastUpdated, "/docs/releases/product-boundaries", "Public",
+        new("product-release-boundaries", "Product and Release Boundaries", "Desktop, Companion, Full Mobile, Website and future Portal separation.", "Business evaluator", "Release", "Platform", "v26 private beta", LastUpdated, "/docs/releases/product-boundaries", "Public",
             ["product boundary", "release", "desktop", "companion", "mobile", "website", "portal"],
-            [S("Current products", "Desktop v7 beta and Mobile Companion beta are complete baselines. Website v0.2 is the public knowledge foundation."), S("Planned products", "Full Mobile is a separate planned application. A future Portal may support selected secure web capabilities only after Desktop and Full Mobile stabilize."), S("Not included", "The public Website has no login, account model, billing, licence system, downloads or private dashboard.")],
+            [S("Current products", "Desktop, Full Mobile, Mobile Companion and the public Website have separate private-beta boundaries."), S("Future work", "A future Portal may support selected secure web capabilities only after Desktop and Full Mobile stabilize."), S("Not included", "The public Website has no login, account model, billing, licence system, downloads or private dashboard.")],
             ["getting-started", "mobile-companion-guide", "group-41-release"], ["/roadmap"]),
 
         new("group-41-release", "Group 41 Documentation Foundation", "The first real public documentation set, deterministic search and controlled Desktop link-outs.", "Technical reviewer", "Release", "Website", "v0.3.0-beta.1", LastUpdated, "/docs/releases/group-41", "Public",
@@ -93,10 +93,10 @@ public static class PublicContent
 
         new("release-history", "Release history", "Public release summaries and validation checkpoints.", "User", "Release", "Platform", "Current", LastUpdated, "/docs/releases/release-history", "Public",
             ["release", "history", "versions", "validation", "checkpoint"],
-            [S("Release discipline", "LifeOS records completed release groups, validation totals and product boundaries without presenting planned work as available."), S("Current public baseline", "Desktop v7 beta and Mobile Companion beta are complete. Website v0.3 beta is the public launch-readiness checkpoint."), S("Evidence links", "Release claims link to sanitized screenshots, tests and repository-backed validation where practical.")],
+            [S("Release discipline", "LifeOS records completed release groups, validation totals and product boundaries without presenting planned work as available."), S("Current public baseline", "LifeOS v26 is the Website Packaging and Onboarding private-beta checkpoint through Group 116."), S("Evidence links", "Release claims link to sanitized screenshots, tests and repository-backed validation where practical.")],
             ["group-41-release", "product-release-boundaries"], ["/evidence", "/roadmap"]),
 
-        new("desktop-operating-model", "Desktop operating model", "How Desktop turns pressure into explicit state and reviewable decisions.", "User", "Concept", "Desktop", "v7.0.0-beta.1", LastUpdated, "/docs/concepts/desktop-operating-model", "Public",
+        new("desktop-operating-model", "Desktop operating model", "How Desktop turns pressure into explicit state and reviewable decisions.", "User", "Concept", "Desktop", "v26.0.0-beta.1", LastUpdated, "/docs/concepts/desktop-operating-model", "Public",
             ["desktop state", "operating model", "visible state", "reviewable decisions", "pressure"],
             [S("Visible state", "Desktop turns work, money, projects, evidence and follow-ups into explicit reviewable state."), S("Review boundaries", "Consequential changes remain visible and confirmable rather than being hidden behind broad automation."), S("Offline boundary", "Desktop remains usable without the public Website and retains immediate warnings and recovery guidance locally.")],
             ["desktop-overview", "operating-philosophy"], ["/product/desktop"]),
@@ -134,6 +134,7 @@ public static class PublicContent
         new("/docs/modules", "Modules", "Modules landing"), new("/docs/releases", "Releases", "Releases landing"),
         new("/evidence", "Evidence", "Development proof"), new("/roadmap", "Roadmap", "Product tracks"),
         new("/access", "Early Access", "Preview waitlist boundary"), new("/about", "About", "Product and creator"),
-        new("/privacy", "Privacy", "Website privacy boundary"), new("/downloads", "Downloads", "Future GitHub Releases boundary")
+        new("/privacy", "Privacy", "Website privacy boundary"), new("/downloads", "Downloads", "Future GitHub Releases boundary"),
+        new("/onboarding", "Onboarding", "Private-beta onboarding"), new("/case-study", "Case Study", "Factual portfolio case study")
     }.Concat(Docs.Select(x => new RouteEntry(x.Route, x.Title, x.Summary))).ToArray();
 }

@@ -342,6 +342,7 @@ internal static class WorkspaceCatalog
                             Route("control-plane", "Privacy, Backup & Emergency Control", "SG-78 ready", "Sensitive-category permissions, integrity-checked backup/restore, audit and global Emergency Stop."),
                             Route("beta-readiness", "Private Beta Readiness", "SG-71 ready", "Setup now/later/decline choices and desktop/mobile/web release validation."),
                             Route("documentation-hub", "Documentation & Packaging Hub", "SG-70 ready", "Audience-safe website documentation, concise in-app help and versioned release links."),
+                            Route("public-packaging", "Website & Product Packaging", "SG-79 ready", "Public website shell, neutral onboarding, documentation migration and factual case-study packaging."),
                             Route("evidence-automation", "Evidence Automation", "SG-77 ready", "Screenshot intake, stable naming, evidence PDF generation and repository completion gates."),
                             Route("automation-centre", "Automation Centre", "Emergency Stop protected", "Guarded, manual, foreground-only automation and recovery controls."),
                             Route("desktop-release", "Desktop Release", "Diagnostics", "Release readiness and platform checkpoint evidence."),

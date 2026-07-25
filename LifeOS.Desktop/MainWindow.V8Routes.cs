@@ -49,6 +49,7 @@ public partial class MainWindow
         "payment-calendar",
         "projects",
         "proof-tracker",
+        "public-packaging",
         "receipt-evidence",
         "relationship-radar",
         "search-knowledge",
@@ -261,6 +262,9 @@ public partial class MainWindow
                 break;
             case "proof-tracker":
                 ShowProofTrackerPage();
+                break;
+            case "public-packaging":
+                ShowProductLanePage(routeId);
                 break;
             case "receipt-evidence":
                 ShowReceiptEvidencePage();

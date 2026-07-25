@@ -12,9 +12,9 @@ public sealed class PublicContentTests
     }
     [Fact] public void Product_boundaries_are_explicit()
     {
-        Assert.Contains(PublicContent.Products, x => x.Name == "Desktop" && x.State == "Beta complete");
+        Assert.Contains(PublicContent.Products, x => x.Name == "Desktop" && x.State == "Private beta" && x.Version == "v26.0.0-beta.1");
         Assert.Contains(PublicContent.Products, x => x.Name == "Mobile Companion" && x.State == "Beta complete");
-        Assert.Contains(PublicContent.Products, x => x.Name == "Full Mobile" && x.State == "Planned");
+        Assert.Contains(PublicContent.Products, x => x.Name == "Full Mobile" && x.State == "Private beta" && x.Version == "v26.0.0-beta.1");
     }
     [Fact] public void Docs_have_required_metadata()
     {

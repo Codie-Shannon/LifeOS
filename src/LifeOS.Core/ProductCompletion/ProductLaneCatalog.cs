@@ -41,6 +41,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Client discovery call", "Completed", "1h 30m - evidence attached - ready for timesheet", false),
                     new ProductLaneAction("Correct manual entry", "Needs review", "45m manual adjustment with a required reason", true),
                     new ProductLaneAction("Export weekly timesheet", "Ready", "CSV preview contains billable classification and proof count", true)
+                }),
+            ["operating-day"] = new(
+                "operating-day",
+                "SG-68",
+                "Operating Day & Work Proof",
+                "Groups 69-72 - calendar-linked planning, pressure-aware reminders and v14 closure",
+                "Calendar blocks and suggested next actions remain proposals until accepted. Work, Career and Household boundaries stay visible.",
+                new[]
+                {
+                    new ProductLaneMetric("Protected blocks", "3", "Accepted today"),
+                    new ProductLaneMetric("Review queue", "2", "Calendar proposals"),
+                    new ProductLaneMetric("Stop points", "2", "Boundary changes"),
+                    new ProductLaneMetric("Proof linked", "5/6", "One link required")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Client delivery block", "Protected", "09:00-11:00 - linked work session and proof", false),
+                    new ProductLaneAction("Imported supplier call", "Needs review", "Calendar source - accept, defer or reject", true),
+                    new ProductLaneAction("Household appointment", "Accepted", "11:30 - Work to Household boundary shown", false),
+                    new ProductLaneAction("Close v14 operating lane", "Blocked", "Link the remaining Career administration proof first", true)
                 })
         };
 

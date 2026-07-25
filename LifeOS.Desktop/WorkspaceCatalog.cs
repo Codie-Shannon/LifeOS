@@ -219,6 +219,7 @@ internal static class WorkspaceCatalog
                             Route("agenda", "Agenda", "Canonical records", "Commitments, dates, time, pressure, status and notes."),
                             Route("daily-state", "Daily State", "Canonical behaviour", "Current personal state and pressure context."),
                             Route("daily-operating-flow", "Daily Operating Flow", "Canonical behaviour", "A manual, visible operating sequence for the day."),
+                            Route("operating-day", "Operating Day & Work Proof", "SG-68 ready", "Protected blocks, calendar proposals, pressure-aware reminders, boundaries and proof-linked closure."),
                             Route("weekly-close-out", "Weekly Close-Out", "Canonical records", "Done, moved, waiting and next-week review."),
                             Route("timer-agent", "TimerAgent", "Canonical utility", "Desktop-only timing utility inside Life.")
                         })

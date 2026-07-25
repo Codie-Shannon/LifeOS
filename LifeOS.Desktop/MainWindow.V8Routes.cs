@@ -33,6 +33,7 @@ public partial class MainWindow
         "money-pressure",
         "money-profile",
         "money-timeline",
+        "operating-day",
         "os-navigation",
         "paid-work-centre",
         "pay-later",
@@ -202,6 +203,9 @@ public partial class MainWindow
                 break;
             case "money-timeline":
                 ShowMoneyTimelinePage();
+                break;
+            case "operating-day":
+                ShowProductLanePage(routeId);
                 break;
             case "os-navigation":
                 ShowOsNavigationPage();

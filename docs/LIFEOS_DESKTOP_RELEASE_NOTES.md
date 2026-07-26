@@ -1,37 +1,39 @@
-# LifeOS Desktop v26.0.0-beta.1 Release Notes
+# LifeOS Desktop v27.0.0-rc.1 Release Notes
 
-LifeOS Desktop v26 completes Website Packaging and Onboarding across
-Groups 112-116.
+LifeOS Desktop v27 completes the Product-Complete Release Candidate across
+Groups 117-120.
 
 ## Release theme
 
-**Factual public packaging with private-beta boundaries**
+**One explicit release gate across Desktop, Full Mobile, Website and evidence**
 
 ## Added
 
-- Reachable Website & Product Packaging module in Settings.
-- Public product homepage and product-boundary presentation.
-- Neutral local-first onboarding with optional providers.
-- Factual portfolio case study.
-- Updated public documentation, roadmap and release identity.
-- Social-preview packaging for the private beta.
+- Reachable Product-Complete Release Candidate module in Settings.
+- Cross-product readiness records for Desktop, Full Mobile and Website.
+- Full Mobile product-candidate navigation and end-to-end checks.
+- Website release-candidate evidence and owner-review presentation.
+- v27.0.0-rc.1 release identity across current product surfaces.
+- Final SG-80 screenshot and validation evidence.
 
 ## Safety boundaries
 
-- Public copy remains beta-labelled and factual.
-- Private paths and notes cannot enter public packaging.
-- Unsupported production claims fail validation.
-- The Website exposes no account, payment or private-dashboard surface.
+- Candidate status does not create a release tag or authorize publication.
+- Public copy remains factual and private paths remain excluded.
+- External writes, payment initiation and silent authoritative mutation remain disabled.
+- Public launch, store submission and production-provider activation require explicit approval.
 
 ## Validation
 
-- 418 Core tests passed.
+- 4 SG-80 targeted tests passed.
+- 422 Core tests passed.
 - 28 Website tests passed.
 - 54 Mobile tests passed.
 - Website publish plus Desktop and Android Release builds completed cleanly.
+- Public privacy and repository checks passed.
 - Official evidence is in
-  [`screenshot-groups/group-112-116-website-packaging-onboarding`](screenshot-groups/group-112-116-website-packaging-onboarding/).
+  [`screenshot-groups/group-117-120-product-complete-release-candidate`](screenshot-groups/group-117-120-product-complete-release-candidate/).
 
 ## Next
 
-Group 117 begins the v27 product-complete release candidate.
+Explicit owner review determines whether and when to create a release tag.

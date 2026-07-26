@@ -5,7 +5,7 @@
     "currentStatus":  "release-candidate",
     "latestCompletedGroup":  120,
     "latestCompletedGroupName":  "Product-complete candidate closure",
-    "latestCompletedHead":  "generated-pack-checkpoint",
+    "latestCompletedHead":  "fcbf9a9",
     "nextGroup":  121,
     "nextGroupName":  "Owner release decision",
     "roadmapApprovedThroughGroup":  120,
@@ -157,6 +157,11 @@
                                       "release":  "v26",
                                       "groups":  "112-116",
                                       "status":  "complete"
+                                  },
+                                  {
+                                      "release":  "v27",
+                                      "groups":  "117-120",
+                                      "status":  "release-candidate-complete"
                                   }
                               ],
     "safetyBoundaries":  {
@@ -177,7 +182,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-112-116-website-packaging-onboarding",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-117-120-product-complete-release-candidate",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

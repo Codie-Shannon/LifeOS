@@ -1,28 +1,30 @@
 # LifeOS current status
 
-LifeOS is current through **v26.0.0-beta.1 / Group 116** at repository checkpoint `24f5f1a`.
+LifeOS is current through **v27.0.0-rc.1 / Group 120** at repository checkpoint `fcbf9a9`.
 
-Groups 112-116 close Website Packaging and Onboarding. Group 117 is next, and the approved roadmap runs through Group 120.
+Groups 117-120 close the approved product-complete release-candidate
+implementation lane. The next checkpoint is an explicit owner release decision;
+candidate status does not authorize a public launch or release tag.
 
 ## Current product state
 
 | Product | Status |
 |---|---|
-| Desktop | Deep administration, review, planning, audit and reporting through Group 116 |
-| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 116 |
+| Desktop | Deep administration, review, planning, audit and reporting through Group 120 |
+| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 120 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
-| Website | Public product, documentation, onboarding and factual portfolio packaging complete for private beta |
+| Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest completed capability
 
-Groups 112-116 complete Website Packaging and Onboarding:
+Groups 117-120 complete the Product-Complete Release Candidate:
 
-- factual private-beta product positioning
-- neutral local-first onboarding with optional providers
-- public documentation and roadmap migration
-- a portfolio case study grounded in verified behavior
-- public-route and private-path packaging safeguards
+- cross-product Desktop, Full Mobile and Website release-candidate surfaces
+- end-to-end readiness checks and explicit release-decision gating
+- release identity aligned at v27.0.0-rc.1
+- final screenshot evidence and validation closure
+- owner-controlled release tagging with no implicit publication
 
 This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Native Intelligence, Scheduled Communications and Social Review lanes.
 
@@ -39,13 +41,18 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
-- Core tests: 418 passed
+- SG-80 targeted tests: 4 passed
+- Core tests: 422 passed
 - Website tests: 28 passed
 - Mobile tests: 54 passed
 - Desktop Release build: clean
-- Android Release build: clean with signed private-beta artifacts
-- Latest evidence: [`group-112-116-website-packaging-onboarding`](screenshot-groups/group-112-116-website-packaging-onboarding/)
+- Android Release build: clean
+- Website Release publish: clean
+- Public privacy scan: passed
+- Latest evidence: [`group-117-120-product-complete-release-candidate`](screenshot-groups/group-117-120-product-complete-release-candidate/)
 
 ## Next approved work
 
-Group 117 begins the v27 product-complete release candidate. The approved roadmap runs through Group 120.
+Explicit owner review decides whether and when to create a release tag. Public
+launch, store submission and production-provider activation remain separate,
+unapproved actions.

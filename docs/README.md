@@ -9,21 +9,22 @@ This directory is the durable source of truth for LifeOS status, release history
 - [`version-history.md`](version-history.md) — consolidated milestone history
 - [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 120
 - [`LIFEOS_DESKTOP_RELEASE_NOTES.md`](LIFEOS_DESKTOP_RELEASE_NOTES.md) — current Desktop release notes
-- [`screenshot-groups/group-112-116-website-packaging-onboarding/`](screenshot-groups/group-112-116-website-packaging-onboarding/) — latest completed screenshot evidence
+- [`screenshot-groups/group-117-120-product-complete-release-candidate/`](screenshot-groups/group-117-120-product-complete-release-candidate/) — latest completed screenshot evidence
 
 ## Current product state
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | Current through v26 Group 116 |
-| Full Mobile | Built and aligned through v26 Group 116 |
+| LifeOS Desktop | Current through v27 Group 120 |
+| Full Mobile | Built and aligned through v27 Group 120 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
-| Website | Private-beta product, documentation, onboarding and portfolio packaging complete |
+| Website | Product, documentation, onboarding, portfolio and release-candidate evidence complete |
 | Shared Core | Active authoritative contract, validation, provenance, audit and safety layer |
-| Current release | v26 Public Packaging complete; Group 117 next |
+| Current release | v27 Product-Complete Candidate complete; owner release decision pending |
 
 ## Recent release lanes
 
+- **v27 / Groups 117-120** - Product-Complete Release Candidate
 - **v26 / Groups 112-116** - Website Packaging and Onboarding
 - **v25 / Groups 108-111** - Privacy, Export, Backup and Controls
 - **v24 / Groups 104-107** - Evidence Automation and Proof Tooling
@@ -42,6 +43,7 @@ This directory is the durable source of truth for LifeOS status, release history
 
 ## Current evidence
 
+- [`Groups 117-120 - Product-Complete Release Candidate`](screenshot-groups/group-117-120-product-complete-release-candidate/)
 - [`Groups 112-116 - Website Packaging and Onboarding`](screenshot-groups/group-112-116-website-packaging-onboarding/)
 - [`Groups 108-111 - Privacy, Export, Backup and Controls`](screenshot-groups/group-108-111-privacy-export-backup-controls/)
 - [`Groups 104-107 - Evidence Automation and Proof Tooling`](screenshot-groups/group-104-107-evidence-automation-proof-tooling/)

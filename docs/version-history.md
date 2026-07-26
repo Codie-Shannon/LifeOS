@@ -4,7 +4,19 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v26.0.0-beta.1 is complete through Group 116. Website Packaging and Onboarding is closed, Group 117 is next, and the approved roadmap runs through Group 120.
+LifeOS v27.0.0-rc.1 is complete through Group 120 as a product-complete
+release candidate. The owner release decision is next; no public release or tag
+is implied.
+
+## v27 - Product-Complete Release Candidate
+
+### Groups 117-120
+
+- Completed the cross-product Desktop, Full Mobile and Website candidate review.
+- Added explicit readiness records and an owner-controlled release gate.
+- Aligned visible release identity at v27.0.0-rc.1.
+- Closed screenshot and validation evidence through SG-80.
+- Kept release tagging, public launch and production activation unapproved.
 
 ## v26 - Public Packaging
 

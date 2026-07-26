@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v26.0.0-beta.1 active.
-- Group 116 complete.
-- Group 117 next.
+- LifeOS v27.0.0-rc.1 active.
+- Group 120 complete.
+- Owner release decision next.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation
@@ -61,6 +61,7 @@ Confirm these current areas open and show fictional/sanitized state:
 - NZ Grocery Price Lookup
 - Evidence Automation
 - Privacy, Backup & Emergency Control
+- Product-Complete Release Candidate
 
 ## Full Mobile smoke checks
 

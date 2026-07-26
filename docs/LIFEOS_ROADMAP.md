@@ -4,9 +4,12 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v26.0.0-beta.1 is complete through Group 116. Group 117 is next.**
+**LifeOS v27.0.0-rc.1 is complete through Group 120 as a product-complete
+release candidate. The owner release decision is next.**
 
-Groups 112-116 closed Website Packaging and Onboarding with factual private-beta copy, optional-provider onboarding, public documentation migration, portfolio presentation and public packaging safeguards.
+Groups 117-120 closed cross-product regression and release-candidate review
+across Desktop, Full Mobile, Website, documentation and evidence. Public launch
+and release tagging remain explicit owner decisions.
 
 ## Product architecture
 
@@ -52,17 +55,17 @@ Groups 112-116 closed Website Packaging and Onboarding with factual private-beta
 | v24 | 104-107 | Evidence Automation and Proof Tooling |
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
+| v27 | 117-120 | Product-Complete Release Candidate |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
-## Approved roadmap
+## Current release gate
 
-### v27 / Groups 117-120 — Product-complete release candidate
-
-- Cross-product regression, accessibility and security validation.
-- Installer and private-beta release readiness.
-- Final evidence, known limitations and release candidate.
-- Public launch follows private-beta feedback and explicit release approval.
+- Cross-product regression, accessibility and security validation is complete.
+- Desktop, Android and Website Release builds are validated.
+- Final screenshot and validation evidence is recorded in SG-80.
+- A release tag, public launch, store submission and production-provider
+  activation require explicit owner approval.
 
 ## Beyond Group 120
 

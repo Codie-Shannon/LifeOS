@@ -4,20 +4,20 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v26.0.0-beta.1 is complete through Group 116, closing Website Packaging and Onboarding. Group 117 begins the product-complete release candidate.
+> **Current checkpoint:** LifeOS v27.0.0-rc.1 is complete through Group 120 as a product-complete release candidate. Public release and a release tag still require explicit owner approval.
 
-![LifeOS v26 Public Packaging](docs/screenshot-groups/group-112-116-website-packaging-onboarding/05-website-homepage.png)
+![LifeOS v27 Product-Complete Release Candidate](docs/screenshot-groups/group-117-120-product-complete-release-candidate/08-website-release-candidate.png)
 
 ## Product status
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through Group 116 |
-| **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 116, including offline-safe capture, review and execution |
+| **LifeOS Desktop** | Current deep administration, review, planning and audit surface through Group 120 |
+| **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 120, including offline-safe capture, review and execution |
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
-| **LifeOS Website** | Public product, documentation, onboarding and factual portfolio packaging complete for private beta |
+| **LifeOS Website** | Product, documentation, onboarding, factual portfolio and release-candidate evidence surface |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v26 Public Packaging complete; Group 117 next; roadmap approved through Group 120 |
+| **Current release lane** | v27 Product-Complete Candidate through Group 120; owner release decision pending |
 
 Full Mobile and Mobile Companion are separate products. They can share contracts and libraries, but retain different scope, UX and release tracks.
 
@@ -60,7 +60,9 @@ A lighter product for local quick capture, pairing, delivery acknowledgement, no
 
 ### Website
 
-The public product, documentation and evidence foundation. Website packaging, onboarding and distribution are approved for Groups 112-116; product-complete release-candidate work follows in Groups 117-120.
+The product, documentation and evidence foundation. Website packaging,
+onboarding and the cross-product release-candidate gate are complete through
+Group 120.
 
 ## Current capability lanes
 
@@ -93,6 +95,7 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 117-120 - Product-Complete Release Candidate](docs/screenshot-groups/group-117-120-product-complete-release-candidate/)
 - [Groups 112-116 - Website Packaging and Onboarding](docs/screenshot-groups/group-112-116-website-packaging-onboarding/)
 - [Groups 108-111 - Privacy, Export, Backup and Controls](docs/screenshot-groups/group-108-111-privacy-export-backup-controls/)
 - [Groups 104-107 - Evidence Automation and Proof Tooling](docs/screenshot-groups/group-104-107-evidence-automation-proof-tooling/)
@@ -144,11 +147,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v26 is complete through Group 116. Group 117 starts the v27 product-complete release-candidate lane.
-
-Approved work continues through Group 120:
-
-- Groups 117-120: Product-complete release candidate
+LifeOS v27.0.0-rc.1 is complete through Group 120 as a product-complete
+release candidate. No further development group or public release is implied.
+The next checkpoint is the explicit owner release decision after evidence and
+private-beta review.
 
 ## Author
 

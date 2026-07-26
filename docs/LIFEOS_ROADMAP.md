@@ -4,12 +4,12 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v27.0.0-rc.1 is complete through Group 120 as a product-complete
-release candidate. The owner release decision is next.**
+**LifeOS v28.0.0-alpha.1 is active through Group 124 with the CV Builder
+Foundation.**
 
-Groups 117-120 closed cross-product regression and release-candidate review
-across Desktop, Full Mobile, Website, documentation and evidence. Public launch
-and release tagging remain explicit owner decisions.
+The v27/Group 120 release candidate remains preserved as a historical
+checkpoint. Approved post-candidate development now continues through Group 132
+for Career Documents Studio.
 
 ## Product architecture
 
@@ -56,6 +56,7 @@ and release tagging remain explicit owner decisions.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
+| v28 | 121-124 | CV Builder Foundation |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -69,4 +70,25 @@ Version numbers follow shipped product checkpoints; v17 was not used as a comple
 
 ## Beyond Group 120
 
-Post-launch stabilization, public rollout, telemetry expansion, extension SDKs and optional cloud services require separate approval. They are not implicitly authorized by this roadmap.
+### v28 / Groups 121-124 - CV Builder Foundation
+
+- Guided CV creation from trusted Career Profile facts.
+- Editable, reorderable and optional sections with autosave.
+- Multiple target-role variants and live preview.
+- Unsupported source claims block later export.
+
+### v28 / Groups 125-128 - Templates, Preview and Export
+
+- Professional template gallery and layout controls.
+- A4 pagination, ATS/readability checks and PDF/DOCX export.
+- Document version history and safe derivative generation.
+
+### v28 / Groups 129-132 - Cover Letters and Application Integration
+
+- Guided opportunity-linked cover-letter creation.
+- CV, opportunity and application-pack linking.
+- Evidence-backed suggestions with explicit acceptance.
+- Desktop and Full Mobile end-to-end review.
+
+Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
+and optional cloud services require separate approval.

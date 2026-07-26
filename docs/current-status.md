@@ -1,30 +1,31 @@
 # LifeOS current status
 
-LifeOS is current through **v27.0.0-rc.1 / Group 120** at repository checkpoint `fcbf9a9`.
+LifeOS is current through **v28.0.0-alpha.1 / Group 124**. The SG-81 Pack 1
+checkpoint adds the CV Builder Foundation.
 
-Groups 117-120 close the approved product-complete release-candidate
-implementation lane. The next checkpoint is an explicit owner release decision;
-candidate status does not authorize a public launch or release tag.
+Groups 121-124 begin the approved Career Documents Studio after the preserved
+v27 release candidate. Groups 125-132 remain approved for templates, export,
+cover letters and application integration.
 
 ## Current product state
 
 | Product | Status |
 |---|---|
-| Desktop | Deep administration, review, planning, audit and reporting through Group 120 |
-| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 120 |
+| Desktop | Current through Group 124 with guided, evidence-backed CV creation |
+| Full Mobile | Purpose-built Android capture, review, execution and offline-safe workflows aligned through Group 124 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest completed capability
 
-Groups 117-120 complete the Product-Complete Release Candidate:
+Groups 121-124 complete the CV Builder Foundation:
 
-- cross-product Desktop, Full Mobile and Website release-candidate surfaces
-- end-to-end readiness checks and explicit release-decision gating
-- release identity aligned at v27.0.0-rc.1
-- final screenshot evidence and validation closure
-- owner-controlled release tagging with no implicit publication
+- guided creation from trusted Career Profile facts
+- editable CV sections with autosave and versions
+- section enablement and ordering
+- target-role variants and document duplication
+- live document preview and fail-closed source validation
 
 This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Native Intelligence, Scheduled Communications and Social Review lanes.
 
@@ -53,6 +54,5 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Next approved work
 
-Explicit owner review decides whether and when to create a release tag. Public
-launch, store submission and production-provider activation remain separate,
-unapproved actions.
+Groups 125-128 add templates, refined preview and PDF/DOCX export. Groups
+129-132 add cover-letter creation and application-pack integration.

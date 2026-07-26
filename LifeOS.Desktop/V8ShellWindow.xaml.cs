@@ -946,6 +946,11 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
             ShowEmbeddedModule(routeId, title, subtitle, new CareerStudioView());
             return;
         }
+        if (string.Equals(routeId, "career-cvs", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(routeId, title, subtitle, new CareerDocumentsStudioView());
+            return;
+        }
         if (string.Equals(routeId, "v13-grocery-planning", StringComparison.OrdinalIgnoreCase))
         {
             ShowEmbeddedModule(routeId, title, subtitle, new GroceryPlanningView());

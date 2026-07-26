@@ -21,6 +21,7 @@ public partial class MainWindow
         "command-centre",
         "communications",
         "control-plane",
+        "career-cvs",
         "daily-operating-flow",
         "daily-state",
         "desktop-release",

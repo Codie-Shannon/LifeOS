@@ -157,7 +157,7 @@ internal static class WorkspaceCatalog
                         new WorkspaceModuleDefinition[]
                         {
                             Native("career-profile", "Profile", "Native workspace surface", "Role direction, strengths and career positioning without client-work fields."),
-                            Native("career-cvs", "CVs", "Native workspace surface", "CV versions and role-specific evidence."),
+                            Route("career-cvs", "CV & Cover Letter Studio", "SG-81 ready", "Guided CV creation, evidence-backed content, section controls, autosave and live preview."),
                             Route("v12-career-studio", "Career Studio", "Canonical records", "Authoritative opportunity and application pipeline with review-first imported candidates."),
                             Native("career-interviews", "Interviews", "Native workspace surface", "Interview preparation and follow-up structure."),
                             Route("relationship-radar", "Relationship Radar", "Canonical records", "Relationship and follow-up records where they support career activity.")

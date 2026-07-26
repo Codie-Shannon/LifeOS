@@ -1,18 +1,18 @@
 {
-    "currentRelease":  "v27",
-    "currentReleaseName":  "Product-Complete Candidate",
-    "currentSemanticVersion":  "27.0.0-rc.1",
-    "currentStatus":  "release-candidate",
-    "latestCompletedGroup":  120,
-    "latestCompletedGroupName":  "Product-complete candidate closure",
-    "latestCompletedHead":  "fcbf9a9",
-    "nextGroup":  121,
-    "nextGroupName":  "Owner release decision",
-    "roadmapApprovedThroughGroup":  120,
+    "currentRelease":  "v28",
+    "currentReleaseName":  "Career Documents Studio",
+    "currentSemanticVersion":  "28.0.0-alpha.1",
+    "currentStatus":  "active-development",
+    "latestCompletedGroup":  124,
+    "latestCompletedGroupName":  "CV Builder Foundation",
+    "latestCompletedHead":  "sg81-pack1-pending",
+    "nextGroup":  125,
+    "nextGroupName":  "CV Templates, Preview and Export",
+    "roadmapApprovedThroughGroup":  132,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  120,
+                    "currentThroughGroup":  124,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -20,7 +20,7 @@
                        "status":  "built-and-active",
                        "releaseFamily":  "v10",
                        "initialBetaClosureGroup":  57,
-                       "currentThroughGroup":  120,
+                       "currentThroughGroup":  124,
                        "separateFromCompanion":  true,
                        "offlineQueueEnabled":  true,
                        "silentConflictOverwriteAllowed":  false
@@ -162,6 +162,11 @@
                                       "release":  "v27",
                                       "groups":  "117-120",
                                       "status":  "release-candidate-complete"
+                                  },
+                                  {
+                                      "release":  "v28",
+                                      "groups":  "121-124",
+                                      "status":  "cv-builder-foundation-complete"
                                   }
                               ],
     "safetyBoundaries":  {

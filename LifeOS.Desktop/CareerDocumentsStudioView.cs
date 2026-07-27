@@ -1,7 +1,13 @@
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using LifeOS.Core.CareerStudio;
+using Microsoft.Win32;
 
 namespace LifeOS.Desktop;
 
@@ -13,40 +19,123 @@ public sealed class CareerDocumentsStudioView : UserControl
     private readonly CareerDocumentBuilderService _service = new();
     private readonly CareerMaterialsProof _materials = CareerMaterialsProofData.Build(ProofNow);
     private readonly List<CvBuilderDocument> _documents;
+    private readonly Action _close;
     private string _activeDocumentId;
     private string _expandedSectionId = "contact";
     private bool _showOptionalSections;
+    private ScrollViewer? _editorScrollViewer;
+    private double _editorScrollOffset;
+    private readonly Stack<CvBuilderDocument> _undoHistory = new();
+    private readonly Stack<CvBuilderDocument> _redoHistory = new();
+    private double _previewZoom = 0.9;
+    private bool _previewOnly;
+    private string? _importNotice;
+    private bool _hasUnsavedChanges;
+    private TextBlock? _saveStatusText;
+    private bool _compactLayout;
 
     private CvBuilderDocument Active =>
         _documents.Single(document => document.Id == _activeDocumentId);
 
-    public CareerDocumentsStudioView()
+    public CareerDocumentsStudioView(Action? close = null)
     {
+        _close = close ?? (() => { });
         CvBuilderWorkspace workspace = CareerDocumentBuilderProofData.Build(ProofNow);
         _documents = workspace.Documents.ToList();
         _activeDocumentId = workspace.ActiveDocumentId;
-        Background = Brush("#ECEEF2");
-        Foreground = Brush("#20212A");
+        Background = Brush("#0C1220");
+        Foreground = Brushes.White;
         FontFamily = new FontFamily("Segoe UI");
+        PreviewKeyDown += HandleKeyboardShortcut;
+        SizeChanged += (_, e) =>
+        {
+            bool compact = e.NewSize.Width < 1180;
+            if (compact == _compactLayout || _hasUnsavedChanges)
+                return;
+
+            _compactLayout = compact;
+            Render();
+        };
         Render();
+    }
+
+    private void HandleKeyboardShortcut(object sender, KeyEventArgs e)
+    {
+        if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+        {
+            if (e.Key == Key.Z)
+            {
+                Undo();
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Y)
+            {
+                Redo();
+                e.Handled = true;
+            }
+        }
+        else if (e.Key == Key.Escape && _previewOnly)
+        {
+            _previewOnly = false;
+            Render();
+            e.Handled = true;
+        }
     }
 
     private void Render()
     {
+        if (ActualWidth > 0)
+            _compactLayout = ActualWidth < 1180;
+        if (_editorScrollViewer is not null)
+            _editorScrollOffset = _editorScrollViewer.VerticalOffset;
+
         Grid root = new();
         root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         root.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         root.Children.Add(BuildTopBar());
 
-        Grid workspace = new() { Background = Brush("#ECEEF2") };
-        workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        workspace.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        Grid workspace = new() { Background = Brush("#0C1220") };
+        bool showEditor = !_previewOnly;
+        bool showPreview = _previewOnly || !_compactLayout;
+        workspace.ColumnDefinitions.Add(new ColumnDefinition
+        {
+            Width = showEditor
+                ? new GridLength(1, GridUnitType.Star)
+                : new GridLength(0),
+            MinWidth = showEditor ? 340 : 0
+        });
+        workspace.ColumnDefinitions.Add(new ColumnDefinition
+        {
+            Width = showEditor && showPreview
+                ? new GridLength(6)
+                : new GridLength(0)
+        });
+        workspace.ColumnDefinitions.Add(new ColumnDefinition
+        {
+            Width = showPreview
+                ? new GridLength(1, GridUnitType.Star)
+                : new GridLength(0),
+            MinWidth = showPreview ? 340 : 0
+        });
 
         UIElement editor = BuildContinuousEditor();
         workspace.Children.Add(editor);
 
+        GridSplitter splitter = new()
+        {
+            Width = 6,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Stretch,
+            Background = Brush("#27334A"),
+            ResizeDirection = GridResizeDirection.Columns,
+            ResizeBehavior = GridResizeBehavior.PreviousAndNext,
+            Cursor = Cursors.SizeWE
+        };
+        Grid.SetColumn(splitter, 1);
+        workspace.Children.Add(splitter);
+
         UIElement preview = BuildPreviewPane();
-        Grid.SetColumn(preview, 1);
+        Grid.SetColumn(preview, 2);
         workspace.Children.Add(preview);
 
         Grid.SetRow(workspace, 1);
@@ -59,21 +148,19 @@ public sealed class CareerDocumentsStudioView : UserControl
         Grid bar = new()
         {
             Height = 66,
-            Background = Brush("#1D1C20")
+            Background = Brush("#101522")
         };
         bar.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         bar.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         bar.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-        Button back = TopButton("←  CVs", () => { });
+        Button back = SymbolTextButton("\uE72B", "CVs", TryClose);
         back.Margin = new Thickness(14, 12, 0, 12);
         bar.Children.Add(back);
 
-        ComboBox documents = new()
+        TextBox documentName = new()
         {
-            ItemsSource = _documents,
-            DisplayMemberPath = nameof(CvBuilderDocument.Name),
-            SelectedItem = Active,
+            Text = Active.Name,
             Width = 290,
             Height = 38,
             HorizontalAlignment = HorizontalAlignment.Center,
@@ -81,38 +168,74 @@ public sealed class CareerDocumentsStudioView : UserControl
             Background = Brush("#28272C"),
             Foreground = Brushes.White,
             BorderBrush = Brush("#44424A"),
-            Padding = new Thickness(9)
+            Padding = new Thickness(9),
+            TextAlignment = TextAlignment.Center
         };
-        documents.SelectionChanged += (_, _) =>
+        documentName.KeyDown += (_, e) =>
         {
-            if (documents.SelectedItem is CvBuilderDocument document &&
-                document.Id != _activeDocumentId)
+            if (e.Key == Key.Enter && !string.IsNullOrWhiteSpace(documentName.Text))
             {
-                _activeDocumentId = document.Id;
-                _expandedSectionId = "contact";
-                Render();
+                ReplaceActive(
+                    _service.RenameDocument(
+                        Active,
+                        documentName.Text,
+                        DateTimeOffset.Now),
+                    isExplicitSave: true);
+                e.Handled = true;
             }
         };
-        Grid.SetColumn(documents, 1);
-        bar.Children.Add(documents);
+        documentName.TextChanged += (_, _) => MarkEditing();
+        documentName.ToolTip = "Document name. Press Enter to save.";
+        Grid.SetColumn(documentName, 1);
+        bar.Children.Add(documentName);
 
         StackPanel actions = new()
         {
             Orientation = Orientation.Horizontal,
             Margin = new Thickness(0, 11, 14, 11)
         };
-        actions.Children.Add(StatusPill($"☁  Saved · v{Active.Version}"));
-        actions.Children.Add(TopButton("↶", () => { }));
-        actions.Children.Add(TopButton("↷", () => { }));
-        actions.Children.Add(TopButton("EN-NZ", () => { }));
-        Button download = TopButton("Download in SG-82", () => { });
-        download.Background = Brush("#7253E8");
-        download.ToolTip = "PDF and DOCX export is intentionally scheduled for SG-82.";
-        actions.Children.Add(download);
+        actions.Children.Add(BuildStatusPill());
+        Button undo = SymbolButton("\uE7A7", "Undo last change", Undo);
+        undo.IsEnabled = _undoHistory.Count > 0;
+        actions.Children.Add(undo);
+        Button redo = SymbolButton("\uE7A6", "Redo last change", Redo);
+        redo.IsEnabled = _redoHistory.Count > 0;
+        actions.Children.Add(redo);
+        actions.Children.Add(SymbolTextButton(
+            _previewOnly ? "\uE8A7" : "\uE740",
+            _previewOnly ? "Edit" : "Preview",
+            () => RunWhenSaved(() =>
+            {
+                _previewOnly = !_previewOnly;
+                Render();
+            })));
         Grid.SetColumn(actions, 2);
         bar.Children.Add(actions);
 
         return bar;
+    }
+
+    private void TryClose()
+    {
+        if (_hasUnsavedChanges)
+        {
+            MessageBoxResult result = MessageBox.Show(
+                "This CV contains edits that have not been saved. Leave the builder and discard them?",
+                "Unsaved CV changes",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes)
+                return;
+        }
+
+        _close();
+    }
+
+    private void MarkEditing()
+    {
+        _hasUnsavedChanges = true;
+        if (_saveStatusText is not null)
+            _saveStatusText.Text = "Editing…";
     }
 
     private UIElement BuildContinuousEditor()
@@ -123,16 +246,36 @@ public sealed class CareerDocumentsStudioView : UserControl
         import.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         import.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         import.Children.Add(ImportTile(
-            "↥",
+            "\uE898",
             "Upload existing CV",
-            "Import is preview-only until reviewed."));
-        Border profileImport = ImportTile(
-            "L",
+            "Import is preview-only until reviewed.",
+            SelectExistingCv));
+        Button profileImport = ImportTile(
+            "\uE77B",
             "Import trusted LifeOS profile",
-            $"{_materials.Facts.Count(fact => fact.IsTrusted)} accepted facts available");
+            $"{_materials.Facts.Count(fact => fact.IsTrusted)} accepted facts available",
+            () => RunWhenSaved(() =>
+            {
+                _importNotice =
+                    $"{_materials.Facts.Count(fact => fact.IsTrusted)} trusted career facts are linked to this CV.";
+                Render();
+            }));
         Grid.SetColumn(profileImport, 1);
         import.Children.Add(profileImport);
         form.Children.Add(import);
+        if (!string.IsNullOrWhiteSpace(_importNotice))
+        {
+            form.Children.Add(new Border
+            {
+                Background = Brush("#172941"),
+                BorderBrush = Brush("#365A82"),
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(6),
+                Padding = new Thickness(12),
+                Margin = new Thickness(0, 0, 0, 14),
+                Child = Body(_importNotice, "#BFD7F2", FontWeights.SemiBold)
+            });
+        }
 
         foreach (CvBuilderSection section in Active.Sections
                      .Where(section => section.IsEnabled)
@@ -143,11 +286,11 @@ public sealed class CareerDocumentsStudioView : UserControl
 
         Button optional = OutlineButton(
             _showOptionalSections ? "Hide optional sections" : "+ Add optional section",
-            () =>
+            () => RunWhenSaved(() =>
             {
                 _showOptionalSections = !_showOptionalSections;
                 Render();
-            });
+            }));
         optional.Margin = new Thickness(0, 8, 0, 14);
         form.Children.Add(optional);
 
@@ -168,11 +311,32 @@ public sealed class CareerDocumentsStudioView : UserControl
             foreach (string label in new[]
                      {
                          "Languages", "Courses", "Internships", "References",
-                         "Qualities", "Achievements", "Custom section"
+                         "Qualities", "Achievements"
                      })
             {
-                options.Children.Add(DisabledChip($"+ {label}"));
+                options.Children.Add(Chip($"+ {label}", () =>
+                {
+                    CvBuilderDocument updated = _service.AddCustomSection(
+                        Active,
+                        label,
+                        DateTimeOffset.Now);
+                    CvBuilderSection added = updated.Sections
+                        .OrderByDescending(section => section.Order)
+                        .First();
+                    ReplaceActive(updated, added.Id);
+                }));
             }
+            options.Children.Add(Chip("+ Custom section", () =>
+            {
+                CvBuilderDocument updated = _service.AddCustomSection(
+                    Active,
+                    "Custom section",
+                    DateTimeOffset.Now);
+                CvBuilderSection added = updated.Sections
+                    .OrderByDescending(section => section.Order)
+                    .First();
+                ReplaceActive(updated, added.Id);
+            }));
             form.Children.Add(options);
         }
 
@@ -192,16 +356,21 @@ public sealed class CareerDocumentsStudioView : UserControl
                 FontWeights.SemiBold)
         });
 
+        ScrollViewer scrollViewer = new()
+        {
+            Content = form,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Auto
+        };
+        scrollViewer.Loaded += (_, _) =>
+            scrollViewer.ScrollToVerticalOffset(_editorScrollOffset);
+        _editorScrollViewer = scrollViewer;
+
         return new Border
         {
-            Background = Brushes.White,
-            BorderBrush = Brush("#D1D4DA"),
+            Background = Brush("#0F1626"),
+            BorderBrush = Brush("#28354D"),
             BorderThickness = new Thickness(0, 0, 1, 0),
-            Child = new ScrollViewer
-            {
-                Content = form,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Auto
-            }
+            Child = scrollViewer
         };
     }
 
@@ -213,20 +382,65 @@ public sealed class CareerDocumentsStudioView : UserControl
         Grid heading = new();
         heading.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         heading.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        heading.Children.Add(Title(section.Heading, 18));
+        heading.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        StackPanel headingText = new();
+        headingText.Children.Add(Title(section.Heading, 18));
+        headingText.Children.Add(Body(
+            string.IsNullOrWhiteSpace(section.Content)
+                ? "Needs content"
+                : section.SourceFactIds.Count > 0
+                    ? "Source-backed"
+                    : "Ready for review",
+            string.IsNullOrWhiteSpace(section.Content) ? "#E8B36E" : "#8FB7A5",
+            FontWeights.SemiBold));
+        heading.Children.Add(headingText);
 
         StackPanel tools = new() { Orientation = Orientation.Horizontal };
-        tools.Children.Add(IconButton("↑", () =>
-            ReplaceActive(_service.MoveSection(Active, section.Id, -1, DateTimeOffset.Now), section.Id)));
-        tools.Children.Add(IconButton("↓", () =>
-            ReplaceActive(_service.MoveSection(Active, section.Id, 1, DateTimeOffset.Now), section.Id)));
-        tools.Children.Add(IconButton(expanded ? "⌃" : "⌄", () =>
+        tools.Children.Add(SymbolButton(expanded ? "\uE70E" : "\uE70D", expanded ? "Collapse section" : "Expand section", () =>
         {
-            _expandedSectionId = expanded ? string.Empty : section.Id;
-            Render();
+            RunWhenSaved(() =>
+            {
+                _expandedSectionId = expanded ? string.Empty : section.Id;
+                Render();
+            });
         }));
-        Grid.SetColumn(tools, 1);
+        if (section.Kind is CvSectionKind.Custom or CvSectionKind.Education or CvSectionKind.Certifications)
+        {
+            tools.Children.Add(SymbolButton("\uE74D", "Remove section", () =>
+            {
+                _expandedSectionId = string.Empty;
+                ReplaceActive(_service.RemoveSection(
+                    Active,
+                    section.Id,
+                DateTimeOffset.Now));
+            }));
+        }
+        Grid.SetColumn(tools, 2);
         heading.Children.Add(tools);
+
+        Border dragHandle = new()
+        {
+            Background = Brushes.Transparent,
+            Padding = new Thickness(12, 8, 12, 8),
+            Cursor = Cursors.SizeAll,
+            ToolTip = "Drag to reorder section",
+            Child = new TextBlock
+            {
+                Text = "\uE700",
+                FontFamily = new FontFamily("Segoe Fluent Icons"),
+                FontSize = 16,
+                Foreground = Brush("#9FB0CC"),
+                VerticalAlignment = VerticalAlignment.Center
+            }
+        };
+        AutomationProperties.SetName(dragHandle, $"Reorder {section.Heading}");
+        dragHandle.PreviewMouseMove += (_, e) =>
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && !_hasUnsavedChanges)
+                DragDrop.DoDragDrop(dragHandle, section.Id, DragDropEffects.Move);
+        };
+        Grid.SetColumn(dragHandle, 1);
+        heading.Children.Add(dragHandle);
         card.Children.Add(heading);
 
         if (expanded)
@@ -237,14 +451,94 @@ public sealed class CareerDocumentsStudioView : UserControl
                 BuildSectionForm(card, section);
         }
 
-        return new Border
+        Border cardBorder = new()
         {
-            Background = Brushes.White,
-            BorderBrush = Brush("#D8DAE0"),
-            BorderThickness = new Thickness(0, 0, 0, 1),
-            Padding = new Thickness(0, 17, 0, 17),
-            Child = card
+            Background = Brush(expanded ? "#121C30" : "#0F1626"),
+            BorderBrush = Brush("#2A3852"),
+            BorderThickness = new Thickness(1),
+            CornerRadius = new CornerRadius(6),
+            Margin = new Thickness(0, 0, 0, 10),
+            Padding = new Thickness(14),
+            Child = card,
+            Tag = section.Id
         };
+        cardBorder.AllowDrop = true;
+        cardBorder.DragOver += (_, e) =>
+        {
+            if (e.Data.GetData(DataFormats.StringFormat) is not string sourceSectionId ||
+                sourceSectionId == section.Id)
+            {
+                return;
+            }
+
+            bool insertAfter = ShouldInsertAfter(sourceSectionId, section.Id);
+            cardBorder.BorderBrush = Brush("#8A6CFF");
+            cardBorder.BorderThickness = insertAfter
+                ? new Thickness(1, 1, 1, 4)
+                : new Thickness(1, 4, 1, 1);
+
+            AutoScrollDuringDrag(e);
+            e.Effects = DragDropEffects.Move;
+            e.Handled = true;
+        };
+        cardBorder.DragLeave += (_, _) =>
+        {
+            cardBorder.BorderBrush = Brush("#2A3852");
+            cardBorder.BorderThickness = new Thickness(1);
+        };
+        cardBorder.Drop += (_, e) =>
+        {
+            if (e.Data.GetData(DataFormats.StringFormat) is not string sourceSectionId ||
+                sourceSectionId == section.Id)
+            {
+                return;
+            }
+
+            bool insertAfter = ShouldInsertAfter(sourceSectionId, section.Id);
+            CvBuilderDocument reordered = insertAfter
+                ? _service.MoveSectionAfter(
+                    Active,
+                    sourceSectionId,
+                    section.Id,
+                    DateTimeOffset.Now)
+                : _service.MoveSectionBefore(
+                    Active,
+                    sourceSectionId,
+                    section.Id,
+                    DateTimeOffset.Now);
+            ReplaceActive(reordered);
+            e.Handled = true;
+        };
+        return cardBorder;
+    }
+
+    private bool ShouldInsertAfter(string sourceSectionId, string targetSectionId)
+    {
+        CvBuilderSection source = Active.Sections.Single(section =>
+            section.Id == sourceSectionId);
+        CvBuilderSection target = Active.Sections.Single(section =>
+            section.Id == targetSectionId);
+        return source.Order < target.Order;
+    }
+
+    private void AutoScrollDuringDrag(DragEventArgs e)
+    {
+        if (_editorScrollViewer is null)
+            return;
+
+        double y = e.GetPosition(_editorScrollViewer).Y;
+        const double edge = 72;
+        const double step = 28;
+        if (y < edge)
+        {
+            _editorScrollViewer.ScrollToVerticalOffset(
+                Math.Max(0, _editorScrollViewer.VerticalOffset - step));
+        }
+        else if (y > _editorScrollViewer.ViewportHeight - edge)
+        {
+            _editorScrollViewer.ScrollToVerticalOffset(
+                _editorScrollViewer.VerticalOffset + step);
+        }
     }
 
     private void BuildPersonalDetails(StackPanel panel, CvBuilderSection section)
@@ -266,10 +560,10 @@ public sealed class CareerDocumentsStudioView : UserControl
         contacts.Children.Add(phone);
         panel.Children.Add(contacts);
 
-        WrapPanel optional = new() { Margin = new Thickness(0, 4, 0, 8) };
-        foreach (string field in new[] { "Website", "LinkedIn", "Driving licence", "Nationality", "Custom field" })
-            optional.Children.Add(DisabledChip($"+ {field}"));
-        panel.Children.Add(optional);
+        panel.Children.Add(Body(
+            "Email, phone and additional links remain private until explicitly included for export.",
+            "#93A4C3",
+            FontWeights.Normal));
 
         Button save = PrimaryButton("Save personal details", () =>
         {
@@ -280,7 +574,7 @@ public sealed class CareerDocumentsStudioView : UserControl
                 section.Heading,
                 section.Content,
                 DateTimeOffset.Now);
-            ReplaceActive(updated, section.Id);
+            ReplaceActive(updated, section.Id, isExplicitSave: true);
         });
         panel.Children.Add(save);
     }
@@ -292,44 +586,223 @@ public sealed class CareerDocumentsStudioView : UserControl
 
         if (section.Kind is CvSectionKind.Employment or CvSectionKind.Education)
         {
-            Grid entry = TwoColumns();
-            entry.Children.Add(Field(
-                section.Kind == CvSectionKind.Employment ? "Job title" : "Education",
-                Input(section.Kind == CvSectionKind.Employment ? Active.TargetRole : string.Empty)));
-            Border organization = Field(
-                section.Kind == CvSectionKind.Employment ? "Employer" : "Institution",
-                Input(section.Kind == CvSectionKind.Employment ? "Self-directed and client projects" : string.Empty));
-            Grid.SetColumn(organization, 1);
-            entry.Children.Add(organization);
-            panel.Children.Add(entry);
+            foreach (CvBuilderEntry entry in section.Entries ?? [])
+                panel.Children.Add(BuildStructuredEntry(section, entry, heading));
 
-            Grid dates = TwoColumns();
-            dates.Children.Add(Field("Start date", Input("2025")));
-            Border end = Field("End date", Input("Present"));
-            Grid.SetColumn(end, 1);
-            dates.Children.Add(end);
-            panel.Children.Add(dates);
+            string entryLabel = section.Kind == CvSectionKind.Employment
+                ? "employment"
+                : "education";
+            panel.Children.Add(OutlineButton(
+                $"+ Add {entryLabel}",
+                () =>
+                {
+                    CvBuilderDocument titled = _service.UpdateSection(
+                        Active,
+                        section.Id,
+                        heading.Text,
+                        section.Content,
+                        DateTimeOffset.Now);
+                    ReplaceActive(
+                        _service.AddEntry(
+                            titled,
+                            section.Id,
+                            DateTimeOffset.Now),
+                        section.Id,
+                        isExplicitSave: true);
+                }));
+            return;
         }
 
-        TextBox content = Multiline(section.Content);
+        TextBox? subtitle = null;
+        LifeOsDateSelector? startDate = null;
+        LifeOsDateSelector? endDate = null;
+        UIElement? customModules = null;
+        UIElement? customDates = null;
+        UIElement? customSubtitle = null;
+
+        if (section.Kind == CvSectionKind.Custom)
+        {
+            if (section.ShowSubtitle)
+            {
+                subtitle = Input(section.Subtitle);
+                subtitle.ToolTip = "Optional line displayed below the section heading.";
+                customSubtitle = Field("Subtitle", subtitle);
+            }
+
+            WrapPanel modules = new() { Margin = new Thickness(0, 0, 0, 10) };
+            modules.Children.Add(Chip(
+                section.ShowSubtitle ? "− Subtitle" : "+ Subtitle",
+                () => ReplaceActive(
+                    _service.SetSectionModules(
+                        Active,
+                        section.Id,
+                        !section.ShowSubtitle,
+                        section.ShowDateRange,
+                        DateTimeOffset.Now),
+                    section.Id)));
+            modules.Children.Add(Chip(
+                section.ShowDateRange ? "− Date range" : "+ Date range",
+                () => ReplaceActive(
+                    _service.SetSectionModules(
+                        Active,
+                        section.Id,
+                        section.ShowSubtitle,
+                        !section.ShowDateRange,
+                        DateTimeOffset.Now),
+                    section.Id)));
+            customModules = modules;
+
+            if (section.ShowDateRange)
+            {
+                Grid dateGrid = TwoColumns();
+                startDate = CalendarInput(section.StartDate);
+                endDate = CalendarInput(section.EndDate);
+                dateGrid.Children.Add(Field("Start date", startDate));
+                Border customEnd = Field("End date", endDate);
+                Grid.SetColumn(customEnd, 1);
+                dateGrid.Children.Add(customEnd);
+                customDates = dateGrid;
+            }
+        }
+
+        if (customSubtitle is not null)
+            panel.Children.Add(customSubtitle);
+        if (customDates is not null)
+            panel.Children.Add(customDates);
+
+        RichTextBox content = RichDescription(section.Content, section.RichContent);
         panel.Children.Add(Field("Description", content));
+        panel.Children.Add(BuildFormattingToolbar(content));
+        if (customModules is not null)
+            panel.Children.Add(customModules);
         panel.Children.Add(SourceNotice(section));
 
         StackPanel actions = new() { Orientation = Orientation.Horizontal };
         actions.Children.Add(PrimaryButton("Done", () =>
-            ReplaceActive(_service.UpdateSection(
+            ReplaceActive(_service.UpdateSectionDetails(
                 Active,
                 section.Id,
                 heading.Text,
-                content.Text,
+                ReadRichText(content),
+                subtitle?.Text ?? section.Subtitle,
+                startDate?.SelectedDate,
+                endDate?.SelectedDate,
+                section.ShowDateRange ||
+                    section.Kind is CvSectionKind.Employment or CvSectionKind.Education,
+                WriteRichText(content),
+                section.ShowSubtitle,
                 DateTimeOffset.Now),
-                section.Id)));
-        actions.Children.Add(OutlineButton(
-            section.Kind is CvSectionKind.Employment or CvSectionKind.Education
-                ? $"+ Add {section.Kind.ToString().ToLowerInvariant()}"
-                : "Add another entry",
-            () => { }));
+                section.Id,
+                isExplicitSave: true)));
+        actions.Children.Add(OutlineButton("+ Add detail", () =>
+        {
+            Paragraph paragraph = new(new Run(string.Empty));
+            content.Document.Blocks.Add(paragraph);
+            content.CaretPosition = paragraph.ContentStart;
+            content.Focus();
+        }));
         panel.Children.Add(actions);
+    }
+
+    private UIElement BuildStructuredEntry(
+        CvBuilderSection section,
+        CvBuilderEntry entry,
+        TextBox sectionHeading)
+    {
+        StackPanel form = new();
+        Grid titleRow = TwoColumns();
+        TextBox title = Input(entry.Title);
+        TextBox organization = Input(entry.Organization);
+        titleRow.Children.Add(Field(
+            section.Kind == CvSectionKind.Employment ? "Job title" : "Education",
+            title));
+        Border organizationField = Field(
+            section.Kind == CvSectionKind.Employment ? "Employer" : "Institution",
+            organization);
+        Grid.SetColumn(organizationField, 1);
+        titleRow.Children.Add(organizationField);
+        form.Children.Add(titleRow);
+
+        TextBox city = Input(entry.City);
+        form.Children.Add(Field("City", city));
+
+        LifeOsDateSelector start = CalendarInput(entry.StartDate);
+        LifeOsDateSelector end = CalendarInput(entry.EndDate);
+        Grid dates = TwoColumns();
+        dates.Children.Add(Field("Start date", start));
+        Border endField = Field("End date", end);
+        Grid.SetColumn(endField, 1);
+        dates.Children.Add(endField);
+        form.Children.Add(dates);
+
+        CheckBox current = new()
+        {
+            Content = "Current position",
+            IsChecked = entry.IsCurrent,
+            Foreground = Brush("#E4EAF4"),
+            Margin = new Thickness(0, 0, 0, 10)
+        };
+        current.Checked += (_, _) => end.Visibility = Visibility.Collapsed;
+        current.Unchecked += (_, _) => end.Visibility = Visibility.Visible;
+        current.Click += (_, _) => MarkEditing();
+        end.Visibility = entry.IsCurrent ? Visibility.Collapsed : Visibility.Visible;
+        form.Children.Add(current);
+
+        RichTextBox description = RichDescription(entry.Description, entry.RichContent);
+        form.Children.Add(Field("Description", description));
+        form.Children.Add(BuildFormattingToolbar(description));
+
+        StackPanel actions = new() { Orientation = Orientation.Horizontal };
+        actions.Children.Add(PrimaryButton("Save entry", () =>
+        {
+            CvBuilderDocument updated = _service.UpdateEntry(
+                    Active,
+                    section.Id,
+                    entry with
+                    {
+                        Title = title.Text.Trim(),
+                        Organization = organization.Text.Trim(),
+                        City = city.Text.Trim(),
+                        StartDate = start.SelectedDate,
+                        EndDate = current.IsChecked == true ? null : end.SelectedDate,
+                        IsCurrent = current.IsChecked == true,
+                        Description = ReadRichText(description),
+                        RichContent = WriteRichText(description)
+                    },
+                    DateTimeOffset.Now);
+            CvBuilderSection updatedSection = updated.Sections.Single(candidate =>
+                candidate.Id == section.Id);
+            updated = _service.UpdateSection(
+                updated,
+                section.Id,
+                sectionHeading.Text,
+                updatedSection.Content,
+                DateTimeOffset.Now);
+            ReplaceActive(
+                updated,
+                section.Id,
+                isExplicitSave: true);
+        }));
+        actions.Children.Add(OutlineButton("Remove entry", () =>
+            ReplaceActive(
+                _service.RemoveEntry(
+                    Active,
+                    section.Id,
+                    entry.Id,
+                    DateTimeOffset.Now),
+                section.Id)));
+        form.Children.Add(actions);
+
+        return new Border
+        {
+            Background = Brush("#0E1728"),
+            BorderBrush = Brush("#34445F"),
+            BorderThickness = new Thickness(1),
+            CornerRadius = new CornerRadius(6),
+            Padding = new Thickness(12),
+            Margin = new Thickness(0, 10, 0, 12),
+            Child = form
+        };
     }
 
     private UIElement BuildPreviewPane()
@@ -354,6 +827,7 @@ public sealed class CareerDocumentsStudioView : UserControl
                 Opacity = 0.18
             }
         };
+        page.LayoutTransform = new ScaleTransform(_previewZoom, _previewZoom);
 
         StackPanel cv = new();
         Border banner = new()
@@ -372,7 +846,8 @@ public sealed class CareerDocumentsStudioView : UserControl
         };
         cv.Children.Add(banner);
 
-        foreach (CvBuilderSection section in Active.VisibleSections)
+        foreach (CvBuilderSection section in Active.VisibleSections
+                     .Where(section => !string.IsNullOrWhiteSpace(section.Content)))
         {
             cv.Children.Add(PreviewText(
                 section.Heading.ToUpperInvariant(),
@@ -386,11 +861,76 @@ public sealed class CareerDocumentsStudioView : UserControl
                 Background = Brush("#D7DCE3"),
                 Margin = new Thickness(0, 0, 0, 6)
             });
-            cv.Children.Add(PreviewText(
-                string.IsNullOrWhiteSpace(section.Content) ? "Add content in the editor." : section.Content,
-                10.5,
-                "#333944",
-                FontWeights.Normal));
+            if (!string.IsNullOrWhiteSpace(section.Subtitle))
+            {
+                cv.Children.Add(PreviewText(
+                    section.Subtitle,
+                    10.5,
+                    "#252B36",
+                    FontWeights.SemiBold,
+                    new Thickness(0, 0, 0, 3)));
+            }
+            if (section.ShowDateRange && section.StartDate.HasValue)
+            {
+                string range = section.EndDate.HasValue
+                    ? $"{section.StartDate:MMM yyyy} – {section.EndDate:MMM yyyy}"
+                    : $"{section.StartDate:MMM yyyy} – Present";
+                cv.Children.Add(PreviewText(
+                    range,
+                    9.5,
+                    "#687181",
+                    FontWeights.Normal,
+                    new Thickness(0, 0, 0, 3)));
+            }
+            if (section.Entries is { Count: > 0 })
+            {
+                foreach (CvBuilderEntry entry in section.Entries)
+                {
+                    string heading = string.Join(
+                        " · ",
+                        new[] { entry.Title, entry.Organization }
+                            .Where(value => !string.IsNullOrWhiteSpace(value)));
+                    if (!string.IsNullOrWhiteSpace(heading))
+                    {
+                        cv.Children.Add(PreviewText(
+                            heading,
+                            10.5,
+                            "#252B36",
+                            FontWeights.SemiBold,
+                            new Thickness(0, 2, 0, 2)));
+                    }
+
+                    if (entry.StartDate.HasValue)
+                    {
+                        string range = entry.IsCurrent || !entry.EndDate.HasValue
+                            ? $"{entry.StartDate:MMM yyyy} – Present"
+                            : $"{entry.StartDate:MMM yyyy} – {entry.EndDate:MMM yyyy}";
+                        cv.Children.Add(PreviewText(
+                            range,
+                            9.5,
+                            "#687181",
+                            FontWeights.Normal));
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(entry.Description))
+                    {
+                        cv.Children.Add(PreviewText(
+                            entry.Description,
+                            10.5,
+                            "#333944",
+                            FontWeights.Normal,
+                            new Thickness(0, 2, 0, 6)));
+                    }
+                }
+            }
+            else
+            {
+                cv.Children.Add(PreviewText(
+                    section.Content,
+                    10.5,
+                    "#333944",
+                    FontWeights.Normal));
+            }
         }
         page.Child = cv;
 
@@ -408,39 +948,160 @@ public sealed class CareerDocumentsStudioView : UserControl
             HorizontalAlignment = HorizontalAlignment.Stretch,
             VerticalAlignment = VerticalAlignment.Center
         };
-        toolbar.Children.Add(ToolbarItem("▦", "Templates · SG-82"));
-        toolbar.Children.Add(ToolbarItem("Aa", "Typography · SG-82"));
-        toolbar.Children.Add(ToolbarItem("↕", "Spacing · SG-82"));
-        toolbar.Children.Add(ToolbarItem("◒", "Colours · SG-82"));
-        toolbar.Children.Add(ToolbarItem("⛶", "Fullscreen preview"));
+        toolbar.Children.Add(ToolbarItem("\uE71F", "Zoom out", () => RunWhenSaved(() =>
+        {
+            _previewZoom = Math.Max(0.65, _previewZoom - 0.1);
+            Render();
+        })));
+        toolbar.Children.Add(new TextBlock
+        {
+            Text = $"{_previewZoom:P0}",
+            Foreground = Brush("#3D4658"),
+            FontWeight = FontWeights.SemiBold,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(12, 0, 4, 0)
+        });
+        toolbar.Children.Add(ToolbarItem("\uE710", "Zoom in", () => RunWhenSaved(() =>
+        {
+            _previewZoom = Math.Min(1.25, _previewZoom + 0.1);
+            Render();
+        })));
+        toolbar.Children.Add(ToolbarItem(
+            _previewOnly ? "\uE8A7" : "\uE740",
+            _previewOnly ? "Return to editor" : "Fullscreen preview",
+            () => RunWhenSaved(() =>
+            {
+                _previewOnly = !_previewOnly;
+                Render();
+            })));
         Grid.SetRow(toolbar, 1);
         pane.Children.Add(toolbar);
         return pane;
     }
 
-    private void ReplaceActive(CvBuilderDocument replacement, string? expanded = null)
+    private void ReplaceActive(
+        CvBuilderDocument replacement,
+        string? expanded = null,
+        bool isExplicitSave = false)
     {
+        if (_hasUnsavedChanges && !isExplicitSave)
+        {
+            MessageBox.Show(
+                "Save or discard the current field edits before changing the document structure.",
+                "Unsaved CV changes",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+            return;
+        }
+
+        if (_saveStatusText is not null)
+            _saveStatusText.Text = "Saving…";
         int index = _documents.FindIndex(document => document.Id == replacement.Id);
+        CvBuilderDocument current = _documents[index];
+        if (current != replacement)
+        {
+            _undoHistory.Push(current);
+            _redoHistory.Clear();
+        }
         _documents[index] = replacement;
+        _hasUnsavedChanges = false;
         if (expanded is not null)
             _expandedSectionId = expanded;
         Render();
     }
 
-    private static Border ImportTile(string icon, string title, string subtitle)
+    private void Undo()
+    {
+        if (!EnsureSavedBeforeStructureChange())
+            return;
+        if (_undoHistory.Count == 0)
+            return;
+
+        int index = _documents.FindIndex(document => document.Id == _activeDocumentId);
+        _redoHistory.Push(_documents[index]);
+        _documents[index] = _undoHistory.Pop();
+        _hasUnsavedChanges = false;
+        Render();
+    }
+
+    private void Redo()
+    {
+        if (!EnsureSavedBeforeStructureChange())
+            return;
+        if (_redoHistory.Count == 0)
+            return;
+
+        int index = _documents.FindIndex(document => document.Id == _activeDocumentId);
+        _undoHistory.Push(_documents[index]);
+        _documents[index] = _redoHistory.Pop();
+        _hasUnsavedChanges = false;
+        Render();
+    }
+
+    private void SelectExistingCv()
+    {
+        if (!EnsureSavedBeforeStructureChange())
+            return;
+
+        OpenFileDialog dialog = new()
+        {
+            Title = "Choose an existing CV for review",
+            Filter = "CV documents (*.pdf;*.docx)|*.pdf;*.docx|All files (*.*)|*.*",
+            Multiselect = false
+        };
+        if (dialog.ShowDialog() != true)
+            return;
+
+        _importNotice =
+            $"{System.IO.Path.GetFileName(dialog.FileName)} is queued for preview-only field review. The original file was not changed.";
+        Render();
+    }
+
+    private void RunWhenSaved(Action action)
+    {
+        if (EnsureSavedBeforeStructureChange())
+            action();
+    }
+
+    private bool EnsureSavedBeforeStructureChange()
+    {
+        if (!_hasUnsavedChanges)
+            return true;
+
+        MessageBox.Show(
+            "Save the current field edits before changing the builder layout or history.",
+            "Unsaved CV changes",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+        return false;
+    }
+
+    private static Button ImportTile(
+        string icon,
+        string title,
+        string subtitle,
+        Action action)
     {
         StackPanel content = new() { HorizontalAlignment = HorizontalAlignment.Center };
-        content.Children.Add(Title(icon, 22));
-        content.Children.Add(Title(title, 14));
-        content.Children.Add(Body(subtitle, "#777B85", FontWeights.Normal));
-        return new Border
+        content.Children.Add(new TextBlock
         {
-            BorderBrush = Brush("#D8DAE0"),
-            BorderThickness = new Thickness(1),
-            Padding = new Thickness(14),
-            Margin = new Thickness(0, 0, 10, 18),
-            Child = content
-        };
+            Text = icon,
+            FontFamily = new FontFamily("Segoe Fluent Icons"),
+            FontSize = 22,
+            Foreground = Brushes.White,
+            HorizontalAlignment = HorizontalAlignment.Center
+        });
+        content.Children.Add(Title(title, 14));
+        content.Children.Add(Body(subtitle, "#93A4C3", FontWeights.Normal));
+        Button button = ButtonBase(string.Empty, "#141D30", "#FFFFFF");
+        button.Content = content;
+        button.BorderBrush = Brush("#3A4964");
+        button.BorderThickness = new Thickness(1);
+        button.Padding = new Thickness(14);
+        button.Margin = new Thickness(0, 0, 10, 18);
+        AutomationProperties.SetName(button, title);
+        button.Click += (_, _) => action();
+        return button;
     }
 
     private static Border SourceNotice(CvBuilderSection section) => new()
@@ -451,16 +1112,21 @@ public sealed class CareerDocumentsStudioView : UserControl
         Margin = new Thickness(0, 0, 0, 12),
         Child = Body(
             section.SourceFactIds.Count == 0
-                ? "Manual content · verify before export"
-                : $"LifeOS sources: {string.Join(", ", section.SourceFactIds)}",
+                ? "Review this section before including it in an application."
+                : $"Verified from {section.SourceFactIds.Count} trusted LifeOS source(s).",
             section.SourceFactIds.Count == 0 ? "#8C5D26" : "#25664E",
             FontWeights.SemiBold)
     };
 
-    private static Border Field(string label, UIElement input)
+    private Border Field(string label, UIElement input)
     {
+        AutomationProperties.SetName(input, label);
+        if (input is TextBoxBase textEditor)
+            textEditor.TextChanged += (_, _) => MarkEditing();
+        if (input is LifeOsDateSelector dateSelector)
+            dateSelector.SelectedDateChanged += (_, _) => MarkEditing();
         StackPanel panel = new();
-        panel.Children.Add(Body(label, "#454853", FontWeights.SemiBold));
+        panel.Children.Add(Body(label, "#C8D3E6", FontWeights.SemiBold));
         panel.Children.Add(input);
         return new Border { Margin = new Thickness(0, 0, 12, 12), Child = panel };
     }
@@ -477,31 +1143,108 @@ public sealed class CareerDocumentsStudioView : UserControl
     {
         Text = value,
         Height = 40,
-        Background = Brush("#F5F5F7"),
-        Foreground = Brush("#20212A"),
-        BorderBrush = Brush("#D7D8DD"),
+        Background = Brush("#171F32"),
+        Foreground = Brushes.White,
+        BorderBrush = Brush("#35445F"),
         Padding = new Thickness(10),
         FontSize = 13
     };
 
-    private static TextBox Multiline(string value) => new()
-    {
-        Text = value,
-        MinHeight = 110,
-        AcceptsReturn = true,
-        TextWrapping = TextWrapping.Wrap,
-        VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-        Background = Brush("#F5F5F7"),
-        Foreground = Brush("#20212A"),
-        BorderBrush = Brush("#D7D8DD"),
-        Padding = new Thickness(10),
-        FontSize = 13
-    };
+    private static LifeOsDateSelector CalendarInput(DateTime? value) =>
+        new(value);
 
-    private static Button TopButton(string label, Action action)
+    private static RichTextBox RichDescription(string value, string richContent)
     {
-        Button button = ButtonBase(label, "#29282D", "#FFFFFF");
+        RichTextBox editor = new()
+        {
+            MinHeight = 120,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+            Background = Brush("#171F32"),
+            Foreground = Brushes.White,
+            BorderBrush = Brush("#35445F"),
+            Padding = new Thickness(10),
+            FontSize = 13,
+            AcceptsReturn = true
+        };
+        if (!string.IsNullOrWhiteSpace(richContent) &&
+            XamlReader.Parse(richContent) is FlowDocument savedDocument)
+        {
+            editor.Document = savedDocument;
+        }
+        else
+        {
+            editor.Document.Blocks.Clear();
+            editor.Document.Blocks.Add(new Paragraph(new Run(value)));
+        }
+        return editor;
+    }
+
+    private static UIElement BuildFormattingToolbar(RichTextBox editor)
+    {
+        StackPanel toolbar = new()
+        {
+            Orientation = Orientation.Horizontal,
+            Margin = new Thickness(0, 0, 0, 6)
+        };
+        toolbar.Children.Add(SymbolButton("\uE8DD", "Bold", () =>
+            EditingCommands.ToggleBold.Execute(null, editor)));
+        toolbar.Children.Add(SymbolButton("\uE8DB", "Italic", () =>
+            EditingCommands.ToggleItalic.Execute(null, editor)));
+        toolbar.Children.Add(SymbolButton("\uE8FD", "Bulleted list", () =>
+            EditingCommands.ToggleBullets.Execute(null, editor)));
+        return toolbar;
+    }
+
+    private static string ReadRichText(RichTextBox editor) =>
+        new TextRange(
+            editor.Document.ContentStart,
+            editor.Document.ContentEnd).Text.Trim();
+
+    private static string WriteRichText(RichTextBox editor) =>
+        XamlWriter.Save(editor.Document);
+
+    private static Button SymbolTextButton(
+        string glyph,
+        string label,
+        Action action)
+    {
+        StackPanel content = new()
+        {
+            Orientation = Orientation.Horizontal
+        };
+        content.Children.Add(new TextBlock
+        {
+            Text = glyph,
+            FontFamily = new FontFamily("Segoe Fluent Icons"),
+            FontSize = 14,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(0, 0, 8, 0)
+        });
+        content.Children.Add(new TextBlock
+        {
+            Text = label,
+            VerticalAlignment = VerticalAlignment.Center
+        });
+
+        Button button = ButtonBase(string.Empty, "#202A40", "#FFFFFF");
+        button.Content = content;
+        AutomationProperties.SetName(button, label);
+        button.Click += (_, _) => action();
+        return button;
+    }
+
+    private static Button SymbolButton(
+        string glyph,
+        string tooltip,
+        Action action)
+    {
+        Button button = ButtonBase(glyph, "#263754", "#FFFFFF");
+        button.FontFamily = new FontFamily("Segoe Fluent Icons");
+        button.FontSize = 14;
+        button.Padding = new Thickness(10, 7, 10, 7);
         button.Margin = new Thickness(6, 0, 0, 0);
+        button.ToolTip = tooltip;
+        AutomationProperties.SetName(button, tooltip);
         button.Click += (_, _) => action();
         return button;
     }
@@ -516,29 +1259,18 @@ public sealed class CareerDocumentsStudioView : UserControl
 
     private static Button OutlineButton(string label, Action action)
     {
-        Button button = ButtonBase(label, "#FFFFFF", "#3D3F49");
-        button.BorderBrush = Brush("#C8CBD2");
+        Button button = ButtonBase(label, "#182238", "#E4EAF4");
+        button.BorderBrush = Brush("#3A4964");
         button.BorderThickness = new Thickness(1);
         button.Margin = new Thickness(0, 0, 10, 0);
         button.Click += (_, _) => action();
         return button;
     }
 
-    private static Button IconButton(string label, Action action)
-    {
-        Button button = ButtonBase(label, "#FFFFFF", "#595C66");
-        button.BorderBrush = Brush("#D5D7DC");
-        button.BorderThickness = new Thickness(1);
-        button.Padding = new Thickness(9, 5, 9, 5);
-        button.Margin = new Thickness(5, 0, 0, 0);
-        button.Click += (_, _) => action();
-        return button;
-    }
-
     private static Button Chip(string label, Action action)
     {
-        Button button = ButtonBase(label, "#FFFFFF", "#454853");
-        button.BorderBrush = Brush("#C9CCD2");
+        Button button = ButtonBase(label, "#182238", "#E4EAF4");
+        button.BorderBrush = Brush("#3A4964");
         button.BorderThickness = new Thickness(1);
         button.Padding = new Thickness(11, 7, 11, 7);
         button.Margin = new Thickness(0, 0, 8, 8);
@@ -546,48 +1278,103 @@ public sealed class CareerDocumentsStudioView : UserControl
         return button;
     }
 
-    private static Button DisabledChip(string label)
-    {
-        Button button = Chip(label, () => { });
-        button.ToolTip = "Planned for the complete Career Documents Studio.";
-        return button;
-    }
-
-    private static Button ToolbarItem(string icon, string tooltip)
+    private static Button ToolbarItem(string icon, string tooltip, Action action)
     {
         Button button = ButtonBase(icon, "#FFFFFF", "#3D3F49");
+        button.FontFamily = new FontFamily("Segoe Fluent Icons");
+        button.FontSize = 16;
         button.ToolTip = tooltip;
         button.Margin = new Thickness(14, 10, 0, 10);
         button.MinWidth = 58;
+        button.Click += (_, _) => action();
         return button;
     }
 
-    private static Button ButtonBase(string label, string background, string foreground) => new()
+    private static Button ButtonBase(string label, string background, string foreground)
     {
-        Content = label,
-        Background = Brush(background),
-        Foreground = Brush(foreground),
-        BorderBrush = Brushes.Transparent,
-        Padding = new Thickness(13, 8, 13, 8),
-        FontSize = 13,
-        Cursor = System.Windows.Input.Cursors.Hand
-    };
+        Button button = new()
+        {
+            Content = label,
+            Foreground = Brush(foreground),
+            BorderBrush = Brushes.Transparent,
+            Padding = new Thickness(13, 8, 13, 8),
+            FontSize = 13,
+            Cursor = Cursors.Hand
+        };
+        button.Style = ButtonStyle(background, foreground);
+        return button;
+    }
 
-    private static Border StatusPill(string text) => new()
+    private static Style ButtonStyle(string background, string foreground)
     {
-        Background = Brush("#24332D"),
-        CornerRadius = new CornerRadius(14),
-        Padding = new Thickness(11, 6, 11, 6),
-        Margin = new Thickness(0, 5, 8, 5),
-        Child = Body(text, "#8BE0B7", FontWeights.SemiBold)
-    };
+        Style style = new(typeof(Button));
+        style.Setters.Add(new Setter(BackgroundProperty, Brush(background)));
+        style.Setters.Add(new Setter(Control.ForegroundProperty, Brush(foreground)));
+
+        FrameworkElementFactory border = new(typeof(Border));
+        border.Name = "buttonBorder";
+        border.SetValue(Border.BackgroundProperty, new TemplateBindingExtension(BackgroundProperty));
+        border.SetValue(Border.BorderBrushProperty, new TemplateBindingExtension(BorderBrushProperty));
+        border.SetValue(Border.BorderThicknessProperty, new TemplateBindingExtension(BorderThicknessProperty));
+        border.SetValue(Border.PaddingProperty, new TemplateBindingExtension(PaddingProperty));
+        border.SetValue(Border.CornerRadiusProperty, new CornerRadius(3));
+
+        FrameworkElementFactory presenter = new(typeof(ContentPresenter));
+        presenter.SetValue(HorizontalAlignmentProperty, HorizontalAlignment.Center);
+        presenter.SetValue(VerticalAlignmentProperty, VerticalAlignment.Center);
+        presenter.SetValue(ContentPresenter.ContentProperty, new TemplateBindingExtension(ContentControl.ContentProperty));
+        presenter.SetValue(ContentPresenter.ContentTemplateProperty, new TemplateBindingExtension(ContentControl.ContentTemplateProperty));
+        border.AppendChild(presenter);
+
+        ControlTemplate template = new(typeof(Button)) { VisualTree = border };
+
+        Trigger hover = new()
+        {
+            Property = IsMouseOverProperty,
+            Value = true
+        };
+        hover.Setters.Add(new Setter(
+            Border.BackgroundProperty,
+            Brush(background == "#FFFFFF" ? "#D8DFEA" : "#33466A"),
+            "buttonBorder"));
+        hover.Setters.Add(new Setter(
+            Control.ForegroundProperty,
+            Brush(background == "#FFFFFF" ? "#20283A" : "#FFFFFF")));
+        template.Triggers.Add(hover);
+        Trigger disabled = new()
+        {
+            Property = IsEnabledProperty,
+            Value = false
+        };
+        disabled.Setters.Add(new Setter(OpacityProperty, 0.38));
+        disabled.Setters.Add(new Setter(CursorProperty, Cursors.Arrow));
+        template.Triggers.Add(disabled);
+        style.Setters.Add(new Setter(TemplateProperty, template));
+        return style;
+    }
+
+    private Border BuildStatusPill()
+    {
+        _saveStatusText = Body(
+            _hasUnsavedChanges ? "Editing…" : $"Saved · v{Active.Version}",
+            _hasUnsavedChanges ? "#FFD18A" : "#8BE0B7",
+            FontWeights.SemiBold);
+        return new Border
+        {
+            Background = Brush(_hasUnsavedChanges ? "#3A3022" : "#24332D"),
+            CornerRadius = new CornerRadius(14),
+            Padding = new Thickness(11, 6, 11, 6),
+            Margin = new Thickness(0, 5, 8, 5),
+            Child = _saveStatusText
+        };
+    }
 
     private static TextBlock Title(string text, double size) => new()
     {
         Text = text,
         FontSize = size,
         FontWeight = FontWeights.SemiBold,
-        Foreground = Brush("#25262D"),
+        Foreground = Brushes.White,
         TextWrapping = TextWrapping.Wrap
     };
 
@@ -618,4 +1405,140 @@ public sealed class CareerDocumentsStudioView : UserControl
 
     private static Brush Brush(string value) =>
         new SolidColorBrush((Color)ColorConverter.ConvertFromString(value));
+
+    private sealed class LifeOsDateSelector : Grid
+    {
+        private readonly Button _display;
+        private readonly Button _clear;
+        private readonly Popup _popup;
+        private DateTime? _selectedDate;
+        public event EventHandler? SelectedDateChanged;
+
+        public DateTime? SelectedDate
+        {
+            get => _selectedDate;
+            private set
+            {
+                _selectedDate = value;
+                _display.Content = value.HasValue
+                    ? value.Value.ToString("d MMMM yyyy")
+                    : "Select a date";
+                _clear.Visibility = value.HasValue
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
+                SelectedDateChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public LifeOsDateSelector(DateTime? value)
+        {
+            Height = 42;
+            ColumnDefinitions.Add(new ColumnDefinition
+            {
+                Width = new GridLength(1, GridUnitType.Star)
+            });
+            ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            _popup = new Popup
+            {
+                Placement = PlacementMode.Bottom,
+                StaysOpen = false,
+                AllowsTransparency = true
+            };
+
+            _display = SymbolTextButton(
+                "\uE787",
+                value.HasValue ? value.Value.ToString("d MMMM yyyy") : "Select a date",
+                () => _popup.IsOpen = true);
+            _display.HorizontalContentAlignment = HorizontalAlignment.Left;
+            _display.HorizontalAlignment = HorizontalAlignment.Stretch;
+            _display.Background = Brush("#171F32");
+            _display.BorderBrush = Brush("#35445F");
+            _display.BorderThickness = new Thickness(1);
+            Children.Add(_display);
+
+            Calendar calendar = new()
+            {
+                SelectedDate = value,
+                DisplayDate = value ?? DateTime.Today,
+                Background = Brush("#111A2C"),
+                Foreground = Brushes.White,
+                BorderBrush = Brush("#46597A"),
+                BorderThickness = new Thickness(1),
+                SelectionMode = CalendarSelectionMode.SingleDate
+            };
+            calendar.Resources[typeof(CalendarDayButton)] = CalendarDayStyle();
+            calendar.Resources[typeof(CalendarButton)] = CalendarMonthStyle();
+            calendar.SelectedDatesChanged += (_, _) =>
+            {
+                SelectedDate = calendar.SelectedDate;
+                _popup.IsOpen = false;
+            };
+
+            _clear = SymbolButton("\uE711", "Clear date", () =>
+            {
+                calendar.SelectedDate = null;
+                SelectedDate = null;
+            });
+            _clear.Margin = new Thickness(6, 0, 0, 0);
+            _clear.MinWidth = 40;
+            Grid.SetColumn(_clear, 1);
+            Children.Add(_clear);
+
+            Border popupSurface = new()
+            {
+                Background = Brush("#111A2C"),
+                BorderBrush = Brush("#46597A"),
+                BorderThickness = new Thickness(1),
+                Padding = new Thickness(8),
+                Child = calendar
+            };
+            _popup.Child = popupSurface;
+            _popup.PlacementTarget = _display;
+
+            SelectedDate = value;
+        }
+
+        private static Style CalendarDayStyle()
+        {
+            Style style = new(typeof(CalendarDayButton));
+            style.Setters.Add(new Setter(BackgroundProperty, Brushes.Transparent));
+            style.Setters.Add(new Setter(Control.ForegroundProperty, Brushes.White));
+            style.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
+
+            Trigger hover = new()
+            {
+                Property = IsMouseOverProperty,
+                Value = true
+            };
+            hover.Setters.Add(new Setter(BackgroundProperty, Brush("#33466A")));
+            style.Triggers.Add(hover);
+
+            Trigger selected = new()
+            {
+                Property = CalendarDayButton.IsSelectedProperty,
+                Value = true
+            };
+            selected.Setters.Add(new Setter(BackgroundProperty, Brush("#7253E8")));
+            selected.Setters.Add(new Setter(Control.ForegroundProperty, Brushes.White));
+            style.Triggers.Add(selected);
+            return style;
+        }
+
+        private static Style CalendarMonthStyle()
+        {
+            Style style = new(typeof(CalendarButton));
+            style.Setters.Add(new Setter(BackgroundProperty, Brush("#17233A")));
+            style.Setters.Add(new Setter(Control.ForegroundProperty, Brushes.White));
+            style.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
+
+            Trigger hover = new()
+            {
+                Property = IsMouseOverProperty,
+                Value = true
+            };
+            hover.Setters.Add(new Setter(BackgroundProperty, Brush("#33466A")));
+            style.Triggers.Add(hover);
+            return style;
+        }
+    }
 }

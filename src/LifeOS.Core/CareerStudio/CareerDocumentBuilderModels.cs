@@ -17,6 +17,17 @@ public enum CvSectionKind
 
 public enum CvValidationSeverity { Information, Warning, Blocking }
 
+public sealed record CvBuilderEntry(
+    string Id,
+    string Title,
+    string Organization,
+    string City,
+    DateTime? StartDate,
+    DateTime? EndDate,
+    bool IsCurrent,
+    string Description,
+    string RichContent = "");
+
 public sealed record CvBuilderSection(
     string Id,
     CvSectionKind Kind,
@@ -24,7 +35,14 @@ public sealed record CvBuilderSection(
     string Content,
     int Order,
     bool IsEnabled,
-    IReadOnlyList<string> SourceFactIds);
+    IReadOnlyList<string> SourceFactIds,
+    string Subtitle = "",
+    DateTime? StartDate = null,
+    DateTime? EndDate = null,
+    bool ShowDateRange = false,
+    string RichContent = "",
+    bool ShowSubtitle = false,
+    IReadOnlyList<CvBuilderEntry>? Entries = null);
 
 public sealed record CvBuilderDocument(
     string Id,

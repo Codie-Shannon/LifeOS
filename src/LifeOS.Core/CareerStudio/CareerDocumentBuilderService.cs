@@ -42,7 +42,19 @@ public sealed class CareerDocumentBuilderService
                 1, true, FactIds("Profile")),
             new("employment", CvSectionKind.Employment, "Experience",
                 JoinCategory("Experience"),
-                2, true, FactIds("Experience")),
+                2, true, FactIds("Experience"),
+                Entries:
+                [
+                    new(
+                        "employment-1",
+                        targetRole,
+                        "Self-directed and client projects",
+                        "Whakatane",
+                        new DateTime(2025, 1, 1),
+                        null,
+                        true,
+                        JoinCategory("Experience"))
+                ]),
             new("skills", CvSectionKind.Skills, "Skills",
                 JoinCategory("Skill"),
                 3, true, FactIds("Skill")),
@@ -109,13 +121,241 @@ public sealed class CareerDocumentBuilderService
         return Autosave(document with { Sections = sections }, now);
     }
 
+    public CvBuilderDocument UpdateSectionDetails(
+        CvBuilderDocument document,
+        string sectionId,
+        string heading,
+        string content,
+        string subtitle,
+        DateTime? startDate,
+        DateTime? endDate,
+        bool showDateRange,
+        string richContent,
+        bool showSubtitle,
+        DateTimeOffset now)
+    {
+        if (showDateRange &&
+            startDate.HasValue &&
+            endDate.HasValue &&
+            endDate.Value.Date < startDate.Value.Date)
+        {
+            throw new ArgumentException("The end date cannot be before the start date.", nameof(endDate));
+        }
+
+        CvBuilderDocument updated = UpdateSection(document, sectionId, heading, content, now);
+        CvBuilderSection[] sections = updated.Sections
+            .Select(section => section.Id == sectionId
+                ? section with
+                {
+                    Subtitle = subtitle.Trim(),
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    ShowDateRange = showDateRange,
+                    RichContent = richContent,
+                    ShowSubtitle = showSubtitle
+                }
+                : section)
+            .ToArray();
+
+        return updated with { Sections = sections };
+    }
+
+    public CvBuilderDocument SetSectionModules(
+        CvBuilderDocument document,
+        string sectionId,
+        bool showSubtitle,
+        bool showDateRange,
+        DateTimeOffset now)
+    {
+        if (!document.Sections.Any(section => section.Id == sectionId))
+            throw new ArgumentException("The requested CV section does not exist.", nameof(sectionId));
+
+        CvBuilderSection[] sections = document.Sections
+            .Select(section => section.Id == sectionId
+                ? section with
+                {
+                    ShowSubtitle = showSubtitle,
+                    ShowDateRange = showDateRange,
+                    Subtitle = showSubtitle ? section.Subtitle : string.Empty,
+                    StartDate = showDateRange ? section.StartDate : null,
+                    EndDate = showDateRange ? section.EndDate : null
+                }
+                : section)
+            .ToArray();
+
+        return Autosave(document with { Sections = sections }, now);
+    }
+
+    public CvBuilderDocument RenameDocument(
+        CvBuilderDocument document,
+        string name,
+        DateTimeOffset now)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("A document name is required.", nameof(name));
+
+        return Autosave(document with { Name = name.Trim() }, now);
+    }
+
+    public CvBuilderDocument AddCustomSection(
+        CvBuilderDocument document,
+        string heading,
+        DateTimeOffset now)
+    {
+        if (string.IsNullOrWhiteSpace(heading))
+            throw new ArgumentException("A custom section heading is required.", nameof(heading));
+
+        int suffix = 1;
+        string sectionId;
+        do
+        {
+            sectionId = $"custom-{suffix++}";
+        }
+        while (document.Sections.Any(section => section.Id == sectionId));
+
+        CvBuilderSection section = new(
+            sectionId,
+            CvSectionKind.Custom,
+            heading.Trim(),
+            string.Empty,
+            document.Sections.Count,
+            true,
+            []);
+
+        return Autosave(
+            document with { Sections = [.. document.Sections, section] },
+            now);
+    }
+
+    public CvBuilderDocument RemoveSection(
+        CvBuilderDocument document,
+        string sectionId,
+        DateTimeOffset now)
+    {
+        CvBuilderSection? target = document.Sections.FirstOrDefault(section =>
+            section.Id == sectionId);
+        if (target is null)
+            throw new ArgumentException("The requested CV section does not exist.", nameof(sectionId));
+        if (RequiredSections.Contains(target.Kind))
+            throw new InvalidOperationException("Required CV sections cannot be removed.");
+
+        CvBuilderSection[] sections = document.Sections
+            .Where(section => section.Id != sectionId)
+            .OrderBy(section => section.Order)
+            .Select((section, index) => section with { Order = index })
+            .ToArray();
+
+        return Autosave(document with { Sections = sections }, now);
+    }
+
+    public CvBuilderDocument AddEntry(
+        CvBuilderDocument document,
+        string sectionId,
+        DateTimeOffset now)
+    {
+        CvBuilderSection section = document.Sections.SingleOrDefault(candidate =>
+            candidate.Id == sectionId)
+            ?? throw new ArgumentException("The requested CV section does not exist.", nameof(sectionId));
+        if (section.Kind is not (CvSectionKind.Employment or CvSectionKind.Education))
+            throw new InvalidOperationException("Only employment and education sections use structured entries.");
+
+        List<CvBuilderEntry> entries = section.Entries?.ToList() ?? [];
+        int suffix = 1;
+        string prefix = section.Kind == CvSectionKind.Employment ? "employment" : "education";
+        string entryId;
+        do
+        {
+            entryId = $"{prefix}-{suffix++}";
+        }
+        while (entries.Any(entry => entry.Id == entryId));
+
+        entries.Add(new CvBuilderEntry(
+            entryId,
+            string.Empty,
+            string.Empty,
+            string.Empty,
+            null,
+            null,
+            false,
+            string.Empty));
+
+        CvBuilderSection[] sections = document.Sections
+            .Select(candidate => candidate.Id == sectionId
+                ? candidate with { Entries = entries }
+                : candidate)
+            .ToArray();
+        return Autosave(document with { Sections = sections }, now);
+    }
+
+    public CvBuilderDocument UpdateEntry(
+        CvBuilderDocument document,
+        string sectionId,
+        CvBuilderEntry replacement,
+        DateTimeOffset now)
+    {
+        CvBuilderSection section = document.Sections.SingleOrDefault(candidate =>
+            candidate.Id == sectionId)
+            ?? throw new ArgumentException("The requested CV section does not exist.", nameof(sectionId));
+        if (section.Entries is null ||
+            section.Entries.All(entry => entry.Id != replacement.Id))
+        {
+            throw new ArgumentException("The requested structured entry does not exist.", nameof(replacement));
+        }
+
+        CvBuilderEntry[] entries = section.Entries
+            .Select(entry => entry.Id == replacement.Id ? replacement : entry)
+            .ToArray();
+        string combinedContent = string.Join(
+            Environment.NewLine,
+            entries
+                .Where(entry => !string.IsNullOrWhiteSpace(entry.Description))
+                .Select(entry => entry.Description.Trim()));
+        CvBuilderSection[] sections = document.Sections
+            .Select(candidate => candidate.Id == sectionId
+                ? candidate with { Entries = entries, Content = combinedContent }
+                : candidate)
+            .ToArray();
+        return Autosave(document with { Sections = sections }, now);
+    }
+
+    public CvBuilderDocument RemoveEntry(
+        CvBuilderDocument document,
+        string sectionId,
+        string entryId,
+        DateTimeOffset now)
+    {
+        CvBuilderSection section = document.Sections.SingleOrDefault(candidate =>
+            candidate.Id == sectionId)
+            ?? throw new ArgumentException("The requested CV section does not exist.", nameof(sectionId));
+        CvBuilderEntry[] entries = (section.Entries ?? [])
+            .Where(entry => entry.Id != entryId)
+            .ToArray();
+        if ((section.Entries?.Count ?? 0) == entries.Length)
+            throw new ArgumentException("The requested structured entry does not exist.", nameof(entryId));
+
+        string combinedContent = string.Join(
+            Environment.NewLine,
+            entries
+                .Where(entry => !string.IsNullOrWhiteSpace(entry.Description))
+                .Select(entry => entry.Description.Trim()));
+        CvBuilderSection[] sections = document.Sections
+            .Select(candidate => candidate.Id == sectionId
+                ? candidate with { Entries = entries, Content = combinedContent }
+                : candidate)
+            .ToArray();
+        return Autosave(document with { Sections = sections }, now);
+    }
+
     public CvBuilderDocument MoveSection(
         CvBuilderDocument document,
         string sectionId,
         int direction,
         DateTimeOffset now)
     {
-        List<CvBuilderSection> ordered = document.Sections.OrderBy(section => section.Order).ToList();
+        List<CvBuilderSection> ordered = document.Sections
+            .Where(section => section.IsEnabled)
+            .OrderBy(section => section.Order)
+            .ToList();
         int currentIndex = ordered.FindIndex(section => section.Id == sectionId);
         int targetIndex = currentIndex + Math.Sign(direction);
 
@@ -127,7 +367,65 @@ public sealed class CareerDocumentBuilderService
 
         (ordered[currentIndex], ordered[targetIndex]) = (ordered[targetIndex], ordered[currentIndex]);
 
+        IEnumerable<CvBuilderSection> disabled = document.Sections
+            .Where(section => !section.IsEnabled)
+            .OrderBy(section => section.Order);
         CvBuilderSection[] sections = ordered
+            .Concat(disabled)
+            .Select((section, index) => section with { Order = index })
+            .ToArray();
+
+        return Autosave(document with { Sections = sections }, now);
+    }
+
+    public CvBuilderDocument MoveSectionBefore(
+        CvBuilderDocument document,
+        string sectionId,
+        string targetSectionId,
+        DateTimeOffset now) =>
+        MoveSectionRelative(document, sectionId, targetSectionId, false, now);
+
+    public CvBuilderDocument MoveSectionAfter(
+        CvBuilderDocument document,
+        string sectionId,
+        string targetSectionId,
+        DateTimeOffset now) =>
+        MoveSectionRelative(document, sectionId, targetSectionId, true, now);
+
+    private static CvBuilderDocument MoveSectionRelative(
+        CvBuilderDocument document,
+        string sectionId,
+        string targetSectionId,
+        bool insertAfter,
+        DateTimeOffset now)
+    {
+        if (sectionId == targetSectionId)
+            return document;
+
+        List<CvBuilderSection> enabled = document.Sections
+            .Where(section => section.IsEnabled)
+            .OrderBy(section => section.Order)
+            .ToList();
+        CvBuilderSection? moving = enabled.FirstOrDefault(section =>
+            section.Id == sectionId);
+        if (moving is null ||
+            enabled.All(section => section.Id != targetSectionId))
+        {
+            throw new ArgumentException("Both sections must exist and be enabled.");
+        }
+
+        enabled.Remove(moving);
+        int targetIndex = enabled.FindIndex(section =>
+            section.Id == targetSectionId);
+        if (insertAfter)
+            targetIndex++;
+        enabled.Insert(targetIndex, moving);
+
+        IEnumerable<CvBuilderSection> disabled = document.Sections
+            .Where(section => !section.IsEnabled)
+            .OrderBy(section => section.Order);
+        CvBuilderSection[] sections = enabled
+            .Concat(disabled)
             .Select((section, index) => section with { Order = index })
             .ToArray();
 

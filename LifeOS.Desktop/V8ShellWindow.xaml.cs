@@ -948,7 +948,12 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         }
         if (string.Equals(routeId, "career-cvs", StringComparison.OrdinalIgnoreCase))
         {
-            ShowEmbeddedModule(routeId, title, subtitle, new CareerDocumentsStudioView());
+            ShowEmbeddedModule(
+                routeId,
+                title,
+                subtitle,
+                new CareerDocumentsStudioView(() =>
+                    CloseEmbeddedModule(restoreScroll: true)));
             return;
         }
         if (string.Equals(routeId, "v13-grocery-planning", StringComparison.OrdinalIgnoreCase))
@@ -987,15 +992,38 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
     {
         _workspaceScrollOffset = WorkspaceScrollViewer.VerticalOffset;
         _activeModuleRoute = routeId;
+        bool immersiveCareerDocuments = string.Equals(
+            routeId,
+            "career-cvs",
+            StringComparison.OrdinalIgnoreCase);
 
         ModuleBackButton.Content = $"← Back to {_activeWorkspace}";
         ModuleHostTitle.Text = title;
         ModuleHostSubtitle.Text = subtitle;
         ModuleHostContent.Content = content;
+        ModuleHostRoot.Margin = immersiveCareerDocuments
+            ? new Thickness(0)
+            : new Thickness(24);
+        ModuleBackButton.Visibility = immersiveCareerDocuments ? Visibility.Collapsed : Visibility.Visible;
+        ModuleHostTitle.Visibility = immersiveCareerDocuments ? Visibility.Collapsed : Visibility.Visible;
+        ModuleHostSubtitle.Visibility = immersiveCareerDocuments ? Visibility.Collapsed : Visibility.Visible;
+        WorkspaceScrollViewer.VerticalScrollBarVisibility =
+            immersiveCareerDocuments ? ScrollBarVisibility.Disabled : ScrollBarVisibility.Auto;
 
         WorkspaceRoot.Visibility = Visibility.Collapsed;
         ModuleHostRoot.Visibility = Visibility.Visible;
-        WorkspaceScrollViewer.ScrollToTop();
+        Dispatcher.BeginInvoke(
+            DispatcherPriority.Loaded,
+            new Action(() =>
+            {
+                WorkspaceScrollViewer.ScrollToTop();
+                if (immersiveCareerDocuments)
+                {
+                    ModuleHostContent.Height = Math.Max(
+                        680,
+                        WorkspaceScrollViewer.ViewportHeight);
+                }
+            }));
     }
 
     private void ModuleBackButton_Click(object sender, RoutedEventArgs e) =>
@@ -1009,7 +1037,13 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         }
 
         ModuleHostContent.Content = null;
+        ModuleHostContent.Height = double.NaN;
         ModuleHostRoot.Visibility = Visibility.Collapsed;
+        ModuleHostRoot.Margin = new Thickness(24);
+        ModuleBackButton.Visibility = Visibility.Visible;
+        ModuleHostTitle.Visibility = Visibility.Visible;
+        ModuleHostSubtitle.Visibility = Visibility.Visible;
+        WorkspaceScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
         WorkspaceRoot.Visibility = Visibility.Visible;
 
         _embeddedLegacyModuleWindow?.Close();

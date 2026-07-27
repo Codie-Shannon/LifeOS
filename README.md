@@ -6,7 +6,7 @@ LifeOS is a safety-first platform built by Codie Shannon around purpose-built De
 
 > **Current checkpoint:** LifeOS v28.0.0-alpha.1 is active through Group 124 with the CV Builder Foundation. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
 
-![LifeOS v27 Product-Complete Release Candidate](docs/screenshot-groups/group-117-120-product-complete-release-candidate/08-website-release-candidate.png)
+![LifeOS v28 CV Builder Foundation](docs/screenshot-groups/group-121-124-cv-builder-foundation/02-cv-builder-split-workspace.png)
 
 ## Product status
 
@@ -95,6 +95,7 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 121-124 - CV Builder Foundation](docs/screenshot-groups/group-121-124-cv-builder-foundation/)
 - [Groups 117-120 - Product-Complete Release Candidate](docs/screenshot-groups/group-117-120-product-complete-release-candidate/)
 - [Groups 112-116 - Website Packaging and Onboarding](docs/screenshot-groups/group-112-116-website-packaging-onboarding/)
 - [Groups 108-111 - Privacy, Export, Backup and Controls](docs/screenshot-groups/group-108-111-privacy-export-backup-controls/)

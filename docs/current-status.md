@@ -1,7 +1,8 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.1 / Group 124**. The SG-81 Pack 1
-checkpoint adds the CV Builder Foundation.
+LifeOS is current through **v28.0.0-alpha.1 / Group 124**. SG-81 is complete
+with Pack 1 implementation and Pack 2 screenshot evidence for the CV Builder
+Foundation.
 
 Groups 121-124 begin the approved Career Documents Studio after the preserved
 v27 release candidate. Groups 125-132 remain approved for templates, export,
@@ -42,15 +43,13 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
-- SG-80 targeted tests: 4 passed
-- Core tests: 422 passed
+- SG-81 targeted tests: 14 passed
+- Core tests: 436 passed
+- Companion tests: 34 passed
 - Website tests: 28 passed
 - Mobile tests: 54 passed
 - Desktop Release build: clean
-- Android Release build: clean
-- Website Release publish: clean
-- Public privacy scan: passed
-- Latest evidence: [`group-117-120-product-complete-release-candidate`](screenshot-groups/group-117-120-product-complete-release-candidate/)
+- Latest evidence: [`group-121-124-cv-builder-foundation`](screenshot-groups/group-121-124-cv-builder-foundation/)
 
 ## Next approved work
 

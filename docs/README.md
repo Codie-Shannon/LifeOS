@@ -7,23 +7,24 @@ This directory is the durable source of truth for LifeOS status, release history
 - [`current-status.md`](current-status.md) — current product and roadmap state
 - [`lifeos-version-state.json`](lifeos-version-state.json) — machine-readable version, group and boundary state
 - [`version-history.md`](version-history.md) — consolidated milestone history
-- [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 120
+- [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 132
 - [`LIFEOS_DESKTOP_RELEASE_NOTES.md`](LIFEOS_DESKTOP_RELEASE_NOTES.md) — current Desktop release notes
-- [`screenshot-groups/group-117-120-product-complete-release-candidate/`](screenshot-groups/group-117-120-product-complete-release-candidate/) — latest completed screenshot evidence
+- [`screenshot-groups/group-121-124-cv-builder-foundation/`](screenshot-groups/group-121-124-cv-builder-foundation/) — latest completed screenshot evidence
 
 ## Current product state
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | Current through v27 Group 120 |
-| Full Mobile | Built and aligned through v27 Group 120 |
+| LifeOS Desktop | Current through v28 Group 124 |
+| Full Mobile | Built and aligned through Group 124 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence complete |
 | Shared Core | Active authoritative contract, validation, provenance, audit and safety layer |
-| Current release | v27 Product-Complete Candidate complete; owner release decision pending |
+| Current release | v28 Career Documents Studio; CV Builder Foundation complete |
 
 ## Recent release lanes
 
+- **v28 / Groups 121-124** - CV Builder Foundation
 - **v27 / Groups 117-120** - Product-Complete Release Candidate
 - **v26 / Groups 112-116** - Website Packaging and Onboarding
 - **v25 / Groups 108-111** - Privacy, Export, Backup and Controls
@@ -43,6 +44,7 @@ This directory is the durable source of truth for LifeOS status, release history
 
 ## Current evidence
 
+- [`Groups 121-124 - CV Builder Foundation`](screenshot-groups/group-121-124-cv-builder-foundation/)
 - [`Groups 117-120 - Product-Complete Release Candidate`](screenshot-groups/group-117-120-product-complete-release-candidate/)
 - [`Groups 112-116 - Website Packaging and Onboarding`](screenshot-groups/group-112-116-website-packaging-onboarding/)
 - [`Groups 108-111 - Privacy, Export, Backup and Controls`](screenshot-groups/group-108-111-privacy-export-backup-controls/)

@@ -4,9 +4,20 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v27.0.0-rc.1 is complete through Group 120 as a product-complete
-release candidate. The owner release decision is next; no public release or tag
-is implied.
+LifeOS v28.0.0-alpha.1 is active through Group 124 with the evidence-backed CV
+Builder Foundation. Templates, refined preview and safe derivative export are
+next in Groups 125-128.
+
+## v28 - Career Documents Studio
+
+### Groups 121-124
+
+- Added guided CV creation from trusted Career Profile facts.
+- Added structured employment entries and modular custom sections.
+- Added stable drag ordering, autosave/version state and undo/redo.
+- Added responsive split editing and focused full-page preview.
+- Closed screenshot and validation evidence through SG-81.
+- Kept unsupported claims, autonomous applications and recruiter messaging blocked.
 
 ## v27 - Product-Complete Release Candidate
 

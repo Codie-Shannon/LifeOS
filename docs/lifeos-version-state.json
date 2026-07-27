@@ -5,7 +5,7 @@
     "currentStatus":  "active-development",
     "latestCompletedGroup":  124,
     "latestCompletedGroupName":  "CV Builder Foundation",
-    "latestCompletedHead":  "sg81-pack1-pending",
+    "latestCompletedHead":  "a8340ea",
     "nextGroup":  125,
     "nextGroupName":  "CV Templates, Preview and Export",
     "roadmapApprovedThroughGroup":  132,
@@ -187,7 +187,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-117-120-product-complete-release-candidate",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-121-124-cv-builder-foundation",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

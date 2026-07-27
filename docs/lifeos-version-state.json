@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
     "currentReleaseName":  "Career Documents Studio",
-    "currentSemanticVersion":  "28.0.0-alpha.1",
+    "currentSemanticVersion":  "28.0.0-alpha.2",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  124,
-    "latestCompletedGroupName":  "CV Builder Foundation",
-    "latestCompletedHead":  "a8340ea",
-    "nextGroup":  125,
-    "nextGroupName":  "CV Templates, Preview and Export",
+    "latestCompletedGroup":  128,
+    "latestCompletedGroupName":  "CV Templates, Preview and Export",
+    "latestCompletedHead":  "sg82-pack1-pending",
+    "nextGroup":  129,
+    "nextGroupName":  "Cover Letters and Application Integration",
     "roadmapApprovedThroughGroup":  132,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  124,
+                    "currentThroughGroup":  128,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -20,7 +20,7 @@
                        "status":  "built-and-active",
                        "releaseFamily":  "v10",
                        "initialBetaClosureGroup":  57,
-                       "currentThroughGroup":  124,
+                       "currentThroughGroup":  128,
                        "separateFromCompanion":  true,
                        "offlineQueueEnabled":  true,
                        "silentConflictOverwriteAllowed":  false
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-124",
-                                      "status":  "cv-builder-foundation-complete"
+                                      "groups":  "121-128",
+                                      "status":  "cv-builder-templates-export-complete"
                                   }
                               ],
     "safetyBoundaries":  {

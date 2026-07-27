@@ -4,7 +4,7 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v28.0.0-alpha.1 is active through Group 124 with the CV Builder Foundation. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
+> **Current checkpoint:** LifeOS v28.0.0-alpha.2 is active through Group 128 with CV templates, refined A4 preview, ATS/readability review and safe PDF/DOCX export. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
 
 ![LifeOS v28 CV Builder Foundation](docs/screenshot-groups/group-121-124-cv-builder-foundation/02-cv-builder-split-workspace.png)
 
@@ -12,12 +12,12 @@ LifeOS is a safety-first platform built by Codie Shannon around purpose-built De
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current through Group 124, including the guided CV Builder Foundation |
-| **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 124, including offline-safe capture, review and execution |
+| **LifeOS Desktop** | Current through Group 128, including CV templates, A4 review and derivative export |
+| **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 128, including offline-safe capture, review and execution |
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
 | **LifeOS Website** | Product, documentation, onboarding, factual portfolio and release-candidate evidence surface |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v28 Career Documents Studio; CV Builder Foundation complete, templates and export next |
+| **Current release lane** | v28 Career Documents Studio; CV Builder and templates/export complete, cover letters next |
 
 Full Mobile and Mobile Companion are separate products. They can share contracts and libraries, but retain different scope, UX and release tracks.
 
@@ -148,9 +148,9 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v28.0.0-alpha.1 is active through Group 124. Groups 125-132 continue
-Career Documents Studio with templates, export, cover letters and application
-integration. The v27 release-candidate evidence remains preserved in SG-80.
+LifeOS v28.0.0-alpha.2 is active through Group 128. Groups 129-132 continue
+Career Documents Studio with cover letters and application integration. The
+v27 release-candidate evidence remains preserved in SG-80.
 
 ## Author
 

@@ -4,11 +4,20 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.1 is active through Group 124 with the evidence-backed CV
-Builder Foundation. Templates, refined preview and safe derivative export are
-next in Groups 125-128.
+LifeOS v28.0.0-alpha.2 is active through Group 128 with professional CV
+templates, A4 review, ATS/readability checks, version history and safe
+derivative export. Cover letters and application integration are next.
 
 ## v28 - Career Documents Studio
+
+### Groups 125-128
+
+- Added four professional, ATS-safe CV templates.
+- Added bounded typography, density, margin and accent controls.
+- Added A4 page estimation and explicit ATS/readability checks.
+- Added preserved, restorable local document-version history.
+- Added real versioned PDF and DOCX derivative generation.
+- Kept export fail-closed when source or readability checks block.
 
 ### Groups 121-124
 

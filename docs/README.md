@@ -15,15 +15,16 @@ This directory is the durable source of truth for LifeOS status, release history
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | Current through v28 Group 124 |
-| Full Mobile | Built and aligned through Group 124 |
+| LifeOS Desktop | Current through v28 Group 128 |
+| Full Mobile | Built and aligned through Group 128 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence complete |
 | Shared Core | Active authoritative contract, validation, provenance, audit and safety layer |
-| Current release | v28 Career Documents Studio; CV Builder Foundation complete |
+| Current release | v28 Career Documents Studio; templates, review and export complete |
 
 ## Recent release lanes
 
+- **v28 / Groups 125-128** - CV Templates, Preview and Export
 - **v28 / Groups 121-124** - CV Builder Foundation
 - **v27 / Groups 117-120** - Product-Complete Release Candidate
 - **v26 / Groups 112-116** - Website Packaging and Onboarding

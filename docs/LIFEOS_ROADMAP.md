@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.1 is active through Group 124 with the CV Builder
-Foundation.**
+**LifeOS v28.0.0-alpha.2 is active through Group 128 with CV Templates,
+Preview and Export.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Approved post-candidate development now continues through Group 132
@@ -56,7 +56,7 @@ for Career Documents Studio.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-124 | CV Builder Foundation |
+| v28 | 121-128 | CV Builder, Templates, Preview and Export |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -79,9 +79,9 @@ Version numbers follow shipped product checkpoints; v17 was not used as a comple
 
 ### v28 / Groups 125-128 - Templates, Preview and Export
 
-- Professional template gallery and layout controls.
-- A4 pagination, ATS/readability checks and PDF/DOCX export.
-- Document version history and safe derivative generation.
+- Professional template gallery and bounded layout controls are complete.
+- A4 pagination, ATS/readability checks and PDF/DOCX export are complete.
+- Restorable document version history and safe derivative generation are complete.
 
 ### v28 / Groups 129-132 - Cover Letters and Application Integration
 

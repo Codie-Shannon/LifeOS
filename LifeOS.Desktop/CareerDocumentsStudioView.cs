@@ -1,3 +1,4 @@
+using System.IO;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
@@ -17,6 +18,7 @@ public sealed class CareerDocumentsStudioView : UserControl
         new(2026, 7, 26, 15, 0, 0, TimeSpan.FromHours(12));
 
     private readonly CareerDocumentBuilderService _service = new();
+    private readonly CareerDocumentLayoutService _layoutService = new();
     private readonly CareerMaterialsProof _materials = CareerMaterialsProofData.Build(ProofNow);
     private readonly List<CvBuilderDocument> _documents;
     private readonly Action _close;
@@ -33,6 +35,10 @@ public sealed class CareerDocumentsStudioView : UserControl
     private bool _hasUnsavedChanges;
     private TextBlock? _saveStatusText;
     private bool _compactLayout;
+    private bool _showDesignStudio = true;
+    private readonly List<CvVersionSnapshot> _versionHistory = [];
+    private readonly List<CvBuilderDocument> _savedVersions = [];
+    private string? _exportNotice;
 
     private CvBuilderDocument Active =>
         _documents.Single(document => document.Id == _activeDocumentId);
@@ -43,6 +49,8 @@ public sealed class CareerDocumentsStudioView : UserControl
         CvBuilderWorkspace workspace = CareerDocumentBuilderProofData.Build(ProofNow);
         _documents = workspace.Documents.ToList();
         _activeDocumentId = workspace.ActiveDocumentId;
+        _versionHistory.Add(_layoutService.CreateSnapshot(Active, "CV foundation"));
+        _savedVersions.Add(Active);
         Background = Brush("#0C1220");
         Foreground = Brushes.White;
         FontFamily = new FontFamily("Segoe UI");
@@ -241,6 +249,7 @@ public sealed class CareerDocumentsStudioView : UserControl
     private UIElement BuildContinuousEditor()
     {
         StackPanel form = new() { Margin = new Thickness(30, 24, 24, 40) };
+        form.Children.Add(BuildDesignStudio());
 
         Grid import = new();
         import.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -373,6 +382,316 @@ public sealed class CareerDocumentsStudioView : UserControl
             Child = scrollViewer
         };
     }
+
+    private UIElement BuildDesignStudio()
+    {
+        StackPanel panel = new();
+        Grid heading = new();
+        heading.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        heading.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        StackPanel copy = new();
+        copy.Children.Add(Title("Template, layout & export", 20));
+        copy.Children.Add(Body(
+            "SG-82 · A4 preview, ATS/readability review and safe versioned derivatives",
+            "#9FB0CB",
+            FontWeights.Normal));
+        heading.Children.Add(copy);
+        Button toggle = SymbolButton(
+            _showDesignStudio ? "\uE70E" : "\uE70D",
+            _showDesignStudio ? "Collapse design studio" : "Expand design studio",
+            () =>
+            {
+                _showDesignStudio = !_showDesignStudio;
+                Render();
+            });
+        Grid.SetColumn(toggle, 1);
+        heading.Children.Add(toggle);
+        panel.Children.Add(heading);
+
+        if (_showDesignStudio)
+        {
+            panel.Children.Add(SectionLabel("Professional templates"));
+            UniformGrid gallery = new() { Columns = 2, Margin = new Thickness(0, 6, 0, 14) };
+            foreach (CvTemplateDefinition template in _layoutService.GetTemplates())
+            {
+                bool selected = template.Id == Active.TemplateId;
+                StackPanel tileContent = new();
+                tileContent.Children.Add(new Border
+                {
+                    Width = 36,
+                    Height = 5,
+                    Background = Brush(template.Layout.AccentHex),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(0, 0, 0, 8)
+                });
+                tileContent.Children.Add(Title(
+                    selected ? $"{template.Name}  ✓" : template.Name,
+                    14));
+                tileContent.Children.Add(Body(
+                    template.Description,
+                    "#9FB0CB",
+                    FontWeights.Normal));
+                Button tile = ButtonBase(string.Empty, selected ? "#20304B" : "#141D30", "#FFFFFF");
+                tile.Content = tileContent;
+                tile.BorderBrush = Brush(selected ? template.Layout.AccentHex : "#34445F");
+                tile.BorderThickness = new Thickness(selected ? 2 : 1);
+                tile.Padding = new Thickness(12);
+                tile.Margin = new Thickness(0, 0, 10, 10);
+                AutomationProperties.SetName(tile, $"Use {template.Name} template");
+                tile.Click += (_, _) => RunWhenSaved(() =>
+                    ReplaceActive(
+                        _layoutService.ApplyTemplate(Active, template.Id, DateTimeOffset.Now),
+                        isExplicitSave: true));
+                gallery.Children.Add(tile);
+            }
+            panel.Children.Add(gallery);
+
+            CvDocumentLayout layout = Active.EffectiveLayout;
+            Grid controls = new();
+            controls.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            controls.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            controls.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            ComboBox density = Select(
+                Enum.GetValues<CvPageDensity>().Select(value => value.ToString()),
+                layout.Density.ToString());
+            density.SelectionChanged += (_, _) =>
+            {
+                if (density.SelectedItem is not string selected ||
+                    !Enum.TryParse(selected, out CvPageDensity value))
+                    return;
+                ApplyLayout(layout with { Density = value });
+            };
+            controls.Children.Add(Field("Page density", density));
+
+            ComboBox typography = Select(
+                new[] { "Aptos", "Arial", "Segoe UI", "Calibri" },
+                layout.FontFamily);
+            typography.SelectionChanged += (_, _) =>
+            {
+                if (typography.SelectedItem is string selected)
+                    ApplyLayout(layout with { FontFamily = selected });
+            };
+            Border typographyField = Field("Typography", typography);
+            Grid.SetColumn(typographyField, 1);
+            controls.Children.Add(typographyField);
+
+            ComboBox margin = Select(
+                new[] { "15 mm", "18 mm", "20 mm", "22 mm" },
+                $"{layout.PageMarginMillimetres:0} mm");
+            margin.SelectionChanged += (_, _) =>
+            {
+                if (margin.SelectedItem is string selected &&
+                    double.TryParse(selected.Split(' ')[0], out double value))
+                {
+                    ApplyLayout(layout with { PageMarginMillimetres = value });
+                }
+            };
+            Border marginField = Field("A4 margins", margin);
+            Grid.SetColumn(marginField, 2);
+            controls.Children.Add(marginField);
+            panel.Children.Add(controls);
+
+            WrapPanel accents = new() { Margin = new Thickness(0, 2, 0, 14) };
+            accents.Children.Add(Body("Accent", "#C8D3E6", FontWeights.SemiBold));
+            foreach (string accent in new[] { "#315E91", "#6C4EE3", "#176B65", "#8B3D5C" })
+            {
+                Button swatch = new()
+                {
+                    Width = 32,
+                    Height = 32,
+                    Background = Brush(accent),
+                    BorderBrush = Brush(accent == layout.AccentHex ? "#FFFFFF" : "#56657D"),
+                    BorderThickness = new Thickness(accent == layout.AccentHex ? 3 : 1),
+                    Margin = new Thickness(10, 0, 0, 0),
+                    Cursor = Cursors.Hand,
+                    ToolTip = $"Use accent {accent}"
+                };
+                swatch.Click += (_, _) => ApplyLayout(layout with { AccentHex = accent });
+                accents.Children.Add(swatch);
+            }
+            panel.Children.Add(accents);
+
+            CvReadabilityReview readability = _layoutService.Review(Active);
+            Border review = new()
+            {
+                Background = Brush(readability.CanExport ? "#132C29" : "#342419"),
+                BorderBrush = Brush(readability.CanExport ? "#2C796D" : "#A56833"),
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(8),
+                Padding = new Thickness(14),
+                Margin = new Thickness(0, 0, 0, 12)
+            };
+            StackPanel reviewContent = new();
+            reviewContent.Children.Add(Title(
+                $"ATS & readability · {readability.Score}/100",
+                16));
+            reviewContent.Children.Add(Body(
+                $"{readability.Checks.Count(check => check.Passed)}/{readability.Checks.Count} checks passed · estimated {readability.EstimatedPages} A4 page(s)",
+                readability.CanExport ? "#8ED8C3" : "#F2B77F",
+                FontWeights.SemiBold));
+            WrapPanel checks = new() { Margin = new Thickness(0, 8, 0, 0) };
+            foreach (CvReadabilityCheck check in readability.Checks)
+            {
+                checks.Children.Add(new Border
+                {
+                    Background = Brush(check.Passed ? "#1B4A42" : "#4A2D1B"),
+                    CornerRadius = new CornerRadius(12),
+                    Padding = new Thickness(9, 4, 9, 4),
+                    Margin = new Thickness(0, 0, 6, 6),
+                    ToolTip = check.Detail,
+                    Child = Body(
+                        $"{(check.Passed ? "✓" : "!")} {check.Label}",
+                        check.Passed ? "#B8F0DE" : "#FFD1A8",
+                        FontWeights.SemiBold)
+                });
+            }
+            reviewContent.Children.Add(checks);
+            review.Child = reviewContent;
+            panel.Children.Add(review);
+
+            Grid footer = new();
+            footer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            footer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            StackPanel history = new();
+            history.Children.Add(Title("Version history", 14));
+            history.Children.Add(Body(
+                _versionHistory.Count == 0
+                    ? "No saved layout versions"
+                    : string.Join(
+                        "  ·  ",
+                        _versionHistory.TakeLast(3).Select(snapshot =>
+                            $"v{snapshot.Version} {snapshot.Label}")),
+                "#9FB0CB",
+                FontWeights.Normal));
+            footer.Children.Add(history);
+            WrapPanel exportActions = new();
+            exportActions.Children.Add(OutlineButton("Save version", SaveVersionSnapshot));
+            if (_savedVersions.Count > 1)
+            {
+                Button restore = OutlineButton("Restore previous", RestorePreviousVersion);
+                restore.Margin = new Thickness(8, 0, 0, 0);
+                exportActions.Children.Add(restore);
+            }
+            Button pdf = PrimaryButton("Export PDF", () => ExportDocument(CvExportFormat.Pdf));
+            pdf.Margin = new Thickness(8, 0, 0, 0);
+            exportActions.Children.Add(pdf);
+            Button docx = OutlineButton("Export DOCX", () => ExportDocument(CvExportFormat.Docx));
+            docx.Margin = new Thickness(8, 0, 0, 0);
+            exportActions.Children.Add(docx);
+            Grid.SetColumn(exportActions, 1);
+            footer.Children.Add(exportActions);
+            panel.Children.Add(footer);
+
+            if (!string.IsNullOrWhiteSpace(_exportNotice))
+            {
+                panel.Children.Add(new Border
+                {
+                    Background = Brush("#172941"),
+                    BorderBrush = Brush("#365A82"),
+                    BorderThickness = new Thickness(1),
+                    CornerRadius = new CornerRadius(6),
+                    Padding = new Thickness(10),
+                    Margin = new Thickness(0, 12, 0, 0),
+                    Child = Body(_exportNotice, "#BFD7F2", FontWeights.SemiBold)
+                });
+            }
+        }
+
+        return new Border
+        {
+            Background = Brush("#111C30"),
+            BorderBrush = Brush("#405276"),
+            BorderThickness = new Thickness(1),
+            CornerRadius = new CornerRadius(10),
+            Padding = new Thickness(16),
+            Margin = new Thickness(0, 0, 0, 18),
+            Child = panel
+        };
+    }
+
+    private void ApplyLayout(CvDocumentLayout layout)
+    {
+        if (!EnsureSavedBeforeStructureChange())
+            return;
+        ReplaceActive(
+            _layoutService.UpdateLayout(Active, layout, DateTimeOffset.Now),
+            isExplicitSave: true);
+    }
+
+    private void SaveVersionSnapshot()
+    {
+        if (!EnsureSavedBeforeStructureChange())
+            return;
+        _versionHistory.Add(_layoutService.CreateSnapshot(
+            Active,
+            _layoutService.GetTemplate(Active.TemplateId).Name));
+        _savedVersions.Add(Active);
+        _exportNotice = $"Version v{Active.Version} added to local history.";
+        Render();
+    }
+
+    private void RestorePreviousVersion()
+    {
+        if (!EnsureSavedBeforeStructureChange() || _savedVersions.Count < 2)
+            return;
+
+        CvBuilderDocument previous = _savedVersions[^2] with
+        {
+            Version = Active.Version + 1,
+            UpdatedUtc = DateTimeOffset.Now,
+            IsAutosaved = true
+        };
+        _savedVersions.Add(previous);
+        _versionHistory.Add(_layoutService.CreateSnapshot(previous, "Restored version"));
+        _exportNotice =
+            $"Restored the prior saved layout as new version v{previous.Version}; history was preserved.";
+        ReplaceActive(previous, isExplicitSave: true);
+    }
+
+    private void ExportDocument(CvExportFormat format)
+    {
+        if (!EnsureSavedBeforeStructureChange())
+            return;
+
+        try
+        {
+            CvBuilderReview sourceReview = _service.Review(Active, _materials.Facts);
+            CvExportArtifact artifact = _layoutService.Export(
+                Active,
+                sourceReview,
+                format,
+                DateTimeOffset.Now);
+            SaveFileDialog dialog = new()
+            {
+                Title = $"Export reviewed CV as {format.ToString().ToUpperInvariant()}",
+                FileName = artifact.SuggestedFileName,
+                Filter = format == CvExportFormat.Pdf
+                    ? "PDF document (*.pdf)|*.pdf"
+                    : "Word document (*.docx)|*.docx",
+                AddExtension = true
+            };
+            if (dialog.ShowDialog() != true)
+                return;
+
+            File.WriteAllBytes(dialog.FileName, artifact.Content);
+            _versionHistory.Add(_layoutService.CreateSnapshot(Active, $"{format} export"));
+            _exportNotice =
+                $"{format.ToString().ToUpperInvariant()} derivative saved from v{artifact.SourceVersion}. Authoritative Career records were not changed.";
+            Render();
+        }
+        catch (InvalidOperationException exception)
+        {
+            MessageBox.Show(
+                exception.Message,
+                "Export blocked",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+    }
+
+    private static TextBlock SectionLabel(string text) =>
+        Body(text, "#D7E2F4", FontWeights.Bold);
 
     private UIElement BuildSectionAccordion(CvBuilderSection section)
     {
@@ -807,6 +1126,8 @@ public sealed class CareerDocumentsStudioView : UserControl
 
     private UIElement BuildPreviewPane()
     {
+        CvDocumentLayout layout = Active.EffectiveLayout;
+        double pagePadding = layout.PageMarginMillimetres * 2.2;
         Grid pane = new() { Background = Brush("#EEF0F4") };
         pane.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         pane.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -814,10 +1135,10 @@ public sealed class CareerDocumentsStudioView : UserControl
         Border page = new()
         {
             Width = 560,
-            MinHeight = 735,
+            MinHeight = 792,
             Background = Brushes.White,
             Margin = new Thickness(28, 18, 28, 16),
-            Padding = new Thickness(42),
+            Padding = new Thickness(pagePadding),
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Top,
             Effect = new System.Windows.Media.Effects.DropShadowEffect
@@ -830,11 +1151,12 @@ public sealed class CareerDocumentsStudioView : UserControl
         page.LayoutTransform = new ScaleTransform(_previewZoom, _previewZoom);
 
         StackPanel cv = new();
+        TextElement.SetFontFamily(cv, new FontFamily(layout.FontFamily));
         Border banner = new()
         {
-            Background = Brush("#315E91"),
-            Margin = new Thickness(-42, -42, -42, 22),
-            Padding = new Thickness(42, 26, 42, 26),
+            Background = Brush(layout.AccentHex),
+            Margin = new Thickness(-pagePadding, -pagePadding, -pagePadding, 22),
+            Padding = new Thickness(pagePadding, 26, pagePadding, 26),
             Child = new StackPanel
             {
                 Children =
@@ -851,21 +1173,24 @@ public sealed class CareerDocumentsStudioView : UserControl
         {
             cv.Children.Add(PreviewText(
                 section.Heading.ToUpperInvariant(),
-                11,
-                "#315E91",
+                11 * layout.FontScale,
+                layout.AccentHex,
                 FontWeights.Bold,
                 new Thickness(0, 10, 0, 4)));
-            cv.Children.Add(new Border
+            if (layout.ShowSectionRules)
             {
-                Height = 1,
-                Background = Brush("#D7DCE3"),
-                Margin = new Thickness(0, 0, 0, 6)
-            });
+                cv.Children.Add(new Border
+                {
+                    Height = 1,
+                    Background = Brush("#D7DCE3"),
+                    Margin = new Thickness(0, 0, 0, 6)
+                });
+            }
             if (!string.IsNullOrWhiteSpace(section.Subtitle))
             {
                 cv.Children.Add(PreviewText(
                     section.Subtitle,
-                    10.5,
+                    10.5 * layout.FontScale,
                     "#252B36",
                     FontWeights.SemiBold,
                     new Thickness(0, 0, 0, 3)));
@@ -877,7 +1202,7 @@ public sealed class CareerDocumentsStudioView : UserControl
                     : $"{section.StartDate:MMM yyyy} – Present";
                 cv.Children.Add(PreviewText(
                     range,
-                    9.5,
+                    9.5 * layout.FontScale,
                     "#687181",
                     FontWeights.Normal,
                     new Thickness(0, 0, 0, 3)));
@@ -894,7 +1219,7 @@ public sealed class CareerDocumentsStudioView : UserControl
                     {
                         cv.Children.Add(PreviewText(
                             heading,
-                            10.5,
+                            10.5 * layout.FontScale,
                             "#252B36",
                             FontWeights.SemiBold,
                             new Thickness(0, 2, 0, 2)));
@@ -907,7 +1232,7 @@ public sealed class CareerDocumentsStudioView : UserControl
                             : $"{entry.StartDate:MMM yyyy} – {entry.EndDate:MMM yyyy}";
                         cv.Children.Add(PreviewText(
                             range,
-                            9.5,
+                            9.5 * layout.FontScale,
                             "#687181",
                             FontWeights.Normal));
                     }
@@ -916,7 +1241,7 @@ public sealed class CareerDocumentsStudioView : UserControl
                     {
                         cv.Children.Add(PreviewText(
                             entry.Description,
-                            10.5,
+                            10.5 * layout.FontScale,
                             "#333944",
                             FontWeights.Normal,
                             new Thickness(0, 2, 0, 6)));
@@ -927,7 +1252,7 @@ public sealed class CareerDocumentsStudioView : UserControl
             {
                 cv.Children.Add(PreviewText(
                     section.Content,
-                    10.5,
+                    10.5 * layout.FontScale,
                     "#333944",
                     FontWeights.Normal));
             }
@@ -960,6 +1285,15 @@ public sealed class CareerDocumentsStudioView : UserControl
             FontWeight = FontWeights.SemiBold,
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(12, 0, 4, 0)
+        });
+        CvReadabilityReview pagination = _layoutService.Review(Active);
+        toolbar.Children.Add(new TextBlock
+        {
+            Text = $"A4 · Page 1 of {pagination.EstimatedPages}",
+            Foreground = Brush("#687181"),
+            FontWeight = FontWeights.SemiBold,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(18, 0, 4, 0)
         });
         toolbar.Children.Add(ToolbarItem("\uE710", "Zoom in", () => RunWhenSaved(() =>
         {
@@ -1149,6 +1483,25 @@ public sealed class CareerDocumentsStudioView : UserControl
         Padding = new Thickness(10),
         FontSize = 13
     };
+
+    private static ComboBox Select(IEnumerable<string> values, string selected)
+    {
+        ComboBox box = new()
+        {
+            Height = 40,
+            Background = Brush("#171F32"),
+            Foreground = Brushes.White,
+            BorderBrush = Brush("#35445F"),
+            Padding = new Thickness(8),
+            FontSize = 13
+        };
+        foreach (string value in values)
+            box.Items.Add(value);
+        box.SelectedItem = box.Items.Cast<string>()
+            .FirstOrDefault(value => string.Equals(value, selected, StringComparison.Ordinal))
+            ?? box.Items.Cast<string>().FirstOrDefault();
+        return box;
+    }
 
     private static LifeOsDateSelector CalendarInput(DateTime? value) =>
         new(value);

@@ -11,6 +11,7 @@ using LifeOS.Core;
 using LifeOS.Shared.V8;
 using LifeOS.Shared.Storage;
 using LifeOS.Core.IntegrationInbox;
+using LifeOS.Core.ShellSearch;
 
 namespace LifeOS.Desktop;
 
@@ -435,6 +436,7 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         _focusBeforeCommand = Keyboard.FocusedElement;
         CommandOverlay.Visibility = Visibility.Visible;
         CommandTextBox.Clear();
+        RefreshCommandResults();
         Keyboard.Focus(CommandTextBox);
     }
 
@@ -462,53 +464,145 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
 
     private void CommandTextBox_KeyDown(object sender, KeyEventArgs e)
     {
+        if (e.Key is Key.Down or Key.Up)
+        {
+            int count = CommandResultsListBox.Items.Count;
+            if (count > 0)
+            {
+                int current = CommandResultsListBox.SelectedIndex;
+                CommandResultsListBox.SelectedIndex = e.Key == Key.Down
+                    ? Math.Min(current + 1, count - 1)
+                    : Math.Max(current - 1, 0);
+                CommandResultsListBox.ScrollIntoView(CommandResultsListBox.SelectedItem);
+            }
+            e.Handled = true;
+            return;
+        }
+
         if (e.Key != Key.Enter)
         {
             return;
         }
 
-        string command = CommandTextBox.Text.Trim();
-        string? workspace = WorkspaceOrder.FirstOrDefault(candidate =>
-            string.Equals(candidate, command, StringComparison.OrdinalIgnoreCase));
-
-        if (workspace is not null)
+        if (CommandResultsListBox.SelectedItem is ShellSearchResultView selected)
         {
-            CloseCommand();
-            NavigateTo(workspace);
-            e.Handled = true;
+            ExecuteCommandResult(selected.Result);
+        }
+        else
+        {
+            CommandStatusText.Text = "No matching workspace, module or safe display command. Nothing ran.";
+        }
+        e.Handled = true;
+    }
+
+    private void CommandTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
+        RefreshCommandResults();
+
+    private void CommandResultsListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (CommandResultsListBox.SelectedItem is ShellSearchResultView selected)
+            ExecuteCommandResult(selected.Result);
+    }
+
+    private void RefreshCommandResults()
+    {
+        if (CommandResultsListBox is null || CommandStatusText is null)
             return;
+
+        IReadOnlyList<ShellSearchResultView> results = ShellSearchService
+            .Search(CommandTextBox?.Text, BuildCommandCandidates(), maximumResults: 8)
+            .Select(result => new ShellSearchResultView(
+                result,
+                result.Candidate.Label,
+                $"{result.Candidate.Kind} • {result.MatchReason} • {result.Candidate.Description}"))
+            .ToArray();
+        CommandResultsListBox.ItemsSource = results;
+        CommandResultsListBox.SelectedIndex = results.Count > 0 ? 0 : -1;
+        CommandStatusText.Text = results.Count == 0
+            ? "No matches. Nothing will run until you choose a listed result."
+            : string.IsNullOrWhiteSpace(CommandTextBox?.Text)
+                ? "Browse indexed shell destinations. No personal record content is indexed."
+                : $"{results.Count} match{(results.Count == 1 ? string.Empty : "es")}. No action runs before selection.";
+    }
+
+    private static IReadOnlyList<ShellSearchCandidate> BuildCommandCandidates()
+    {
+        List<ShellSearchCandidate> candidates = [];
+        foreach (string workspaceName in WorkspaceOrder)
+        {
+            WorkspaceDefinition workspace = WorkspaceCatalog.Get(workspaceName);
+            candidates.Add(new ShellSearchCandidate(
+                $"workspace-{workspaceName.ToLowerInvariant()}",
+                workspaceName,
+                workspace.Description,
+                ShellSearchTargetKind.Workspace,
+                Workspace: workspaceName,
+                Keywords: [workspace.Subtitle, workspace.Eyebrow]));
+
+            foreach (WorkspaceSectionDefinition section in workspace.Sections)
+            {
+                foreach (WorkspaceModuleDefinition module in section.Modules.Where(module => module.CanOpen))
+                {
+                    candidates.Add(new ShellSearchCandidate(
+                        $"module-{module.Id}",
+                        module.Title,
+                        module.Description,
+                        ShellSearchTargetKind.Module,
+                        Workspace: workspaceName,
+                        RouteId: module.RouteId,
+                        Keywords: [module.Id, module.Status, section.Title]));
+                }
+            }
         }
 
-        var moduleMatch =
-            WorkspaceOrder
-                .SelectMany(workspaceName => WorkspaceCatalog.Get(workspaceName)
-                    .Sections
-                    .SelectMany(section => section.Modules)
-                    .Select(module => new { Workspace = workspaceName, Module = module }))
-                .FirstOrDefault(candidate =>
-                    !string.IsNullOrWhiteSpace(candidate.Module.RouteId) &&
-                    (string.Equals(candidate.Module.Title, command, StringComparison.OrdinalIgnoreCase) ||
-                     string.Equals(candidate.Module.RouteId, command, StringComparison.OrdinalIgnoreCase) ||
-                     string.Equals(
-                         candidate.Module.RouteId.Replace('-', ' '),
-                         command,
-                         StringComparison.OrdinalIgnoreCase)));
-
-        if (moduleMatch is not null)
+        foreach ((string command, string description, string[] keywords) in SafeDisplayCommands())
         {
-            CloseCommand();
-            NavigateTo(moduleMatch.Workspace);
-            OpenModule(moduleMatch.Module.RouteId!);
-            e.Handled = true;
-            return;
+            candidates.Add(new ShellSearchCandidate(
+                $"preference-{command.Replace(' ', '-').ToLowerInvariant()}",
+                command,
+                description,
+                ShellSearchTargetKind.Preference,
+                CommandText: command,
+                Keywords: keywords));
         }
+        return candidates;
+    }
 
-        bool handled = TryApplyPreferenceCommand(command);
+    private static IReadOnlyList<(string Command, string Description, string[] Keywords)> SafeDisplayCommands() =>
+    [
+        ("Theme light", "Apply the light appearance.", ["appearance", "colour"]),
+        ("Theme dark", "Apply the dark appearance.", ["appearance", "colour"]),
+        ("Theme system", "Follow the system appearance.", ["appearance", "automatic"]),
+        ("Theme high contrast", "Apply the high-contrast appearance.", ["accessibility", "contrast"]),
+        ("Accent purple", "Use the purple accent.", ["appearance", "colour"]),
+        ("Accent blue", "Use the blue accent.", ["appearance", "colour"]),
+        ("Accent teal", "Use the teal accent.", ["appearance", "colour"]),
+        ("Density compact", "Use compact workspace spacing.", ["appearance", "spacing"]),
+        ("Density comfortable", "Use comfortable workspace spacing.", ["appearance", "spacing"])
+    ];
 
-        if (handled)
+    private void ExecuteCommandResult(ShellSearchResult result)
+    {
+        ShellSearchCandidate candidate = result.Candidate;
+        switch (candidate.Kind)
         {
-            CloseCommand();
-            e.Handled = true;
+            case ShellSearchTargetKind.Workspace when candidate.Workspace is not null:
+                CloseCommand();
+                NavigateTo(candidate.Workspace);
+                break;
+            case ShellSearchTargetKind.Module when
+                candidate.Workspace is not null && candidate.RouteId is not null:
+                CloseCommand();
+                NavigateTo(candidate.Workspace);
+                OpenModule(candidate.RouteId);
+                break;
+            case ShellSearchTargetKind.Preference when candidate.CommandText is not null:
+                if (TryApplyPreferenceCommand(candidate.CommandText))
+                    CloseCommand();
+                break;
+            default:
+                CommandStatusText.Text = "That result is incomplete and was not run.";
+                break;
         }
     }
 
@@ -1244,6 +1338,14 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
 
     private void UpdateProfileVisual()
     {
+}
+
+internal sealed record ShellSearchResultView(
+    ShellSearchResult Result,
+    string Title,
+    string Meta)
+{
+    public override string ToString() => Title;
 }
 
     private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)

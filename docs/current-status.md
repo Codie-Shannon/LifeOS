@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.4 / Group 136 / SG-136 Pack 2**.
+LifeOS is current through **v28.0.0-alpha.5 / Group 140 / SG-140 Pack 1**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
@@ -12,6 +12,11 @@ Pipeline and Work Sessions now share versioned atomic persistence, inspected
 health, validated backup recovery and a recoverable 30-day Trash. Desktop
 Settings exposes the registered stores without claiming that every legacy
 module has migrated.
+
+Groups 137-140 add the next platform-spine slice: ranked shell discovery across
+static workspaces, module routes and safe appearance commands. Results are
+keyboard-operable, deterministic and explicit; an unknown query visibly runs
+nothing. Personal record content is deliberately outside this index.
 
 The 2026-08-18 recovery pass corrected the execution baseline without claiming
 a new group: ordinary and portfolio-demo data are now explicitly separated,
@@ -29,13 +34,27 @@ preserved v27 release candidate.
 
 | Product | Status |
 |---|---|
-| Desktop | Current through Group 136 with local-data health/recovery plus CVs, cover letters, application packs, review and export |
+| Desktop | Current through Group 140 with ranked shell search, local-data health/recovery plus CVs, cover letters, application packs, review and export |
 | Full Mobile | Current through Group 132 with ordinary empty state, opportunity capture, document review and derivative sharing |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest implemented capability
+
+Groups 137-140 establish Navigation and Shell Search Pack 1:
+
+- a shared deterministic search/ranking service in Core
+- live search over nine workspaces, allowlisted module routes and safe display commands
+- title, command, description and keyword matching with stable result ordering
+- Up/Down selection, Enter execution and double-click execution
+- visible result type, match reason and description before any action runs
+- an honest no-result state that makes clear nothing ran
+- no personal records, provider content or external search in the shell index
+
+SG-140 Pack 2 rendered-product capture remains open.
+
+## Prior completed capability
 
 Groups 133-136 establish Local Data & Recovery:
 
@@ -50,8 +69,6 @@ Groups 133-136 establish Local Data & Recovery:
 
 SG-136 Pack 2 is closed with four directly rendered Desktop images and four
 inspected validation records.
-
-## Prior completed capability
 
 Groups 129-132 complete Cover Letters and Application Integration in Pack 1:
 
@@ -93,8 +110,9 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
+- Groups 137-140 targeted tests: 7 passed
 - Groups 133-136 targeted tests: 8 passed
-- Core tests: 486 passed
+- Core tests: 493 passed
 - Companion tests: 34 passed
 - Website tests: 28 passed
 - Mobile tests: 56 passed
@@ -112,7 +130,7 @@ inferring UI proof from builds or automated tests.
 
 ## Next completion work
 
-Continue migrating remaining stores and the approved ordinary-mode
-productization backlog. SG-128’s historical visible Pack 2 capture remains open.
+Close SG-140 Pack 2, then continue migrating remaining stores and the approved
+ordinary-mode productization backlog. SG-128’s historical visible Pack 2 capture remains open.
 Credentialed integrations, signing, public deployment, store submission and
 owner acceptance remain final gates.

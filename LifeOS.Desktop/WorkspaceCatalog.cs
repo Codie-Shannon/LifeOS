@@ -340,7 +340,7 @@ internal static class WorkspaceCatalog
                         new WorkspaceModuleDefinition[]
                         {
                             Route("settings-safety", "Settings / Safety", "Canonical settings", "Underlying safety profile and local settings evidence."),
-                            Route("local-data-recovery", "Local Data & Recovery", "SG-136 active", "Versioned local stores, migration health, recoverable Trash and explicit restore controls."),
+                            Route("local-data-recovery", "Local Data & Recovery", "SG-136 ready", "Versioned local stores, migration and backup health, recoverable Trash and explicit restore controls."),
                             Route("control-plane", "Privacy, Backup & Emergency Control", "SG-111 ready", "Sensitive-category permissions, integrity-checked backup/restore, audit and global Emergency Stop."),
                             Route("beta-readiness", "Private Beta Readiness", "SG-82 ready", "Setup now/later/decline choices and desktop/mobile/web release validation."),
                             Route("documentation-hub", "Documentation & Packaging Hub", "SG-79 ready", "Audience-safe website documentation, concise in-app help and versioned release links."),

@@ -7,7 +7,7 @@ This directory is the durable source of truth for LifeOS status, release history
 - [`current-status.md`](current-status.md) — current product and roadmap state
 - [`lifeos-version-state.json`](lifeos-version-state.json) — machine-readable version, group and boundary state
 - [`version-history.md`](version-history.md) — consolidated milestone history
-- [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 136
+- [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 140
 - [`LIFEOS_DESKTOP_RELEASE_NOTES.md`](LIFEOS_DESKTOP_RELEASE_NOTES.md) — current Desktop release notes
 - [`screenshot-groups/group-121-124-cv-builder-foundation/`](screenshot-groups/group-121-124-cv-builder-foundation/) — latest completed screenshot evidence
 
@@ -15,7 +15,7 @@ This directory is the durable source of truth for LifeOS status, release history
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | Current through v28 Group 136 |
+| LifeOS Desktop | Current through v28 Group 140 |
 | Full Mobile | Built and aligned through Group 132 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence complete |

@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.4 is active through Group 136 with the first versioned
-local-data stores, health inspection, backup recovery and recoverable Trash.**
+**LifeOS v28.0.0-alpha.5 is active through Group 140 with ranked shell
+navigation/search on top of the first local-data recovery migration.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -55,7 +55,7 @@ checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-136 | CV Builder, Templates, Preview, Export, Cover Letters, Application Packs and Local Data Recovery |
+| v28 | 121-140 | Career Documents, Local Data Recovery, Navigation and Shell Search |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -108,6 +108,15 @@ sequential counter.
   evidence set.
 - Remaining stores, encrypted whole-product backup and explicit purge policy
   remain later platform-spine work.
+
+### v28 / Groups 137-140 - Navigation and Shell Search
+
+- Static workspaces, allowlisted modules and safe display commands are indexed.
+- Deterministic title, command, description and keyword ranking is shared in Core.
+- Keyboard selection, Enter and double-click execution are implemented.
+- Result type, match reason and description remain visible before execution.
+- Unknown queries run nothing and show an explicit no-result state.
+- Personal records, provider content and external search are not indexed.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

@@ -4,10 +4,18 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.4 is active through Group 136 with the first versioned
-operational stores, visible health, validated recovery and recoverable Trash.
+LifeOS v28.0.0-alpha.5 is active through Group 140 with ranked shell navigation
+and safe-command discovery over static product metadata.
 
 ## v28 - Career Documents Studio
+
+### Groups 137-140
+
+- Added deterministic, shared shell search and ranking.
+- Indexed static workspaces, allowlisted modules and safe display commands.
+- Added live results with keyboard and double-click execution.
+- Added visible match reasons and a fail-closed no-result state.
+- Kept personal records, provider content and external search outside the index.
 
 ### Groups 133-136
 

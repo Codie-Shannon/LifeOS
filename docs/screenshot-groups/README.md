@@ -31,6 +31,7 @@ work appear to stop at SG-82 even though implementation had reached Group 128.
 | 125-128 | SG-128 |
 | 129-132 | SG-132 |
 | 133-136 | SG-136 |
+| 137-140 | SG-140 |
 
 ## Evidence preservation
 
@@ -46,3 +47,5 @@ evidence set.
 
 SG-136 is closed with the exact eight-image Desktop and validation Pack 2
 evidence set.
+
+SG-140 Pack 1 is implemented; its Pack 2 rendered-product evidence is pending.

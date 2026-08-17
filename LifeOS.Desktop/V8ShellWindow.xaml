@@ -537,10 +537,46 @@
                              Padding="12"
                              Foreground="{DynamicResource LifeOS.Brush.InputText}"
                              Background="{DynamicResource LifeOS.Brush.Input}"
+                             TextChanged="CommandTextBox_TextChanged"
                              KeyDown="CommandTextBox_KeyDown"
                              AutomationProperties.AutomationId="Command.Input" />
+                    <ListBox x:Name="CommandResultsListBox"
+                             Margin="0,10,0,0"
+                             MaxHeight="330"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             SelectionMode="Single"
+                             MouseDoubleClick="CommandResultsListBox_MouseDoubleClick"
+                             AutomationProperties.AutomationId="Command.Results">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="0,0,0,6" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="12"
+                                        Background="{DynamicResource LifeOS.Brush.Surface}"
+                                        BorderBrush="{DynamicResource LifeOS.Brush.Border}"
+                                        BorderThickness="1"
+                                        CornerRadius="8">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Title}" Style="{StaticResource LifeOS.Text.Body}" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding Meta}" Margin="0,3,0,0" Style="{StaticResource LifeOS.Text.Caption}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock x:Name="CommandStatusText"
+                               Margin="0,4,0,0"
+                               Style="{StaticResource LifeOS.Text.Caption}"
+                               AutomationProperties.AutomationId="Command.Status" />
                     <TextBlock Margin="0,12,0,0"
-                               Text="Try: Home, Work, Integration Inbox, Google Calendar, Theme light, Accent teal, Density compact"
+                               Text="Searches workspaces, modules and safe display commands only. Use ↑/↓ and Enter, or double-click a result."
                                Style="{StaticResource LifeOS.Text.Caption}" />
                     <Button Content="Close" HorizontalAlignment="Left" Margin="0,14,0,0" Style="{StaticResource LifeOS.Button}" Click="CloseCommand_Click" AutomationProperties.AutomationId="Command.Close" />
                 </StackPanel>

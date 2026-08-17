@@ -57,6 +57,7 @@ public sealed class V8Preferences
         "Career",
         "Money",
         "Life",
+        "Household",
         "Projects",
         "Assistant",
         "Settings"

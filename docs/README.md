@@ -7,7 +7,7 @@ This directory is the durable source of truth for LifeOS status, release history
 - [`current-status.md`](current-status.md) — current product and roadmap state
 - [`lifeos-version-state.json`](lifeos-version-state.json) — machine-readable version, group and boundary state
 - [`version-history.md`](version-history.md) — consolidated milestone history
-- [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 140
+- [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 144
 - [`LIFEOS_DESKTOP_RELEASE_NOTES.md`](LIFEOS_DESKTOP_RELEASE_NOTES.md) — current Desktop release notes
 - [`screenshot-groups/group-121-124-cv-builder-foundation/`](screenshot-groups/group-121-124-cv-builder-foundation/) — latest completed screenshot evidence
 
@@ -15,7 +15,7 @@ This directory is the durable source of truth for LifeOS status, release history
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | Current through v28 Group 140 |
+| LifeOS Desktop | Current through v28 Group 144 |
 | Full Mobile | Built and aligned through Group 132 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence complete |
@@ -24,6 +24,10 @@ This directory is the durable source of truth for LifeOS status, release history
 
 ## Recent release lanes
 
+- **v28 / Groups 141-144** - Forms and Actionable Problems
+- **v28 / Groups 137-140** - Navigation and Shell Search
+- **v28 / Groups 133-136** - Local Data and Recovery Spine
+- **v28 / Groups 129-132** - Cover Letters and Application Integration
 - **v28 / Groups 125-128** - CV Templates, Preview and Export
 - **v28 / Groups 121-124** - CV Builder Foundation
 - **v27 / Groups 117-120** - Product-Complete Release Candidate

@@ -11,6 +11,7 @@ using LifeOS.Core;
 using LifeOS.Shared.V8;
 using LifeOS.Shared.Storage;
 using LifeOS.Core.IntegrationInbox;
+using LifeOS.Core.Forms;
 using LifeOS.Core.ShellSearch;
 
 namespace LifeOS.Desktop;
@@ -1350,35 +1351,56 @@ internal sealed record ShellSearchResultView(
 
     private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
     {
-        _preferences.Theme = ThemeComboBox.SelectedItem is V8Theme theme
+        ClearSettingsFeedback();
+        FormValidationResult validation = V8SettingsFormValidator.Validate(new(
+            ProfileNameTextBox.Text,
+            ActiveContextTextBox.Text));
+        if (!validation.IsValid)
+        {
+            ShowFieldIssues(ProfileNameErrorText, validation.ForField("profile-name"));
+            ShowFieldIssues(ActiveContextErrorText, validation.ForField("active-context"));
+            ShowSettingsProblem(new UserFacingProblem(
+                "settings-validation-failed",
+                "Review the highlighted settings",
+                "The settings were not saved because one or more display fields are invalid.",
+                "Correct the highlighted fields, then choose Save Settings again.",
+                true));
+            return;
+        }
+
+        V8Preferences candidate = new V8Preferences
+        {
+            Theme = ThemeComboBox.SelectedItem is V8Theme theme
             ? theme
-            : V8Theme.Dark;
-        _preferences.Accent = AccentComboBox.SelectedItem is V8Accent accent
+            : V8Theme.Dark,
+            Accent = AccentComboBox.SelectedItem is V8Accent accent
             ? accent
-            : V8Accent.Purple;
-        _preferences.Density = DensityComboBox.SelectedItem is V8Density density
+            : V8Accent.Purple,
+            Density = DensityComboBox.SelectedItem is V8Density density
             ? density
-            : V8Density.Comfortable;
-        _preferences.StartupMode = StartupComboBox.SelectedItem is V8StartupMode startup
+            : V8Density.Comfortable,
+            StartupMode = StartupComboBox.SelectedItem is V8StartupMode startup
             ? startup
-            : V8StartupMode.Home;
-        _preferences.ExperienceMode = ExperienceModeComboBox.SelectedItem is V8ExperienceMode experienceMode
+            : V8StartupMode.Home,
+            ExperienceMode = ExperienceModeComboBox.SelectedItem is V8ExperienceMode experienceMode
             ? experienceMode
-            : V8ExperienceMode.Ordinary;
-        _preferences.TextScale = IndexToTextScale(TextScaleComboBox.SelectedIndex);
-        _preferences.ReducedMotion = ReducedMotionCheckBox.IsChecked == true;
-        _preferences.ContextPanelAutoOpen = ContextAutoOpenCheckBox.IsChecked == true;
-        _preferences.ProfileName = ProfileNameTextBox.Text;
-        _preferences.ActiveContext = ActiveContextTextBox.Text;
-        _preferences.LastWorkspace = _activeWorkspace;
-        _preferences.ContextPanelOpen = _contextOpen;
-        _preferences.Normalize();
+            : V8ExperienceMode.Ordinary,
+            EmergencyStopState = _preferences.EmergencyStopState,
+            TextScale = IndexToTextScale(TextScaleComboBox.SelectedIndex),
+            ReducedMotion = ReducedMotionCheckBox.IsChecked == true,
+            ContextPanelAutoOpen = ContextAutoOpenCheckBox.IsChecked == true,
+            ProfileName = ProfileNameTextBox.Text,
+            ActiveContext = ActiveContextTextBox.Text,
+            LastWorkspace = _activeWorkspace,
+            ContextPanelOpen = _contextOpen
+        }.Normalize();
 
         try
         {
-            V8PreferenceStore.Save(_preferences);
+            V8PreferenceStore.Save(candidate);
             LocalAppDataPath.SetPortfolioDemoMode(
-                _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo);
+                candidate.ExperienceMode == V8ExperienceMode.PortfolioDemo);
+            _preferences = candidate;
             _snapshot = WorkspaceSnapshot.Load();
             ApplyPreferencesToUi();
             ApplyDensity();
@@ -1390,7 +1412,9 @@ internal sealed record ShellSearchResultView(
             exception is System.IO.IOException or
             UnauthorizedAccessException)
         {
-            SettingsSaveStatusText.Text = "Could not save the local preference file.";
+            ShowSettingsProblem(UserFacingProblemFactory.FromException(
+                exception,
+                "save settings"));
         }
     }
 
@@ -1407,14 +1431,54 @@ internal sealed record ShellSearchResultView(
             return;
         }
 
-        _preferences = new V8Preferences().Normalize();
-        V8PreferenceStore.Save(_preferences);
-        LocalAppDataPath.SetPortfolioDemoMode(false);
-        _snapshot = WorkspaceSnapshot.Load();
-        ApplyPreferencesToUi();
-        SetContextOpen(false, persist: false, returnFocusOnClose: false);
-        NavigateTo("Home", persist: false);
-        SettingsSaveStatusText.Text = "Approved defaults restored. Module records were not changed.";
+        ClearSettingsFeedback();
+        V8Preferences reset = new V8Preferences().Normalize();
+        try
+        {
+            V8PreferenceStore.Save(reset);
+            _preferences = reset;
+            LocalAppDataPath.SetPortfolioDemoMode(false);
+            _snapshot = WorkspaceSnapshot.Load();
+            ApplyPreferencesToUi();
+            SetContextOpen(false, persist: false, returnFocusOnClose: false);
+            NavigateTo("Home", persist: false);
+            SettingsSaveStatusText.Text = "Approved defaults restored. Module records were not changed.";
+        }
+        catch (Exception exception) when (
+            exception is System.IO.IOException or
+            UnauthorizedAccessException)
+        {
+            ShowSettingsProblem(UserFacingProblemFactory.FromException(
+                exception,
+                "restore approved settings defaults"));
+        }
+    }
+
+    private void ClearSettingsFeedback()
+    {
+        SettingsSaveStatusText.Text = string.Empty;
+        SettingsProblemPanel.Visibility = Visibility.Collapsed;
+        ProfileNameErrorText.Visibility = Visibility.Collapsed;
+        ActiveContextErrorText.Visibility = Visibility.Collapsed;
+        ProfileNameErrorText.Text = string.Empty;
+        ActiveContextErrorText.Text = string.Empty;
+    }
+
+    private static void ShowFieldIssues(
+        TextBlock target,
+        IReadOnlyList<FormFieldIssue> issues)
+    {
+        target.Text = string.Join(" ", issues.Select(issue => issue.Message));
+        target.Visibility = issues.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+    }
+
+    private void ShowSettingsProblem(UserFacingProblem problem)
+    {
+        SettingsProblemTitleText.Text = $"{problem.Title} ({problem.Code})";
+        SettingsProblemDetailText.Text = problem.Detail;
+        SettingsProblemRecoveryText.Text = $"Next: {problem.RecoveryAction}";
+        SettingsProblemPanel.Visibility = Visibility.Visible;
+        SettingsSaveStatusText.Text = "Not saved.";
     }
 
     private void SavePreferencesSilently()

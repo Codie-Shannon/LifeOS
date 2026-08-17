@@ -361,8 +361,8 @@
 
                                 <TextBlock Text="Profiles" Style="{StaticResource LifeOS.Text.Heading}" />
                                 <WrapPanel Margin="0,10,0,12">
-                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Profile name" Style="{StaticResource LifeOS.Text.Body}" /><TextBox x:Name="ProfileNameTextBox" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Profile.Name" /></StackPanel></Border>
-                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Active context" Style="{StaticResource LifeOS.Text.Body}" /><TextBox x:Name="ActiveContextTextBox" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Profile.ActiveContext" /></StackPanel></Border>
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Profile name" Style="{StaticResource LifeOS.Text.Body}" /><TextBox x:Name="ProfileNameTextBox" MaxLength="81" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Profile.Name" /><TextBlock x:Name="ProfileNameErrorText" Visibility="Collapsed" Margin="0,6,0,0" Foreground="{DynamicResource LifeOS.Brush.Danger}" TextWrapping="Wrap" AutomationProperties.AutomationId="Settings.Profile.Name.Error" /></StackPanel></Border>
+                                    <Border Style="{StaticResource LifeOS.Card}" Width="330"><StackPanel><TextBlock Text="Active context" Style="{StaticResource LifeOS.Text.Body}" /><TextBox x:Name="ActiveContextTextBox" MaxLength="81" Style="{StaticResource LifeOS.Input}" AutomationProperties.AutomationId="Settings.Profile.ActiveContext" /><TextBlock x:Name="ActiveContextErrorText" Visibility="Collapsed" Margin="0,6,0,0" Foreground="{DynamicResource LifeOS.Brush.Danger}" TextWrapping="Wrap" AutomationProperties.AutomationId="Settings.Profile.ActiveContext.Error" /></StackPanel></Border>
                                 </WrapPanel>
 
                                 <TextBlock Text="Privacy / Local Data" Style="{StaticResource LifeOS.Text.Heading}" />
@@ -470,6 +470,20 @@
                                             <Button Content="Offline Checkpoint" Tag="final-offline-os" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.OfflineCheckpoint" />
                                             <Button Content="OS Navigation" Tag="os-navigation" Click="OpenModule_Click" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Diagnostics.Navigation" />
                                         </WrapPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border x:Name="SettingsProblemPanel"
+                                        Visibility="Collapsed"
+                                        Style="{StaticResource LifeOS.Card}"
+                                        MaxWidth="1014"
+                                        HorizontalAlignment="Left"
+                                        BorderBrush="{DynamicResource LifeOS.Brush.Danger}"
+                                        AutomationProperties.AutomationId="Settings.Problem">
+                                    <StackPanel>
+                                        <TextBlock x:Name="SettingsProblemTitleText" FontWeight="SemiBold" FontSize="16" />
+                                        <TextBlock x:Name="SettingsProblemDetailText" Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Body}" />
+                                        <TextBlock x:Name="SettingsProblemRecoveryText" Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" />
                                     </StackPanel>
                                 </Border>
 

@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.5 is active through Group 140 with ranked shell
-navigation/search on top of the first local-data recovery migration.**
+**LifeOS v28.0.0-alpha.6 is active through Group 144 with validated Settings
+forms and actionable local problem states on top of ranked shell discovery.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -55,7 +55,7 @@ checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-140 | Career Documents, Local Data Recovery, Navigation and Shell Search |
+| v28 | 121-144 | Career Documents, Local Data Recovery, Navigation, Shell Search and Forms |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -119,6 +119,17 @@ sequential counter.
 - Personal records, provider content and external search are not indexed.
 - SG-140 Pack 2 is closed with the exact eight-image Desktop and validation
   evidence set.
+
+### v28 / Groups 141-144 - Forms and Actionable Problems
+
+- Shared required, maximum-length and single-line validation is implemented.
+- Settings rejects invalid input before changing memory or disk.
+- Field issues and recovery guidance remain visible and keyboard-readable.
+- Local access, storage, unreadable-data and unexpected failures map to safe,
+  stable user-facing problem identifiers.
+- Exception messages and private paths are not exposed in UI feedback.
+- Preference reset persists before replacing the current in-memory state.
+- SG-144 Pack 1 is implemented; exact visible Pack 2 evidence remains open.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

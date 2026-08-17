@@ -4,10 +4,19 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.5 is active through Group 140 with ranked shell navigation
-and safe-command discovery over static product metadata.
+LifeOS v28.0.0-alpha.6 is active through Group 144 with validated Settings
+forms and safe, actionable local problem states.
 
 ## v28 - Career Documents Studio
+
+### Groups 141-144
+
+- Added reusable required, maximum-length and single-line form validation.
+- Prevented invalid Settings values from mutating memory or disk.
+- Added field-specific errors and standardized actionable recovery guidance.
+- Kept exception messages and private paths out of user-facing errors.
+- Made preference reset preserve current state when persistence fails.
+- Corrected Household last-workspace persistence.
 
 ### Groups 137-140
 

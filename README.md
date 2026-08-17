@@ -4,7 +4,7 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v28.0.0-alpha.5 is active through Group 140. The shell now provides ranked, keyboard-operable discovery for static workspaces, modules and safe display commands, with an honest no-result state and no personal-record indexing. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
+> **Current checkpoint:** LifeOS v28.0.0-alpha.6 is active through Group 144. Shared form validation now prevents invalid Settings writes and local failures become safe, actionable problem states without exposing private exception details. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
 
 ![LifeOS v28 CV Builder Foundation](docs/screenshot-groups/group-121-124-cv-builder-foundation/02-cv-builder-split-workspace.png)
 
@@ -12,7 +12,7 @@ LifeOS is a safety-first platform built by Codie Shannon around purpose-built De
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current through Group 140, including ranked shell search, local-data recovery controls and the completed Career Documents Studio |
+| **LifeOS Desktop** | Current through Group 144, including validated Settings forms, actionable local problem states, ranked shell search, local-data recovery controls and the completed Career Documents Studio |
 | **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 132, including opportunity capture, career review and derivative sharing |
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
 | **LifeOS Website** | Product, documentation, onboarding, factual portfolio and release-candidate evidence surface |
@@ -148,10 +148,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v28.0.0-alpha.5 is active through Group 140. The platform spine now
-adds ranked shell navigation and safe-command discovery on top of the SG-136
-local-data recovery checkpoint. SG-140 is closed with its exact eight-image
-Desktop and validation evidence set. SG-128 visible
+LifeOS v28.0.0-alpha.6 is active through Group 144. The platform spine now
+adds shared form validation and actionable local problem states on top of the
+SG-140 shell-discovery checkpoint. SG-144 Pack 1 is implemented and its visible
+evidence capture is in progress. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.
 

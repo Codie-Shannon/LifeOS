@@ -161,7 +161,7 @@ sequential counter.
 - Pending income remains visible but is excluded from safe-to-spend.
 - The existing money-pressure store is migrated to the shared versioned recovery contract.
 - Bank feeds, payment initiation, accounting writes and automatic reconciliation remain unavailable.
-- SG-156 Pack 1 is implemented; directly rendered product and validation evidence remains Pack 2 work.
+- SG-156 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

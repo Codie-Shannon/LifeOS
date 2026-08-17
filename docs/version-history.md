@@ -17,7 +17,7 @@ Money Pressure, Work Time and Projects workspaces.
 - Migrated money-pressure persistence to the versioned atomic recovery contract.
 - Registered the sixth operational store in Local Data & Recovery.
 - Kept bank feeds, payments, accounting writes and automatic reconciliation unavailable.
-- Implemented SG-156 Pack 1; visible product and validation evidence remains open.
+- Closed SG-156 with five Desktop product images and three validation records.
 
 ### Groups 149-152
 

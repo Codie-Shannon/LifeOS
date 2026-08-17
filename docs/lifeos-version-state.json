@@ -5,7 +5,7 @@
     "currentStatus":  "active-development",
     "latestCompletedGroup":  156,
     "latestCompletedGroupName":  "Money Pressure and Safe to Spend",
-    "latestCompletedHead":  "sg156-pack1-implemented",
+    "latestCompletedHead":  "sg156-pack2-closed",
     "nextGroup":  157,
     "nextGroupName":  "Documents and Evidence Productization",
     "roadmapApprovedThroughGroup":  156,
@@ -166,7 +166,7 @@
                                   {
                                       "release":  "v28",
                                       "groups":  "121-156",
-                                      "status":  "money-pressure-pack1"
+                                      "status":  "money-pressure-pack2-closed"
                                   }
                               ],
     "safetyBoundaries":  {
@@ -187,7 +187,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-149-152-work-time-billable-records",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-153-156-money-pressure-safe-spend",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

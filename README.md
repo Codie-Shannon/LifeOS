@@ -95,6 +95,7 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 153-156 - Money Pressure and Safe to Spend](docs/screenshot-groups/group-153-156-money-pressure-safe-spend/)
 - [Groups 149-152 - Work Time and Billable Records](docs/screenshot-groups/group-149-152-work-time-billable-records/)
 - [Groups 145-148 - Projects and Delivery](docs/screenshot-groups/group-145-148-projects-delivery/)
 - [Groups 141-144 - Forms and Actionable Problems](docs/screenshot-groups/group-141-144-forms-actionable-problems/)
@@ -155,8 +156,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 LifeOS v28.0.0-alpha.9 is active through Group 156. Money Pressure now has a
 real ordinary-mode local workspace on top of the shared storage, forms and
-problem-state spine. SG-156 Pack 1 is implemented and visible Pack 2 evidence is
-next. SG-128 visible
+problem-state spine. SG-156 is closed with its exact eight-image Desktop and
+validation evidence set. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.
 

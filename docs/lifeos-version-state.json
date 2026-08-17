@@ -5,7 +5,7 @@
     "currentStatus":  "active-development",
     "latestCompletedGroup":  152,
     "latestCompletedGroupName":  "Work Time and Billable Records",
-    "latestCompletedHead":  "sg152-pack1-implemented",
+    "latestCompletedHead":  "sg152-pack2-closed",
     "nextGroup":  153,
     "nextGroupName":  "Money and Documents Productization",
     "roadmapApprovedThroughGroup":  152,
@@ -166,7 +166,7 @@
                                   {
                                       "release":  "v28",
                                       "groups":  "121-152",
-                                      "status":  "work-time-pack1"
+                                      "status":  "work-time-pack2-closed"
                                   }
                               ],
     "safetyBoundaries":  {
@@ -187,7 +187,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-145-148-projects-delivery",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-149-152-work-time-billable-records",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

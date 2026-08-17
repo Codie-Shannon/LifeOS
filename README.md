@@ -95,6 +95,7 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 149-152 - Work Time and Billable Records](docs/screenshot-groups/group-149-152-work-time-billable-records/)
 - [Groups 145-148 - Projects and Delivery](docs/screenshot-groups/group-145-148-projects-delivery/)
 - [Groups 141-144 - Forms and Actionable Problems](docs/screenshot-groups/group-141-144-forms-actionable-problems/)
 - [Groups 137-140 - Navigation and Shell Search](docs/screenshot-groups/group-137-140-navigation-shell-search/)
@@ -154,8 +155,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 LifeOS v28.0.0-alpha.8 is active through Group 152. Work Time & Billable Records
 now has a real ordinary-mode local workspace on top of the shared storage,
-forms and problem-state spine. SG-152 Pack 1 is implemented and its visible
-Pack 2 evidence is next. SG-128 visible
+forms and problem-state spine. SG-152 is closed with its exact eight-image
+Desktop and validation evidence set. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.
 

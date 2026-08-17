@@ -22,7 +22,7 @@ Release build succeeds.
 Confirm the repository and visible product state align with:
 
 - LifeOS v28.0.0-alpha.8 active.
-- Group 152 / SG-152 Pack 1 implemented.
+- Group 152 / SG-152 Pack 2 closed.
 - Work Time & Billable Records is a real ordinary-mode embedded workspace.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 

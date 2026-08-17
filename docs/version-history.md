@@ -17,7 +17,7 @@ Work Time and Projects workspaces.
 - Added deterministic total, billable, paid and unpaid calculations.
 - Reused the versioned atomic work-session store with recovery health and Trash registration.
 - Kept invoice sending, payment initiation, bank verification and client messaging unavailable.
-- Implemented SG-152 Pack 1; visible product and validation evidence remains open.
+- Closed SG-152 with five Desktop product images and three validation records.
 
 ### Groups 145-148
 

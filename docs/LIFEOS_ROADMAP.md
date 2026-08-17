@@ -152,7 +152,7 @@ sequential counter.
 - Totals distinguish tracked value, paid value and unpaid billable value.
 - Work sessions use the shared versioned, atomic, backup-aware local-store contract.
 - Invoice sending, payment initiation, bank verification and client messaging remain unavailable.
-- SG-152 Pack 1 is implemented; directly rendered product and validation evidence remains Pack 2 work.
+- SG-152 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

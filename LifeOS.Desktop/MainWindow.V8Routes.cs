@@ -39,6 +39,7 @@ public partial class MainWindow
         "intelligence",
         "item-state-engine",
         "lifeos-spine",
+        "local-data-recovery",
         "memory",
         "money-pressure",
         "money-profile",

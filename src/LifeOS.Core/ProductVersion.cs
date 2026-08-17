@@ -2,7 +2,7 @@ namespace LifeOS.Core;
 
 public static class ProductVersion
 {
-    public const string Semantic = "28.0.0-alpha.3";
-    public const string Display = "v28.0.0-alpha.3";
-    public const string ReleaseName = "v28 Career Documents and Applications";
+    public const string Semantic = "28.0.0-alpha.4";
+    public const string Display = "v28.0.0-alpha.4";
+    public const string ReleaseName = "v28 Local Data and Recovery Spine";
 }

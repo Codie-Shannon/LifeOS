@@ -30,6 +30,7 @@ work appear to stop at SG-82 even though implementation had reached Group 128.
 | 121-124 | SG-124 |
 | 125-128 | SG-128 |
 | 129-132 | SG-132 |
+| 133-136 | SG-136 |
 
 ## Evidence preservation
 
@@ -42,3 +43,5 @@ the original pixels while making the lineage accurate going forward.
 SG-128 Pack 1 is implemented and its visible Desktop capture remains open.
 SG-132 is closed with the exact eight-image Desktop and Full Mobile Pack 2
 evidence set.
+
+SG-136 Pack 1 is implemented; its Pack 2 rendered-product evidence is pending.

@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.3 is active through Group 132 with CVs, cover letters,
-application-pack review and derivative export.**
+**LifeOS v28.0.0-alpha.4 is active through Group 136 with the first versioned
+local-data stores, health inspection, backup recovery and recoverable Trash.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -55,7 +55,7 @@ checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-132 | CV Builder, Templates, Preview, Export, Cover Letters and Application Packs |
+| v28 | 121-136 | CV Builder, Templates, Preview, Export, Cover Letters, Application Packs and Local Data Recovery |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -95,6 +95,17 @@ sequential counter.
 - Desktop and Full Mobile configuration-free review paths are implemented.
 - SG-132 Pack 2 is closed with the exact eight-image Desktop and Full Mobile
   evidence set.
+
+### v28 / Groups 133-136 - Local Data and Recovery Spine
+
+- Versioned, atomic storage is implemented for Agenda, Follow-ups, Work
+  Pipeline and Work Sessions.
+- Legacy and corrupt source files are preserved before replacement or recovery.
+- Newer schemas fail closed without silent overwrite.
+- Reset moves current data and its backup to recoverable 30-day Trash.
+- Desktop Settings exposes store health and guarded restore controls.
+- Remaining stores, encrypted whole-product backup and explicit purge policy
+  remain later platform-spine work.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

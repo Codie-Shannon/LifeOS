@@ -8,43 +8,34 @@ public static class WorkSessionStorage
 {
     private const string FileName = "work-sessions.json";
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        WriteIndented = true
-    };
-
     public static string FilePath => LocalAppDataPath.GetFilePath(FileName);
 
-    public static List<WorkSession> Load()
-    {
-        try
-        {
-            if (!File.Exists(FilePath)) return LoadFallback();
+    public static List<WorkSession> Load() => Store().Load().Value;
 
-            var json = File.ReadAllText(FilePath);
-            if (string.IsNullOrWhiteSpace(json)) return LoadFallback();
+    public static LocalStoreHealth Inspect() => Store().Inspect();
 
-            return JsonSerializer.Deserialize<List<WorkSession>>(json, JsonOptions) ?? LoadFallback();
-        }
-        catch
-        {
-            return LoadFallback();
-        }
-    }
+    public static IReadOnlyList<LocalStoreTrashEntry> ListTrash() => Store().ListTrash();
+
+    public static void RestoreTrash(string entryId) => Store().RestoreTrash(entryId);
 
     private static List<WorkSession> LoadFallback() =>
         LocalAppDataPath.IsPortfolioDemoMode ? CreateDefaultSessions() : [];
 
     public static void Save(IEnumerable<WorkSession> sessions)
     {
-        var json = JsonSerializer.Serialize(sessions, JsonOptions);
-        File.WriteAllText(FilePath, json);
+        Store().Save(sessions.ToList());
     }
 
     public static void Reset()
     {
-        if (File.Exists(FilePath)) File.Delete(FilePath);
+        if (File.Exists(FilePath)) Store().MoveToTrash();
     }
+
+    private static VersionedJsonLocalStore<List<WorkSession>> Store() => new(
+        FilePath,
+        "work-sessions",
+        1,
+        LoadFallback);
 
     private static List<WorkSession> CreateDefaultSessions()
     {

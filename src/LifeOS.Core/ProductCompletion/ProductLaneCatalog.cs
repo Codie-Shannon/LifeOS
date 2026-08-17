@@ -320,6 +320,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Evidence suggestions", "Needs review", "Only trusted, source-backed facts are proposed", true),
                     new ProductLaneAction("Application pack", "Review", "Current source versions and export checks required", true),
                     new ProductLaneAction("External submission", "Blocked", "LifeOS records a confirmed external submission only", false)
+                }),
+            ["local-data-recovery"] = new(
+                "local-data-recovery",
+                "SG-136",
+                "Local Data & Recovery",
+                "Groups 133-136 - versioned storage, health inspection and recoverable Trash",
+                "The first operational stores now migrate safely, retain validated backups and move resets to a 30-day Trash. Other stores remain visible as future migration work.",
+                new[]
+                {
+                    new ProductLaneMetric("Registered stores", "4", "Agenda, Follow-ups, Work pipeline, Work sessions"),
+                    new ProductLaneMetric("Schema writes", "Versioned", "Atomic envelope format"),
+                    new ProductLaneMetric("Trash retention", "30 days", "Restore without overwrite"),
+                    new ProductLaneMetric("Silent replacement", "0", "Newer schemas fail closed")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Inspect local data", "Ready", "Health, schema and backup state are visible", false),
+                    new ProductLaneAction("Migrate legacy payload", "Ready", "Source is preserved before versioned replacement", false),
+                    new ProductLaneAction("Restore Trash item", "Review", "Restore is allowed only when no current file exists", true),
+                    new ProductLaneAction("Permanent purge", "Blocked", "No UI or automatic purge is enabled in this checkpoint", false)
                 })
         };
 

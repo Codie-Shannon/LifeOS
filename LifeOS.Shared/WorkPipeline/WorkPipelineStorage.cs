@@ -7,55 +7,17 @@ namespace LifeOS.Shared.WorkPipeline;
 public static class WorkPipelineStorage
 {
     private const string FileName = "work-pipeline.json";
-    private const string BackupFileName = "work-pipeline.backup.json";
-
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        WriteIndented = true
-    };
-
     public static string FilePath => LocalAppDataPath.GetFilePath(FileName);
 
-    public static string BackupFilePath => LocalAppDataPath.GetFilePath(BackupFileName);
+    public static string BackupFilePath => LocalAppDataPath.GetFilePath("work-pipeline.backup.json");
 
-    public static List<WorkPipelineItem> Load()
-    {
-        try
-        {
-            if (!File.Exists(FilePath))
-            {
-                return LoadFallback();
-            }
+    public static List<WorkPipelineItem> Load() => Store().Load().Value;
 
-            var json = File.ReadAllText(FilePath);
+    public static LocalStoreHealth Inspect() => Store().Inspect();
 
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                return LoadFallback();
-            }
+    public static IReadOnlyList<LocalStoreTrashEntry> ListTrash() => Store().ListTrash();
 
-            return JsonSerializer.Deserialize<List<WorkPipelineItem>>(json, JsonOptions)
-                ?? LoadFallback();
-        }
-        catch
-        {
-            if (File.Exists(BackupFilePath))
-            {
-                try
-                {
-                    var backupJson = File.ReadAllText(BackupFilePath);
-                    return JsonSerializer.Deserialize<List<WorkPipelineItem>>(backupJson, JsonOptions)
-                        ?? LoadFallback();
-                }
-                catch
-                {
-                    return LoadFallback();
-                }
-            }
-
-            return LoadFallback();
-        }
-    }
+    public static void RestoreTrash(string entryId) => Store().RestoreTrash(entryId);
 
     private static List<WorkPipelineItem> LoadFallback() =>
         LocalAppDataPath.IsPortfolioDemoMode ? CreateDefaultItems() : [];
@@ -70,30 +32,26 @@ public static class WorkPipelineStorage
             .ThenBy(item => item.Title)
             .ToList();
 
-        if (File.Exists(FilePath))
-        {
-            File.Copy(FilePath, BackupFilePath, overwrite: true);
-        }
-
-        var json = JsonSerializer.Serialize(cleanItems, JsonOptions);
-        var tempPath = FilePath + ".tmp";
-        File.WriteAllText(tempPath, json);
-
-        if (File.Exists(FilePath))
-        {
-            File.Delete(FilePath);
-        }
-
-        File.Move(tempPath, FilePath);
+        Store().Save(cleanItems);
     }
 
     public static void Reset()
     {
-        if (File.Exists(FilePath))
-        {
-            File.Delete(FilePath);
-        }
+        if (File.Exists(FilePath)) Store().MoveToTrash();
     }
+
+    private static VersionedJsonLocalStore<List<WorkPipelineItem>> Store() => new(
+        FilePath,
+        "work-pipeline",
+        1,
+        LoadFallback,
+        items => items.Select(Normalise)
+            .OrderBy(item => item.IsArchived)
+            .ThenByDescending(item => item.Priority)
+            .ThenBy(item => item.Stage)
+            .ThenBy(item => item.Title)
+            .ToList(),
+        backupPath: BackupFilePath);
 
     private static WorkPipelineItem Normalise(WorkPipelineItem item)
     {

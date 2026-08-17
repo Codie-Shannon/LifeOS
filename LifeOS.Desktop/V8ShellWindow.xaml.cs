@@ -1010,6 +1010,16 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
                     _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
             return;
         }
+        if (string.Equals(routeId, "local-data-recovery", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(
+                routeId,
+                title,
+                subtitle,
+                new LocalDataRecoveryView(
+                    _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
+            return;
+        }
         if (string.Equals(routeId, "v13-grocery-planning", StringComparison.OrdinalIgnoreCase))
         {
             ShowEmbeddedModule(routeId, title, subtitle, new GroceryPlanningView());

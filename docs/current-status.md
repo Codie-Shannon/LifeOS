@@ -1,11 +1,17 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.3 / Group 132 / SG-132 Pack 2**.
+LifeOS is current through **v28.0.0-alpha.4 / Group 136 / SG-136 Pack 1**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
 cover-letter and application-pack vertical with inspected Desktop and Full
 Mobile evidence.
+
+Groups 133-136 begin the approved platform spine. Agenda, Follow-ups, Work
+Pipeline and Work Sessions now share versioned atomic persistence, inspected
+health, validated backup recovery and a recoverable 30-day Trash. Desktop
+Settings exposes the registered stores without claiming that every legacy
+module has migrated.
 
 The 2026-08-18 recovery pass corrected the execution baseline without claiming
 a new group: ordinary and portfolio-demo data are now explicitly separated,
@@ -23,13 +29,28 @@ preserved v27 release candidate.
 
 | Product | Status |
 |---|---|
-| Desktop | Current through Group 132 with CVs, cover letters, application packs, review and export |
+| Desktop | Current through Group 136 with local-data health/recovery plus CVs, cover letters, application packs, review and export |
 | Full Mobile | Current through Group 132 with ordinary empty state, opportunity capture, document review and derivative sharing |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest implemented capability
+
+Groups 133-136 establish Local Data & Recovery Pack 1:
+
+- shared, versioned JSON envelopes with atomic write-through replacement
+- honest missing-file state without demo seeding or implicit writes
+- preserved legacy and older-schema migration sources
+- fail-closed handling for newer schemas and mismatched store identifiers
+- corrupt-primary preservation with validated backup recovery
+- recoverable 30-day Trash that refuses to overwrite current data
+- Desktop health and recovery surface for the first four migrated stores
+- no permanent-delete control or automatic purge in this checkpoint
+
+SG-136 Pack 2 rendered-product capture remains open.
+
+## Prior completed capability
 
 Groups 129-132 complete Cover Letters and Application Integration in Pack 1:
 
@@ -44,8 +65,6 @@ Groups 129-132 complete Cover Letters and Application Integration in Pack 1:
 
 The exact eight-image Desktop and Full Mobile SG-132 Pack 2 evidence set is
 captured, inspected and committed.
-
-## Prior completed capability
 
 Groups 125-128 complete CV Templates, Preview and Export:
 
@@ -73,15 +92,16 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
-- SG-124 targeted tests: 14 passed
-- Groups 129-132 targeted tests: 11 passed
-- Core tests: 477 passed
+- Groups 133-136 targeted tests: 8 passed
+- Core tests: 486 passed
 - Companion tests: 34 passed
 - Website tests: 28 passed
 - Mobile tests: 56 passed
-- Desktop, website and TimerAgent Release builds: clean (0 warnings, 0 errors)
-- Full Mobile Android x64 Release build: clean; fresh install launched on API 36
-- Mobile Companion Android x64 Release build: clean; fresh install launched on API 36
+- Desktop Release build: clean (0 warnings, 0 errors)
+- Full Mobile and Mobile Companion Android x64 Release builds: clean (0 warnings, 0 errors)
+- SG-124 targeted tests: 14 passed
+- Groups 129-132 targeted tests: 11 passed
+- Prior Android runtime baseline: fresh installs launched on API 36 at SG-132
 - Website runtime smoke test: HTTP 200
 - Latest evidence: [`group-129-132-cover-letters-application-packs`](screenshot-groups/group-129-132-cover-letters-application-packs/)
 
@@ -91,6 +111,7 @@ or automated tests.
 
 ## Next completion work
 
-Close SG-128 Pack 2, then continue the approved platform-spine and ordinary-mode
-productization backlog. Credentialed integrations, signing, public deployment,
-store submission and owner acceptance remain final gates.
+Close SG-136 Pack 2, then continue migrating remaining stores and the approved
+ordinary-mode productization backlog. SG-128’s historical visible Pack 2 capture
+also remains open. Credentialed integrations, signing, public deployment, store
+submission and owner acceptance remain final gates.

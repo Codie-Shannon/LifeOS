@@ -8,54 +8,34 @@ public static class FollowUpStorage
 {
     private const string FileName = "follow-ups.json";
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        WriteIndented = true
-    };
-
     public static string FilePath => LocalAppDataPath.GetFilePath(FileName);
 
-    public static List<FollowUpItem> Load()
-    {
-        try
-        {
-            if (!File.Exists(FilePath))
-            {
-                return LoadFallback();
-            }
+    public static List<FollowUpItem> Load() => Store().Load().Value;
 
-            var json = File.ReadAllText(FilePath);
+    public static LocalStoreHealth Inspect() => Store().Inspect();
 
-            if (string.IsNullOrWhiteSpace(json))
-            {
-                return LoadFallback();
-            }
+    public static IReadOnlyList<LocalStoreTrashEntry> ListTrash() => Store().ListTrash();
 
-            return JsonSerializer.Deserialize<List<FollowUpItem>>(json, JsonOptions)
-                ?? LoadFallback();
-        }
-        catch
-        {
-            return LoadFallback();
-        }
-    }
+    public static void RestoreTrash(string entryId) => Store().RestoreTrash(entryId);
 
     private static List<FollowUpItem> LoadFallback() =>
         LocalAppDataPath.IsPortfolioDemoMode ? CreateDefaultFollowUps() : [];
 
     public static void Save(IEnumerable<FollowUpItem> items)
     {
-        var json = JsonSerializer.Serialize(items, JsonOptions);
-        File.WriteAllText(FilePath, json);
+        Store().Save(items.ToList());
     }
 
     public static void Reset()
     {
-        if (File.Exists(FilePath))
-        {
-            File.Delete(FilePath);
-        }
+        if (File.Exists(FilePath)) Store().MoveToTrash();
     }
+
+    private static VersionedJsonLocalStore<List<FollowUpItem>> Store() => new(
+        FilePath,
+        "follow-ups",
+        1,
+        LoadFallback);
 
     private static List<FollowUpItem> CreateDefaultFollowUps()
     {

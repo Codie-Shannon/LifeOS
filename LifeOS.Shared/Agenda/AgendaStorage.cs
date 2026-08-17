@@ -1,4 +1,3 @@
-using System.Text.Json;
 using LifeOS.Core.Agenda;
 using LifeOS.Shared.Storage;
 
@@ -8,43 +7,34 @@ public static class AgendaStorage
 {
     private const string FileName = "agenda-items.json";
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        WriteIndented = true
-    };
-
     public static string FilePath => LocalAppDataPath.GetFilePath(FileName);
 
-    public static List<AgendaItem> Load()
-    {
-        try
-        {
-            if (!File.Exists(FilePath)) return LoadFallback();
+    public static List<AgendaItem> Load() => Store().Load().Value;
 
-            var json = File.ReadAllText(FilePath);
-            if (string.IsNullOrWhiteSpace(json)) return LoadFallback();
+    public static LocalStoreHealth Inspect() => Store().Inspect();
 
-            return JsonSerializer.Deserialize<List<AgendaItem>>(json, JsonOptions) ?? LoadFallback();
-        }
-        catch
-        {
-            return LoadFallback();
-        }
-    }
+    public static IReadOnlyList<LocalStoreTrashEntry> ListTrash() => Store().ListTrash();
+
+    public static void RestoreTrash(string entryId) => Store().RestoreTrash(entryId);
 
     private static List<AgendaItem> LoadFallback() =>
         LocalAppDataPath.IsPortfolioDemoMode ? CreateDefaultItems() : [];
 
     public static void Save(IEnumerable<AgendaItem> items)
     {
-        var json = JsonSerializer.Serialize(items, JsonOptions);
-        File.WriteAllText(FilePath, json);
+        Store().Save(items.ToList());
     }
 
     public static void Reset()
     {
-        if (File.Exists(FilePath)) File.Delete(FilePath);
+        if (File.Exists(FilePath)) Store().MoveToTrash();
     }
+
+    private static VersionedJsonLocalStore<List<AgendaItem>> Store() => new(
+        FilePath,
+        "agenda",
+        1,
+        LoadFallback);
 
     private static List<AgendaItem> CreateDefaultItems()
     {

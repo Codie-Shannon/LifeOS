@@ -4,11 +4,19 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.3 is active through Group 132 with professional CVs,
-opportunity-linked cover letters, explicit evidence acceptance, versioned
-application-pack review and safe PDF/DOCX derivatives.
+LifeOS v28.0.0-alpha.4 is active through Group 136 with the first versioned
+operational stores, visible health, validated recovery and recoverable Trash.
 
 ## v28 - Career Documents Studio
+
+### Groups 133-136
+
+- Added a shared versioned JSON storage envelope and atomic writes.
+- Migrated Agenda, Follow-ups, Work Pipeline and Work Sessions.
+- Preserved legacy, older-schema and corrupt source files during recovery.
+- Added fail-closed newer-schema and wrong-store protection.
+- Replaced destructive resets with recoverable 30-day Trash.
+- Added a Desktop Local Data & Recovery health and restore surface.
 
 ### Groups 129-132
 

@@ -1,12 +1,12 @@
 <Project>
   <PropertyGroup>
-    <Version>28.0.0-alpha.2</Version>
+    <Version>28.0.0-alpha.4</Version>
     <VersionPrefix>28.0.0</VersionPrefix>
-    <VersionSuffix>alpha.2</VersionSuffix>
+    <VersionSuffix>alpha.4</VersionSuffix>
     <AssemblyVersion>28.0.0.0</AssemblyVersion>
     <FileVersion>28.0.0.0</FileVersion>
-    <InformationalVersion>28.0.0-alpha.2</InformationalVersion>
-    <LifeOSDisplayVersion>v28.0.0-alpha.2</LifeOSDisplayVersion>
-    <LifeOSReleaseName>v28 CV Templates and Export</LifeOSReleaseName>
+    <InformationalVersion>28.0.0-alpha.4</InformationalVersion>
+    <LifeOSDisplayVersion>v28.0.0-alpha.4</LifeOSDisplayVersion>
+    <LifeOSReleaseName>v28 Local Data and Recovery Spine</LifeOSReleaseName>
   </PropertyGroup>
 </Project>

@@ -4,7 +4,7 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v28.0.0-alpha.3 is active through Group 132 with CVs, opportunity-linked cover letters, explicit evidence acceptance, application-pack review and safe PDF/DOCX derivatives. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
+> **Current checkpoint:** LifeOS v28.0.0-alpha.4 is active through Group 136. The first operational stores now use a versioned, atomic local-data spine with visible health, backup recovery and recoverable 30-day Trash. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
 
 ![LifeOS v28 CV Builder Foundation](docs/screenshot-groups/group-121-124-cv-builder-foundation/02-cv-builder-split-workspace.png)
 
@@ -12,7 +12,7 @@ LifeOS is a safety-first platform built by Codie Shannon around purpose-built De
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current through Group 132, including CVs, cover letters, application packs and derivative export |
+| **LifeOS Desktop** | Current through Group 136, including local-data health and recovery controls plus the completed Career Documents Studio |
 | **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 132, including opportunity capture, career review and derivative sharing |
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
 | **LifeOS Website** | Product, documentation, onboarding, factual portfolio and release-candidate evidence surface |
@@ -148,8 +148,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v28.0.0-alpha.3 is active through Group 132. Career Documents Studio now
-includes CVs, cover letters and application-pack integration. SG-132 is closed
+LifeOS v28.0.0-alpha.4 is active through Group 136. The platform spine now
+versions the first operational stores and exposes honest recovery state. SG-132 is closed
 with its exact eight-image Desktop and Full Mobile evidence set. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.

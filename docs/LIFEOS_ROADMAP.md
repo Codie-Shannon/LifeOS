@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.9 is active through Group 156 with real ordinary-mode
-Money Pressure, Work Time and Projects workspaces on the shared platform spine.**
+**LifeOS v28.0.0-alpha.10 is active through Group 160 with real ordinary-mode
+Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -55,7 +55,7 @@ checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-156 | Career Documents, Local Data Recovery, Navigation, Forms, Projects, Work Time and Money Pressure |
+| v28 | 121-160 | Career Documents, Platform Spine, Projects, Work Time, Money Pressure and Document Intake |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -162,6 +162,15 @@ sequential counter.
 - The existing money-pressure store is migrated to the shared versioned recovery contract.
 - Bank feeds, payment initiation, accounting writes and automatic reconciliation remain unavailable.
 - SG-156 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
+
+### v28 / Groups 157-160 - Documents and Evidence Intake
+
+- The ordinary proof boundary is replaced by a genuine embedded file-picker workflow.
+- User-selected originals are size-bounded, byte-preserved and SHA-256 verified.
+- Classification and review state require explicit local decisions.
+- Exact-hash duplicates remain candidates; automatic merge and deletion are unavailable.
+- Document intake uses the shared versioned, atomic, recoverable local-store contract.
+- SG-160 Pack 1 is implemented; directly rendered product and validation evidence remains Pack 2 work.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

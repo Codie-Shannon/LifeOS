@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
-    "currentReleaseName":  "Money Pressure and Safe to Spend",
-    "currentSemanticVersion":  "28.0.0-alpha.9",
+    "currentReleaseName":  "Documents and Evidence Intake",
+    "currentSemanticVersion":  "28.0.0-alpha.10",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  156,
-    "latestCompletedGroupName":  "Money Pressure and Safe to Spend",
-    "latestCompletedHead":  "sg156-pack2-closed",
-    "nextGroup":  157,
-    "nextGroupName":  "Documents and Evidence Productization",
-    "roadmapApprovedThroughGroup":  156,
+    "latestCompletedGroup":  160,
+    "latestCompletedGroupName":  "Documents and Evidence Intake",
+    "latestCompletedHead":  "sg160-pack1-implemented",
+    "nextGroup":  161,
+    "nextGroupName":  "Household Grocery and Life Productization",
+    "roadmapApprovedThroughGroup":  160,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  156,
+                    "currentThroughGroup":  160,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-156",
-                                      "status":  "money-pressure-pack2-closed"
+                                      "groups":  "121-160",
+                                      "status":  "document-intake-pack1"
                                   }
                               ],
     "safetyBoundaries":  {

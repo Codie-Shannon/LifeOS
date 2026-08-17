@@ -4,10 +4,20 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.9 is active through Group 156 with genuine ordinary-mode
-Money Pressure, Work Time and Projects workspaces.
+LifeOS v28.0.0-alpha.10 is active through Group 160 with genuine ordinary-mode
+Documents, Money Pressure, Work Time and Projects workspaces.
 
 ## v28 - Career Documents Studio
+
+### Groups 157-160
+
+- Replaced the ordinary Document Intake proof boundary with a real local workspace.
+- Added size-bounded file selection and original byte/SHA-256 preservation.
+- Added explicit type, draft, review, accepted, deferred and rejected state.
+- Kept exact duplicates as candidates without automatic merge or replacement.
+- Registered the seventh versioned operational store in Local Data & Recovery.
+- Kept extraction acceptance, financial posting, provider upload and deletion unavailable.
+- Implemented SG-160 Pack 1; visible product and validation evidence remains open.
 
 ### Groups 153-156
 

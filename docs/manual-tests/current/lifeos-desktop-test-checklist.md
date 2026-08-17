@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v28.0.0-alpha.9 active.
-- Group 156 / SG-156 Pack 2 closed.
-- Money Pressure is a real ordinary-mode embedded workspace.
+- LifeOS v28.0.0-alpha.10 active.
+- Group 160 / SG-160 Pack 1 implemented.
+- Document & Evidence Intake is a real ordinary-mode embedded workspace.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation

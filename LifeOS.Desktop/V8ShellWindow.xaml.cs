@@ -35,7 +35,6 @@ public partial class V8ShellWindow : Window
         "search-knowledge",
         "settings-safety",
         "universal-spine",
-        "v11-document-intake",
         "v11-money-foundation",
         "v12-career-studio",
         "v13-grocery-planning"
@@ -1068,7 +1067,12 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
 
         if (string.Equals(routeId, "v11-document-intake", StringComparison.OrdinalIgnoreCase))
         {
-            ShowEmbeddedModule(routeId, title, subtitle, new DocumentIntakeV11View());
+            ShowEmbeddedModule(
+                routeId,
+                title,
+                subtitle,
+                new DocumentEvidenceWorkspaceView(
+                    _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
             return;
         }
 

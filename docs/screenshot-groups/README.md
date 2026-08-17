@@ -36,6 +36,7 @@ work appear to stop at SG-82 even though implementation had reached Group 128.
 | 145-148 | SG-148 |
 | 149-152 | SG-152 |
 | 153-156 | SG-156 |
+| 157-160 | SG-160 |
 
 ## Evidence preservation
 
@@ -66,3 +67,6 @@ evidence set.
 
 SG-156 is closed with the exact eight-image Desktop and validation Pack 2
 evidence set.
+
+SG-160 Pack 1 is implemented. Its directly rendered Desktop and validation Pack
+2 evidence remains open.

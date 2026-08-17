@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.10 / Group 160 / SG-160 Pack 1**.
+LifeOS is current through **v28.0.0-alpha.10 / Group 160 / SG-160 Pack 2**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
@@ -74,8 +74,8 @@ Groups 157-160 establish Documents and Evidence Intake:
 - versioned atomic persistence, load/save integrity checks and recoverable Trash
 - no extraction acceptance, financial posting, provider upload or permanent delete
 
-SG-160 Pack 1 is implemented. Directly rendered Desktop and inspected
-validation evidence remain Pack 2 work.
+SG-160 Pack 2 is closed with five directly rendered Desktop images and three
+inspected validation records.
 
 ## Prior completed capability
 
@@ -215,20 +215,20 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Groups 129-132 targeted tests: 11 passed
 - Prior Android runtime baseline: fresh installs launched on API 36 at SG-132
 - Website runtime smoke test: HTTP 200
-- Latest closed evidence: [`group-153-156-money-pressure-safe-spend`](screenshot-groups/group-153-156-money-pressure-safe-spend/)
+- Latest closed evidence: [`group-157-160-document-evidence-intake`](screenshot-groups/group-157-160-document-evidence-intake/)
 
 SG-140 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-144 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-148 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-152 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-156 Pack 2 is closed with exact, inspected product and validation evidence.
-SG-160 Pack 1 is implemented; Pack 2 evidence remains open.
+SG-160 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-128 Pack 2 remains a historical evidence gap and must be closed without
 inferring UI proof from builds or automated tests.
 
 ## Next completion work
 
-Close SG-160 visible Pack 2 evidence, then continue Household, Grocery and Life
-productization. SG-128’s historical visible Pack 2 capture remains open.
+Continue Household, Grocery and Life productization. SG-128’s historical
+visible Pack 2 capture remains open.
 Credentialed integrations, signing, public deployment, store submission and
 owner acceptance remain final gates.

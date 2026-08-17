@@ -170,7 +170,7 @@ sequential counter.
 - Classification and review state require explicit local decisions.
 - Exact-hash duplicates remain candidates; automatic merge and deletion are unavailable.
 - Document intake uses the shared versioned, atomic, recoverable local-store contract.
-- SG-160 Pack 1 is implemented; directly rendered product and validation evidence remains Pack 2 work.
+- SG-160 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

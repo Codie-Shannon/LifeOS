@@ -5,7 +5,7 @@
     "currentStatus":  "active-development",
     "latestCompletedGroup":  160,
     "latestCompletedGroupName":  "Documents and Evidence Intake",
-    "latestCompletedHead":  "sg160-pack1-implemented",
+    "latestCompletedHead":  "sg160-pack2-evidence",
     "nextGroup":  161,
     "nextGroupName":  "Household Grocery and Life Productization",
     "roadmapApprovedThroughGroup":  160,
@@ -166,7 +166,7 @@
                                   {
                                       "release":  "v28",
                                       "groups":  "121-160",
-                                      "status":  "document-intake-pack1"
+                                      "status":  "document-intake-pack2-complete"
                                   }
                               ],
     "safetyBoundaries":  {
@@ -187,7 +187,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-153-156-money-pressure-safe-spend",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-157-160-document-evidence-intake",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

@@ -36,8 +36,7 @@ public partial class V8ShellWindow : Window
         "settings-safety",
         "universal-spine",
         "v11-money-foundation",
-        "v12-career-studio",
-        "v13-grocery-planning"
+        "v12-career-studio"
     };
 
     private static readonly string[] WorkspaceOrder =
@@ -1151,7 +1150,12 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         }
         if (string.Equals(routeId, "v13-grocery-planning", StringComparison.OrdinalIgnoreCase))
         {
-            ShowEmbeddedModule(routeId, title, subtitle, new GroceryPlanningView());
+            ShowEmbeddedModule(
+                routeId,
+                title,
+                subtitle,
+                new HouseholdGroceryWorkspaceView(
+                    _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
             return;
         }
 

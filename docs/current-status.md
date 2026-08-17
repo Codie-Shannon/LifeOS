@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.10 / Group 160 / SG-160 Pack 2**.
+LifeOS is current through **v28.0.0-alpha.11 / Group 164 / SG-164 Pack 1**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
@@ -41,6 +41,11 @@ Groups 157-160 replace the ordinary Document Intake proof boundary with a real
 local file-picker workflow. Selected originals are byte-preserved, SHA-256
 verified, explicitly classified and moved through review without auto-posting.
 
+Groups 161-164 replace the Household Grocery Planning proof boundary with a
+genuine ordinary local workspace. Grocery needs and optional recurring
+essentials are validated before save, list and item state changes are explicit,
+and duplicate names remain review candidates.
+
 The 2026-08-18 recovery pass corrected the execution baseline without claiming
 a new group: ordinary and portfolio-demo data are now explicitly separated,
 Career document history is durable across restarts, PDF export paginates instead
@@ -57,13 +62,29 @@ preserved v27 release candidate.
 
 | Product | Status |
 |---|---|
-| Desktop | Current through Group 160 with ordinary-mode Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
+| Desktop | Current through Group 164 with ordinary-mode Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
 | Full Mobile | Current through Group 132 with ordinary empty state, opportunity capture, document review and derivative sharing |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest implemented capability
+
+Groups 161-164 establish Household and Grocery Planning:
+
+- genuine ordinary-mode local grocery state with no seeded lists or essentials
+- validated list/item names, quantity, unit, priority, category, brand and notes
+- optional recurring cadence with bounded days and explicit ISO next-due date
+- explicit draft, ready, shopping, paused, completed, cancelled and archived list state
+- explicit checked, unavailable, skipped and undo item decisions
+- duplicate names remain review candidates without automatic merge
+- versioned atomic persistence and recoverable Trash registration
+- no order, payment, price trust, substitution, grocery-list automation or external-cart mutation
+
+SG-164 Pack 1 is implemented. Directly rendered Desktop and inspected
+validation evidence remain Pack 2 work.
+
+## Prior completed capability
 
 Groups 157-160 establish Documents and Evidence Intake:
 
@@ -76,8 +97,6 @@ Groups 157-160 establish Documents and Evidence Intake:
 
 SG-160 Pack 2 is closed with five directly rendered Desktop images and three
 inspected validation records.
-
-## Prior completed capability
 
 Groups 153-156 establish Money Pressure and Safe to Spend:
 
@@ -197,6 +216,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
+- Groups 161-164 targeted tests: 8 passed
 - Groups 157-160 targeted tests: 8 passed
 - Groups 153-156 targeted tests: 8 passed
 - Groups 149-152 targeted tests: 8 passed
@@ -204,7 +224,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Groups 141-144 targeted tests: 8 passed
 - Groups 137-140 targeted tests: 7 passed
 - Groups 133-136 targeted tests: 8 passed
-- Core tests: 533 passed
+- Core tests: 541 passed
 - Companion tests: 34 passed
 - Website tests: 28 passed
 - Mobile tests: 56 passed
@@ -223,12 +243,13 @@ SG-148 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-152 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-156 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-160 Pack 2 is closed with exact, inspected product and validation evidence.
+SG-164 Pack 1 is implemented; Pack 2 evidence remains open.
 SG-128 Pack 2 remains a historical evidence gap and must be closed without
 inferring UI proof from builds or automated tests.
 
 ## Next completion work
 
-Continue Household, Grocery and Life productization. SG-128’s historical
-visible Pack 2 capture remains open.
+Close SG-164 visible Pack 2 evidence, then continue Life routines and personal
+administration productization. SG-128’s historical visible Pack 2 capture remains open.
 Credentialed integrations, signing, public deployment, store submission and
 owner acceptance remain final gates.

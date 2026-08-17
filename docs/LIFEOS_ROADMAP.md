@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.10 is active through Group 160 with real ordinary-mode
-Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
+**LifeOS v28.0.0-alpha.11 is active through Group 164 with real ordinary-mode
+Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -171,6 +171,17 @@ sequential counter.
 - Exact-hash duplicates remain candidates; automatic merge and deletion are unavailable.
 - Document intake uses the shared versioned, atomic, recoverable local-store contract.
 - SG-160 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
+
+### v28 / Groups 161-164 - Household and Grocery Planning
+
+- The ordinary proof boundary is replaced by a genuine embedded local workspace.
+- Grocery needs have bounded names, quantities, units, priorities, categories and notes.
+- Recurring essentials require explicit cadence and due-date review.
+- List and item lifecycle transitions remain user-controlled and reversible where safe.
+- Duplicate names remain review candidates without automatic merge.
+- Household grocery data uses the shared versioned, atomic, recoverable local-store contract.
+- Ordering, payments, price trust, substitution and external-cart mutation remain unavailable.
+- SG-164 Pack 1 is implemented; directly rendered product and validation evidence remains Pack 2 work.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

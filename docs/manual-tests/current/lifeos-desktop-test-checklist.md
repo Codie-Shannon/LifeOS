@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v28.0.0-alpha.10 active.
-- Group 160 / SG-160 Pack 2 closed with exact inspected evidence.
-- Document & Evidence Intake is a real ordinary-mode embedded workspace.
+- LifeOS v28.0.0-alpha.11 active.
+- Group 164 / SG-164 Pack 1 implemented.
+- Household & Grocery Planning is a real ordinary-mode embedded workspace.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation

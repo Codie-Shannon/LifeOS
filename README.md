@@ -4,7 +4,7 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v28.0.0-alpha.10 is active through Group 160. Document & Evidence Intake now preserves user-selected local originals with SHA-256 integrity, explicit review state and versioned recovery without automatic posting or deletion. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
+> **Current checkpoint:** LifeOS v28.0.0-alpha.11 is active through Group 164. Household & Grocery Planning now provides validated local lists, recurring essentials and explicit shopping decisions without ordering, payment or external-cart mutation. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
 
 ![LifeOS v28 CV Builder Foundation](docs/screenshot-groups/group-121-124-cv-builder-foundation/02-cv-builder-split-workspace.png)
 
@@ -12,12 +12,12 @@ LifeOS is a safety-first platform built by Codie Shannon around purpose-built De
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current through Group 160, including ordinary-mode Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
+| **LifeOS Desktop** | Current through Group 164, including ordinary-mode Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
 | **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 132, including opportunity capture, career review and derivative sharing |
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
 | **LifeOS Website** | Product, documentation, onboarding, factual portfolio and release-candidate evidence surface |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v28 ordinary-mode productization; Documents and Evidence Intake complete through SG-160 Pack 2 |
+| **Current release lane** | v28 ordinary-mode productization; Household and Grocery Planning implemented through SG-164 Pack 1 |
 
 Full Mobile and Mobile Companion are separate products. They can share contracts and libraries, but retain different scope, UX and release tracks.
 
@@ -155,10 +155,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v28.0.0-alpha.10 is active through Group 160. Document & Evidence Intake
+LifeOS v28.0.0-alpha.11 is active through Group 164. Household & Grocery Planning
 now has a real ordinary-mode local workspace on the shared storage, forms and
-problem-state spine. SG-160 Pack 2 is closed with exact, inspected product and
-validation evidence. SG-128 visible
+problem-state spine. SG-164 Pack 1 is implemented and visible Pack 2 evidence is
+next. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.
 

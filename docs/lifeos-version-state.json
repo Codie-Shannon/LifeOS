@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
-    "currentReleaseName":  "Documents and Evidence Intake",
-    "currentSemanticVersion":  "28.0.0-alpha.10",
+    "currentReleaseName":  "Household and Grocery Planning",
+    "currentSemanticVersion":  "28.0.0-alpha.11",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  160,
-    "latestCompletedGroupName":  "Documents and Evidence Intake",
-    "latestCompletedHead":  "sg160-pack2-evidence",
-    "nextGroup":  161,
-    "nextGroupName":  "Household Grocery and Life Productization",
-    "roadmapApprovedThroughGroup":  160,
+    "latestCompletedGroup":  164,
+    "latestCompletedGroupName":  "Household and Grocery Planning",
+    "latestCompletedHead":  "sg164-pack1-implemented",
+    "nextGroup":  165,
+    "nextGroupName":  "Life Routines and Personal Administration",
+    "roadmapApprovedThroughGroup":  164,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  160,
+                    "currentThroughGroup":  164,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-160",
-                                      "status":  "document-intake-pack2-complete"
+                                      "groups":  "121-164",
+                                      "status":  "household-grocery-pack1"
                                   }
                               ],
     "safetyBoundaries":  {

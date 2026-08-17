@@ -250,8 +250,8 @@ internal static class WorkspaceCatalog
                             Route(
                                 "v13-grocery-planning",
                                 "Grocery Planning",
-                                "Canonical records",
-                                "Lists, recurring essentials, quantities, priorities and review-first household planning."),
+                                "SG-164 active",
+                                "Validated local lists, recurring essentials, quantities, priorities and explicit shopping decisions."),
                             Route("grocery-lookup", "NZ Grocery Price Lookup", "SG-103 ready", "Consent-based nearby-store lookup, visible worker status, sourced price comparisons and manual fallback.")
                         })
                 }),

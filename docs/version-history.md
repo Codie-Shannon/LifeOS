@@ -4,10 +4,20 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.10 is active through Group 160 with genuine ordinary-mode
-Documents, Money Pressure, Work Time and Projects workspaces.
+LifeOS v28.0.0-alpha.11 is active through Group 164 with genuine ordinary-mode
+Household, Documents, Money Pressure, Work Time and Projects workspaces.
 
 ## v28 - Career Documents Studio
+
+### Groups 161-164
+
+- Replaced the ordinary Grocery Planning proof boundary with a real local workspace.
+- Added validated grocery item capture and optional recurring essentials.
+- Added explicit list and item transitions without automatic purchase or substitution.
+- Kept duplicate names as review candidates without automatic merge.
+- Registered the eighth versioned operational store in Local Data & Recovery.
+- Kept ordering, payment, price trust and external-cart mutation unavailable.
+- Implemented SG-164 Pack 1; visible product and validation evidence remains open.
 
 ### Groups 157-160
 

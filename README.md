@@ -95,6 +95,7 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 145-148 - Projects and Delivery](docs/screenshot-groups/group-145-148-projects-delivery/)
 - [Groups 141-144 - Forms and Actionable Problems](docs/screenshot-groups/group-141-144-forms-actionable-problems/)
 - [Groups 137-140 - Navigation and Shell Search](docs/screenshot-groups/group-137-140-navigation-shell-search/)
 - [Groups 133-136 - Local Data and Recovery Spine](docs/screenshot-groups/group-133-136-local-data-recovery/)
@@ -153,8 +154,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 LifeOS v28.0.0-alpha.7 is active through Group 148. Projects now has a real
 ordinary-mode local workspace on top of the SG-144 forms and problem-state
-checkpoint. SG-148 Pack 1 is implemented and visible evidence capture is in
-progress. SG-128 visible
+checkpoint. SG-148 is closed with its exact eight-image Desktop and validation
+evidence set. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.
 

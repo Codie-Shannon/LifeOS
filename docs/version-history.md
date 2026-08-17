@@ -16,6 +16,7 @@ Projects and delivery workspace.
 - Added delivery status, next action, due date and optional proof references.
 - Added versioned atomic storage, recovery health and Trash registration.
 - Added reversible archive/restore and safe write-failure problem states.
+- Closed SG-148 with five Desktop product images and three validation records.
 
 ### Groups 141-144
 

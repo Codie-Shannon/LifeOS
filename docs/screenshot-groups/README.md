@@ -56,5 +56,5 @@ evidence set.
 SG-144 is closed with the exact eight-image Desktop and validation Pack 2
 evidence set.
 
-SG-148 Pack 1 is implemented. Its exact visible Pack 2 evidence set remains
-open.
+SG-148 is closed with the exact eight-image Desktop and validation Pack 2
+evidence set.

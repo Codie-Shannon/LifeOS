@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.7 / Group 148 / SG-148 Pack 1**.
+LifeOS is current through **v28.0.0-alpha.7 / Group 148 / SG-148 Pack 2**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
@@ -62,7 +62,8 @@ Groups 145-148 establish Projects and Delivery:
 - reversible archive/restore with no permanent-delete control
 - safe actionable write-failure states and an accessible live problem region
 
-SG-148 Pack 1 is implemented; exact visible evidence capture remains open.
+SG-148 Pack 2 is closed with five directly rendered Desktop images and three
+inspected validation records.
 
 ## Prior completed capability
 
@@ -161,11 +162,11 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Groups 129-132 targeted tests: 11 passed
 - Prior Android runtime baseline: fresh installs launched on API 36 at SG-132
 - Website runtime smoke test: HTTP 200
-- Latest evidence: [`group-141-144-forms-actionable-problems`](screenshot-groups/group-141-144-forms-actionable-problems/)
+- Latest evidence: [`group-145-148-projects-delivery`](screenshot-groups/group-145-148-projects-delivery/)
 
 SG-140 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-144 Pack 2 is closed with exact, inspected product and validation evidence.
-SG-148 Pack 1 is implemented and visible Pack 2 capture remains open.
+SG-148 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-128 Pack 2 remains a historical evidence gap and must be closed without
 inferring UI proof from builds or automated tests.
 

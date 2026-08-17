@@ -140,7 +140,8 @@ sequential counter.
 - Delivery state, due date and optional proof reference remain explicit.
 - Projects use the shared versioned, atomic, backup-aware local-store contract.
 - Archive and restore are reversible; permanent deletion is not exposed.
-- SG-148 Pack 1 is implemented; exact visible Pack 2 evidence remains open.
+- SG-148 Pack 2 is closed with the exact eight-image Desktop and validation
+  evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

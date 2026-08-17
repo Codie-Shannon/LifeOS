@@ -5,7 +5,7 @@
     "currentStatus":  "active-development",
     "latestCompletedGroup":  148,
     "latestCompletedGroupName":  "Projects and Delivery",
-    "latestCompletedHead":  "sg148-pack1-pending",
+    "latestCompletedHead":  "sg148-pack2-closed",
     "nextGroup":  149,
     "nextGroupName":  "Work and Time Productization",
     "roadmapApprovedThroughGroup":  148,
@@ -187,7 +187,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-141-144-forms-actionable-problems",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-145-148-projects-delivery",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

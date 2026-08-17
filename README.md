@@ -95,6 +95,9 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 141-144 - Forms and Actionable Problems](docs/screenshot-groups/group-141-144-forms-actionable-problems/)
+- [Groups 137-140 - Navigation and Shell Search](docs/screenshot-groups/group-137-140-navigation-shell-search/)
+- [Groups 133-136 - Local Data and Recovery Spine](docs/screenshot-groups/group-133-136-local-data-recovery/)
 - [Groups 121-124 - CV Builder Foundation](docs/screenshot-groups/group-121-124-cv-builder-foundation/)
 - [Groups 117-120 - Product-Complete Release Candidate](docs/screenshot-groups/group-117-120-product-complete-release-candidate/)
 - [Groups 112-116 - Website Packaging and Onboarding](docs/screenshot-groups/group-112-116-website-packaging-onboarding/)
@@ -150,8 +153,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 LifeOS v28.0.0-alpha.6 is active through Group 144. The platform spine now
 adds shared form validation and actionable local problem states on top of the
-SG-140 shell-discovery checkpoint. SG-144 Pack 1 is implemented and its visible
-evidence capture is in progress. SG-128 visible
+SG-140 shell-discovery checkpoint. SG-144 is closed with its exact eight-image
+Desktop and validation evidence set. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.
 

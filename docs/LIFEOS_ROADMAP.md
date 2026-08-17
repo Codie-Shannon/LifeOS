@@ -129,7 +129,8 @@ sequential counter.
   stable user-facing problem identifiers.
 - Exception messages and private paths are not exposed in UI feedback.
 - Preference reset persists before replacing the current in-memory state.
-- SG-144 Pack 1 is implemented; exact visible Pack 2 evidence remains open.
+- SG-144 Pack 2 is closed with the exact eight-image Desktop and validation
+  evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

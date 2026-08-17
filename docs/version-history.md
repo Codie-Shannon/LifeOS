@@ -17,6 +17,7 @@ forms and safe, actionable local problem states.
 - Kept exception messages and private paths out of user-facing errors.
 - Made preference reset preserve current state when persistence fails.
 - Corrected Household last-workspace persistence.
+- Closed SG-144 with five Desktop product images and three validation records.
 
 ### Groups 137-140
 

@@ -9,7 +9,7 @@ This directory is the durable source of truth for LifeOS status, release history
 - [`version-history.md`](version-history.md) — consolidated milestone history
 - [`LIFEOS_ROADMAP.md`](LIFEOS_ROADMAP.md) — approved compressed roadmap through Group 144
 - [`LIFEOS_DESKTOP_RELEASE_NOTES.md`](LIFEOS_DESKTOP_RELEASE_NOTES.md) — current Desktop release notes
-- [`screenshot-groups/group-121-124-cv-builder-foundation/`](screenshot-groups/group-121-124-cv-builder-foundation/) — latest completed screenshot evidence
+- [`screenshot-groups/group-141-144-forms-actionable-problems/`](screenshot-groups/group-141-144-forms-actionable-problems/) — latest completed screenshot evidence
 
 ## Current product state
 
@@ -49,6 +49,9 @@ This directory is the durable source of truth for LifeOS status, release history
 
 ## Current evidence
 
+- [`Groups 141-144 - Forms and Actionable Problems`](screenshot-groups/group-141-144-forms-actionable-problems/)
+- [`Groups 137-140 - Navigation and Shell Search`](screenshot-groups/group-137-140-navigation-shell-search/)
+- [`Groups 133-136 - Local Data and Recovery Spine`](screenshot-groups/group-133-136-local-data-recovery/)
 - [`Groups 121-124 - CV Builder Foundation`](screenshot-groups/group-121-124-cv-builder-foundation/)
 - [`Groups 117-120 - Product-Complete Release Candidate`](screenshot-groups/group-117-120-product-complete-release-candidate/)
 - [`Groups 112-116 - Website Packaging and Onboarding`](screenshot-groups/group-112-116-website-packaging-onboarding/)

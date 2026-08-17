@@ -150,7 +150,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 LifeOS v28.0.0-alpha.2 is active through Group 128. Groups 129-132 continue
 Career Documents Studio with cover letters and application integration. The
-v27 release-candidate evidence remains preserved in SG-80.
+v27 release-candidate evidence remains preserved in SG-120.
 
 ## Author
 

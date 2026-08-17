@@ -1,13 +1,13 @@
 # Groups 83-86 - Native Intelligence and Optional AI
 
-- Screenshot group: SG-72
+- Screenshot group: SG-86
 - Release: v19 Native Intelligence
 - Version: 19.0.0-alpha.1
 - Development commit: `41dbc2b`
 
 ## Scope
 
-SG-72 demonstrates deterministic, offline-capable native suggestions and the
+SG-86 demonstrates deterministic, offline-capable native suggestions and the
 strict boundary around optional external AI. External enrichment is
 category-scoped, cost-controlled and review-first; it cannot mutate LifeOS
 directly.
@@ -23,7 +23,7 @@ duplicate or impossible per-record screenshots.
    - Shows the reachable Native Intelligence & Optional AI module.
 2. `02-desktop-intelligence-overview.png`
    - Navigation: Assistant > Native Intelligence & Optional AI
-   - Shows the SG-72 boundary, native suggestion count, Ask mode, monthly cap,
+   - Shows the SG-86 boundary, native suggestion count, Ask mode, monthly cap,
      review count and the first source-backed suggestions.
 3. `03-desktop-intelligence-review-records.png`
    - Navigation: Assistant > Native Intelligence & Optional AI, records
@@ -32,7 +32,7 @@ duplicate or impossible per-record screenshots.
 4. `04-desktop-release-version.png`
    - Navigation: Settings
    - Shows Desktop release v19.0.0-alpha.1 and v19 Native Intelligence.
-5. `05-group72-validation.png`
+5. `05-sg86-validation.png`
    - Shows 381 Core tests and 54 Mobile tests passing, a clean Desktop
      Release build, signed APK/AAB verification, Git diff validation and
      commit `41dbc2b`.
@@ -48,7 +48,7 @@ duplicate or impossible per-record screenshots.
 - Android bundle: signed AAB verified
 - Git diff check: passed
 - Private-data review: passed
-- Mobile feature screenshots: not applicable; SG-72 adds no Mobile UI surface
+- Mobile feature screenshots: not applicable; SG-86 adds no Mobile UI surface
 - Website screenshots: not applicable to this pack
 
 ## Pack boundary

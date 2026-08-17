@@ -130,7 +130,7 @@ internal static class WorkspaceCatalog
                             Route("work-pipeline", "Work Pipeline", "Canonical records", "Active work, opportunities, stages, waiting-on state, invoice readiness and expected value."),
                             Route("follow-ups", "Follow-Ups", "Canonical records", "People, contexts, due dates, priority, money links and next actions."),
                             Route("paid-work-centre", "Paid Work Centre", "Canonical behaviour", "Billable work, invoice readiness, payment state and proof-led delivery."),
-                            Route("work-time", "Work Time & Billable Records", "SG-67 ready", "Timers, pause/resume, manual entries, daily totals, billable classification and exportable source proof."),
+                            Route("work-time", "Work Time & Billable Records", "SG-68 ready", "Timers, pause/resume, manual entries, daily totals, billable classification and exportable source proof."),
                             Route("work-sessions", "Work Sessions", "Canonical records", "Hours, rates, billable state, descriptions and session evidence."),
                             Route("timesheet-evidence", "Timesheet Evidence", "Canonical behaviour", "Review timesheet-ready work without copying or rewriting source records.")
                         })
@@ -157,7 +157,7 @@ internal static class WorkspaceCatalog
                         new WorkspaceModuleDefinition[]
                         {
                             Native("career-profile", "Profile", "Native workspace surface", "Role direction, strengths and career positioning without client-work fields."),
-                            Route("career-cvs", "CV & Cover Letter Studio", "SG-81 ready", "Guided CV creation, evidence-backed content, section controls, autosave and live preview."),
+                            Route("career-cvs", "CV & Cover Letter Studio", "SG-124 ready", "Guided CV creation, evidence-backed content, section controls, autosave and live preview."),
                             Route("v12-career-studio", "Career Studio", "Canonical records", "Authoritative opportunity and application pipeline with review-first imported candidates."),
                             Native("career-interviews", "Interviews", "Native workspace surface", "Interview preparation and follow-up structure."),
                             Route("relationship-radar", "Relationship Radar", "Canonical records", "Relationship and follow-up records where they support career activity.")
@@ -192,7 +192,7 @@ internal static class WorkspaceCatalog
                             Route("money-profile", "Money Profile", "Canonical state", "Buffers, hidden deductions and safe-to-spend planning."),
                             Route("payment-calendar", "Payment Calendar", "Canonical behaviour", "Due dates, expected income and payment attention."),
                             Route("pay-later", "Pay Later", "Canonical records", "BNPL obligations, due dates, pressure and notes."),
-                            Route("pay-later-insights", "Pay-Later & Money Integration Review", "SG-75 ready", "Afterpay/Zip evidence parsing, duplicate review, safe-money exclusion and read-only bank/accounting boundaries."),
+                            Route("pay-later-insights", "Pay-Later & Money Integration Review", "SG-98 ready", "Afterpay/Zip evidence parsing, duplicate review, safe-money exclusion and read-only bank/accounting boundaries."),
                             Route("receipt-evidence", "Receipt Evidence", "Canonical records", "Receipts and payment proof retained as evidence.")
                         })
                 }),
@@ -220,7 +220,7 @@ internal static class WorkspaceCatalog
                             Route("agenda", "Agenda", "Canonical records", "Commitments, dates, time, pressure, status and notes."),
                             Route("daily-state", "Daily State", "Canonical behaviour", "Current personal state and pressure context."),
                             Route("daily-operating-flow", "Daily Operating Flow", "Canonical behaviour", "A manual, visible operating sequence for the day."),
-                            Route("operating-day", "Operating Day & Work Proof", "SG-68 ready", "Protected blocks, calendar proposals, pressure-aware reminders, boundaries and proof-linked closure."),
+                            Route("operating-day", "Operating Day & Work Proof", "SG-72 ready", "Protected blocks, calendar proposals, pressure-aware reminders, boundaries and proof-linked closure."),
                             Route("weekly-close-out", "Weekly Close-Out", "Canonical records", "Done, moved, waiting and next-week review."),
                             Route("timer-agent", "TimerAgent", "Canonical utility", "Desktop-only timing utility inside Life.")
                         })
@@ -251,7 +251,7 @@ internal static class WorkspaceCatalog
                                 "Grocery Planning",
                                 "Canonical records",
                                 "Lists, recurring essentials, quantities, priorities and review-first household planning."),
-                            Route("grocery-lookup", "NZ Grocery Price Lookup", "SG-76 ready", "Consent-based nearby-store lookup, visible worker status, sourced price comparisons and manual fallback.")
+                            Route("grocery-lookup", "NZ Grocery Price Lookup", "SG-103 ready", "Consent-based nearby-store lookup, visible worker status, sourced price comparisons and manual fallback.")
                         })
                 }),
             new(
@@ -302,13 +302,13 @@ internal static class WorkspaceCatalog
                         new WorkspaceModuleDefinition[]
                         {
                             Route("assistant", "Assistant", "Preserved safety boundary", "Source-backed answers, evidence disclosure, uncertainty and review-only planning."),
-                            Route("communications", "Scheduled Communications", "SG-73 ready", "SMS and email drafts, explicit approvals, quiet hours, edit/cancel/reschedule, audit and Emergency Stop."),
-                            Route("social-publishing", "Social & Messenger Review", "SG-74 ready", "Meta capability mapping, scheduled drafts, approvals, visible browser fallback and provider confirmation."),
-                            Route("intelligence", "Native Intelligence & Optional AI", "SG-72 ready", "Deterministic ranking, optional provider settings, category permissions, cost caps and review-first suggestions."),
+                            Route("communications", "Scheduled Communications", "SG-90 ready", "SMS and email drafts, explicit approvals, quiet hours, edit/cancel/reschedule, audit and Emergency Stop."),
+                            Route("social-publishing", "Social & Messenger Review", "SG-94 ready", "Meta capability mapping, scheduled drafts, approvals, visible browser fallback and provider confirmation."),
+                            Route("intelligence", "Native Intelligence & Optional AI", "SG-86 ready", "Deterministic ranking, optional provider settings, category permissions, cost caps and review-first suggestions."),
                             Route("memory", "Memory", "Explicit and revocable", "User-confirmed memory with scope, audit, expiry, revocation and deletion."),
                             Route("search-knowledge", "Search / Knowledge", "Canonical behaviour", "Local search and knowledge surfaces."),
                             Route("integration-inbox", "Integration Inbox", "Review-first", "Untrusted imported records remain separate from trusted operational state."),
-                            Route("guarded-providers", "Guarded Provider Contracts", "SG-69 ready", "Provider registry, source previews, duplicate/conflict decisions, permission gates, audit and Emergency Stop."),
+                            Route("guarded-providers", "Guarded Provider Contracts", "SG-76 ready", "Provider registry, source previews, duplicate/conflict decisions, permission gates, audit and Emergency Stop."),
                             Route("google-calendar", "Google Calendar", "Read-only connector", "Connect, disconnect and manually refresh bounded Google Calendar previews."),
                             Route("email-radar", "Email Radar", "Read-only review", "Local email evidence without sending or external mutation.")
                         })
@@ -339,12 +339,12 @@ internal static class WorkspaceCatalog
                         new WorkspaceModuleDefinition[]
                         {
                             Route("settings-safety", "Settings / Safety", "Canonical settings", "Underlying safety profile and local settings evidence."),
-                            Route("control-plane", "Privacy, Backup & Emergency Control", "SG-78 ready", "Sensitive-category permissions, integrity-checked backup/restore, audit and global Emergency Stop."),
-                            Route("beta-readiness", "Private Beta Readiness", "SG-71 ready", "Setup now/later/decline choices and desktop/mobile/web release validation."),
-                            Route("documentation-hub", "Documentation & Packaging Hub", "SG-70 ready", "Audience-safe website documentation, concise in-app help and versioned release links."),
-                            Route("public-packaging", "Website & Product Packaging", "SG-79 ready", "Public website shell, neutral onboarding, documentation migration and factual case-study packaging."),
-                            Route("release-candidate", "Product-Complete Release Candidate", "SG-80 ready", "End-to-end desktop/mobile/web checks, hardening, evidence closure and owner-controlled release decision."),
-                            Route("evidence-automation", "Evidence Automation", "SG-77 ready", "Screenshot intake, stable naming, evidence PDF generation and repository completion gates."),
+                            Route("control-plane", "Privacy, Backup & Emergency Control", "SG-111 ready", "Sensitive-category permissions, integrity-checked backup/restore, audit and global Emergency Stop."),
+                            Route("beta-readiness", "Private Beta Readiness", "SG-82 ready", "Setup now/later/decline choices and desktop/mobile/web release validation."),
+                            Route("documentation-hub", "Documentation & Packaging Hub", "SG-79 ready", "Audience-safe website documentation, concise in-app help and versioned release links."),
+                            Route("public-packaging", "Website & Product Packaging", "SG-116 ready", "Public website shell, neutral onboarding, documentation migration and factual case-study packaging."),
+                            Route("release-candidate", "Product-Complete Release Candidate", "SG-120 ready", "End-to-end desktop/mobile/web checks, hardening, evidence closure and owner-controlled release decision."),
+                            Route("evidence-automation", "Evidence Automation", "SG-107 ready", "Screenshot intake, stable naming, evidence PDF generation and repository completion gates."),
                             Route("automation-centre", "Automation Centre", "Emergency Stop protected", "Guarded, manual, foreground-only automation and recovery controls."),
                             Route("desktop-release", "Desktop Release", "Diagnostics", "Release readiness and platform checkpoint evidence."),
                             Route("item-state-engine", "Item State Engine", "Diagnostics", "Shared item-state rules and platform behaviour."),

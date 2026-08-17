@@ -1,13 +1,13 @@
 # Groups 99-103 - New Zealand Grocery Lookup Worker
 
-- Screenshot group: SG-76
+- Screenshot group: SG-103
 - Release: v23 Grocery Intelligence
 - Version: 23.0.0-alpha.1
 - Development commit: `2610420`
 
 ## Scope
 
-SG-76 demonstrates consent-based New Zealand grocery lookup with a
+SG-103 demonstrates consent-based New Zealand grocery lookup with a
 user-selected location or optional nearest-town pricing. Price records expose
 their retailer, capture time and confidence, while unavailable provider paths
 remain visible and offer manual fallback.
@@ -27,12 +27,12 @@ without manufacturing Mobile or Website feature views.
    - Shows sourced pricing, comparable products, manual fallback and refresh off.
 4. `04-desktop-v23-release-version.png`
    - Shows Desktop release v23.0.0-alpha.1 and v23 Grocery Intelligence.
-5. `05-group76-validation.png`
+5. `05-sg103-validation.png`
    - Shows targeted, Core and Mobile tests plus Release builds passing.
 
 ## Verification
 
-- SG-76 targeted tests: 5 passed, 0 failed
+- SG-103 targeted tests: 5 passed, 0 failed
 - Core tests: 399 passed, 0 failed
 - Mobile tests: 54 passed, 0 failed
 - Desktop Release build: succeeded
@@ -40,7 +40,7 @@ without manufacturing Mobile or Website feature views.
 - Git diff check: passed
 - Private-data review: passed
 - Cart mutations: 0
-- Mobile feature screenshots: not applicable; SG-76 only aligns Mobile version
+- Mobile feature screenshots: not applicable; SG-103 only aligns Mobile version
 - Website screenshots: not applicable to this pack
 
 ## Pack boundary

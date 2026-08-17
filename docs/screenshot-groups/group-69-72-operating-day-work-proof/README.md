@@ -1,13 +1,13 @@
 # Groups 69-72 - Operating Day and Work Proof
 
-- Screenshot group: SG-68
+- Screenshot group: SG-72
 - Release: v14 Operating Day
 - Version: 14.0.0-beta.1
 - Development commit: `9082616`
 
 ## Scope
 
-SG-68 demonstrates calendar-linked operating-day planning, protected work
+SG-72 demonstrates calendar-linked operating-day planning, protected work
 blocks, pressure-aware review, visible Work/Career/Household boundaries and
 proof-gated v14 closure.
 
@@ -18,10 +18,10 @@ accepted. All visible operating records are fictional demonstration data.
 
 1. `01-desktop-life-workspace.png`
    - Navigation: Life
-   - Shows the permanent Life workspace and SG-68-ready Operating Day module.
+   - Shows the permanent Life workspace and SG-72-ready Operating Day module.
 2. `02-desktop-operating-day-overview.png`
    - Navigation: Life > Operating Day & Work Proof
-   - Shows the SG-68 boundary, protected blocks, review queue, stop points and proof state.
+   - Shows the SG-72 boundary, protected blocks, review queue, stop points and proof state.
 3. `03-desktop-operating-day-records.png`
    - Navigation: Life > Operating Day & Work Proof
    - Shows protected, reviewable, accepted and blocked records together.
@@ -37,7 +37,7 @@ accepted. All visible operating records are fictional demonstration data.
 7. `07-desktop-release-version.png`
    - Navigation: Settings
    - Shows Desktop release v14.0.0-beta.1 and v14 Operating Day.
-8. `08-group68-validation.png`
+8. `08-sg72-validation.png`
    - Shows 362 Core tests passing, the successful Desktop Release build,
      zero warnings, zero errors, Git diff validation and commit `9082616`.
 

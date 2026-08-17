@@ -15,12 +15,12 @@ public sealed class Groups104To107EvidenceAutomationTests
         {
             (@"C:\Pictures\Screenshots\old\legacy.png", cutoff.AddDays(-1)),
             (@"C:\Pictures\Screenshots\work time.png", cutoff.AddMinutes(1))
-        }, cutoff, "SG-67");
+        }, cutoff, "SG-68");
 
         ScreenshotCandidate candidate = Assert.Single(candidates);
         Assert.False(candidate.IsOld);
         Assert.Equal(@"C:\Pictures\Screenshots\work time.png", candidate.SourcePath);
-        Assert.Equal("01_SG-67_work-time.png", candidate.SuggestedName);
+        Assert.Equal("01_SG-68_work-time.png", candidate.SuggestedName);
     }
 
     [Fact]

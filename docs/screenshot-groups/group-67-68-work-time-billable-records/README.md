@@ -1,13 +1,13 @@
 # Groups 67-68 - Work Time and Billable Records
 
-- Screenshot group: SG-67
+- Screenshot group: SG-68
 - Release: v14 Work Time
 - Version: 14.0.0-alpha.1
 - Development commit: `4f4417d`
 
 ## Scope
 
-SG-67 demonstrates the Work Time and Billable Records lane, its relationship
+SG-68 demonstrates the Work Time and Billable Records lane, its relationship
 to the permanent Work workspace, review-gated manual corrections and exports,
 authoritative Work Sessions and Timesheet Evidence routes, and the matching
 release and validation state.
@@ -19,10 +19,10 @@ provider writes, payment actions or autonomous record changes are enabled.
 
 1. `01-desktop-work-workspace.png`
    - Navigation: Work
-   - Shows the permanent Work workspace and the SG-67-ready Work Time module.
+   - Shows the permanent Work workspace and the SG-68-ready Work Time module.
 2. `02-desktop-work-time-overview.png`
    - Navigation: Work > Work Time & Billable Records
-   - Shows the SG-67 boundary, daily totals, billable value and retained evidence count.
+   - Shows the SG-68 boundary, daily totals, billable value and retained evidence count.
 3. `03-desktop-work-time-records.png`
    - Navigation: Work > Work Time & Billable Records
    - Shows running, completed, manual-correction and export records together.
@@ -38,7 +38,7 @@ provider writes, payment actions or autonomous record changes are enabled.
 7. `07-desktop-release-version.png`
    - Navigation: Settings
    - Shows Desktop release v14.0.0-alpha.1 and the v14 Work Time release name.
-8. `08-group67-validation.png`
+8. `08-sg68-validation.png`
    - Shows 358 Core tests passing, the successful Desktop Release build,
      zero warnings, zero errors, Git diff validation and development commit `4f4417d`.
 

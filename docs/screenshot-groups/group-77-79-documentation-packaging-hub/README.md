@@ -1,13 +1,13 @@
 # Groups 77-79 - Documentation and Packaging Hub
 
-- Screenshot group: SG-70
+- Screenshot group: SG-79
 - Release: v16 Documentation Hub
 - Version: 16.0.0-alpha.1
 - Development commit: `e4f2b24`
 
 ## Scope
 
-SG-70 demonstrates the desktop and website Documentation Hub, release
+SG-79 demonstrates the desktop and website Documentation Hub, release
 readiness records, stable screenshot evidence links and the separation of
 public, beta and internal documentation.
 
@@ -38,7 +38,7 @@ separate from this evidence-only pack.
 7. `07-desktop-release-version.png`
    - Navigation: Settings
    - Shows Desktop release v16.0.0-alpha.1 and v16 Documentation Hub.
-8. `08-group70-validation.png`
+8. `08-sg79-validation.png`
    - Shows 371 Core tests and 28 Website tests passing, the successful Desktop
      Release build, zero warnings, zero errors, Git diff validation and commit
      `e4f2b24`.

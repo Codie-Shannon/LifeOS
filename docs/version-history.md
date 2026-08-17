@@ -25,7 +25,7 @@ derivative export. Cover letters and application integration are next.
 - Added structured employment entries and modular custom sections.
 - Added stable drag ordering, autosave/version state and undo/redo.
 - Added responsive split editing and focused full-page preview.
-- Closed screenshot and validation evidence through SG-81.
+- Closed screenshot and validation evidence through SG-124.
 - Kept unsupported claims, autonomous applications and recruiter messaging blocked.
 
 ## v27 - Product-Complete Release Candidate
@@ -35,7 +35,7 @@ derivative export. Cover letters and application integration are next.
 - Completed the cross-product Desktop, Full Mobile and Website candidate review.
 - Added explicit readiness records and an owner-controlled release gate.
 - Aligned visible release identity at v27.0.0-rc.1.
-- Closed screenshot and validation evidence through SG-80.
+- Closed screenshot and validation evidence through SG-120.
 - Kept release tagging, public launch and production activation unapproved.
 
 ## v26 - Public Packaging

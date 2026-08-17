@@ -64,11 +64,16 @@ Version numbers follow shipped product checkpoints; v17 was not used as a comple
 
 - Cross-product regression, accessibility and security validation is complete.
 - Desktop, Android and Website Release builds are validated.
-- Final screenshot and validation evidence is recorded in SG-80.
+- Final screenshot and validation evidence is recorded in SG-120.
 - A release tag, public launch, store submission and production-provider
   activation require explicit owner approval.
 
 ## Beyond Group 120
+
+Screenshot-group identifiers follow the ending implementation checkpoint for
+compressed lanes. For example, Groups 117-120 close as SG-120, Groups 121-124
+close as SG-124, and Groups 125-128 close as SG-128. They are not a separate
+sequential counter.
 
 ### v28 / Groups 121-124 - CV Builder Foundation
 

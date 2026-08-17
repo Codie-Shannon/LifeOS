@@ -1,13 +1,13 @@
 # Groups 112-116 - Website Packaging and Onboarding
 
-- Screenshot group: SG-79
+- Screenshot group: SG-116
 - Release: v26 Public Packaging
 - Version: 26.0.0-beta.1
 - Development commit: `24f5f1a`
 
 ## Scope
 
-SG-79 completes the public Website packaging lane with factual private-beta
+SG-116 completes the public Website packaging lane with factual private-beta
 positioning, local-first onboarding, portfolio case-study presentation, updated
 product and roadmap boundaries, public-route validation and safeguards against
 private paths or unsupported production claims.
@@ -16,16 +16,16 @@ private paths or unsupported production claims.
 
 1. `01-desktop-public-packaging-navigation.png` - reachable Settings route.
 2. `02-desktop-v26-release-version.png` - v26 private-beta release identity.
-3. `03-desktop-public-packaging-overview.png` - SG-79 boundary and metrics.
+3. `03-desktop-public-packaging-overview.png` - SG-116 boundary and metrics.
 4. `04-desktop-public-packaging-records.png` - packaging work records.
 5. `05-website-homepage.png` - public LifeOS product homepage.
 6. `06-website-onboarding.png` - three-step optional-provider onboarding.
 7. `07-website-case-study.png` - factual portfolio case study.
-8. `08-group79-validation.png` - complete validation proof.
+8. `08-sg116-validation.png` - complete validation proof.
 
 ## Verification
 
-- SG-79 targeted tests: passed
+- SG-116 targeted tests: passed
 - Core tests: 418 passed, 0 failed
 - Website tests: 28 passed, 0 failed
 - Mobile tests: 54 passed, 0 failed

@@ -1,13 +1,13 @@
 # Groups 87-90 - Scheduled Communications
 
-- Screenshot group: SG-73
+- Screenshot group: SG-90
 - Release: v20 Scheduled Communications
 - Version: 20.0.0-alpha.1
 - Development commit: `b95a0dd`
 
 ## Scope
 
-SG-73 demonstrates scheduled SMS, Gmail and Outlook communication drafts with
+SG-90 demonstrates scheduled SMS, Gmail and Outlook communication drafts with
 explicit approval, quiet-hours enforcement, approval revocation after edits
 or rescheduling, auditable send state and an Emergency Stop that blocks every
 channel.
@@ -21,7 +21,7 @@ No message is sent automatically merely because it was drafted or scheduled.
    - Shows the reachable Scheduled Communications module.
 2. `02-desktop-scheduled-communications-overview.png`
    - Navigation: Assistant > Scheduled Communications
-   - Shows the SG-73 boundary, draft and approval counts, local quiet hours,
+   - Shows the SG-90 boundary, draft and approval counts, local quiet hours,
      zero automatic sends and the first communication records.
 3. `03-desktop-communication-review-records.png`
    - Navigation: Assistant > Scheduled Communications, records
@@ -30,7 +30,7 @@ No message is sent automatically merely because it was drafted or scheduled.
 4. `04-desktop-release-version.png`
    - Navigation: Settings
    - Shows Desktop release v20.0.0-alpha.1 and v20 Scheduled Communications.
-5. `05-group73-validation.png`
+5. `05-sg90-validation.png`
    - Shows 386 Core tests and 54 Mobile tests passing, a clean Desktop
      Release build, signed APK/AAB verification, Git diff validation and
      commit `b95a0dd`.
@@ -47,7 +47,7 @@ No message is sent automatically merely because it was drafted or scheduled.
 - Git diff check: passed
 - Private-data review: passed
 - Automatic messages shown: 0
-- Mobile feature screenshots: not applicable; SG-73 adds no Mobile UI surface
+- Mobile feature screenshots: not applicable; SG-90 adds no Mobile UI surface
 - Website screenshots: not applicable to this pack
 
 ## Pack boundary

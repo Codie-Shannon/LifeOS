@@ -24,7 +24,7 @@ public static class ProductLaneCatalog
         {
             ["work-time"] = new(
                 "work-time",
-                "SG-67",
+                "SG-68",
                 "Work Time & Billable Records",
                 "Groups 67-68 - timers, manual entries, daily totals and exportable source proof",
                 "Local timers and manual records change only when the user acts. Evidence remains attached and reviewable.",
@@ -44,7 +44,7 @@ public static class ProductLaneCatalog
                 }),
             ["operating-day"] = new(
                 "operating-day",
-                "SG-68",
+                "SG-72",
                 "Operating Day & Work Proof",
                 "Groups 69-72 - calendar-linked planning, pressure-aware reminders and v14 closure",
                 "Calendar blocks and suggested next actions remain proposals until accepted. Work, Career and Household boundaries stay visible.",
@@ -64,7 +64,7 @@ public static class ProductLaneCatalog
                 }),
             ["guarded-providers"] = new(
                 "guarded-providers",
-                "SG-69",
+                "SG-76",
                 "Guarded Provider Contracts",
                 "Groups 73-76 - connector registry, Integration Inbox v2, permission gates and v15 closure",
                 "Provider data remains an untrusted preview. Writes are disabled by default, decisions are audited, and Emergency Stop wins.",
@@ -84,7 +84,7 @@ public static class ProductLaneCatalog
                 }),
             ["documentation-hub"] = new(
                 "documentation-hub",
-                "SG-70",
+                "SG-79",
                 "Documentation & Packaging Hub",
                 "Groups 77-79 - concise in-app help, website documentation and release-asset links",
                 "Public, beta and internal audiences are separated. Private paths, account details and handoff notes never enter public copy.",
@@ -103,7 +103,7 @@ public static class ProductLaneCatalog
                 }),
             ["beta-readiness"] = new(
                 "beta-readiness",
-                "SG-71",
+                "SG-82",
                 "Private Beta Readiness",
                 "Groups 80-82 - setup choices, portal distribution and closed-beta validation",
                 "Core local value never requires an external provider. Optional setup supports now, later or decline and can be changed in Settings.",
@@ -123,7 +123,7 @@ public static class ProductLaneCatalog
                 }),
             ["intelligence"] = new(
                 "intelligence",
-                "SG-72",
+                "SG-86",
                 "Native Intelligence & Optional AI",
                 "Groups 83-86 - deterministic ranking, provider controls and review-first suggestions",
                 "Native rules always work offline. External AI is optional, category-scoped, cost-controlled and cannot mutate LifeOS directly.",
@@ -143,7 +143,7 @@ public static class ProductLaneCatalog
                 }),
             ["communications"] = new(
                 "communications",
-                "SG-73",
+                "SG-90",
                 "Scheduled Communications",
                 "Groups 87-90 - SMS and email scheduling, unified review, quiet hours and safety closure",
                 "Every scheduled SMS or email requires explicit approval. Editing or rescheduling revokes approval; quiet hours and Emergency Stop always apply.",
@@ -163,7 +163,7 @@ public static class ProductLaneCatalog
                 }),
             ["social-publishing"] = new(
                 "social-publishing",
-                "SG-74",
+                "SG-94",
                 "Social & Messenger Review",
                 "Groups 91-94 - Meta capability mapping, scheduled drafts and transparent fallback",
                 "Official APIs are preferred. Unsupported actions show their limitation and use an explicit browser-assisted or manual handoff; nothing posts invisibly.",
@@ -183,7 +183,7 @@ public static class ProductLaneCatalog
                 }),
             ["pay-later-insights"] = new(
                 "pay-later-insights",
-                "SG-75",
+                "SG-98",
                 "Pay-Later & Money Integration Review",
                 "Groups 95-98 - Afterpay/Zip parsing, safe-money exclusion and read-only contracts",
                 "Email evidence creates candidates only. Safe money changes after confirmation; banking/accounting contracts cannot reconcile or initiate payments.",
@@ -203,7 +203,7 @@ public static class ProductLaneCatalog
                 }),
             ["grocery-lookup"] = new(
                 "grocery-lookup",
-                "SG-76",
+                "SG-103",
                 "NZ Grocery Price Lookup",
                 "Groups 99-103 - consent, visible worker, retailer adapters and price intelligence",
                 "Lookup runs only after retailer and location consent. Every price shows source, timestamp and confidence; carts, orders and payments never change.",
@@ -223,7 +223,7 @@ public static class ProductLaneCatalog
                 }),
             ["evidence-automation"] = new(
                 "evidence-automation",
-                "SG-77",
+                "SG-107",
                 "Evidence Automation",
                 "Groups 104-107 - screenshot intake, PDF generation and repository completion gates",
                 "Evidence tools copy and rename proof without altering originals. A group cannot close until screenshots, builds, tests, notes and repository checks are present.",
@@ -243,7 +243,7 @@ public static class ProductLaneCatalog
                 }),
             ["control-plane"] = new(
                 "control-plane",
-                "SG-78",
+                "SG-111",
                 "Privacy, Backup & Emergency Control",
                 "Groups 108-111 - category permissions, export/restore and global control",
                 "Sensitive categories are independently permissioned. Backups exclude credentials and validate integrity. Emergency Stop disconnects providers and records every decision.",
@@ -263,7 +263,7 @@ public static class ProductLaneCatalog
                 }),
             ["public-packaging"] = new(
                 "public-packaging",
-                "SG-79",
+                "SG-116",
                 "Website & Product Packaging",
                 "Groups 112-116 - website uplift, onboarding, documentation migration and case study",
                 "Public copy is factual and beta-labelled. Internal paths, private notes and unsupported production claims are excluded automatically.",
@@ -283,7 +283,7 @@ public static class ProductLaneCatalog
                 }),
             ["release-candidate"] = new(
                 "release-candidate",
-                "SG-80",
+                "SG-120",
                 "Product-Complete Release Candidate",
                 "Groups 117-120 - end-to-end passes, hardening and final closure decision",
                 "Candidate status requires desktop, mobile, website, documentation, evidence and repository checks. A release tag still requires explicit owner approval.",

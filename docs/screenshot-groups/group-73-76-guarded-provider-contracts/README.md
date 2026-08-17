@@ -1,13 +1,13 @@
 # Groups 73-76 - Guarded Provider Contracts
 
-- Screenshot group: SG-69
+- Screenshot group: SG-76
 - Release: v15 Guarded Integrations
 - Version: 15.0.0-beta.1
 - Development commit: `5d1d2f3`
 
 ## Scope
 
-SG-69 demonstrates the guarded provider registry, source-backed preview
+SG-76 demonstrates the guarded provider registry, source-backed preview
 boundary, duplicate and conflict review, permission gates, auditable decisions
 and fail-closed Emergency Stop behaviour.
 
@@ -19,10 +19,10 @@ records, and Emergency Stop takes precedence.
 
 1. `01-desktop-assistant-workspace.png`
    - Navigation: Assistant
-   - Shows the permanent review workspace and SG-69-ready provider module.
+   - Shows the permanent review workspace and SG-76-ready provider module.
 2. `02-desktop-guarded-providers-overview.png`
    - Navigation: Assistant > Guarded Provider Contracts
-   - Shows the SG-69 boundary, providers, review queue, duplicates and zero external writes.
+   - Shows the SG-76 boundary, providers, review queue, duplicates and zero external writes.
 3. `03-desktop-guarded-provider-records.png`
    - Navigation: Assistant > Guarded Provider Contracts
    - Shows New, Conflict, Setup later and Emergency Stop provider records.
@@ -38,7 +38,7 @@ records, and Emergency Stop takes precedence.
 7. `07-desktop-release-version.png`
    - Navigation: Settings
    - Shows Desktop release v15.0.0-beta.1 and v15 Guarded Integrations.
-8. `08-group69-validation.png`
+8. `08-sg76-validation.png`
    - Shows 367 Core tests passing, the successful Desktop Release build,
      zero warnings, zero errors, Git diff validation and commit `5d1d2f3`.
 

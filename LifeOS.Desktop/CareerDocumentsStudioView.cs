@@ -437,7 +437,7 @@ public sealed class CareerDocumentsStudioView : UserControl
         StackPanel copy = new();
         copy.Children.Add(Title("Template, layout & export", 20));
         copy.Children.Add(Body(
-            "SG-82 · A4 preview, ATS/readability review and safe versioned derivatives",
+            "SG-128 · A4 preview, ATS/readability review and safe versioned derivatives",
             "#9FB0CB",
             FontWeights.Normal));
         heading.Children.Add(copy);

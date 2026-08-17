@@ -14,7 +14,7 @@ Groups 117-120.
 - Full Mobile product-candidate navigation and end-to-end checks.
 - Website release-candidate evidence and owner-review presentation.
 - v27.0.0-rc.1 release identity across current product surfaces.
-- Final SG-80 screenshot and validation evidence.
+- Final SG-120 screenshot and validation evidence.
 
 ## Safety boundaries
 
@@ -25,7 +25,7 @@ Groups 117-120.
 
 ## Validation
 
-- 4 SG-80 targeted tests passed.
+- 4 SG-120 targeted tests passed.
 - 422 Core tests passed.
 - 28 Website tests passed.
 - 54 Mobile tests passed.

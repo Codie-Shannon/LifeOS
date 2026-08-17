@@ -72,5 +72,5 @@ evidence set.
 SG-160 is closed with the exact eight-image Desktop and validation Pack 2
 evidence set.
 
-SG-164 Pack 1 is implemented. Its directly rendered Desktop and validation Pack
-2 evidence remains open.
+SG-164 is closed with the exact eight-image Desktop and validation Pack 2
+evidence set.

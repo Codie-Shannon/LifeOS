@@ -181,7 +181,7 @@ sequential counter.
 - Duplicate names remain review candidates without automatic merge.
 - Household grocery data uses the shared versioned, atomic, recoverable local-store contract.
 - Ordering, payments, price trust, substitution and external-cart mutation remain unavailable.
-- SG-164 Pack 1 is implemented; directly rendered product and validation evidence remains Pack 2 work.
+- SG-164 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

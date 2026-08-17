@@ -17,7 +17,7 @@ Household, Documents, Money Pressure, Work Time and Projects workspaces.
 - Kept duplicate names as review candidates without automatic merge.
 - Registered the eighth versioned operational store in Local Data & Recovery.
 - Kept ordering, payment, price trust and external-cart mutation unavailable.
-- Implemented SG-164 Pack 1; visible product and validation evidence remains open.
+- Closed SG-164 Pack 2 with five inspected Desktop captures and three validation records.
 
 ### Groups 157-160
 

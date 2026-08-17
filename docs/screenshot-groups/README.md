@@ -44,4 +44,5 @@ SG-128 Pack 1 is implemented and its visible Desktop capture remains open.
 SG-132 is closed with the exact eight-image Desktop and Full Mobile Pack 2
 evidence set.
 
-SG-136 Pack 1 is implemented; its Pack 2 rendered-product evidence is pending.
+SG-136 is closed with the exact eight-image Desktop and validation Pack 2
+evidence set.

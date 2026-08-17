@@ -149,8 +149,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 ## Current development boundary
 
 LifeOS v28.0.0-alpha.4 is active through Group 136. The platform spine now
-versions the first operational stores and exposes honest recovery state. SG-132 is closed
-with its exact eight-image Desktop and Full Mobile evidence set. SG-128 visible
+versions the first operational stores and exposes honest recovery state. SG-136
+is closed with its exact eight-image Desktop and validation evidence set. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.
 

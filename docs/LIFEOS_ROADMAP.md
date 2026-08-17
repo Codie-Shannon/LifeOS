@@ -104,6 +104,8 @@ sequential counter.
 - Newer schemas fail closed without silent overwrite.
 - Reset moves current data and its backup to recoverable 30-day Trash.
 - Desktop Settings exposes store health and guarded restore controls.
+- SG-136 Pack 2 is closed with the exact eight-image Desktop and validation
+  evidence set.
 - Remaining stores, encrypted whole-product backup and explicit purge policy
   remain later platform-spine work.
 

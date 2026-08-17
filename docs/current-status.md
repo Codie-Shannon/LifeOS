@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.4 / Group 136 / SG-136 Pack 1**.
+LifeOS is current through **v28.0.0-alpha.4 / Group 136 / SG-136 Pack 2**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
@@ -37,7 +37,7 @@ preserved v27 release candidate.
 
 ## Latest implemented capability
 
-Groups 133-136 establish Local Data & Recovery Pack 1:
+Groups 133-136 establish Local Data & Recovery:
 
 - shared, versioned JSON envelopes with atomic write-through replacement
 - honest missing-file state without demo seeding or implicit writes
@@ -48,7 +48,8 @@ Groups 133-136 establish Local Data & Recovery Pack 1:
 - Desktop health and recovery surface for the first four migrated stores
 - no permanent-delete control or automatic purge in this checkpoint
 
-SG-136 Pack 2 rendered-product capture remains open.
+SG-136 Pack 2 is closed with four directly rendered Desktop images and four
+inspected validation records.
 
 ## Prior completed capability
 
@@ -103,15 +104,15 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Groups 129-132 targeted tests: 11 passed
 - Prior Android runtime baseline: fresh installs launched on API 36 at SG-132
 - Website runtime smoke test: HTTP 200
-- Latest evidence: [`group-129-132-cover-letters-application-packs`](screenshot-groups/group-129-132-cover-letters-application-packs/)
+- Latest evidence: [`group-133-136-local-data-recovery`](screenshot-groups/group-133-136-local-data-recovery/)
 
-SG-132 Pack 2 is closed with visible rendered-product evidence. SG-128 Pack 2
-capture remains open and must be closed without inferring UI proof from builds
-or automated tests.
+SG-136 Pack 2 is closed with exact, inspected product and validation evidence.
+SG-128 Pack 2 remains a historical evidence gap and must be closed without
+inferring UI proof from builds or automated tests.
 
 ## Next completion work
 
-Close SG-136 Pack 2, then continue migrating remaining stores and the approved
-ordinary-mode productization backlog. SG-128’s historical visible Pack 2 capture
-also remains open. Credentialed integrations, signing, public deployment, store
-submission and owner acceptance remain final gates.
+Continue migrating remaining stores and the approved ordinary-mode
+productization backlog. SG-128’s historical visible Pack 2 capture remains open.
+Credentialed integrations, signing, public deployment, store submission and
+owner acceptance remain final gates.

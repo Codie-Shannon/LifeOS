@@ -4,7 +4,9 @@ namespace LifeOS.Mobile.Views;
 
 public sealed class SettingsPage : ContentPage
 {
-    public SettingsPage(MobileFoundationService foundation)
+    public SettingsPage(
+        MobileFoundationService foundation,
+        LifeOS.Mobile.Core.Foundation.MobileExperienceMode experienceMode)
     {
         Title = "Settings";
         BackgroundColor = Color.FromArgb("#11131A");
@@ -20,6 +22,23 @@ public sealed class SettingsPage : ContentPage
         var density = CreatePicker(
             new[] { "Comfortable", "Compact" },
             selectedIndex: 0);
+
+        var experience = CreatePicker(
+            new[] { "Ordinary", "Portfolio demo" },
+            selectedIndex: experienceMode == LifeOS.Mobile.Core.Foundation.MobileExperienceMode.PortfolioDemo ? 1 : 0);
+
+        experience.SelectedIndexChanged += async (_, _) =>
+        {
+            LifeOS.Mobile.Core.Foundation.MobileExperienceMode selected =
+                experience.SelectedIndex == 1
+                    ? LifeOS.Mobile.Core.Foundation.MobileExperienceMode.PortfolioDemo
+                    : LifeOS.Mobile.Core.Foundation.MobileExperienceMode.Ordinary;
+            await foundation.SaveExperienceModeAsync(selected);
+            await DisplayAlertAsync(
+                "Experience mode saved",
+                "Close and reopen LifeOS to apply the mode to every workspace.",
+                "OK");
+        };
 
         var clearStop = new Button
         {
@@ -59,6 +78,14 @@ public sealed class SettingsPage : ContentPage
                     CreateSettingBlock("Theme", theme),
                     CreateSettingBlock("Accent", accent),
                     CreateSettingBlock("Density", density),
+                    CreateSettingBlock("Experience", experience),
+
+                    new Label
+                    {
+                        Text = "Ordinary mode shows only your local records. Portfolio demo mode explicitly enables fictional proof workspaces.",
+                        TextColor = Color.FromArgb("#C7C9D3"),
+                        FontSize = 14
+                    },
 
                     CreateToggleRow(
                         "Sensitive previews hidden",

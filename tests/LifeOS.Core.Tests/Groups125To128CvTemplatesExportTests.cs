@@ -97,6 +97,37 @@ public sealed class Groups125To128CvTemplatesExportTests
     }
 
     [Fact]
+    public void Pdf_export_wraps_and_paginates_without_dropping_tail_content()
+    {
+        CvBuilderDocument document = Create();
+        CvBuilderSection profile = document.Sections.Single(section =>
+            section.Kind == CvSectionKind.Profile);
+        string longContent = string.Join(
+            " ",
+            Enumerable.Range(1, 700).Select(index => $"evidence{index}")) +
+            " FINAL-TAIL-MARKER";
+        CvBuilderDocument longDocument = document with
+        {
+            Sections = document.Sections
+                .Select(section => section.Id == profile.Id
+                    ? section with { Content = longContent }
+                    : section)
+                .ToArray()
+        };
+        CvBuilderReview sourceReview = _builder.Review(longDocument, _materials.Facts);
+
+        CvExportArtifact artifact = _layouts.Export(
+            longDocument,
+            sourceReview,
+            CvExportFormat.Pdf,
+            Now);
+        string pdf = System.Text.Encoding.ASCII.GetString(artifact.Content);
+
+        Assert.Matches(@"/Count [2-9]", pdf);
+        Assert.Contains("FINAL-TAIL-MARKER", pdf);
+    }
+
+    [Fact]
     public void Docx_export_contains_openxml_document_and_A4_page_settings()
     {
         CvBuilderDocument document = Create();

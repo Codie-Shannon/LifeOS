@@ -24,18 +24,18 @@ public static class WorkPipelineStorage
         {
             if (!File.Exists(FilePath))
             {
-                return CreateDefaultItems();
+                return LoadFallback();
             }
 
             var json = File.ReadAllText(FilePath);
 
             if (string.IsNullOrWhiteSpace(json))
             {
-                return CreateDefaultItems();
+                return LoadFallback();
             }
 
             return JsonSerializer.Deserialize<List<WorkPipelineItem>>(json, JsonOptions)
-                ?? CreateDefaultItems();
+                ?? LoadFallback();
         }
         catch
         {
@@ -45,17 +45,20 @@ public static class WorkPipelineStorage
                 {
                     var backupJson = File.ReadAllText(BackupFilePath);
                     return JsonSerializer.Deserialize<List<WorkPipelineItem>>(backupJson, JsonOptions)
-                        ?? CreateDefaultItems();
+                        ?? LoadFallback();
                 }
                 catch
                 {
-                    return CreateDefaultItems();
+                    return LoadFallback();
                 }
             }
 
-            return CreateDefaultItems();
+            return LoadFallback();
         }
     }
+
+    private static List<WorkPipelineItem> LoadFallback() =>
+        LocalAppDataPath.IsPortfolioDemoMode ? CreateDefaultItems() : [];
 
     public static void Save(IEnumerable<WorkPipelineItem> items)
     {

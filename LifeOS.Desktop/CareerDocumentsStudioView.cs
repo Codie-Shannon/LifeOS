@@ -19,9 +19,11 @@ public sealed class CareerDocumentsStudioView : UserControl
 
     private readonly CareerDocumentBuilderService _service = new();
     private readonly CareerDocumentLayoutService _layoutService = new();
-    private readonly CareerMaterialsProof _materials = CareerMaterialsProofData.Build(ProofNow);
+    private readonly IReadOnlyList<CareerFact> _facts;
     private readonly List<CvBuilderDocument> _documents;
     private readonly Action _close;
+    private readonly bool _portfolioDemo;
+    private readonly string _libraryPath;
     private string _activeDocumentId;
     private string _expandedSectionId = "contact";
     private bool _showOptionalSections;
@@ -38,19 +40,62 @@ public sealed class CareerDocumentsStudioView : UserControl
     private bool _showDesignStudio = true;
     private readonly List<CvVersionSnapshot> _versionHistory = [];
     private readonly List<CvBuilderDocument> _savedVersions = [];
+    private readonly List<CvStoredVersion> _storedVersions = [];
     private string? _exportNotice;
 
     private CvBuilderDocument Active =>
         _documents.Single(document => document.Id == _activeDocumentId);
 
     public CareerDocumentsStudioView(Action? close = null)
+        : this(false, close)
     {
+    }
+
+    public CareerDocumentsStudioView(
+        bool portfolioDemo,
+        Action? close = null,
+        string? libraryPath = null)
+    {
+        _portfolioDemo = portfolioDemo;
         _close = close ?? (() => { });
-        CvBuilderWorkspace workspace = CareerDocumentBuilderProofData.Build(ProofNow);
-        _documents = workspace.Documents.ToList();
-        _activeDocumentId = workspace.ActiveDocumentId;
-        _versionHistory.Add(_layoutService.CreateSnapshot(Active, "CV foundation"));
-        _savedVersions.Add(Active);
+        _libraryPath = string.IsNullOrWhiteSpace(libraryPath)
+            ? CareerDocumentLibraryStore.DefaultFilePath
+            : Path.GetFullPath(libraryPath);
+
+        if (portfolioDemo)
+        {
+            CareerMaterialsProof materials = CareerMaterialsProofData.Build(ProofNow);
+            _facts = materials.Facts;
+            CvBuilderWorkspace workspace = CareerDocumentBuilderProofData.Build(ProofNow);
+            _documents = workspace.Documents.ToList();
+            _activeDocumentId = workspace.ActiveDocumentId;
+            _versionHistory.Add(_layoutService.CreateSnapshot(Active, "CV foundation"));
+            _savedVersions.Add(Active);
+        }
+        else
+        {
+            _facts = [];
+            CareerDocumentLibrary library = CareerDocumentLibraryStore.Load(_libraryPath);
+            _documents = library.Documents.ToList();
+            if (_documents.Count == 0)
+            {
+                _documents.Add(_service.CreateBlank(
+                    $"cv-{Guid.NewGuid():N}",
+                    "Untitled CV",
+                    DateTimeOffset.Now));
+            }
+
+            _activeDocumentId = _documents.Any(document => document.Id == library.ActiveDocumentId)
+                ? library.ActiveDocumentId
+                : _documents[0].Id;
+            _storedVersions.AddRange(library.Versions);
+            CvStoredVersion[] history = library.Versions
+                .Where(version => version.DocumentId == _activeDocumentId)
+                .OrderBy(version => version.Snapshot.SavedUtc)
+                .ToArray();
+            _versionHistory.AddRange(history.Select(version => version.Snapshot));
+            _savedVersions.AddRange(history.Select(version => version.Document));
+        }
         Background = Brush("#0C1220");
         Foreground = Brushes.White;
         FontFamily = new FontFamily("Segoe UI");
@@ -262,11 +307,11 @@ public sealed class CareerDocumentsStudioView : UserControl
         Button profileImport = ImportTile(
             "\uE77B",
             "Import trusted LifeOS profile",
-            $"{_materials.Facts.Count(fact => fact.IsTrusted)} accepted facts available",
+            $"{_facts.Count(fact => fact.IsTrusted)} accepted facts available",
             () => RunWhenSaved(() =>
             {
                 _importNotice =
-                    $"{_materials.Facts.Count(fact => fact.IsTrusted)} trusted career facts are linked to this CV.";
+                    $"{_facts.Count(fact => fact.IsTrusted)} trusted career facts are linked to this CV.";
                 Render();
             }));
         Grid.SetColumn(profileImport, 1);
@@ -349,7 +394,7 @@ public sealed class CareerDocumentsStudioView : UserControl
             form.Children.Add(options);
         }
 
-        CvBuilderReview review = _service.Review(Active, _materials.Facts);
+        CvBuilderReview review = _service.Review(Active, _facts);
         form.Children.Add(new Border
         {
             Background = Brush(review.CanExport ? "#E4F5ED" : "#FFF1DF"),
@@ -627,6 +672,7 @@ public sealed class CareerDocumentsStudioView : UserControl
             Active,
             _layoutService.GetTemplate(Active.TemplateId).Name));
         _savedVersions.Add(Active);
+        PersistLibrary();
         _exportNotice = $"Version v{Active.Version} added to local history.";
         Render();
     }
@@ -656,7 +702,7 @@ public sealed class CareerDocumentsStudioView : UserControl
 
         try
         {
-            CvBuilderReview sourceReview = _service.Review(Active, _materials.Facts);
+            CvBuilderReview sourceReview = _service.Review(Active, _facts);
             CvExportArtifact artifact = _layoutService.Export(
                 Active,
                 sourceReview,
@@ -676,6 +722,8 @@ public sealed class CareerDocumentsStudioView : UserControl
 
             File.WriteAllBytes(dialog.FileName, artifact.Content);
             _versionHistory.Add(_layoutService.CreateSnapshot(Active, $"{format} export"));
+            _savedVersions.Add(Active);
+            PersistLibrary();
             _exportNotice =
                 $"{format.ToString().ToUpperInvariant()} derivative saved from v{artifact.SourceVersion}. Authoritative Career records were not changed.";
             Render();
@@ -1341,6 +1389,7 @@ public sealed class CareerDocumentsStudioView : UserControl
         _hasUnsavedChanges = false;
         if (expanded is not null)
             _expandedSectionId = expanded;
+        PersistLibrary();
         Render();
     }
 
@@ -1355,6 +1404,7 @@ public sealed class CareerDocumentsStudioView : UserControl
         _redoHistory.Push(_documents[index]);
         _documents[index] = _undoHistory.Pop();
         _hasUnsavedChanges = false;
+        PersistLibrary();
         Render();
     }
 
@@ -1369,7 +1419,31 @@ public sealed class CareerDocumentsStudioView : UserControl
         _undoHistory.Push(_documents[index]);
         _documents[index] = _redoHistory.Pop();
         _hasUnsavedChanges = false;
+        PersistLibrary();
         Render();
+    }
+
+    private void PersistLibrary()
+    {
+        if (_portfolioDemo)
+            return;
+
+        int historyCount = Math.Min(_versionHistory.Count, _savedVersions.Count);
+        CvStoredVersion[] versions = Enumerable.Range(0, historyCount)
+            .Select(index => new CvStoredVersion(
+                _activeDocumentId,
+                _versionHistory[index],
+                _savedVersions[index]))
+            .ToArray();
+        _storedVersions.RemoveAll(version => version.DocumentId == _activeDocumentId);
+        _storedVersions.AddRange(versions);
+        CareerDocumentLibraryStore.Save(
+            new CareerDocumentLibrary(
+                CareerDocumentLibrary.CurrentSchemaVersion,
+                _documents.ToArray(),
+                _activeDocumentId,
+                _storedVersions.ToArray()),
+            _libraryPath);
     }
 
     private void SelectExistingCv()

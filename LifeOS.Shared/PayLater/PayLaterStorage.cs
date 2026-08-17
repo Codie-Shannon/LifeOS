@@ -19,18 +19,21 @@ public static class PayLaterStorage
     {
         try
         {
-            if (!File.Exists(FilePath)) return CreateDefaultItems();
+            if (!File.Exists(FilePath)) return LoadFallback();
 
             var json = File.ReadAllText(FilePath);
-            if (string.IsNullOrWhiteSpace(json)) return CreateDefaultItems();
+            if (string.IsNullOrWhiteSpace(json)) return LoadFallback();
 
-            return JsonSerializer.Deserialize<List<PayLaterItem>>(json, JsonOptions) ?? CreateDefaultItems();
+            return JsonSerializer.Deserialize<List<PayLaterItem>>(json, JsonOptions) ?? LoadFallback();
         }
         catch
         {
-            return CreateDefaultItems();
+            return LoadFallback();
         }
     }
+
+    private static List<PayLaterItem> LoadFallback() =>
+        LocalAppDataPath.IsPortfolioDemoMode ? CreateDefaultItems() : [];
 
     public static void Save(IEnumerable<PayLaterItem> items)
     {

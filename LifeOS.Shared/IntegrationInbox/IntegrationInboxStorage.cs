@@ -1,5 +1,6 @@
 using System.Text.Json;
 using LifeOS.Core.IntegrationInbox;
+using LifeOS.Shared.Storage;
 
 namespace LifeOS.Shared.IntegrationInbox;
 
@@ -7,9 +8,7 @@ public static class IntegrationInboxStorage
 {
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
 
-    public static string FilePath =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "LifeOS", "lifeos-integration-inbox.json");
+    public static string FilePath => LocalAppDataPath.GetFilePath("lifeos-integration-inbox.json");
 
     public static List<IntegrationPreviewItem> Load()
     {
@@ -17,9 +16,7 @@ public static class IntegrationInboxStorage
         {
             if (!File.Exists(FilePath))
             {
-                var demo = IntegrationInboxDemoData.Create();
-                Save(demo);
-                return demo;
+                return LoadFallback();
             }
 
             return JsonSerializer.Deserialize<List<IntegrationPreviewItem>>(
@@ -27,7 +24,7 @@ public static class IntegrationInboxStorage
         }
         catch
         {
-            return IntegrationInboxDemoData.Create();
+            return LoadFallback();
         }
     }
 
@@ -39,8 +36,11 @@ public static class IntegrationInboxStorage
 
     public static List<IntegrationPreviewItem> Reset()
     {
-        var demo = IntegrationInboxDemoData.Create();
-        Save(demo);
-        return demo;
+        List<IntegrationPreviewItem> items = LoadFallback();
+        Save(items);
+        return items;
     }
+
+    private static List<IntegrationPreviewItem> LoadFallback() =>
+        LocalAppDataPath.IsPortfolioDemoMode ? IntegrationInboxDemoData.Create() : [];
 }

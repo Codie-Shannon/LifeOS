@@ -33,6 +33,12 @@ public enum V8StartupMode
     LastUsed
 }
 
+public enum V8ExperienceMode
+{
+    Ordinary,
+    PortfolioDemo
+}
+
 public enum V8EmergencyStopState
 {
     Idle,
@@ -66,6 +72,8 @@ public sealed class V8Preferences
 
     public V8StartupMode StartupMode { get; set; } = V8StartupMode.Home;
 
+    public V8ExperienceMode ExperienceMode { get; set; } = V8ExperienceMode.Ordinary;
+
     public V8EmergencyStopState EmergencyStopState { get; set; } = V8EmergencyStopState.Idle;
 
     public string LastWorkspace { get; set; } = "Home";
@@ -92,6 +100,9 @@ public sealed class V8Preferences
         Accent = Enum.IsDefined(Accent) ? Accent : V8Accent.Purple;
         Density = Enum.IsDefined(Density) ? Density : V8Density.Comfortable;
         StartupMode = Enum.IsDefined(StartupMode) ? StartupMode : V8StartupMode.Home;
+        ExperienceMode = Enum.IsDefined(ExperienceMode)
+            ? ExperienceMode
+            : V8ExperienceMode.Ordinary;
         EmergencyStopState = Enum.IsDefined(EmergencyStopState)
             ? EmergencyStopState
             : V8EmergencyStopState.Idle;

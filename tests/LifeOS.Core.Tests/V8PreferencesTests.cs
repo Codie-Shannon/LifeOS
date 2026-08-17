@@ -16,6 +16,7 @@ public sealed class V8PreferencesTests
         Assert.Equal(V8Accent.Purple, preferences.Accent);
         Assert.Equal(V8Density.Comfortable, preferences.Density);
         Assert.Equal(V8StartupMode.Home, preferences.StartupMode);
+        Assert.Equal(V8ExperienceMode.Ordinary, preferences.ExperienceMode);
         Assert.Equal("Home", preferences.LastWorkspace);
         Assert.Equal(1.0, preferences.TextScale);
         Assert.True(preferences.ContextPanelAutoOpen);
@@ -53,6 +54,7 @@ public sealed class V8PreferencesTests
             Accent = (V8Accent)999,
             Density = (V8Density)999,
             StartupMode = (V8StartupMode)999,
+            ExperienceMode = (V8ExperienceMode)999,
             EmergencyStopState = (V8EmergencyStopState)999,
             LastWorkspace = "Legacy",
             TextScale = 9.9,
@@ -66,6 +68,7 @@ public sealed class V8PreferencesTests
         Assert.Equal(V8Accent.Purple, preferences.Accent);
         Assert.Equal(V8Density.Comfortable, preferences.Density);
         Assert.Equal(V8StartupMode.Home, preferences.StartupMode);
+        Assert.Equal(V8ExperienceMode.Ordinary, preferences.ExperienceMode);
         Assert.Equal(V8EmergencyStopState.Idle, preferences.EmergencyStopState);
         Assert.Equal("Home", preferences.LastWorkspace);
         Assert.Equal(1.0, preferences.TextScale);
@@ -86,6 +89,7 @@ public sealed class V8PreferencesTests
                 Accent = V8Accent.Teal,
                 Density = V8Density.Compact,
                 StartupMode = V8StartupMode.LastUsed,
+                ExperienceMode = V8ExperienceMode.PortfolioDemo,
                 EmergencyStopState = V8EmergencyStopState.Armed,
                 LastWorkspace = "Projects",
                 ContextPanelOpen = true,
@@ -103,6 +107,7 @@ public sealed class V8PreferencesTests
             Assert.Equal(expected.Accent, actual.Accent);
             Assert.Equal(expected.Density, actual.Density);
             Assert.Equal(expected.StartupMode, actual.StartupMode);
+            Assert.Equal(expected.ExperienceMode, actual.ExperienceMode);
             Assert.Equal(expected.EmergencyStopState, actual.EmergencyStopState);
             Assert.Equal(expected.LastWorkspace, actual.LastWorkspace);
             Assert.Equal(expected.ContextPanelOpen, actual.ContextPanelOpen);

@@ -106,8 +106,8 @@ public sealed class JsonMobileLocalStore : IMobileLocalStore
         public static StoreDocument CreateDefault() => new()
         {
             Preferences = new(MobileThemeMode.System, "Violet", MobileDensity.Comfortable, true, true),
-            Session = new(true, false, "Full Mobile demo device"),
-            Sync = new(MobileSyncState.Idle, 0, DateTimeOffset.UtcNow.AddMinutes(-4), "Fresh")
+            Session = new(true, false, "This device"),
+            Sync = new(MobileSyncState.Idle, 0, null, "Not yet synced")
         };
     }
 }

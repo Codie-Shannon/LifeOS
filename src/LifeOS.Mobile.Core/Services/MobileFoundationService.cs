@@ -15,24 +15,46 @@ public sealed class MobileFoundationService
         _store = store;
     }
 
-    public async Task InitializeDemoAsync(
+    public async Task<MobilePreferences> InitializeAsync(
         CancellationToken cancellationToken = default)
     {
         await _store.InitializeAsync(cancellationToken);
+        MobilePreferences preferences =
+            await _store.LoadPreferencesAsync(cancellationToken);
 
-        var outbox = await _store.LoadOutboxAsync(cancellationToken);
-
-        if (outbox.Count == 0)
+        if (preferences.ExperienceMode == MobileExperienceMode.PortfolioDemo)
         {
-            await _store.QueueAsync(
-                new MobileOutboxItem(
-                    DeterministicId("group-52-demo-command"),
-                    "Local demo update",
-                    Sha256("fictional-demo-payload"),
-                    DateTimeOffset.UtcNow.AddMinutes(-2),
-                    "Pending"),
-                cancellationToken);
+            var outbox = await _store.LoadOutboxAsync(cancellationToken);
+
+            if (outbox.Count == 0)
+            {
+                await _store.QueueAsync(
+                    new MobileOutboxItem(
+                        DeterministicId("group-52-demo-command"),
+                        "Local demo update",
+                        Sha256("fictional-demo-payload"),
+                        DateTimeOffset.UtcNow.AddMinutes(-2),
+                        "Pending"),
+                    cancellationToken);
+            }
         }
+
+        return preferences;
+    }
+
+    public Task<MobilePreferences> GetPreferencesAsync(
+        CancellationToken cancellationToken = default) =>
+        _store.LoadPreferencesAsync(cancellationToken);
+
+    public async Task SaveExperienceModeAsync(
+        MobileExperienceMode experienceMode,
+        CancellationToken cancellationToken = default)
+    {
+        MobilePreferences current =
+            await _store.LoadPreferencesAsync(cancellationToken);
+        await _store.SavePreferencesAsync(
+            current with { ExperienceMode = experienceMode },
+            cancellationToken);
     }
 
     public async Task QueueQuickCaptureAsync(
@@ -93,7 +115,7 @@ public sealed class MobileFoundationService
 
         return
         [
-            new("Release", "LifeOS v10 Full Mobile — Group 53"),
+            new("Release", $"{LifeOS.Core.ProductVersion.Display} — {LifeOS.Core.ProductVersion.ReleaseName}"),
             new("Device", Redaction.Safe(session.DeviceLabel)),
             new("Local encryption", "AES-256-GCM"),
             new("Schema", "1"),

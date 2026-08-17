@@ -5,13 +5,18 @@ namespace LifeOS.Mobile.Views;
 
 public sealed class MorePage : ContentPage
 {
-    public MorePage(MobileFoundationService foundation)
+    public MorePage(
+        MobileFoundationService foundation,
+        MobileExperienceMode experienceMode)
     {
         Title = "More"; BackgroundColor = Color.FromArgb("#11131A");
         var layout = new VerticalStackLayout { Padding = 20, Spacing = 12 };
         layout.Children.Add(new Label { Text = "All workspaces", FontSize = 28, FontAttributes = FontAttributes.Bold, TextColor = Colors.White });
         foreach (var workspace in MobileWorkspaceCatalog.Permanent.Where(x => x is not "Home" and not "Work" and not "Money" and not "Projects"))
         {
+            if (experienceMode == MobileExperienceMode.Ordinary && workspace != "Settings")
+                continue;
+
             var captured = workspace;
             var button = new Button { Text = captured, BackgroundColor = Color.FromArgb("#292D3A"), TextColor = Colors.White };
             button.Clicked += async (_, _) =>
@@ -19,7 +24,7 @@ public sealed class MorePage : ContentPage
     Page target = captured switch
     {
         "Life" => new LifePage(),
-        "Settings" => new SettingsPage(foundation),
+        "Settings" => new SettingsPage(foundation, experienceMode),
         _ => new WorkspacePage(captured)
     };
 
@@ -30,35 +35,38 @@ public sealed class MorePage : ContentPage
         var diagnostics = new Button { Text = "Diagnostics", BackgroundColor = Color.FromArgb("#7C5CFC"), TextColor = Colors.White };
         diagnostics.Clicked += async (_, _) => await Navigation.PushAsync(new DiagnosticsPage(foundation));
         layout.Children.Add(diagnostics);
-        var betaClosure = new Button
+        if (experienceMode == MobileExperienceMode.PortfolioDemo)
         {
-            Text = "Beta closure",
-            BackgroundColor = Color.FromArgb("#7C5CFC"),
-            TextColor = Colors.White
-        };
+            var betaClosure = new Button
+            {
+                Text = "Beta closure",
+                BackgroundColor = Color.FromArgb("#7C5CFC"),
+                TextColor = Colors.White
+            };
 
-        betaClosure.Clicked += async (_, _) =>
-            await Navigation.PushAsync(new BetaClosurePage());
+            betaClosure.Clicked += async (_, _) =>
+                await Navigation.PushAsync(new BetaClosurePage());
 
-        layout.Children.Add(betaClosure);
-        var productReadiness = new Button
-        {
-            Text = "Private beta readiness",
-            BackgroundColor = Color.FromArgb("#304860"),
-            TextColor = Colors.White
-        };
-        productReadiness.Clicked += async (_, _) =>
-            await Navigation.PushAsync(new ProductReadinessPage());
-        layout.Children.Add(productReadiness);
-        var productComplete = new Button
-        {
-            Text = "Product-complete candidate",
-            BackgroundColor = Color.FromArgb("#304860"),
-            TextColor = Colors.White
-        };
-        productComplete.Clicked += async (_, _) =>
-            await Navigation.PushAsync(new ProductCompletePage());
-        layout.Children.Add(productComplete);
+            layout.Children.Add(betaClosure);
+            var productReadiness = new Button
+            {
+                Text = "Private beta readiness",
+                BackgroundColor = Color.FromArgb("#304860"),
+                TextColor = Colors.White
+            };
+            productReadiness.Clicked += async (_, _) =>
+                await Navigation.PushAsync(new ProductReadinessPage());
+            layout.Children.Add(productReadiness);
+            var productComplete = new Button
+            {
+                Text = "Product-complete candidate",
+                BackgroundColor = Color.FromArgb("#304860"),
+                TextColor = Colors.White
+            };
+            productComplete.Clicked += async (_, _) =>
+                await Navigation.PushAsync(new ProductCompletePage());
+            layout.Children.Add(productComplete);
+        }
         Content = new ScrollView { Content = layout };
     }
 }

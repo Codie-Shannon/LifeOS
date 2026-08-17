@@ -188,27 +188,53 @@ public sealed class CareerDocumentLayoutService
     private static byte[] BuildPdf(CvBuilderDocument document)
     {
         List<string> lines = RenderPlainText(document)
-            .Select(line => line.Length > 95 ? line[..95] : line)
+            .SelectMany(line => WrapPdfLine(line, 92))
             .ToList();
-        List<string> contentLines = [];
-        int y = 790;
-        foreach (string line in lines)
-        {
-            if (y < 45)
-                break;
-            contentLines.Add($"BT /F1 10 Tf 48 {y} Td ({EscapePdf(line)}) Tj ET");
-            y -= 15;
-        }
+        const int linesPerPage = 50;
+        List<string[]> pages = lines
+            .Chunk(linesPerPage)
+            .Select(page => page.ToArray())
+            .ToList();
+        if (pages.Count == 0)
+            pages.Add([]);
 
-        string stream = string.Join("\n", contentLines);
+        int pageCount = pages.Count;
+        int firstContentObjectId = 3 + pageCount;
+        int fontObjectId = firstContentObjectId + pageCount;
+        string pageReferences = string.Join(
+            " ",
+            Enumerable.Range(3, pageCount).Select(id => $"{id} 0 R"));
         List<string> objects =
         [
             "<< /Type /Catalog /Pages 2 0 R >>",
-            "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
-            "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>",
-            $"<< /Length {Encoding.ASCII.GetByteCount(stream)} >>\nstream\n{stream}\nendstream",
-            "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"
+            $"<< /Type /Pages /Kids [{pageReferences}] /Count {pageCount} >>"
         ];
+
+        for (int pageIndex = 0; pageIndex < pageCount; pageIndex++)
+        {
+            int contentObjectId = firstContentObjectId + pageIndex;
+            objects.Add(
+                $"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] " +
+                $"/Resources << /Font << /F1 {fontObjectId} 0 R >> >> " +
+                $"/Contents {contentObjectId} 0 R >>");
+        }
+
+        foreach (string[] page in pages)
+        {
+            List<string> contentLines = [];
+            int y = 790;
+            foreach (string line in page)
+            {
+                contentLines.Add($"BT /F1 10 Tf 48 {y} Td ({EscapePdf(line)}) Tj ET");
+                y -= 15;
+            }
+
+            string stream = string.Join("\n", contentLines);
+            objects.Add(
+                $"<< /Length {Encoding.ASCII.GetByteCount(stream)} >>\n" +
+                $"stream\n{stream}\nendstream");
+        }
+        objects.Add("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>");
 
         StringBuilder pdf = new("%PDF-1.4\n");
         List<int> offsets = [0];
@@ -224,6 +250,39 @@ public sealed class CareerDocumentLayoutService
         pdf.Append($"trailer << /Size {objects.Count + 1} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF");
         return Encoding.ASCII.GetBytes(pdf.ToString());
     }
+
+    private static IEnumerable<string> WrapPdfLine(string value, int maximumCharacters)
+    {
+        string normalized = NormalizePdfText(value);
+        if (string.IsNullOrWhiteSpace(normalized))
+        {
+            yield return string.Empty;
+            yield break;
+        }
+
+        string remaining = normalized.Trim();
+        while (remaining.Length > maximumCharacters)
+        {
+            int breakAt = remaining.LastIndexOf(' ', maximumCharacters);
+            if (breakAt < maximumCharacters / 2)
+                breakAt = maximumCharacters;
+            yield return remaining[..breakAt].TrimEnd();
+            remaining = remaining[breakAt..].TrimStart();
+        }
+        yield return remaining;
+    }
+
+    private static string NormalizePdfText(string value) =>
+        value
+            .Replace('\u2018', '\'')
+            .Replace('\u2019', '\'')
+            .Replace('\u201C', '"')
+            .Replace('\u201D', '"')
+            .Replace("\u2013", "-")
+            .Replace("\u2014", "-")
+            .Replace("\u2022", "*")
+            .Replace("\r", " ")
+            .Replace("\n", " ");
 
     private static byte[] BuildDocx(CvBuilderDocument document)
     {

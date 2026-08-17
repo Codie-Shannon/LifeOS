@@ -14,7 +14,9 @@ public static class RelationshipRadarStorage
     {
         if (!File.Exists(FilePath))
         {
-            return RelationshipRadarDemoData.CreateDefaultProfiles();
+            return LocalAppDataPath.IsPortfolioDemoMode
+                ? RelationshipRadarDemoData.CreateDefaultProfiles()
+                : [];
         }
 
         var json = File.ReadAllText(FilePath);

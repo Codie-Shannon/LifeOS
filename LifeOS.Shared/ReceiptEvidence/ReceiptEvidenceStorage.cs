@@ -1,5 +1,6 @@
 using System.Text.Json;
 using LifeOS.Core.ReceiptEvidence;
+using LifeOS.Shared.Storage;
 
 namespace LifeOS.Shared.ReceiptEvidence;
 
@@ -7,8 +8,7 @@ public static class ReceiptEvidenceStorage
 {
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 
-    public static string FilePath =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "LifeOS", "lifeos-receipt-evidence.json");
+    public static string FilePath => LocalAppDataPath.GetFilePath("lifeos-receipt-evidence.json");
 
     public static List<ReceiptEvidenceItem> Load()
     {
@@ -16,17 +16,15 @@ public static class ReceiptEvidenceStorage
         {
             if (!File.Exists(FilePath))
             {
-                var defaults = ReceiptEvidenceDemoData.Create();
-                Save(defaults);
-                return defaults;
+                return LoadFallback();
             }
 
             var json = File.ReadAllText(FilePath);
-            return JsonSerializer.Deserialize<List<ReceiptEvidenceItem>>(json, JsonOptions) ?? ReceiptEvidenceDemoData.Create();
+            return JsonSerializer.Deserialize<List<ReceiptEvidenceItem>>(json, JsonOptions) ?? LoadFallback();
         }
         catch
         {
-            return ReceiptEvidenceDemoData.Create();
+            return LoadFallback();
         }
     }
 
@@ -43,6 +41,9 @@ public static class ReceiptEvidenceStorage
 
     public static void Reset()
     {
-        Save(ReceiptEvidenceDemoData.Create());
+        Save(LoadFallback());
     }
+
+    private static List<ReceiptEvidenceItem> LoadFallback() =>
+        LocalAppDataPath.IsPortfolioDemoMode ? ReceiptEvidenceDemoData.Create() : [];
 }

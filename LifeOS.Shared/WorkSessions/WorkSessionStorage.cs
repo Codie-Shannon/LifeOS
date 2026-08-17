@@ -19,18 +19,21 @@ public static class WorkSessionStorage
     {
         try
         {
-            if (!File.Exists(FilePath)) return CreateDefaultSessions();
+            if (!File.Exists(FilePath)) return LoadFallback();
 
             var json = File.ReadAllText(FilePath);
-            if (string.IsNullOrWhiteSpace(json)) return CreateDefaultSessions();
+            if (string.IsNullOrWhiteSpace(json)) return LoadFallback();
 
-            return JsonSerializer.Deserialize<List<WorkSession>>(json, JsonOptions) ?? CreateDefaultSessions();
+            return JsonSerializer.Deserialize<List<WorkSession>>(json, JsonOptions) ?? LoadFallback();
         }
         catch
         {
-            return CreateDefaultSessions();
+            return LoadFallback();
         }
     }
+
+    private static List<WorkSession> LoadFallback() =>
+        LocalAppDataPath.IsPortfolioDemoMode ? CreateDefaultSessions() : [];
 
     public static void Save(IEnumerable<WorkSession> sessions)
     {

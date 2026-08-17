@@ -21,23 +21,21 @@ public static class WeeklyCloseOutReviewStorage
         {
             if (!File.Exists(FilePath))
             {
-                var defaults = WeeklyCloseOutReviewDemoData.Create();
-                Save(defaults);
-                return defaults;
+                return LoadFallback();
             }
 
             var json = File.ReadAllText(FilePath);
             if (string.IsNullOrWhiteSpace(json))
             {
-                return WeeklyCloseOutReviewDemoData.Create();
+                return LoadFallback();
             }
 
             return JsonSerializer.Deserialize<List<WeeklyCloseOutReviewItem>>(json, JsonOptions)
-                ?? WeeklyCloseOutReviewDemoData.Create();
+                ?? LoadFallback();
         }
         catch
         {
-            return WeeklyCloseOutReviewDemoData.Create();
+            return LoadFallback();
         }
     }
 
@@ -49,6 +47,9 @@ public static class WeeklyCloseOutReviewStorage
 
     public static void Reset()
     {
-        Save(WeeklyCloseOutReviewDemoData.Create());
+        Save(LoadFallback());
     }
+
+    private static List<WeeklyCloseOutReviewItem> LoadFallback() =>
+        LocalAppDataPath.IsPortfolioDemoMode ? WeeklyCloseOutReviewDemoData.Create() : [];
 }

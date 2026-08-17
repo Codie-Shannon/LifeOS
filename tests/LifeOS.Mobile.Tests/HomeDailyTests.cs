@@ -14,7 +14,9 @@ public sealed class HomeDailyTests
     [Fact]
     public void TodayAggregationCoversMultipleDomains()
     {
-        var overview = new HomeDailyService().BuildOverview(Now);
+        var overview = new HomeDailyService().BuildOverview(
+            Now,
+            LifeOS.Mobile.Core.Foundation.MobileExperienceMode.PortfolioDemo);
 
         Assert.Contains(overview.Priorities, x => x.Workspace == "Work");
         Assert.Contains(overview.Priorities, x => x.Workspace == "Money");
@@ -23,12 +25,57 @@ public sealed class HomeDailyTests
     }
 
     [Fact]
+    public void Ordinary_overview_is_an_honest_empty_state()
+    {
+        var overview = new HomeDailyService().BuildOverview(Now);
+
+        Assert.Empty(overview.Priorities);
+        Assert.Empty(overview.Upcoming);
+        Assert.Equal(0, overview.Waiting.WaitingOn);
+        Assert.Equal(0, overview.Review.IntegrationInboxCount);
+        Assert.Contains("No focus", overview.CurrentFocus);
+    }
+
+    [Fact]
+    public async Task Ordinary_initialization_does_not_seed_a_demo_command()
+    {
+        string directory = Path.Combine(
+            Path.GetTempPath(),
+            "lifeos-mobile-ordinary",
+            Guid.NewGuid().ToString("N"));
+
+        try
+        {
+            var store = new JsonMobileLocalStore(
+                Path.Combine(directory, "store.bin"),
+                RandomNumberGenerator.GetBytes(32));
+            var foundation = new MobileFoundationService(store);
+
+            var preferences = await foundation.InitializeAsync();
+
+            Assert.Equal(
+                LifeOS.Mobile.Core.Foundation.MobileExperienceMode.Ordinary,
+                preferences.ExperienceMode);
+            Assert.Empty(await store.LoadOutboxAsync());
+        }
+        finally
+        {
+            if (Directory.Exists(directory))
+                Directory.Delete(directory, true);
+        }
+    }
+
+    [Fact]
     public void PriorityOrderingIsDeterministicAndExplainable()
     {
         var service = new HomeDailyService();
 
-        var first = service.BuildOverview(Now).Priorities;
-        var second = service.BuildOverview(Now).Priorities;
+        var first = service.BuildOverview(
+            Now,
+            LifeOS.Mobile.Core.Foundation.MobileExperienceMode.PortfolioDemo).Priorities;
+        var second = service.BuildOverview(
+            Now,
+            LifeOS.Mobile.Core.Foundation.MobileExperienceMode.PortfolioDemo).Priorities;
 
         Assert.Equal(
             first.Select(x => x.Id),
@@ -140,7 +187,9 @@ public sealed class HomeDailyTests
     [Fact]
     public void WaitingAndReviewCountsRemainExplicit()
     {
-        var overview = new HomeDailyService().BuildOverview(Now);
+        var overview = new HomeDailyService().BuildOverview(
+            Now,
+            LifeOS.Mobile.Core.Foundation.MobileExperienceMode.PortfolioDemo);
 
         Assert.Equal(2, overview.Waiting.WaitingOn);
         Assert.Equal(1, overview.Waiting.Blocked);
@@ -176,7 +225,9 @@ public sealed class HomeDailyTests
     [Fact]
     public void OverviewContainsNoAutonomousDecisionClaim()
     {
-        var overview = new HomeDailyService().BuildOverview(Now);
+        var overview = new HomeDailyService().BuildOverview(
+            Now,
+            LifeOS.Mobile.Core.Foundation.MobileExperienceMode.PortfolioDemo);
 
         Assert.DoesNotContain(
             overview.Priorities,

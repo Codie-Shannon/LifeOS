@@ -234,10 +234,10 @@ internal static class WorkspaceCatalog
                 "Household keeps planning explicit. Recurring essentials remain reviewable candidates and no purchase, payment or external cart mutation occurs automatically.",
                 new WorkspaceMetricDefinition[]
                 {
-                    Metric("Active lists", "", "1", "Shopping or ready"),
-                    Metric("Due essentials", "", "2", "Review required"),
-                    Metric("Unresolved items", "", "2", "Require attention"),
-                    Metric("Estimated spend", "", "NZD 68.40", "Manual estimate")
+                    Metric("Active lists", "", "0", "Shopping or ready"),
+                    Metric("Due essentials", "", "0", "Review required"),
+                    Metric("Unresolved items", "", "0", "Require attention"),
+                    Metric("Estimated spend", "", "Not set", "Manual estimate")
                 },
                 new WorkspaceSectionDefinition[]
                 {

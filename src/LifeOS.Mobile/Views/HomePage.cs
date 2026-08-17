@@ -8,14 +8,18 @@ namespace LifeOS.Mobile.Views;
 public sealed class HomePage : ContentPage
 {
     private readonly MobileFoundationService _foundation;
+    private readonly MobileExperienceMode _experienceMode;
     private readonly HomeDailyService _home = new();
     private readonly Label _sync = new();
     private readonly Label _queue = new();
     private readonly VerticalStackLayout _content = new();
 
-    public HomePage(MobileFoundationService foundation)
+    public HomePage(
+        MobileFoundationService foundation,
+        MobileExperienceMode experienceMode)
     {
         _foundation = foundation;
+        _experienceMode = experienceMode;
 
         Title = "Home";
         BackgroundColor = HomeVisuals.Background;
@@ -58,7 +62,7 @@ public sealed class HomePage : ContentPage
     private async Task RenderAsync()
     {
         var now = DateTimeOffset.Now;
-        var overview = _home.BuildOverview(now);
+        var overview = _home.BuildOverview(now, _experienceMode);
 
         _content.Children.Clear();
         _content.Padding = new Thickness(18, 14, 18, 30);
@@ -120,6 +124,14 @@ public sealed class HomePage : ContentPage
 
         _content.Children.Add(HomeVisuals.Section("Top priorities"));
 
+        if (overview.Priorities.Count == 0)
+        {
+            _content.Children.Add(
+                HomeVisuals.CardView(
+                    "No priorities yet",
+                    "Use Quick capture to create a local draft when you are ready."));
+        }
+
         foreach (var priority in overview.Priorities.Take(4))
         {
             var badge = new Label
@@ -139,6 +151,14 @@ public sealed class HomePage : ContentPage
 
         _content.Children.Add(HomeVisuals.Section("Upcoming"));
 
+        if (overview.Upcoming.Count == 0)
+        {
+            _content.Children.Add(
+                HomeVisuals.CardView(
+                    "No upcoming items",
+                    "Calendar and scheduled items will appear here after you add or import them."));
+        }
+
         foreach (var item in overview.Upcoming)
         {
             _content.Children.Add(
@@ -157,16 +177,19 @@ public sealed class HomePage : ContentPage
                 $"Overdue {overview.Waiting.Overdue} • " +
                 $"Needs review {overview.Waiting.NeedsReview}"));
 
-        var inbox = HomeVisuals.Action(
-            $"Integration Inbox ({overview.Review.IntegrationInboxCount})",
-            Color.FromArgb("#2C3140"));
+        if (_experienceMode == MobileExperienceMode.PortfolioDemo)
+        {
+            var inbox = HomeVisuals.Action(
+                $"Integration Inbox ({overview.Review.IntegrationInboxCount})",
+                Color.FromArgb("#2C3140"));
 
-        inbox.Clicked += async (_, _) =>
-            await Navigation.PushAsync(
-                new IntegrationInboxPage(
-                    overview.Review.IntegrationInboxCount));
+            inbox.Clicked += async (_, _) =>
+                await Navigation.PushAsync(
+                    new IntegrationInboxPage(
+                        overview.Review.IntegrationInboxCount));
 
-        _content.Children.Add(inbox);
+            _content.Children.Add(inbox);
+        }
 
         _content.Children.Add(HomeVisuals.Section("Freshness and sync"));
 
@@ -182,15 +205,18 @@ public sealed class HomePage : ContentPage
         _content.Children.Add(_sync);
         _content.Children.Add(_queue);
 
-        var accessible = HomeVisuals.Action(
-            "Open large-text proof",
-            Color.FromArgb("#2C3140"));
+        if (_experienceMode == MobileExperienceMode.PortfolioDemo)
+        {
+            var accessible = HomeVisuals.Action(
+                "Open large-text proof",
+                Color.FromArgb("#2C3140"));
 
-        accessible.Clicked += async (_, _) =>
-            await Navigation.PushAsync(
-                new AccessibleHomePage(overview));
+            accessible.Clicked += async (_, _) =>
+                await Navigation.PushAsync(
+                    new AccessibleHomePage(overview));
 
-        _content.Children.Add(accessible);
+            _content.Children.Add(accessible);
+        }
 
         var stop = HomeVisuals.Action(
             "Emergency Stop",
@@ -211,9 +237,9 @@ public sealed class HomePage : ContentPage
         _content.Children.Add(
             new Label
             {
-                Text =
-                    "Fictional proof data only • no provider writes • " +
-                    "no silent task generation or reprioritization",
+                Text = _experienceMode == MobileExperienceMode.PortfolioDemo
+                    ? "Portfolio demo data • no provider writes • no silent task generation or reprioritization"
+                    : "Ordinary mode • local records only • portfolio examples are hidden",
                 TextColor = HomeVisuals.Secondary,
                 FontSize = 13,
                 HorizontalTextAlignment = TextAlignment.Center

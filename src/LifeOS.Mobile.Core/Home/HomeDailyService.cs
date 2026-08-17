@@ -1,3 +1,4 @@
+using LifeOS.Mobile.Core.Foundation;
 using LifeOS.Mobile.Core.Services;
 
 namespace LifeOS.Mobile.Core.Home;
@@ -9,8 +10,20 @@ public sealed class HomeDailyService
 
     public HomeDailyOverview BuildOverview(
         DateTimeOffset now,
+        MobileExperienceMode experienceMode = MobileExperienceMode.Ordinary,
         string timeZoneId = "Pacific/Auckland")
     {
+        if (experienceMode == MobileExperienceMode.Ordinary)
+        {
+            return new HomeDailyOverview(
+                DateOnly.FromDateTime(now.Date),
+                "No focus has been set yet.",
+                [],
+                [],
+                new HomeWaitingSummary(0, 0, 0, 0),
+                new HomeReviewSummary(0, "Not yet synced", null));
+        }
+
         var priorities = new[]
         {
             new HomePriority(

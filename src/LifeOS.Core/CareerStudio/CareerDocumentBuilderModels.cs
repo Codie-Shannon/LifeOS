@@ -133,3 +133,20 @@ public sealed record CvBuilderWorkspace(
     IReadOnlyList<CvBuilderDocument> Documents,
     string ActiveDocumentId,
     CvBuilderReview Review);
+
+public sealed record CvStoredVersion(
+    string DocumentId,
+    CvVersionSnapshot Snapshot,
+    CvBuilderDocument Document);
+
+public sealed record CareerDocumentLibrary(
+    int SchemaVersion,
+    IReadOnlyList<CvBuilderDocument> Documents,
+    string ActiveDocumentId,
+    IReadOnlyList<CvStoredVersion> Versions)
+{
+    public const int CurrentSchemaVersion = 1;
+
+    public static CareerDocumentLibrary Empty =>
+        new(CurrentSchemaVersion, [], string.Empty, []);
+}

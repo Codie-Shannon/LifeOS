@@ -21,24 +21,27 @@ public static class FollowUpStorage
         {
             if (!File.Exists(FilePath))
             {
-                return CreateDefaultFollowUps();
+                return LoadFallback();
             }
 
             var json = File.ReadAllText(FilePath);
 
             if (string.IsNullOrWhiteSpace(json))
             {
-                return CreateDefaultFollowUps();
+                return LoadFallback();
             }
 
             return JsonSerializer.Deserialize<List<FollowUpItem>>(json, JsonOptions)
-                ?? CreateDefaultFollowUps();
+                ?? LoadFallback();
         }
         catch
         {
-            return CreateDefaultFollowUps();
+            return LoadFallback();
         }
     }
+
+    private static List<FollowUpItem> LoadFallback() =>
+        LocalAppDataPath.IsPortfolioDemoMode ? CreateDefaultFollowUps() : [];
 
     public static void Save(IEnumerable<FollowUpItem> items)
     {

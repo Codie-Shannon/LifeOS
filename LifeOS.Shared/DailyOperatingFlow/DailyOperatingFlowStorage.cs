@@ -14,7 +14,9 @@ public static class DailyOperatingFlowStorage
     {
         if (!File.Exists(FilePath))
         {
-            return DailyOperatingFlowDemoData.CreateDefaultBlocks();
+            return LocalAppDataPath.IsPortfolioDemoMode
+                ? DailyOperatingFlowDemoData.CreateDefaultBlocks()
+                : [];
         }
 
         var json = File.ReadAllText(FilePath);

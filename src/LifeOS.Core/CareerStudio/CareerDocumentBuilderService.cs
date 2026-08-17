@@ -10,6 +10,39 @@ public sealed class CareerDocumentBuilderService
         CvSectionKind.Skills
     ];
 
+    public CvBuilderDocument CreateBlank(
+        string id,
+        string name,
+        DateTimeOffset now)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            throw new ArgumentException("A document identifier is required.", nameof(id));
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("A document name is required.", nameof(name));
+
+        CvBuilderSection[] sections =
+        [
+            new("contact", CvSectionKind.Contact, "Contact details", string.Empty, 0, true, []),
+            new("profile", CvSectionKind.Profile, "Professional profile", string.Empty, 1, true, []),
+            new("employment", CvSectionKind.Employment, "Experience", string.Empty, 2, true, []),
+            new("skills", CvSectionKind.Skills, "Skills", string.Empty, 3, true, []),
+            new("projects", CvSectionKind.Projects, "Selected projects", string.Empty, 4, true, []),
+            new("education", CvSectionKind.Education, "Education", string.Empty, 5, false, []),
+            new("certifications", CvSectionKind.Certifications, "Certifications", string.Empty, 6, false, [])
+        ];
+
+        return new CvBuilderDocument(
+            id.Trim(),
+            name.Trim(),
+            string.Empty,
+            "professional",
+            sections,
+            CvBuilderStep.Content,
+            1,
+            now,
+            false);
+    }
+
     public CvBuilderDocument CreateFromCareerProfile(
         string id,
         string name,

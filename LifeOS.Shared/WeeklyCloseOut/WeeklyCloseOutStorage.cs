@@ -20,18 +20,21 @@ public static class WeeklyCloseOutStorage
     {
         try
         {
-            if (!File.Exists(FilePath)) return CreateDefaultEntries();
+            if (!File.Exists(FilePath)) return LoadFallback();
 
             var json = File.ReadAllText(FilePath);
-            if (string.IsNullOrWhiteSpace(json)) return CreateDefaultEntries();
+            if (string.IsNullOrWhiteSpace(json)) return LoadFallback();
 
-            return JsonSerializer.Deserialize<List<WeeklyCloseOutEntry>>(json, JsonOptions) ?? CreateDefaultEntries();
+            return JsonSerializer.Deserialize<List<WeeklyCloseOutEntry>>(json, JsonOptions) ?? LoadFallback();
         }
         catch
         {
-            return CreateDefaultEntries();
+            return LoadFallback();
         }
     }
+
+    private static List<WeeklyCloseOutEntry> LoadFallback() =>
+        LocalAppDataPath.IsPortfolioDemoMode ? CreateDefaultEntries() : [];
 
     public static void Save(IEnumerable<WeeklyCloseOutEntry> entries)
     {

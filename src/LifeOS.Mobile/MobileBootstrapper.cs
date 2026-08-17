@@ -1,3 +1,4 @@
+using LifeOS.Mobile.Core.Foundation;
 using LifeOS.Mobile.Core.Services;
 using LifeOS.Mobile.Views;
 
@@ -9,7 +10,11 @@ public sealed class MobileBootstrapper
     public MobileBootstrapper(MobileFoundationService foundation) => _foundation = foundation;
     public async Task<Page> CreatePageAsync()
     {
-        try { await _foundation.InitializeDemoAsync(); return new MobileShell(_foundation); }
+        try
+        {
+            MobilePreferences preferences = await _foundation.InitializeAsync();
+            return new MobileShell(_foundation, preferences.ExperienceMode);
+        }
         catch (Exception ex) { return new RecoveryPage($"{ex.GetType().Name}: {ex.Message}"); }
     }
 }

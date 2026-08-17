@@ -4,13 +4,15 @@ public enum MobileStartupState { Loading, Locked, SignedOut, Ready, Recovery }
 public enum MobileSyncState { Idle, Syncing, Pending, Offline, Stale, Failed, Conflict, Stopped }
 public enum MobileThemeMode { System, Light, Dark, HighContrast }
 public enum MobileDensity { Comfortable, Compact }
+public enum MobileExperienceMode { Ordinary, PortfolioDemo }
 
 public sealed record MobilePreferences(
     MobileThemeMode Theme,
     string Accent,
     MobileDensity Density,
     bool HideSensitivePreviews,
-    bool RequireAppLock);
+    bool RequireAppLock,
+    MobileExperienceMode ExperienceMode = MobileExperienceMode.Ordinary);
 
 public sealed record MobileSessionState(bool IsSignedIn, bool IsLocked, string DeviceLabel);
 

@@ -9,12 +9,36 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using LifeOS.Core;
 using LifeOS.Shared.V8;
+using LifeOS.Shared.Storage;
 using LifeOS.Core.IntegrationInbox;
 
 namespace LifeOS.Desktop;
 
 public partial class V8ShellWindow : Window
 {
+    private static readonly HashSet<string> ProofOnlyRoutes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "assistant",
+        "automation-centre",
+        "bills-payments",
+        "desktop-release",
+        "email-radar",
+        "final-offline-os",
+        "item-state-engine",
+        "lifeos-spine",
+        "memory",
+        "money-profile",
+        "os-navigation",
+        "payment-calendar",
+        "search-knowledge",
+        "settings-safety",
+        "universal-spine",
+        "v11-document-intake",
+        "v11-money-foundation",
+        "v12-career-studio",
+        "v13-grocery-planning"
+    };
+
     private static readonly string[] WorkspaceOrder =
     {
         "Home",
@@ -39,7 +63,7 @@ public partial class V8ShellWindow : Window
     private Group49MicrosoftFilesView? _group49MicrosoftFilesView;
     private Group50TeamsView? _group50TeamsView;
     private Group51GoogleWorkspaceView? _group51GoogleWorkspaceView;
-    private WorkspaceSnapshot _snapshot = WorkspaceSnapshot.Load();
+    private WorkspaceSnapshot _snapshot;
     private double _workspaceScrollOffset;
     private string? _activeModuleRoute;
     private MainWindow? _embeddedLegacyModuleWindow;
@@ -48,6 +72,9 @@ public partial class V8ShellWindow : Window
 
     public V8ShellWindow()
     {
+        LocalAppDataPath.SetPortfolioDemoMode(
+            _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo);
+        _snapshot = WorkspaceSnapshot.Load();
         WorkspaceCatalog.Validate(MainWindow.V8RouteIds);
         InitializeComponent();
 
@@ -929,6 +956,21 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         string subtitle = module?.Description ??
             "This module remains inside its parent LifeOS workspace.";
 
+        if (ProofOnlyRoutes.Contains(routeId) &&
+            _preferences.ExperienceMode != V8ExperienceMode.PortfolioDemo)
+        {
+            ShowEmbeddedModule(
+                routeId,
+                title,
+                subtitle,
+                new PortfolioDemoBoundaryView(title, () =>
+                {
+                    CloseEmbeddedModule(restoreScroll: false);
+                    NavigateTo("Settings");
+                }));
+            return;
+        }
+
         if (string.Equals(routeId, "v11-document-intake", StringComparison.OrdinalIgnoreCase))
         {
             ShowEmbeddedModule(routeId, title, subtitle, new DocumentIntakeV11View());
@@ -952,7 +994,9 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
                 routeId,
                 title,
                 subtitle,
-                new CareerDocumentsStudioView(() =>
+                new CareerDocumentsStudioView(
+                    _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo,
+                    () =>
                     CloseEmbeddedModule(restoreScroll: true)));
             return;
         }
@@ -1128,6 +1172,7 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         AccentComboBox.ItemsSource = Enum.GetValues<V8Accent>();
         DensityComboBox.ItemsSource = Enum.GetValues<V8Density>();
         StartupComboBox.ItemsSource = Enum.GetValues<V8StartupMode>();
+        ExperienceModeComboBox.ItemsSource = Enum.GetValues<V8ExperienceMode>();
         TextScaleComboBox.ItemsSource = new[] { "100%", "110%", "125%", "140%" };
     }
 
@@ -1140,6 +1185,7 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         AccentComboBox.SelectedItem = _preferences.Accent;
         DensityComboBox.SelectedItem = _preferences.Density;
         StartupComboBox.SelectedItem = _preferences.StartupMode;
+        ExperienceModeComboBox.SelectedItem = _preferences.ExperienceMode;
         TextScaleComboBox.SelectedIndex = TextScaleToIndex(_preferences.TextScale);
         ReducedMotionCheckBox.IsChecked = _preferences.ReducedMotion;
         ContextAutoOpenCheckBox.IsChecked = _preferences.ContextPanelAutoOpen;
@@ -1189,6 +1235,9 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         _preferences.StartupMode = StartupComboBox.SelectedItem is V8StartupMode startup
             ? startup
             : V8StartupMode.Home;
+        _preferences.ExperienceMode = ExperienceModeComboBox.SelectedItem is V8ExperienceMode experienceMode
+            ? experienceMode
+            : V8ExperienceMode.Ordinary;
         _preferences.TextScale = IndexToTextScale(TextScaleComboBox.SelectedIndex);
         _preferences.ReducedMotion = ReducedMotionCheckBox.IsChecked == true;
         _preferences.ContextPanelAutoOpen = ContextAutoOpenCheckBox.IsChecked == true;
@@ -1201,6 +1250,9 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         try
         {
             V8PreferenceStore.Save(_preferences);
+            LocalAppDataPath.SetPortfolioDemoMode(
+                _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo);
+            _snapshot = WorkspaceSnapshot.Load();
             ApplyPreferencesToUi();
             ApplyDensity();
             UpdateNavigationSelection();
@@ -1230,6 +1282,8 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
 
         _preferences = new V8Preferences().Normalize();
         V8PreferenceStore.Save(_preferences);
+        LocalAppDataPath.SetPortfolioDemoMode(false);
+        _snapshot = WorkspaceSnapshot.Load();
         ApplyPreferencesToUi();
         SetContextOpen(false, persist: false, returnFocusOnClose: false);
         NavigateTo("Home", persist: false);

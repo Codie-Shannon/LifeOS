@@ -40,5 +40,5 @@ current product code use the corrected checkpoint identifiers. This preserves
 the original pixels while making the lineage accurate going forward.
 
 SG-128 Pack 1 is implemented and its visible Desktop capture remains open.
-SG-132 Pack 1 adds the cover-letter and application-pack vertical; its Desktop
-and Full Mobile Pack 2 capture is also open.
+SG-132 is closed with the exact eight-image Desktop and Full Mobile Pack 2
+evidence set.

@@ -23,5 +23,6 @@ labelling whenever synthetic records are visible.
 8. `08-sg132-validation.png` - version, focused/full test totals, Desktop and
    Android Release builds, repository hygiene and clean synchronization.
 
-Pack 1 is implemented. The group closes only after all eight approved images
-are captured, inspected, validated, committed and pushed.
+Pack 2 is complete. All eight approved images were captured from the rendered
+products, inspected, validated and committed; the group is closed after the
+evidence commit is pushed and synchronization is verified.

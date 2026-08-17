@@ -1,10 +1,11 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.3 / Group 132 / SG-132 Pack 1**.
+LifeOS is current through **v28.0.0-alpha.3 / Group 132 / SG-132 Pack 2**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
-visible Pack 2 capture remains open. SG-132 Pack 1 adds the configuration-free
-cover-letter and application-pack vertical.
+visible Pack 2 capture remains open. SG-132 closes the configuration-free
+cover-letter and application-pack vertical with inspected Desktop and Full
+Mobile evidence.
 
 The 2026-08-18 recovery pass corrected the execution baseline without claiming
 a new group: ordinary and portfolio-demo data are now explicitly separated,
@@ -41,7 +42,8 @@ Groups 129-132 complete Cover Letters and Application Integration in Pack 1:
 - ordinary-mode Desktop and Full Mobile paths without fictional records
 - no autonomous application submission or employer communication
 
-Visible Desktop and Full Mobile Pack 2 evidence remains open.
+The exact eight-image Desktop and Full Mobile SG-132 Pack 2 evidence set is
+captured, inspected and committed.
 
 ## Prior completed capability
 
@@ -72,7 +74,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 ## Validation baseline
 
 - SG-124 targeted tests: 14 passed
-- Groups 129-132 targeted tests: 10 passed
+- Groups 129-132 targeted tests: 11 passed
 - Core tests: 477 passed
 - Companion tests: 34 passed
 - Website tests: 28 passed
@@ -81,14 +83,14 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Full Mobile Android x64 Release build: clean; fresh install launched on API 36
 - Mobile Companion Android x64 Release build: clean; fresh install launched on API 36
 - Website runtime smoke test: HTTP 200
-- Latest evidence: [`group-121-124-cv-builder-foundation`](screenshot-groups/group-121-124-cv-builder-foundation/)
+- Latest evidence: [`group-129-132-cover-letters-application-packs`](screenshot-groups/group-129-132-cover-letters-application-packs/)
 
-SG-128 and SG-132 Pack 2 screenshot capture remains open; both must be closed
-with visible rendered-product evidence rather than inferred from builds or
-automated tests.
+SG-132 Pack 2 is closed with visible rendered-product evidence. SG-128 Pack 2
+capture remains open and must be closed without inferring UI proof from builds
+or automated tests.
 
 ## Next completion work
 
-Close SG-128/SG-132 Pack 2, then continue the approved platform-spine and
-ordinary-mode productization backlog. Credentialed integrations, signing,
-public deployment, store submission and owner acceptance remain final gates.
+Close SG-128 Pack 2, then continue the approved platform-spine and ordinary-mode
+productization backlog. Credentialed integrations, signing, public deployment,
+store submission and owner acceptance remain final gates.

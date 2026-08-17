@@ -93,7 +93,8 @@ sequential counter.
 - CV, opportunity and versioned application-pack linking is implemented.
 - Evidence-backed suggestions require explicit acceptance, rejection or edit.
 - Desktop and Full Mobile configuration-free review paths are implemented.
-- Visible SG-132 Pack 2 capture remains open.
+- SG-132 Pack 2 is closed with the exact eight-image Desktop and Full Mobile
+  evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

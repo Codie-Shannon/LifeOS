@@ -149,9 +149,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 ## Current development boundary
 
 LifeOS v28.0.0-alpha.3 is active through Group 132. Career Documents Studio now
-includes CVs, cover letters and application-pack integration. SG-128 and SG-132
-visible Pack 2 evidence remains open; v27 release-candidate evidence remains
-preserved in SG-120.
+includes CVs, cover letters and application-pack integration. SG-132 is closed
+with its exact eight-image Desktop and Full Mobile evidence set. SG-128 visible
+Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
+in SG-120.
 
 ## Author
 

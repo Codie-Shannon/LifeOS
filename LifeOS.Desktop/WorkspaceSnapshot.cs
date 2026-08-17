@@ -26,6 +26,7 @@ internal sealed class WorkspaceSnapshot
             ["integration-inbox"] = LoadCount("LifeOS.Shared.IntegrationInbox.IntegrationInboxStorage"),
             ["pay-later"] = LoadCount("LifeOS.Shared.PayLater.PayLaterStorage"),
             ["proof"] = LoadCount("LifeOS.Shared.ProofTracker.ProofStorage"),
+            ["projects"] = LoadCount("LifeOS.Shared.Projects.ProjectStorage"),
             ["receipts"] = LoadCount("LifeOS.Shared.ReceiptEvidence.ReceiptEvidenceStorage"),
             ["relationships"] = LoadCount("LifeOS.Shared.RelationshipRadar.RelationshipRadarStorage"),
             ["timesheets"] = LoadCount("LifeOS.Shared.TimesheetEvidence.TimesheetEvidenceStorage"),

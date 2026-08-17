@@ -4,10 +4,18 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.6 is active through Group 144 with validated Settings
-forms and safe, actionable local problem states.
+LifeOS v28.0.0-alpha.7 is active through Group 148 with a genuine ordinary-mode
+Projects and delivery workspace.
 
 ## v28 - Career Documents Studio
+
+### Groups 145-148
+
+- Replaced the Projects placeholder with a real embedded Desktop workspace.
+- Added honest ordinary-mode empty state and validated local project capture.
+- Added delivery status, next action, due date and optional proof references.
+- Added versioned atomic storage, recovery health and Trash registration.
+- Added reversible archive/restore and safe write-failure problem states.
 
 ### Groups 141-144
 

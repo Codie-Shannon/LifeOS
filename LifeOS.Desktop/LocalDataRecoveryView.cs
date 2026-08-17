@@ -58,7 +58,7 @@ public sealed class LocalDataRecoveryView : UserControl
 
         root.Children.Add(Heading("Operational stores", 20, new Thickness(0, 8, 0, 4)));
         root.Children.Add(Text(
-            "Agenda, follow-ups, work pipeline and work sessions are the first stores moved onto the shared versioned contract. Other modules remain on their existing paths until migrated deliberately.",
+            "Agenda, follow-ups, work pipeline, work sessions and projects use the shared versioned contract. Other modules remain on their existing paths until migrated deliberately.",
             12,
             "#A9B6CA"));
 

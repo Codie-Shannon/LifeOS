@@ -140,11 +140,12 @@ public static class LifeOSModuleCatalog
         {
             Kind = LifeOSModuleKind.Projects,
             Title = "Projects",
-            Badge = "Planned",
-            ShortDescription = "Portfolio builds, proof projects, shipped versions, and active focus.",
-            DetailDescription = "Planned shared LifeOS module for active builds, client proofs, portfolio work, shipped versions, and project pressure.",
-            PlatformRole = "Shared core module. Connects build work to proof, case studies, client opportunities, and business momentum.",
-            NextBuildFocus = "Later: project list with status, next action, proof link, and pressure note.",
+            Badge = "v28 alpha.7",
+            ShortDescription = "Local projects, next actions, delivery state, due dates and proof references.",
+            DetailDescription = "Projects tracks ordinary-mode local delivery records with validated capture, explicit status, due dates, proof references and reversible archive.",
+            PlatformRole = "Shared local project model with a purpose-built Desktop workspace and versioned recovery contract.",
+            NextBuildFocus = "Extend intentional project editing and connect reviewed proof without copying evidence.",
+            IsBuilt = true,
             IsSharedCoreModule = true
         },
 

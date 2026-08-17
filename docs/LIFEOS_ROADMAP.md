@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.6 is active through Group 144 with validated Settings
-forms and actionable local problem states on top of ranked shell discovery.**
+**LifeOS v28.0.0-alpha.7 is active through Group 148 with a real ordinary-mode
+Projects workspace on top of the shared storage, forms and shell spine.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -55,7 +55,7 @@ checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-144 | Career Documents, Local Data Recovery, Navigation, Shell Search and Forms |
+| v28 | 121-148 | Career Documents, Local Data Recovery, Navigation, Forms and Projects |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -131,6 +131,16 @@ sequential counter.
 - Preference reset persists before replacing the current in-memory state.
 - SG-144 Pack 2 is closed with the exact eight-image Desktop and validation
   evidence set.
+
+### v28 / Groups 145-148 - Projects and Delivery
+
+- The planned Projects placeholder is replaced by a genuine embedded workspace.
+- Ordinary mode starts empty and never seeds portfolio proof records.
+- Project capture validates name, next action, dates and bounded text fields.
+- Delivery state, due date and optional proof reference remain explicit.
+- Projects use the shared versioned, atomic, backup-aware local-store contract.
+- Archive and restore are reversible; permanent deletion is not exposed.
+- SG-148 Pack 1 is implemented; exact visible Pack 2 evidence remains open.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

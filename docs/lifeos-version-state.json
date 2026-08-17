@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
-    "currentReleaseName":  "Forms and Actionable Problems",
-    "currentSemanticVersion":  "28.0.0-alpha.6",
+    "currentReleaseName":  "Projects and Delivery",
+    "currentSemanticVersion":  "28.0.0-alpha.7",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  144,
-    "latestCompletedGroupName":  "Forms and Actionable Problems",
-    "latestCompletedHead":  "sg144-pack2-closed",
-    "nextGroup":  145,
-    "nextGroupName":  "Ordinary-mode Productization",
-    "roadmapApprovedThroughGroup":  144,
+    "latestCompletedGroup":  148,
+    "latestCompletedGroupName":  "Projects and Delivery",
+    "latestCompletedHead":  "sg148-pack1-pending",
+    "nextGroup":  149,
+    "nextGroupName":  "Work and Time Productization",
+    "roadmapApprovedThroughGroup":  148,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  144,
+                    "currentThroughGroup":  148,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-144",
-                                      "status":  "forms-actionable-problems-pack1"
+                                      "groups":  "121-148",
+                                      "status":  "projects-delivery-pack1"
                                   }
                               ],
     "safetyBoundaries":  {

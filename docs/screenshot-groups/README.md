@@ -33,6 +33,7 @@ work appear to stop at SG-82 even though implementation had reached Group 128.
 | 133-136 | SG-136 |
 | 137-140 | SG-140 |
 | 141-144 | SG-144 |
+| 145-148 | SG-148 |
 
 ## Evidence preservation
 
@@ -54,3 +55,6 @@ evidence set.
 
 SG-144 is closed with the exact eight-image Desktop and validation Pack 2
 evidence set.
+
+SG-148 Pack 1 is implemented. Its exact visible Pack 2 evidence set remains
+open.

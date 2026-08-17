@@ -265,7 +265,7 @@ internal static class WorkspaceCatalog
                 new WorkspaceMetricDefinition[]
                 {
                     Metric("Proof items", "proof", "0", "Canonical records"),
-                    Metric("Projects", "", "Active", "Core module"),
+                    Metric("Projects", "projects", "0", "Versioned local records"),
                     Metric("Evidence vault", "", "Linked", "Canonical behaviour"),
                     Metric("DevOps", "", "Deferred", "Outside v8 scope")
                 },
@@ -276,7 +276,7 @@ internal static class WorkspaceCatalog
                         "Milestones and evidence remain linked to their authoritative stores.",
                         new WorkspaceModuleDefinition[]
                         {
-                            Route("projects", "Projects", "Canonical module", "Active project records and delivery structure."),
+                            Route("projects", "Projects", "SG-148 active", "Validated local projects, next actions, delivery state, due dates, proof references and reversible archive."),
                             Route("proof-tracker", "Proof Tracker", "Canonical records", "Project proof, evidence status, links and notes."),
                             Route("evidence-vault", "Evidence Vault", "Canonical behaviour", "Cross-module evidence and provenance review.")
                         })

@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.6 / Group 144 / SG-144 Pack 2**.
+LifeOS is current through **v28.0.0-alpha.7 / Group 148 / SG-148 Pack 1**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
@@ -23,6 +23,11 @@ problem states. Invalid values do not mutate memory or disk, field issues remain
 visible beside their controls, and caught local exceptions are translated into
 safe recovery guidance without exposing private exception text.
 
+Groups 145-148 replace the Projects placeholder with an ordinary-mode local
+workspace. Projects now have validated capture, explicit delivery state, next
+action, optional due date and proof reference, atomic versioned persistence and
+reversible archive/restore.
+
 The 2026-08-18 recovery pass corrected the execution baseline without claiming
 a new group: ordinary and portfolio-demo data are now explicitly separated,
 Career document history is durable across restarts, PDF export paginates instead
@@ -39,13 +44,27 @@ preserved v27 release candidate.
 
 | Product | Status |
 |---|---|
-| Desktop | Current through Group 144 with validated Settings forms, actionable local problems, ranked shell search, local-data health/recovery plus CVs, cover letters, application packs, review and export |
+| Desktop | Current through Group 148 with ordinary-mode Projects, validated forms, actionable local problems, ranked shell search, local-data health/recovery plus Career Documents Studio |
 | Full Mobile | Current through Group 132 with ordinary empty state, opportunity capture, document review and derivative sharing |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest implemented capability
+
+Groups 145-148 establish Projects and Delivery:
+
+- a genuine ordinary-mode Projects workspace with no seeded proof records
+- validated project name, next action, date and bounded text fields
+- explicit backlog, active, waiting, blocked, completed and archived states
+- optional due date, proof reference, summary and notes
+- versioned atomic persistence, backup health and recoverable Trash registration
+- reversible archive/restore with no permanent-delete control
+- safe actionable write-failure states and an accessible live problem region
+
+SG-148 Pack 1 is implemented; exact visible evidence capture remains open.
+
+## Prior completed capability
 
 Groups 141-144 establish Forms and Actionable Problems:
 
@@ -59,8 +78,6 @@ Groups 141-144 establish Forms and Actionable Problems:
 
 SG-144 Pack 2 is closed with five directly rendered Desktop images and three
 inspected validation records.
-
-## Prior completed capability
 
 Groups 137-140 establish Navigation and Shell Search:
 
@@ -129,10 +146,11 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
+- Groups 145-148 targeted tests: 8 passed
 - Groups 141-144 targeted tests: 8 passed
 - Groups 137-140 targeted tests: 7 passed
 - Groups 133-136 targeted tests: 8 passed
-- Core tests: 501 passed
+- Core tests: 509 passed
 - Companion tests: 34 passed
 - Website tests: 28 passed
 - Mobile tests: 56 passed
@@ -147,12 +165,13 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 SG-140 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-144 Pack 2 is closed with exact, inspected product and validation evidence.
+SG-148 Pack 1 is implemented and visible Pack 2 capture remains open.
 SG-128 Pack 2 remains a historical evidence gap and must be closed without
 inferring UI proof from builds or automated tests.
 
 ## Next completion work
 
-Continue migrating remaining stores and the approved ordinary-mode
-productization backlog. SG-128’s historical visible Pack 2 capture remains open.
+Continue the Work, Time, Money and Documents ordinary-mode productization
+backlog. SG-128’s historical visible Pack 2 capture remains open.
 Credentialed integrations, signing, public deployment, store submission and
 owner acceptance remain final gates.

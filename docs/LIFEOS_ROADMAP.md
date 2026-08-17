@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.7 is active through Group 148 with a real ordinary-mode
-Projects workspace on top of the shared storage, forms and shell spine.**
+**LifeOS v28.0.0-alpha.8 is active through Group 152 with real ordinary-mode
+Work Time and Projects workspaces on top of the shared storage, forms and shell spine.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -55,7 +55,7 @@ checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-148 | Career Documents, Local Data Recovery, Navigation, Forms and Projects |
+| v28 | 121-152 | Career Documents, Local Data Recovery, Navigation, Forms, Projects and Work Time |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -142,6 +142,17 @@ sequential counter.
 - Archive and restore are reversible; permanent deletion is not exposed.
 - SG-148 Pack 2 is closed with the exact eight-image Desktop and validation
   evidence set.
+
+### v28 / Groups 149-152 - Work Time and Billable Records
+
+- The retained Work Time product-lane page is replaced by a genuine embedded workspace.
+- Ordinary mode starts empty and never seeds fictional client, hour or revenue records.
+- Work capture validates client/project, date, hours, rate and bounded text fields.
+- Billable classification and completed, invoiced, paid and cancelled state remain explicit.
+- Totals distinguish tracked value, paid value and unpaid billable value.
+- Work sessions use the shared versioned, atomic, backup-aware local-store contract.
+- Invoice sending, payment initiation, bank verification and client messaging remain unavailable.
+- SG-152 Pack 1 is implemented; directly rendered product and validation evidence remains Pack 2 work.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

@@ -1,8 +1,47 @@
-using System.Text.Json;
 using LifeOS.Core.WorkSessions;
 using LifeOS.Shared.Storage;
 
 namespace LifeOS.Shared.WorkSessions;
+
+public sealed class WorkSessionRepository
+{
+    private readonly VersionedJsonLocalStore<List<WorkSession>> _store;
+
+    public WorkSessionRepository(
+        string filePath,
+        Func<List<WorkSession>>? emptyFactory = null,
+        Func<DateTimeOffset>? utcNow = null)
+    {
+        _store = new VersionedJsonLocalStore<List<WorkSession>>(
+            filePath,
+            "work-sessions",
+            1,
+            emptyFactory ?? (() => []),
+            Normalize,
+            utcNow: utcNow);
+    }
+
+    public LocalStoreLoadResult<List<WorkSession>> LoadResult() => _store.Load();
+
+    public List<WorkSession> Load() => LoadResult().Value;
+
+    public void Save(IEnumerable<WorkSession> sessions) =>
+        _store.Save(sessions.ToList());
+
+    public LocalStoreHealth Inspect() => _store.Inspect();
+
+    public IReadOnlyList<LocalStoreTrashEntry> ListTrash() => _store.ListTrash();
+
+    public LocalStoreTrashEntry MoveToTrash() => _store.MoveToTrash();
+
+    public void RestoreTrash(string entryId) => _store.RestoreTrash(entryId);
+
+    private static List<WorkSession> Normalize(List<WorkSession> sessions) => sessions
+        .Select(WorkSessionService.Normalize)
+        .OrderByDescending(session => session.Date)
+        .ThenBy(session => session.ClientOrProject, StringComparer.OrdinalIgnoreCase)
+        .ToList();
+}
 
 public static class WorkSessionStorage
 {
@@ -10,31 +49,29 @@ public static class WorkSessionStorage
 
     public static string FilePath => LocalAppDataPath.GetFilePath(FileName);
 
-    public static List<WorkSession> Load() => Store().Load().Value;
+    public static List<WorkSession> Load() => Repository().Load();
 
-    public static LocalStoreHealth Inspect() => Store().Inspect();
+    public static LocalStoreHealth Inspect() => Repository().Inspect();
 
-    public static IReadOnlyList<LocalStoreTrashEntry> ListTrash() => Store().ListTrash();
+    public static IReadOnlyList<LocalStoreTrashEntry> ListTrash() => Repository().ListTrash();
 
-    public static void RestoreTrash(string entryId) => Store().RestoreTrash(entryId);
+    public static void RestoreTrash(string entryId) => Repository().RestoreTrash(entryId);
 
     private static List<WorkSession> LoadFallback() =>
         LocalAppDataPath.IsPortfolioDemoMode ? CreateDefaultSessions() : [];
 
     public static void Save(IEnumerable<WorkSession> sessions)
     {
-        Store().Save(sessions.ToList());
+        Repository().Save(sessions);
     }
 
     public static void Reset()
     {
-        if (File.Exists(FilePath)) Store().MoveToTrash();
+        if (File.Exists(FilePath)) Repository().MoveToTrash();
     }
 
-    private static VersionedJsonLocalStore<List<WorkSession>> Store() => new(
+    private static WorkSessionRepository Repository() => new(
         FilePath,
-        "work-sessions",
-        1,
         LoadFallback);
 
     private static List<WorkSession> CreateDefaultSessions()

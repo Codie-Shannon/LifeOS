@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v27.0.0-rc.1 active.
-- Group 120 complete.
-- Owner release decision next.
+- LifeOS v28.0.0-alpha.8 active.
+- Group 152 / SG-152 Pack 1 implemented.
+- Work Time & Billable Records is a real ordinary-mode embedded workspace.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation
@@ -52,6 +52,7 @@ Confirm these current areas open and show fictional/sanitized state:
 - Integration control and review-first inbox
 - Assistant and automation boundary surfaces
 - Work Time and Operating Day Work Proof
+- Work Time ordinary empty state, validated manual capture and explicit billing-state transitions
 - Documentation and Packaging Hub
 - Closed Beta readiness
 - Native Intelligence and Optional AI

@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
-    "currentReleaseName":  "Projects and Delivery",
-    "currentSemanticVersion":  "28.0.0-alpha.7",
+    "currentReleaseName":  "Work Time and Billable Records",
+    "currentSemanticVersion":  "28.0.0-alpha.8",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  148,
-    "latestCompletedGroupName":  "Projects and Delivery",
-    "latestCompletedHead":  "sg148-pack2-closed",
-    "nextGroup":  149,
-    "nextGroupName":  "Work and Time Productization",
-    "roadmapApprovedThroughGroup":  148,
+    "latestCompletedGroup":  152,
+    "latestCompletedGroupName":  "Work Time and Billable Records",
+    "latestCompletedHead":  "sg152-pack1-implemented",
+    "nextGroup":  153,
+    "nextGroupName":  "Money and Documents Productization",
+    "roadmapApprovedThroughGroup":  152,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  148,
+                    "currentThroughGroup":  152,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-148",
-                                      "status":  "projects-delivery-pack1"
+                                      "groups":  "121-152",
+                                      "status":  "work-time-pack1"
                                   }
                               ],
     "safetyBoundaries":  {

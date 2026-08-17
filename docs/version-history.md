@@ -4,10 +4,20 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.7 is active through Group 148 with a genuine ordinary-mode
-Projects and delivery workspace.
+LifeOS v28.0.0-alpha.8 is active through Group 152 with genuine ordinary-mode
+Work Time and Projects workspaces.
 
 ## v28 - Career Documents Studio
+
+### Groups 149-152
+
+- Replaced the retained Work Time product-lane page with a real embedded Desktop workspace.
+- Added honest ordinary-mode empty state and validated local work-session capture.
+- Added explicit billable/non-billable, completed, invoiced, paid and cancelled state.
+- Added deterministic total, billable, paid and unpaid calculations.
+- Reused the versioned atomic work-session store with recovery health and Trash registration.
+- Kept invoice sending, payment initiation, bank verification and client messaging unavailable.
+- Implemented SG-152 Pack 1; visible product and validation evidence remains open.
 
 ### Groups 145-148
 

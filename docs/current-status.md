@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.7 / Group 148 / SG-148 Pack 2**.
+LifeOS is current through **v28.0.0-alpha.8 / Group 152 / SG-152 Pack 1**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
@@ -28,6 +28,11 @@ workspace. Projects now have validated capture, explicit delivery state, next
 action, optional due date and proof reference, atomic versioned persistence and
 reversible archive/restore.
 
+Groups 149-152 replace the retained Work Time product-lane page with a genuine
+ordinary-mode workspace. Work records now have validated local capture,
+billable and non-billable classification, explicit completed/invoiced/paid/
+cancelled state, deterministic totals and versioned recovery.
+
 The 2026-08-18 recovery pass corrected the execution baseline without claiming
 a new group: ordinary and portfolio-demo data are now explicitly separated,
 Career document history is durable across restarts, PDF export paginates instead
@@ -44,13 +49,28 @@ preserved v27 release candidate.
 
 | Product | Status |
 |---|---|
-| Desktop | Current through Group 148 with ordinary-mode Projects, validated forms, actionable local problems, ranked shell search, local-data health/recovery plus Career Documents Studio |
+| Desktop | Current through Group 152 with ordinary-mode Work Time and Projects, validated forms, actionable local problems, ranked shell search, local-data health/recovery plus Career Documents Studio |
 | Full Mobile | Current through Group 132 with ordinary empty state, opportunity capture, document review and derivative sharing |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest implemented capability
+
+Groups 149-152 establish Work Time and Billable Records:
+
+- a genuine ordinary-mode embedded workspace with no seeded client or revenue records
+- validated client/project, date, hours, rate, description and bounded notes
+- explicit billable/non-billable classification and lifecycle state
+- deterministic total, billable, paid and unpaid calculations
+- versioned atomic persistence, backup health and recoverable Trash registration
+- safe actionable read/write failure states and an accessible live problem region
+- no invoice sending, client messaging, bank verification or payment initiation
+
+SG-152 Pack 1 is implemented. Directly rendered Desktop and inspected
+validation evidence remain Pack 2 work.
+
+## Prior completed capability
 
 Groups 145-148 establish Projects and Delivery:
 
@@ -64,8 +84,6 @@ Groups 145-148 establish Projects and Delivery:
 
 SG-148 Pack 2 is closed with five directly rendered Desktop images and three
 inspected validation records.
-
-## Prior completed capability
 
 Groups 141-144 establish Forms and Actionable Problems:
 
@@ -147,11 +165,12 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
+- Groups 149-152 targeted tests: 8 passed
 - Groups 145-148 targeted tests: 8 passed
 - Groups 141-144 targeted tests: 8 passed
 - Groups 137-140 targeted tests: 7 passed
 - Groups 133-136 targeted tests: 8 passed
-- Core tests: 509 passed
+- Core tests: 517 passed
 - Companion tests: 34 passed
 - Website tests: 28 passed
 - Mobile tests: 56 passed
@@ -162,17 +181,18 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Groups 129-132 targeted tests: 11 passed
 - Prior Android runtime baseline: fresh installs launched on API 36 at SG-132
 - Website runtime smoke test: HTTP 200
-- Latest evidence: [`group-145-148-projects-delivery`](screenshot-groups/group-145-148-projects-delivery/)
+- Latest closed evidence: [`group-145-148-projects-delivery`](screenshot-groups/group-145-148-projects-delivery/)
 
 SG-140 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-144 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-148 Pack 2 is closed with exact, inspected product and validation evidence.
+SG-152 Pack 1 is implemented; Pack 2 evidence remains open.
 SG-128 Pack 2 remains a historical evidence gap and must be closed without
 inferring UI proof from builds or automated tests.
 
 ## Next completion work
 
-Continue the Work, Time, Money and Documents ordinary-mode productization
-backlog. SG-128’s historical visible Pack 2 capture remains open.
+Close SG-152 visible Pack 2 evidence, then continue Money and Documents
+ordinary-mode productization. SG-128’s historical visible Pack 2 capture remains open.
 Credentialed integrations, signing, public deployment, store submission and
 owner acceptance remain final gates.

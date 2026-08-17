@@ -18,7 +18,7 @@ public sealed class MobileShell : Shell
             {
                 new ShellContent { Title = "Home", Route = "home", Content = new HomePage(foundation, experienceMode) },
                 new ShellContent { Title = "Work", Route = "work", Content = ProofPage("Work", experienceMode, () => new WorkPage(foundation)) },
-                new ShellContent { Title = "Career", Route = "career", Content = ProofPage("Career", experienceMode, () => new CareerPage()) },
+                new ShellContent { Title = "Career", Route = "career", Content = new CareerApplicationHubPage(experienceMode) },
                 new ShellContent { Title = "Grocery", Route = "grocery", Content = ProofPage("Grocery", experienceMode, () => new GroceryPage()) },
                 new ShellContent { Title = "Money", Route = "money", Content = ProofPage("Money", experienceMode, () => new MoneyPage()) },
                 new ShellContent { Title = "Projects", Route = "projects", Content = ProofPage("Projects", experienceMode, () => new ProjectsPage()) },

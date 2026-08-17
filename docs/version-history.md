@@ -4,11 +4,20 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.2 is active through Group 128 with professional CV
-templates, A4 review, ATS/readability checks, version history and safe
-derivative export. Cover letters and application integration are next.
+LifeOS v28.0.0-alpha.3 is active through Group 132 with professional CVs,
+opportunity-linked cover letters, explicit evidence acceptance, versioned
+application-pack review and safe PDF/DOCX derivatives.
 
 ## v28 - Career Documents Studio
+
+### Groups 129-132
+
+- Added durable opportunities, trusted facts, cover letters, applications and packs.
+- Added source-backed suggestions with explicit accept, reject and edit states.
+- Added per-document contact-detail confirmation and fail-closed export.
+- Added versioned application-pack freshness and stale-source invalidation.
+- Added ordinary-mode Desktop and Full Mobile review paths.
+- Kept application submission and employer communication blocked.
 
 ### Groups 125-128
 

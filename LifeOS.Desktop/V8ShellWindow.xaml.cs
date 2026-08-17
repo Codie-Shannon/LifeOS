@@ -1000,6 +1000,16 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
                     CloseEmbeddedModule(restoreScroll: true)));
             return;
         }
+        if (string.Equals(routeId, "career-applications", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(
+                routeId,
+                title,
+                subtitle,
+                new CareerApplicationWorkspaceView(
+                    _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
+            return;
+        }
         if (string.Equals(routeId, "v13-grocery-planning", StringComparison.OrdinalIgnoreCase))
         {
             ShowEmbeddedModule(routeId, title, subtitle, new GroceryPlanningView());
@@ -1036,10 +1046,15 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
     {
         _workspaceScrollOffset = WorkspaceScrollViewer.VerticalOffset;
         _activeModuleRoute = routeId;
-        bool immersiveCareerDocuments = string.Equals(
-            routeId,
-            "career-cvs",
-            StringComparison.OrdinalIgnoreCase);
+        bool immersiveCareerDocuments =
+            string.Equals(
+                routeId,
+                "career-cvs",
+                StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(
+                routeId,
+                "career-applications",
+                StringComparison.OrdinalIgnoreCase);
 
         ModuleBackButton.Content = $"← Back to {_activeWorkspace}";
         ModuleHostTitle.Text = title;

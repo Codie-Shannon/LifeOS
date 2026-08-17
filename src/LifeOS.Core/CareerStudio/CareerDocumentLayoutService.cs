@@ -129,21 +129,67 @@ public sealed class CareerDocumentLayoutService
             throw new InvalidOperationException("Resolve blocking source and readability checks before export.");
 
         string safeName = SafeFileName(document.Name);
+        IReadOnlyList<string> lines = RenderPlainText(document).ToArray();
         return format switch
         {
             CvExportFormat.Pdf => new CvExportArtifact(
                 format,
                 $"{safeName}-v{document.Version}.pdf",
                 "application/pdf",
-                BuildPdf(document),
+                BuildPdf(lines),
                 document.Version,
                 now),
             CvExportFormat.Docx => new CvExportArtifact(
                 format,
                 $"{safeName}-v{document.Version}.docx",
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                BuildDocx(document),
+                BuildDocx(lines),
                 document.Version,
+                now),
+            _ => throw new ArgumentOutOfRangeException(nameof(format))
+        };
+    }
+
+    public CvExportArtifact ExportTextDocument(
+        string name,
+        string subtitle,
+        IReadOnlyList<(string Heading, string Content)> sections,
+        int sourceVersion,
+        CvExportFormat format,
+        DateTimeOffset now)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        if (sourceVersion < 1)
+            throw new ArgumentOutOfRangeException(nameof(sourceVersion));
+        if (sections.Count == 0 || sections.Any(section =>
+            string.IsNullOrWhiteSpace(section.Content)))
+            throw new InvalidOperationException("Export requires non-empty reviewed sections.");
+
+        List<string> lines = [name.Trim(), subtitle.Trim(), string.Empty];
+        foreach ((string heading, string content) in sections)
+        {
+            if (!string.IsNullOrWhiteSpace(heading))
+                lines.Add(heading.Trim().ToUpperInvariant());
+            lines.Add(content.Trim());
+            lines.Add(string.Empty);
+        }
+
+        string safeName = SafeFileName(name);
+        return format switch
+        {
+            CvExportFormat.Pdf => new CvExportArtifact(
+                format,
+                $"{safeName}-v{sourceVersion}.pdf",
+                "application/pdf",
+                BuildPdf(lines),
+                sourceVersion,
+                now),
+            CvExportFormat.Docx => new CvExportArtifact(
+                format,
+                $"{safeName}-v{sourceVersion}.docx",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                BuildDocx(lines),
+                sourceVersion,
                 now),
             _ => throw new ArgumentOutOfRangeException(nameof(format))
         };
@@ -185,9 +231,9 @@ public sealed class CareerDocumentLayoutService
         return string.IsNullOrWhiteSpace(normalized) ? "LifeOS-CV" : normalized;
     }
 
-    private static byte[] BuildPdf(CvBuilderDocument document)
+    private static byte[] BuildPdf(IEnumerable<string> sourceLines)
     {
-        List<string> lines = RenderPlainText(document)
+        List<string> lines = sourceLines
             .SelectMany(line => WrapPdfLine(line, 92))
             .ToList();
         const int linesPerPage = 50;
@@ -284,7 +330,7 @@ public sealed class CareerDocumentLayoutService
             .Replace("\r", " ")
             .Replace("\n", " ");
 
-    private static byte[] BuildDocx(CvBuilderDocument document)
+    private static byte[] BuildDocx(IEnumerable<string> sourceLines)
     {
         using MemoryStream output = new();
         using (ZipArchive archive = new(output, ZipArchiveMode.Create, true))
@@ -308,7 +354,7 @@ public sealed class CareerDocumentLayoutService
 
             string paragraphs = string.Join(
                 string.Empty,
-                RenderPlainText(document).Select(line =>
+                sourceLines.Select(line =>
                     $"<w:p><w:r><w:t xml:space=\"preserve\">{SecurityElement.Escape(line)}</w:t></w:r></w:p>"));
             WriteEntry(
                 archive,

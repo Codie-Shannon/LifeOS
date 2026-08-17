@@ -20,6 +20,7 @@ public sealed class ProductLaneScreenshotGroupTests
     [InlineData("control-plane", "SG-111")]
     [InlineData("public-packaging", "SG-116")]
     [InlineData("release-candidate", "SG-120")]
+    [InlineData("career-applications", "SG-132")]
     public void Compressed_product_lanes_use_the_ending_group_as_the_screenshot_group(
         string route,
         string expectedScreenshotGroup)

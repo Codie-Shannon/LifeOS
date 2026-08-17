@@ -300,6 +300,26 @@ public static class ProductLaneCatalog
                     new ProductLaneAction("Mobile end-to-end pass", "Ready", "Household, work, money, communications and offline state", false),
                     new ProductLaneAction("Website and documentation", "Ready", "Public/private boundaries and beta status verified", false),
                     new ProductLaneAction("Create release candidate tag", "Needs approval", "Final screenshots and owner decision required", true)
+                }),
+            ["career-applications"] = new(
+                "career-applications",
+                "SG-132",
+                "Cover Letters & Application Packs",
+                "Groups 129-132 - opportunity-linked documents, evidence acceptance and cross-device review",
+                "Suggestions require explicit acceptance. Current CV and cover-letter versions must pass review before a pack is ready; LifeOS never submits or contacts an employer.",
+                new[]
+                {
+                    new ProductLaneMetric("Opportunities", "Local", "Manual or reviewed import"),
+                    new ProductLaneMetric("Suggestions", "Review-first", "Accept or reject explicitly"),
+                    new ProductLaneMetric("Pack links", "Versioned", "CV and cover letter"),
+                    new ProductLaneMetric("Submissions", "0", "Hard boundary")
+                },
+                new[]
+                {
+                    new ProductLaneAction("Opportunity-linked draft", "Ready", "Current opportunity and CV IDs retained", false),
+                    new ProductLaneAction("Evidence suggestions", "Needs review", "Only trusted, source-backed facts are proposed", true),
+                    new ProductLaneAction("Application pack", "Review", "Current source versions and export checks required", true),
+                    new ProductLaneAction("External submission", "Blocked", "LifeOS records a confirmed external submission only", false)
                 })
         };
 

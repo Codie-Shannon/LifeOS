@@ -15,8 +15,8 @@ This directory is the durable source of truth for LifeOS status, release history
 
 | Product | State |
 |---|---|
-| LifeOS Desktop | Current through v28 Group 128 |
-| Full Mobile | Built and aligned through Group 128 |
+| LifeOS Desktop | Current through v28 Group 132 |
+| Full Mobile | Built and aligned through Group 132 |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence complete |
 | Shared Core | Active authoritative contract, validation, provenance, audit and safety layer |

@@ -4,12 +4,11 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.2 is active through Group 128 with CV Templates,
-Preview and Export.**
+**LifeOS v28.0.0-alpha.3 is active through Group 132 with CVs, cover letters,
+application-pack review and derivative export.**
 
 The v27/Group 120 release candidate remains preserved as a historical
-checkpoint. Approved post-candidate development now continues through Group 132
-for Career Documents Studio.
+checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 
 ## Product architecture
 
@@ -56,7 +55,7 @@ for Career Documents Studio.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-128 | CV Builder, Templates, Preview and Export |
+| v28 | 121-132 | CV Builder, Templates, Preview, Export, Cover Letters and Application Packs |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -90,10 +89,11 @@ sequential counter.
 
 ### v28 / Groups 129-132 - Cover Letters and Application Integration
 
-- Guided opportunity-linked cover-letter creation.
-- CV, opportunity and application-pack linking.
-- Evidence-backed suggestions with explicit acceptance.
-- Desktop and Full Mobile end-to-end review.
+- Guided opportunity-linked cover-letter creation is implemented.
+- CV, opportunity and versioned application-pack linking is implemented.
+- Evidence-backed suggestions require explicit acceptance, rejection or edit.
+- Desktop and Full Mobile configuration-free review paths are implemented.
+- Visible SG-132 Pack 2 capture remains open.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

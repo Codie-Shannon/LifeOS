@@ -1,8 +1,10 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.2 / Group 128 / SG-128**. SG-124 is complete
-with screenshot evidence, and SG-128 Pack 1 adds templates, A4 review,
-ATS/readability checks, version history and safe PDF/DOCX derivatives.
+LifeOS is current through **v28.0.0-alpha.3 / Group 132 / SG-132 Pack 1**.
+SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
+ATS/readability checks, version history and safe PDF/DOCX derivatives; its
+visible Pack 2 capture remains open. SG-132 Pack 1 adds the configuration-free
+cover-letter and application-pack vertical.
 
 The 2026-08-18 recovery pass corrected the execution baseline without claiming
 a new group: ordinary and portfolio-demo data are now explicitly separated,
@@ -13,21 +15,35 @@ API 36 emulator.
 SG identifiers now follow the ending implementation checkpoint; see the
 [`screenshot-group identifier lineage`](screenshot-groups/README.md).
 
-Groups 121-128 establish the approved Career Documents Studio after the
-preserved v27 release candidate. Groups 129-132 remain approved for cover
-letters and application integration.
+Groups 121-132 establish the approved Career Documents Studio after the
+preserved v27 release candidate.
 
 ## Current product state
 
 | Product | Status |
 |---|---|
-| Desktop | Current through Group 128 with guided CV creation, templates, review and export |
-| Full Mobile | API 36 release build verified; ordinary mode starts empty and portfolio proof requires explicit opt-in |
+| Desktop | Current through Group 132 with CVs, cover letters, application packs, review and export |
+| Full Mobile | Current through Group 132 with ordinary empty state, opportunity capture, document review and derivative sharing |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
-## Latest completed capability
+## Latest implemented capability
+
+Groups 129-132 complete Cover Letters and Application Integration in Pack 1:
+
+- durable local opportunities, trusted facts, cover letters, applications and packs
+- opportunity- and CV-linked draft creation
+- source-backed suggestions with explicit accept, reject and user-edit states
+- contact-detail inclusion confirmed per document before export
+- versioned PDF and DOCX cover-letter derivatives
+- stale-pack invalidation when linked source versions change
+- ordinary-mode Desktop and Full Mobile paths without fictional records
+- no autonomous application submission or employer communication
+
+Visible Desktop and Full Mobile Pack 2 evidence remains open.
+
+## Prior completed capability
 
 Groups 125-128 complete CV Templates, Preview and Export:
 
@@ -56,7 +72,8 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 ## Validation baseline
 
 - SG-124 targeted tests: 14 passed
-- Core tests: 465 passed
+- Groups 129-132 targeted tests: 10 passed
+- Core tests: 477 passed
 - Companion tests: 34 passed
 - Website tests: 28 passed
 - Mobile tests: 56 passed
@@ -66,9 +83,12 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Website runtime smoke test: HTTP 200
 - Latest evidence: [`group-121-124-cv-builder-foundation`](screenshot-groups/group-121-124-cv-builder-foundation/)
 
-SG-128 Pack 2 screenshot capture remains open; it should be closed with visible
-Desktop UI evidence rather than inferred from builds or automated tests.
+SG-128 and SG-132 Pack 2 screenshot capture remains open; both must be closed
+with visible rendered-product evidence rather than inferred from builds or
+automated tests.
 
-## Next approved work
+## Next completion work
 
-Groups 129-132 add cover-letter creation and application-pack integration.
+Close SG-128/SG-132 Pack 2, then continue the approved platform-spine and
+ordinary-mode productization backlog. Credentialed integrations, signing,
+public deployment, store submission and owner acceptance remain final gates.

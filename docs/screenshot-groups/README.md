@@ -29,6 +29,7 @@ work appear to stop at SG-82 even though implementation had reached Group 128.
 | 117-120 | SG-120 |
 | 121-124 | SG-124 |
 | 125-128 | SG-128 |
+| 129-132 | SG-132 |
 
 ## Evidence preservation
 
@@ -38,5 +39,6 @@ when the evidence was taken. Folder manifests, validation-asset filenames and
 current product code use the corrected checkpoint identifiers. This preserves
 the original pixels while making the lineage accurate going forward.
 
-SG-128 Pack 1 is implemented. SG-128 Pack 2 visible Desktop screenshot capture
-remains open.
+SG-128 Pack 1 is implemented and its visible Desktop capture remains open.
+SG-132 Pack 1 adds the cover-letter and application-pack vertical; its Desktop
+and Full Mobile Pack 2 capture is also open.

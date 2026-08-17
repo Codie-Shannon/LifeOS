@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.8 / Group 152 / SG-152 Pack 2**.
+LifeOS is current through **v28.0.0-alpha.9 / Group 156 / SG-156 Pack 1**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
@@ -33,6 +33,10 @@ ordinary-mode workspace. Work records now have validated local capture,
 billable and non-billable classification, explicit completed/invoiced/paid/
 cancelled state, deterministic totals and versioned recovery.
 
+Groups 153-156 replace ordinary Money Pressure defaults and direct writes with
+an honest zero-valued local snapshot, validated amounts, deterministic
+safe-to-spend, atomic versioned persistence and recoverable Trash.
+
 The 2026-08-18 recovery pass corrected the execution baseline without claiming
 a new group: ordinary and portfolio-demo data are now explicitly separated,
 Career document history is durable across restarts, PDF export paginates instead
@@ -49,13 +53,27 @@ preserved v27 release candidate.
 
 | Product | Status |
 |---|---|
-| Desktop | Current through Group 152 with ordinary-mode Work Time and Projects, validated forms, actionable local problems, ranked shell search, local-data health/recovery plus Career Documents Studio |
+| Desktop | Current through Group 156 with ordinary-mode Money Pressure, Work Time and Projects, validated forms, actionable local problems and local-data health/recovery |
 | Full Mobile | Current through Group 132 with ordinary empty state, opportunity capture, document review and derivative sharing |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest implemented capability
+
+Groups 153-156 establish Money Pressure and Safe to Spend:
+
+- honest ordinary-mode zero state with no invented balance, income or commitments
+- validated local amounts with overdraft support and non-negative obligations
+- pending income remains visible but excluded from safe-to-spend
+- deterministic current-week commitments, buffers, reasons and pressure state
+- versioned atomic persistence, legacy preservation and recoverable Trash registration
+- no bank feed, payment initiation, accounting write, automatic reconciliation or financial advice
+
+SG-156 Pack 1 is implemented. Directly rendered Desktop and inspected
+validation evidence remain Pack 2 work.
+
+## Prior completed capability
 
 Groups 149-152 establish Work Time and Billable Records:
 
@@ -69,8 +87,6 @@ Groups 149-152 establish Work Time and Billable Records:
 
 SG-152 Pack 2 is closed with five directly rendered Desktop images and three
 inspected validation records.
-
-## Prior completed capability
 
 Groups 145-148 establish Projects and Delivery:
 
@@ -165,12 +181,13 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
+- Groups 153-156 targeted tests: 8 passed
 - Groups 149-152 targeted tests: 8 passed
 - Groups 145-148 targeted tests: 8 passed
 - Groups 141-144 targeted tests: 8 passed
 - Groups 137-140 targeted tests: 7 passed
 - Groups 133-136 targeted tests: 8 passed
-- Core tests: 517 passed
+- Core tests: 525 passed
 - Companion tests: 34 passed
 - Website tests: 28 passed
 - Mobile tests: 56 passed
@@ -187,12 +204,13 @@ SG-140 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-144 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-148 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-152 Pack 2 is closed with exact, inspected product and validation evidence.
+SG-156 Pack 1 is implemented; Pack 2 evidence remains open.
 SG-128 Pack 2 remains a historical evidence gap and must be closed without
 inferring UI proof from builds or automated tests.
 
 ## Next completion work
 
-Continue Money and Documents ordinary-mode productization. SG-128’s historical
-visible Pack 2 capture remains open.
+Close SG-156 visible Pack 2 evidence, then continue Documents ordinary-mode
+productization. SG-128’s historical visible Pack 2 capture remains open.
 Credentialed integrations, signing, public deployment, store submission and
 owner acceptance remain final gates.

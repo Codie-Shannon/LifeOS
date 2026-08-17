@@ -4,10 +4,20 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.8 is active through Group 152 with genuine ordinary-mode
-Work Time and Projects workspaces.
+LifeOS v28.0.0-alpha.9 is active through Group 156 with genuine ordinary-mode
+Money Pressure, Work Time and Projects workspaces.
 
 ## v28 - Career Documents Studio
+
+### Groups 153-156
+
+- Replaced seeded ordinary Money Pressure defaults with honest zero state.
+- Added a real embedded snapshot workspace with validated local amounts.
+- Kept pending income visible but outside deterministic safe-to-spend.
+- Migrated money-pressure persistence to the versioned atomic recovery contract.
+- Registered the sixth operational store in Local Data & Recovery.
+- Kept bank feeds, payments, accounting writes and automatic reconciliation unavailable.
+- Implemented SG-156 Pack 1; visible product and validation evidence remains open.
 
 ### Groups 149-152
 

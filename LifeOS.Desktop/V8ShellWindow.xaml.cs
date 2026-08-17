@@ -1135,6 +1135,16 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
                     _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
             return;
         }
+        if (string.Equals(routeId, "money-pressure", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(
+                routeId,
+                title,
+                subtitle,
+                new MoneyPressureWorkspaceView(
+                    _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
+            return;
+        }
         if (string.Equals(routeId, "v13-grocery-planning", StringComparison.OrdinalIgnoreCase))
         {
             ShowEmbeddedModule(routeId, title, subtitle, new GroceryPlanningView());

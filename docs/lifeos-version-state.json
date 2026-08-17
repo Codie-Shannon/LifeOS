@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
-    "currentReleaseName":  "Work Time and Billable Records",
-    "currentSemanticVersion":  "28.0.0-alpha.8",
+    "currentReleaseName":  "Money Pressure and Safe to Spend",
+    "currentSemanticVersion":  "28.0.0-alpha.9",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  152,
-    "latestCompletedGroupName":  "Work Time and Billable Records",
-    "latestCompletedHead":  "sg152-pack2-closed",
-    "nextGroup":  153,
-    "nextGroupName":  "Money and Documents Productization",
-    "roadmapApprovedThroughGroup":  152,
+    "latestCompletedGroup":  156,
+    "latestCompletedGroupName":  "Money Pressure and Safe to Spend",
+    "latestCompletedHead":  "sg156-pack1-implemented",
+    "nextGroup":  157,
+    "nextGroupName":  "Documents and Evidence Productization",
+    "roadmapApprovedThroughGroup":  156,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  152,
+                    "currentThroughGroup":  156,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-152",
-                                      "status":  "work-time-pack2-closed"
+                                      "groups":  "121-156",
+                                      "status":  "money-pressure-pack1"
                                   }
                               ],
     "safetyBoundaries":  {

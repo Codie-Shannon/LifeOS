@@ -13,9 +13,9 @@ public sealed class Group39BetaReleaseTests
     [Fact]
     public void Release_identity_is_current_v13()
     {
-        Assert.Equal("28.0.0-alpha.8", ProductVersion.Semantic);
-        Assert.Equal("v28.0.0-alpha.8", ProductVersion.Display);
-        Assert.Equal("v28 Work Time and Billable Records", ProductVersion.ReleaseName);
+        Assert.Equal("28.0.0-alpha.9", ProductVersion.Semantic);
+        Assert.Equal("v28.0.0-alpha.9", ProductVersion.Display);
+        Assert.Equal("v28 Money Pressure and Safe to Spend", ProductVersion.ReleaseName);
     }
 
     [Fact]

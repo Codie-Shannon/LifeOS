@@ -187,7 +187,7 @@ internal static class WorkspaceCatalog
                         {
                             Route("v11-document-intake", "Document & Evidence Intake", "Original-preserving intake", "Capture, classify, review and link receipts, invoices, statements, contracts and general evidence."),
                             Route("v11-money-foundation", "Money v11 Foundation", "Authoritative v11 surface", "Accounts, transactions, invoices, payments, linked evidence, manual confirmation and audit history across the trusted financial model."),
-                            Route("money-pressure", "Money Pressure", "Canonical state", "Current balance, paid and pending income, obligations, deductions and safe-to-spend pressure."),
+                            Route("money-pressure", "Money Pressure", "SG-156 active", "Validated local balances, paid and pending income, known commitments, buffers and honest safe-to-spend pressure."),
                             Route("money-timeline", "Money Timeline", "Canonical behaviour", "Chronological money events and expected-income timing."),
                             Route("bills-payments", "Bills / Payments", "Canonical state", "Bills, obligations, status and review windows."),
                             Route("money-profile", "Money Profile", "Canonical state", "Buffers, hidden deductions and safe-to-spend planning."),

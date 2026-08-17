@@ -140,7 +140,7 @@ public static class LifeOSModuleCatalog
         {
             Kind = LifeOSModuleKind.Projects,
             Title = "Projects",
-            Badge = "v28 alpha.8",
+            Badge = "v28 alpha.9",
             ShortDescription = "Local projects, next actions, delivery state, due dates and proof references.",
             DetailDescription = "Projects tracks ordinary-mode local delivery records with validated capture, explicit status, due dates, proof references and reversible archive.",
             PlatformRole = "Shared local project model with a purpose-built Desktop workspace and versioned recovery contract.",

@@ -4,7 +4,7 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v28.0.0-alpha.8 is active through Group 152. Work Time & Billable Records is now a genuine ordinary-mode workspace with validated local capture, explicit billing state, deterministic totals and versioned recovery. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
+> **Current checkpoint:** LifeOS v28.0.0-alpha.9 is active through Group 156. Money Pressure now has honest zero-valued ordinary state, validated local inputs, deterministic safe-to-spend and versioned recovery without claiming bank connectivity. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
 
 ![LifeOS v28 CV Builder Foundation](docs/screenshot-groups/group-121-124-cv-builder-foundation/02-cv-builder-split-workspace.png)
 
@@ -12,12 +12,12 @@ LifeOS is a safety-first platform built by Codie Shannon around purpose-built De
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current through Group 152, including ordinary-mode Work Time and Projects, validated forms, actionable local problem states, ranked shell search, local-data recovery controls and the completed Career Documents Studio |
+| **LifeOS Desktop** | Current through Group 156, including ordinary-mode Money Pressure, Work Time and Projects, validated forms, actionable local problem states, ranked shell search and local-data recovery controls |
 | **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 132, including opportunity capture, career review and derivative sharing |
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
 | **LifeOS Website** | Product, documentation, onboarding, factual portfolio and release-candidate evidence surface |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v28 ordinary-mode productization; Work Time & Billable Records implemented through SG-152 Pack 1 |
+| **Current release lane** | v28 ordinary-mode productization; Money Pressure and Safe to Spend implemented through SG-156 Pack 1 |
 
 Full Mobile and Mobile Companion are separate products. They can share contracts and libraries, but retain different scope, UX and release tracks.
 
@@ -153,10 +153,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v28.0.0-alpha.8 is active through Group 152. Work Time & Billable Records
-now has a real ordinary-mode local workspace on top of the shared storage,
-forms and problem-state spine. SG-152 is closed with its exact eight-image
-Desktop and validation evidence set. SG-128 visible
+LifeOS v28.0.0-alpha.9 is active through Group 156. Money Pressure now has a
+real ordinary-mode local workspace on top of the shared storage, forms and
+problem-state spine. SG-156 Pack 1 is implemented and visible Pack 2 evidence is
+next. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.
 

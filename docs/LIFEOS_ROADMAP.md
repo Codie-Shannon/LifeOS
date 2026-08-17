@@ -117,6 +117,8 @@ sequential counter.
 - Result type, match reason and description remain visible before execution.
 - Unknown queries run nothing and show an explicit no-result state.
 - Personal records, provider content and external search are not indexed.
+- SG-140 Pack 2 is closed with the exact eight-image Desktop and validation
+  evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

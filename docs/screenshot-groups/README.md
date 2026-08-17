@@ -48,4 +48,5 @@ evidence set.
 SG-136 is closed with the exact eight-image Desktop and validation Pack 2
 evidence set.
 
-SG-140 Pack 1 is implemented; its Pack 2 rendered-product evidence is pending.
+SG-140 is closed with the exact eight-image Desktop and validation Pack 2
+evidence set.

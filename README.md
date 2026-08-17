@@ -150,7 +150,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 LifeOS v28.0.0-alpha.5 is active through Group 140. The platform spine now
 adds ranked shell navigation and safe-command discovery on top of the SG-136
-local-data recovery checkpoint. SG-140 Pack 2 evidence remains open. SG-128 visible
+local-data recovery checkpoint. SG-140 is closed with its exact eight-image
+Desktop and validation evidence set. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.
 

@@ -4,10 +4,19 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.14 is active through Group 176 with genuine ordinary-mode
-Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
+LifeOS v28.0.0-alpha.15 is active through Group 180 with genuine ordinary-mode
+Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
 
 ## v28 - Career Documents Studio
+
+### Groups 177-180
+
+- Replaced the TimerAgent placeholder route with one real embedded local workspace.
+- Added validated focus-block planning and explicit timer controls.
+- Preserved elapsed duration across pause and restart without accruing paused time.
+- Registered the eleventh versioned operational store in Local Data & Recovery.
+- Kept automatic starts, notification control, invoices, calendar, messages and provider actions unavailable.
+- Closed SG-180 Pack 2 with five inspected Desktop captures and three validation records.
 
 ### Groups 173-176
 

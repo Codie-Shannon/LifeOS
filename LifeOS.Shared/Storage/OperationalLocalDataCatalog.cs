@@ -1,6 +1,7 @@
 using LifeOS.Shared.Agenda;
 using LifeOS.Shared.Documents;
 using LifeOS.Shared.FollowUps;
+using LifeOS.Shared.FocusTimers;
 using LifeOS.Shared.Grocery;
 using LifeOS.Shared.Life;
 using LifeOS.Shared.Money;
@@ -31,7 +32,8 @@ public static class OperationalLocalDataCatalog
         Status("document-intake", "Document intake", "Documents", DocumentIntakeStorage.Inspect(), DocumentIntakeStorage.ListTrash()),
         Status("household-grocery", "Household grocery", "Household", HouseholdGroceryStorage.Inspect(), HouseholdGroceryStorage.ListTrash()),
         Status("life-routines", "Life routines", "Life", LifeRoutineStorage.Inspect(), LifeRoutineStorage.ListTrash()),
-        Status("weekly-review", "Weekly review", "Life", WeeklyReviewStorage.Inspect(), WeeklyReviewStorage.ListTrash())
+        Status("weekly-review", "Weekly review", "Life", WeeklyReviewStorage.Inspect(), WeeklyReviewStorage.ListTrash()),
+        Status("focus-timers", "Focus timers", "Life", FocusTimerStorage.Inspect(), FocusTimerStorage.ListTrash())
     ];
 
     public static void RestoreTrash(string storeId, string entryId)
@@ -67,6 +69,9 @@ public static class OperationalLocalDataCatalog
                 break;
             case "weekly-review":
                 WeeklyReviewStorage.RestoreTrash(entryId);
+                break;
+            case "focus-timers":
+                FocusTimerStorage.RestoreTrash(entryId);
                 break;
             default:
                 throw new ArgumentException("The local store is not registered.", nameof(storeId));

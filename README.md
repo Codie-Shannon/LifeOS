@@ -4,7 +4,7 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v28.0.0-alpha.14 is active through Group 176. Agenda & Commitment Planning now provides validated local commitments, visible next actions and explicit state transitions without automatic scheduling, reminders, messaging or payment. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
+> **Current checkpoint:** LifeOS v28.0.0-alpha.15 is active through Group 180. Focus Timer & Session Control now provides validated local focus blocks, durable elapsed time and explicit start/pause/stop actions without automatic starts, messaging, notification control or billing claims. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
 
 ![LifeOS v28 CV Builder Foundation](docs/screenshot-groups/group-121-124-cv-builder-foundation/02-cv-builder-split-workspace.png)
 
@@ -12,12 +12,12 @@ LifeOS is a safety-first platform built by Codie Shannon around purpose-built De
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current through Group 176, including ordinary-mode Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
+| **LifeOS Desktop** | Current through Group 180, including ordinary-mode Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
 | **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 132, including opportunity capture, career review and derivative sharing |
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
 | **LifeOS Website** | Product, documentation, onboarding, factual portfolio and release-candidate evidence surface |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v28 ordinary-mode productization; Agenda and Commitment Planning complete through SG-176 Pack 2 |
+| **Current release lane** | v28 ordinary-mode productization; Focus Timer and Session Control complete through SG-180 Pack 2 |
 
 Full Mobile and Mobile Companion are separate products. They can share contracts and libraries, but retain different scope, UX and release tracks.
 
@@ -95,6 +95,7 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 177-180 - Focus Timer and Session Control](docs/screenshot-groups/group-177-180-focus-timer-session-control/)
 - [Groups 173-176 - Agenda and Commitment Planning](docs/screenshot-groups/group-173-176-agenda-commitment-planning/)
 - [Groups 169-172 - Weekly Review and Personal Planning](docs/screenshot-groups/group-169-172-weekly-review-personal-planning/)
 - [Groups 165-168 - Life Routines and Personal Administration](docs/screenshot-groups/group-165-168-life-routines-personal-admin/)
@@ -159,9 +160,9 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v28.0.0-alpha.14 is active through Group 176. Agenda & Commitment
-Planning now has a real ordinary-mode local workspace on the shared storage,
-forms and problem-state spine. SG-176 Pack 2 is closed with exact,
+LifeOS v28.0.0-alpha.15 is active through Group 180. Focus Timer & Session
+Control now has a real ordinary-mode local workspace on the shared storage,
+forms and problem-state spine. SG-180 Pack 2 is closed with exact,
 inspected product and validation evidence. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.

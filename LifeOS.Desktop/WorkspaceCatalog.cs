@@ -223,7 +223,7 @@ internal static class WorkspaceCatalog
                             Route("daily-operating-flow", "Daily Operating Flow", "SG-168 active", "A manual, visible and recoverable personal operating sequence."),
                             Route("operating-day", "Operating Day & Work Proof", "SG-72 ready", "Protected blocks, calendar proposals, pressure-aware reminders, boundaries and proof-linked closure."),
                             Route("weekly-close-out", "Weekly Review", "SG-172 active", "Validated close-out, pressure and explicit next-week focus."),
-                            Route("timer-agent", "TimerAgent", "Canonical utility", "Desktop-only timing utility inside Life.")
+                            Route("timer-agent", "Focus Timer", "SG-180 active", "Planned, running, paused and completed focus sessions with local recovery.")
                         })
                 }),
             new(

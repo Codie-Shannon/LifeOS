@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
-    "currentReleaseName":  "Agenda and Commitment Planning",
-    "currentSemanticVersion":  "28.0.0-alpha.14",
+    "currentReleaseName":  "Focus Timer and Session Control",
+    "currentSemanticVersion":  "28.0.0-alpha.15",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  176,
-    "latestCompletedGroupName":  "Agenda and Commitment Planning",
-    "latestCompletedHead":  "sg176-pack2-evidence",
-    "nextGroup":  177,
-    "nextGroupName":  "Focus Timer and Session Control",
-    "roadmapApprovedThroughGroup":  176,
+    "latestCompletedGroup":  180,
+    "latestCompletedGroupName":  "Focus Timer and Session Control",
+    "latestCompletedHead":  "sg180-pack2-evidence",
+    "nextGroup":  181,
+    "nextGroupName":  "Relationships and Contact Context",
+    "roadmapApprovedThroughGroup":  180,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  176,
+                    "currentThroughGroup":  180,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-176",
-                                      "status":  "agenda-planning-pack2-complete"
+                                      "groups":  "121-180",
+                                      "status":  "focus-timer-pack2-complete"
                                   }
                               ],
     "safetyBoundaries":  {
@@ -187,7 +187,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-173-176-agenda-commitment-planning",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-177-180-focus-timer-session-control",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

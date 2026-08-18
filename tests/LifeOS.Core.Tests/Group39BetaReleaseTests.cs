@@ -13,9 +13,9 @@ public sealed class Group39BetaReleaseTests
     [Fact]
     public void Release_identity_is_current_v13()
     {
-        Assert.Equal("28.0.0-alpha.20", ProductVersion.Semantic);
-        Assert.Equal("v28.0.0-alpha.20", ProductVersion.Display);
-        Assert.Equal("v28 Connection Testing and Health Diagnostics", ProductVersion.ReleaseName);
+        Assert.Equal("28.0.0-alpha.21", ProductVersion.Semantic);
+        Assert.Equal("v28.0.0-alpha.21", ProductVersion.Display);
+        Assert.Equal("v28 Provider Adapter Registry and Capability Matrix", ProductVersion.ReleaseName);
     }
 
     [Fact]

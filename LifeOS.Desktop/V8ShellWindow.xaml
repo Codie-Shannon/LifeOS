@@ -376,6 +376,7 @@
                                         <Button Content="Open Device Transfer &amp; Conflict Review" Tag="device-transfer-review" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.device-transfer-review" />
                                         <Button Content="Open Configuration Readiness" Tag="configuration-readiness" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.configuration-readiness" />
                                         <Button Content="Open Connection Health Diagnostics" Tag="connection-health" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.connection-health" />
+                                        <Button Content="Open Provider Adapter Registry" Tag="provider-adapters" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.provider-adapters" />
                                     </StackPanel>
                                 </Border>
 

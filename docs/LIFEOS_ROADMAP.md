@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.20 is active through Group 200 with real ordinary-mode
-Connection Health, Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
+**LifeOS v28.0.0-alpha.21 is active through Group 204 with real ordinary-mode
+Provider Adapter Registry, Connection Health, Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -55,7 +55,7 @@ checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-200 | Career Documents, Platform Spine, Projects, Work Time, Money Pressure, Documents, Household, Life, Weekly Review, Agenda, Focus Timer, Relationships, Local-First Sync, Device Transfer Review, Configuration Readiness and Connection Health |
+| v28 | 121-204 | Career Documents, Platform Spine, Projects, Work Time, Money Pressure, Documents, Household, Life, Weekly Review, Agenda, Focus Timer, Relationships, Local-First Sync, Device Transfer Review, Configuration Readiness, Connection Health and Provider Adapter Registry |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -272,6 +272,16 @@ sequential counter.
 - Connection-health metadata uses versioned atomic persistence and recoverable Trash.
 - Network connections, secret-value reads, authentication and provider calls remain unavailable.
 - SG-200 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
+
+### v28 / Groups 201-204 - Provider Adapter Registry and Capability Matrix
+
+- Settings gains a genuine embedded provider-adapter registry.
+- Name, provider family, owner, environment and capability flags are validated.
+- Planned, available-for-test, blocked and retired state changes remain explicit.
+- Credential values and secret-like notes are rejected before mutation.
+- Adapter metadata uses versioned atomic persistence and recoverable Trash.
+- SDK loading, credential resolution, endpoints and provider-write activation remain unavailable.
+- SG-204 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

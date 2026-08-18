@@ -22,6 +22,7 @@ public partial class MainWindow
         "communications",
         "configuration-readiness",
         "connection-health",
+        "provider-adapters",
         "control-plane",
         "career-applications",
         "career-cvs",
@@ -198,6 +199,7 @@ public partial class MainWindow
                 break;
             case "configuration-readiness": MainContentControl.Content = new ConfigurationReadinessWorkspaceView(false); break;
             case "connection-health": MainContentControl.Content = new ConnectionHealthWorkspaceView(false); break;
+            case "provider-adapters": MainContentControl.Content = new ProviderAdapterWorkspaceView(false); break;
             case "device-transfer-review":
                 MainContentControl.Content = new DeviceTransferWorkspaceView(false);
                 break;

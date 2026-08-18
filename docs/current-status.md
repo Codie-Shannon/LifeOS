@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.20 / Group 200 / SG-200 Pack 2**.
+LifeOS is current through **v28.0.0-alpha.21 / Group 204 / SG-204 Pack 2**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
@@ -83,6 +83,10 @@ Groups 197-200 add a genuine connection-health diagnostics workspace to
 Settings. Credentialed-test plans and manual observations remain visible while
 the configuration-free surface runs no connections and reads no secret values.
 
+Groups 201-204 add a genuine provider-adapter registry to Settings. Provider
+families, ownership and declared capabilities remain visible while SDK loading,
+credentials, endpoints and provider-write activation remain unavailable.
+
 The 2026-08-18 recovery pass corrected the execution baseline without claiming
 a new group: ordinary and portfolio-demo data are now explicitly separated,
 Career document history is durable across restarts, PDF export paginates instead
@@ -99,7 +103,7 @@ preserved v27 release candidate.
 
 | Product | Status |
 |---|---|
-| Desktop | Current through Group 200 with ordinary-mode Connection Health, Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
+| Desktop | Current through Group 204 with ordinary-mode Provider Adapter Registry, Connection Health, Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
 | Full Mobile | Current through Group 132 with ordinary empty state, opportunity capture, document review and derivative sharing |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
@@ -107,29 +111,29 @@ preserved v27 release candidate.
 
 ## Latest implemented capability
 
-Groups 197-200 establish Connection Testing and Health Diagnostics:
+Groups 201-204 establish Provider Adapter Registry and Capability Matrix:
 
-- genuine ordinary-mode local state with no seeded diagnostic plans
-- validated capability, owner, environment, check kind and reference name
-- explicit passed, degraded, failed and blocked manual observations
-- secret-like notes and observations rejected before mutation
+- genuine ordinary-mode local state with no seeded provider adapters
+- validated adapter name, family, owner, environment and capability flags
+- explicit planned, ready-to-test, blocked and retired states
+- credential values and secret-like notes rejected before mutation
 - versioned atomic persistence and recoverable Trash registration
-- no network connection, secret-value read, authentication or provider call
+- no SDK loading, credential resolution, endpoint selection or provider write activation
 
-SG-200 Pack 2 is closed with five directly rendered Desktop images and three
+SG-204 Pack 2 is closed with five directly rendered Desktop images and three
 inspected validation records.
 
 ## Prior completed capability
 
-Groups 193-196 establish Configuration Readiness and Secret Boundaries:
+Groups 197-200 establish Connection Testing and Health Diagnostics:
 
-- genuine ordinary-mode local state with no seeded capabilities or references
-- validated capability, owner, environment and uppercase secret-reference names
-- secret-like notes and direct secret values rejected before mutation
+- genuine ordinary-mode local state with no seeded diagnostic plans
+- validated capability, owner, environment, check kind and reference name
+- explicit manual health observations with secret-like text rejected
 - versioned atomic persistence and recoverable Trash registration
-- no credentials, secret resolution, authentication endpoints or provider writes
+- no network connection, secret-value read, authentication or provider call
 
-SG-196 Pack 2 is closed with five directly rendered Desktop images and three inspected validation records.
+SG-200 Pack 2 is closed with five directly rendered Desktop images and three inspected validation records.
 
 Groups 181-184 establish Relationships and Contact Context:
 
@@ -328,6 +332,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
+- Groups 201-204 targeted tests: 8 passed
 - Groups 197-200 targeted tests: 8 passed
 - Groups 193-196 targeted tests: 8 passed
 - Groups 189-192 targeted tests: 8 passed
@@ -345,7 +350,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Groups 141-144 targeted tests: 8 passed
 - Groups 137-140 targeted tests: 7 passed
 - Groups 133-136 targeted tests: 8 passed
-- Core tests: 613 passed
+- Core tests: 621 passed
 - Companion tests: 34 passed
 - Website tests: 28 passed
 - Mobile tests: 56 passed
@@ -356,7 +361,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Groups 129-132 targeted tests: 11 passed
 - Prior Android runtime baseline: fresh installs launched on API 36 at SG-132
 - Website runtime smoke test: HTTP 200
-- Latest closed evidence: [`group-197-200-connection-testing-health-diagnostics`](screenshot-groups/group-197-200-connection-testing-health-diagnostics/)
+- Latest closed evidence: [`group-201-204-provider-adapter-capability-matrix`](screenshot-groups/group-201-204-provider-adapter-capability-matrix/)
 
 SG-140 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-144 Pack 2 is closed with exact, inspected product and validation evidence.
@@ -374,12 +379,13 @@ SG-188 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-192 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-196 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-200 Pack 2 is closed with exact, inspected product and validation evidence.
+SG-204 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-128 Pack 2 remains a historical evidence gap and must be closed without
 inferring UI proof from builds or automated tests.
 
 ## Next completion work
 
-Continue Provider Adapter Registry and Capability Matrix productization. SG-128’s historical
+Continue Provider Consent and Permission Profiles productization. SG-128’s historical
 visible Pack 2 capture remains open.
 Credentialed integrations, signing, public deployment, store submission and
 owner acceptance remain final gates.

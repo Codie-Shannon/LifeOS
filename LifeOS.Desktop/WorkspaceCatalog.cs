@@ -344,6 +344,7 @@ internal static class WorkspaceCatalog
                             Route("device-transfer-review", "Device Transfer & Conflict Review", "SG-192 active", "Fingerprint-only transfer manifests, duplicate detection and explicit conflict decisions without payload movement or automatic merge."),
                             Route("configuration-readiness", "Configuration Readiness", "SG-196 active", "Capability metadata, owner input and secret reference names without storing credentials or resolving environment variables."),
                             Route("connection-health", "Connection Health Diagnostics", "SG-200 active", "Credentialed-test plans and explicit manual observations without running network connections or reading secret values."),
+                            Route("provider-adapters", "Provider Adapter Registry", "SG-204 active", "Provider families and declared capability matrix without loading SDKs, credentials, endpoints or provider writes."),
                             Route("local-data-recovery", "Local Data & Recovery", "SG-136 ready", "Versioned local stores, migration and backup health, recoverable Trash and explicit restore controls."),
                             Route("control-plane", "Privacy, Backup & Emergency Control", "SG-111 ready", "Sensitive-category permissions, integrity-checked backup/restore, audit and global Emergency Stop."),
                             Route("beta-readiness", "Private Beta Readiness", "SG-82 ready", "Setup now/later/decline choices and desktop/mobile/web release validation."),

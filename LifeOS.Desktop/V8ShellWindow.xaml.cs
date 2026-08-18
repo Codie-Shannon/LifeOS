@@ -1203,6 +1203,12 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
                 _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
             return;
         }
+        if (string.Equals(routeId, "device-transfer-review", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(routeId, title, subtitle, new DeviceTransferWorkspaceView(
+                _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
+            return;
+        }
 
         MainWindow legacyModule = new()
         {

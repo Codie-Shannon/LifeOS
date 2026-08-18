@@ -4,10 +4,20 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.17 is active through Group 188 with genuine ordinary-mode
-Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
+LifeOS v28.0.0-alpha.18 is active through Group 192 with genuine ordinary-mode
+Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
 
 ## v28 - Career Documents Studio
+
+### Groups 189-192
+
+- Added one real embedded Settings workspace for fingerprint-only device-transfer review.
+- Added strict device, record-key and SHA-256 manifest validation.
+- Kept matching fingerprints as non-mutating duplicates and mismatches as visible conflicts.
+- Added explicit keep-local, keep-incoming-candidate, keep-both and reject decisions.
+- Registered the fourteenth versioned operational store in Local Data & Recovery.
+- Kept payload movement, automatic merge and authoritative replacement unavailable.
+- Closed SG-192 Pack 2 with five inspected Desktop captures and three validation records.
 
 ### Groups 185-188
 

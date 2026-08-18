@@ -26,6 +26,7 @@ public partial class MainWindow
         "daily-operating-flow",
         "daily-state",
         "desktop-release",
+        "device-transfer-review",
         "documentation-hub",
         "email-radar",
         "evidence-automation",
@@ -192,6 +193,9 @@ public partial class MainWindow
                 break;
             case "desktop-release":
                 ShowDesktopReleasePage();
+                break;
+            case "device-transfer-review":
+                MainContentControl.Content = new DeviceTransferWorkspaceView(false);
                 break;
             case "documentation-hub":
                 ShowProductLanePage(routeId);

@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
-    "currentReleaseName":  "Accounts and Local-First Sync Foundation",
-    "currentSemanticVersion":  "28.0.0-alpha.17",
+    "currentReleaseName":  "Device Transfer and Conflict Review",
+    "currentSemanticVersion":  "28.0.0-alpha.18",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  188,
-    "latestCompletedGroupName":  "Accounts and Local-First Sync Foundation",
-    "latestCompletedHead":  "sg188-pack2-evidence",
-    "nextGroup":  189,
-    "nextGroupName":  "Device Transfer and Conflict Review",
-    "roadmapApprovedThroughGroup":  188,
+    "latestCompletedGroup":  192,
+    "latestCompletedGroupName":  "Device Transfer and Conflict Review",
+    "latestCompletedHead":  "sg192-pack2-evidence",
+    "nextGroup":  193,
+    "nextGroupName":  "Configuration Readiness and Secret Boundaries",
+    "roadmapApprovedThroughGroup":  192,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  188,
+                    "currentThroughGroup":  192,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-188",
-                                      "status":  "local-first-sync-pack2-complete"
+                                      "groups":  "121-192",
+                                      "status":  "device-transfer-pack2-complete"
                                   }
                               ],
     "safetyBoundaries":  {
@@ -187,7 +187,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-185-188-accounts-local-first-sync",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-189-192-device-transfer-conflict-review",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

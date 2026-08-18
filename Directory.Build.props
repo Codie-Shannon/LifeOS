@@ -1,12 +1,12 @@
 <Project>
   <PropertyGroup>
-    <Version>28.0.0-alpha.16</Version>
+    <Version>28.0.0-alpha.17</Version>
     <VersionPrefix>28.0.0</VersionPrefix>
-    <VersionSuffix>alpha.16</VersionSuffix>
+    <VersionSuffix>alpha.17</VersionSuffix>
     <AssemblyVersion>28.0.0.0</AssemblyVersion>
     <FileVersion>28.0.0.0</FileVersion>
-    <InformationalVersion>28.0.0-alpha.16</InformationalVersion>
-    <LifeOSDisplayVersion>v28.0.0-alpha.16</LifeOSDisplayVersion>
-    <LifeOSReleaseName>v28 Relationships and Contact Context</LifeOSReleaseName>
+    <InformationalVersion>28.0.0-alpha.17</InformationalVersion>
+    <LifeOSDisplayVersion>v28.0.0-alpha.17</LifeOSDisplayVersion>
+    <LifeOSReleaseName>v28 Accounts and Local-First Sync Foundation</LifeOSReleaseName>
   </PropertyGroup>
 </Project>

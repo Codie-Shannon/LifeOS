@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v28.0.0-alpha.16 active.
-- Group 184 / SG-184 Pack 2 closed with exact inspected evidence.
-- Relationships & Contact Context is a real ordinary-mode embedded workspace.
+- LifeOS v28.0.0-alpha.17 active.
+- Group 188 / SG-188 Pack 2 closed with exact inspected evidence.
+- Local Account & Sync Foundation is a real ordinary-mode embedded workspace.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation

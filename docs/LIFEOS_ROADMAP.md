@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.16 is active through Group 184 with real ordinary-mode
-Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
+**LifeOS v28.0.0-alpha.17 is active through Group 188 with real ordinary-mode
+Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -55,7 +55,7 @@ checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-184 | Career Documents, Platform Spine, Projects, Work Time, Money Pressure, Documents, Household, Life, Weekly Review, Agenda, Focus Timer and Relationships |
+| v28 | 121-188 | Career Documents, Platform Spine, Projects, Work Time, Money Pressure, Documents, Household, Life, Weekly Review, Agenda, Focus Timer, Relationships and Local-First Sync |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -232,6 +232,16 @@ sequential counter.
 - Ordinary mode starts empty; portfolio demo uses isolated fictional profiles.
 - Contact import, automatic chasing, reminders, messages and provider writes remain unavailable.
 - SG-184 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
+
+### v28 / Groups 185-188 - Accounts and Local-First Sync Foundation
+
+- Settings gains a genuine embedded local account and sync-foundation workspace.
+- Display name and device label are validated without collecting email or password credentials.
+- Local-only and manual-transfer postures remain explicit and recoverable.
+- Provider-configured and background-sync flags fail closed in this release.
+- Local change pressure and manual-transfer checkpoints are user-initiated local records only.
+- Authentication, cloud upload, endpoint selection and remote conflict exchange remain unavailable.
+- SG-188 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

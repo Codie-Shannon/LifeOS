@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.16 / Group 184 / SG-184 Pack 2**.
+LifeOS is current through **v28.0.0-alpha.17 / Group 188 / SG-188 Pack 2**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
@@ -66,6 +66,10 @@ Groups 181-184 replace the Relationship Radar legacy surface with a genuine
 ordinary local workspace. Relationship memory is validated, waiting and
 do-not-chase boundaries remain visible, and every state change is explicit.
 
+Groups 185-188 add a genuine local account and sync-foundation workspace to
+Settings. One device-local profile records explicit local-only or manual-transfer
+posture while authentication, cloud upload and background sync remain unavailable.
+
 The 2026-08-18 recovery pass corrected the execution baseline without claiming
 a new group: ordinary and portfolio-demo data are now explicitly separated,
 Career document history is durable across restarts, PDF export paginates instead
@@ -82,13 +86,27 @@ preserved v27 release candidate.
 
 | Product | Status |
 |---|---|
-| Desktop | Current through Group 184 with ordinary-mode Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
+| Desktop | Current through Group 188 with ordinary-mode Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
 | Full Mobile | Current through Group 132 with ordinary empty state, opportunity capture, document review and derivative sharing |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest implemented capability
+
+Groups 185-188 establish Accounts and Local-First Sync Foundation:
+
+- genuine ordinary-mode local state with no seeded account identity
+- validated display name and device label without email or password fields
+- explicit local-only/manual-transfer posture, change tracking and pause/resume
+- versioned atomic persistence and recoverable Trash registration
+- provider and background-sync flags fail closed
+- no authentication, cloud upload, endpoint selection or remote conflict exchange
+
+SG-188 Pack 2 is closed with five directly rendered Desktop images and three
+inspected validation records.
+
+## Prior completed capability
 
 Groups 181-184 establish Relationships and Contact Context:
 
@@ -99,10 +117,7 @@ Groups 181-184 establish Relationships and Contact Context:
 - isolated fictional portfolio-demo profiles
 - no contact import, automatic chase, reminder, message or provider action
 
-SG-184 Pack 2 is closed with five directly rendered Desktop images and three
-inspected validation records.
-
-## Prior completed capability
+SG-184 Pack 2 is closed with five directly rendered Desktop images and three inspected validation records.
 
 Groups 177-180 establish Focus Timer and Session Control:
 
@@ -290,6 +305,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
+- Groups 185-188 targeted tests: 8 passed
 - Groups 181-184 targeted tests: 8 passed
 - Groups 177-180 targeted tests: 8 passed
 - Groups 173-176 targeted tests: 8 passed
@@ -303,7 +319,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Groups 141-144 targeted tests: 8 passed
 - Groups 137-140 targeted tests: 7 passed
 - Groups 133-136 targeted tests: 8 passed
-- Core tests: 581 passed
+- Core tests: 589 passed
 - Companion tests: 34 passed
 - Website tests: 28 passed
 - Mobile tests: 56 passed
@@ -314,7 +330,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Groups 129-132 targeted tests: 11 passed
 - Prior Android runtime baseline: fresh installs launched on API 36 at SG-132
 - Website runtime smoke test: HTTP 200
-- Latest closed evidence: [`group-181-184-relationships-contact-context`](screenshot-groups/group-181-184-relationships-contact-context/)
+- Latest closed evidence: [`group-185-188-accounts-local-first-sync`](screenshot-groups/group-185-188-accounts-local-first-sync/)
 
 SG-140 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-144 Pack 2 is closed with exact, inspected product and validation evidence.
@@ -328,12 +344,13 @@ SG-172 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-176 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-180 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-184 Pack 2 is closed with exact, inspected product and validation evidence.
+SG-188 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-128 Pack 2 remains a historical evidence gap and must be closed without
 inferring UI proof from builds or automated tests.
 
 ## Next completion work
 
-Continue Accounts and Local-First Sync Foundation productization. SG-128’s historical
+Continue Device Transfer and Conflict Review productization. SG-128’s historical
 visible Pack 2 capture remains open.
 Credentialed integrations, signing, public deployment, store submission and
 owner acceptance remain final gates.

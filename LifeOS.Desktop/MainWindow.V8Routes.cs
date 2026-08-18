@@ -39,6 +39,7 @@ public partial class MainWindow
         "intelligence",
         "item-state-engine",
         "lifeos-spine",
+        "local-account-sync",
         "local-data-recovery",
         "memory",
         "money-pressure",
@@ -230,6 +231,9 @@ public partial class MainWindow
                 break;
             case "lifeos-spine":
                 ShowLifeOsSpinePage();
+                break;
+            case "local-account-sync":
+                MainContentControl.Content = new LocalFirstSyncWorkspaceView(false);
                 break;
             case "memory":
                 ShowMemoryPage();

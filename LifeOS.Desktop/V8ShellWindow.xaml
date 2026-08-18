@@ -369,7 +369,12 @@
                                 <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left"><TextBlock Text="Preferences are stored locally under the user profile. Operational records stay in their authoritative module stores. Resetting shell preferences does not delete module data." Style="{StaticResource LifeOS.Text.Body}" /></Border>
 
                                 <TextBlock Text="Sync / Companion" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
-                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left"><TextBlock Text="Companion and integration evidence remain review-first. No pending transfer mutates a workspace automatically." Style="{StaticResource LifeOS.Text.Body}" /></Border>
+                                <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left">
+                                    <StackPanel>
+                                        <TextBlock Text="Companion and integration evidence remain review-first. No pending transfer mutates a workspace automatically." Style="{StaticResource LifeOS.Text.Body}" />
+                                        <Button Content="Open Local Account &amp; Sync Foundation" Tag="local-account-sync" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,12,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.local-account-sync" />
+                                    </StackPanel>
+                                </Border>
 
                                 <TextBlock Text="Automation / Emergency Stop" Margin="0,10,0,0" Style="{StaticResource LifeOS.Text.Heading}" />
                                 <Border Style="{StaticResource LifeOS.Card}" MaxWidth="1014" HorizontalAlignment="Left"><StackPanel><TextBlock x:Name="SettingsStopStatusText" Text="Emergency Stop: Idle" Style="{StaticResource LifeOS.Text.Body}" /><TextBlock Text="The state is always written in text and never communicated by colour alone." Margin="0,6,0,0" Style="{StaticResource LifeOS.Text.Caption}" /><Button Content="Open Automation Centre" Tag="automation-centre" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,12,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Settings.Automation.OpenCentre" /></StackPanel></Border>

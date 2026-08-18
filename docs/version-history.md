@@ -4,10 +4,19 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.16 is active through Group 184 with genuine ordinary-mode
-Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
+LifeOS v28.0.0-alpha.17 is active through Group 188 with genuine ordinary-mode
+Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
 
 ## v28 - Career Documents Studio
+
+### Groups 185-188
+
+- Added one real embedded Settings workspace for device-local account and sync posture.
+- Added validated local display and device labels without email/password collection.
+- Made local-change tracking, pause/resume and manual-transfer checkpoints explicit.
+- Registered the thirteenth versioned operational store in Local Data & Recovery.
+- Kept authentication, cloud upload, endpoints, remote conflict exchange and background sync unavailable.
+- Closed SG-188 Pack 2 with five inspected Desktop captures and three validation records.
 
 ### Groups 181-184
 

@@ -1197,6 +1197,12 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
                 _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
             return;
         }
+        if (string.Equals(routeId, "local-account-sync", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(routeId, title, subtitle, new LocalFirstSyncWorkspaceView(
+                _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
+            return;
+        }
 
         MainWindow legacyModule = new()
         {

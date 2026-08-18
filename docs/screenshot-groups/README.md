@@ -46,6 +46,7 @@ work appear to stop at SG-82 even though implementation had reached Group 128.
 | 185-188 | SG-188 |
 | 189-192 | SG-192 |
 | 193-196 | SG-196 |
+| 197-200 | SG-200 |
 
 ## Evidence preservation
 
@@ -105,4 +106,7 @@ SG-192 is closed with the exact eight-image Desktop and validation Pack 2
 evidence set.
 
 SG-196 is closed with the exact eight-image Desktop and validation Pack 2
+evidence set.
+
+SG-200 is closed with the exact eight-image Desktop and validation Pack 2
 evidence set.

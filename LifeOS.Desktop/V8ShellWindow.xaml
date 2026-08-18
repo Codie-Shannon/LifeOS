@@ -375,6 +375,7 @@
                                         <Button Content="Open Local Account &amp; Sync Foundation" Tag="local-account-sync" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,12,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.local-account-sync" />
                                         <Button Content="Open Device Transfer &amp; Conflict Review" Tag="device-transfer-review" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.device-transfer-review" />
                                         <Button Content="Open Configuration Readiness" Tag="configuration-readiness" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.configuration-readiness" />
+                                        <Button Content="Open Connection Health Diagnostics" Tag="connection-health" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.connection-health" />
                                     </StackPanel>
                                 </Border>
 

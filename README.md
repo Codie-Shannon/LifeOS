@@ -4,7 +4,7 @@
 
 LifeOS is a safety-first platform built by Codie Shannon around purpose-built Desktop, Full Mobile, Mobile Companion and Website products. It is an operations system for controlled review, execution, provenance and evidence—not a generic task list or template.
 
-> **Current checkpoint:** LifeOS v28.0.0-alpha.19 is active through Group 196. Configuration Readiness & Secret Boundaries now records capability ownership, environment posture and secret-reference names without accepting secret values, credentials or provider writes. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
+> **Current checkpoint:** LifeOS v28.0.0-alpha.20 is active through Group 200. Connection Testing & Health Diagnostics now prepares credentialed-test plans and records explicit observations without opening network connections, reading secret values or calling providers. The preserved v27/Group 120 release candidate remains historical evidence, not a promise that feature development has ended.
 
 ![LifeOS v28 CV Builder Foundation](docs/screenshot-groups/group-121-124-cv-builder-foundation/02-cv-builder-split-workspace.png)
 
@@ -12,12 +12,12 @@ LifeOS is a safety-first platform built by Codie Shannon around purpose-built De
 
 | Product | Status |
 |---|---|
-| **LifeOS Desktop** | Current through Group 196, including ordinary-mode Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
+| **LifeOS Desktop** | Current through Group 200, including ordinary-mode Connection Health, Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
 | **LifeOS Full Mobile** | Purpose-built Android application aligned through Group 132, including opportunity capture, career review and derivative sharing |
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
 | **LifeOS Website** | Product, documentation, onboarding, factual portfolio and release-candidate evidence surface |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v28 ordinary-mode productization; Configuration Readiness and Secret Boundaries complete through SG-196 Pack 2 |
+| **Current release lane** | v28 ordinary-mode productization; Connection Testing and Health Diagnostics complete through SG-200 Pack 2 |
 
 Full Mobile and Mobile Companion are separate products. They can share contracts and libraries, but retain different scope, UX and release tracks.
 
@@ -95,6 +95,7 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 197-200 - Connection Testing and Health Diagnostics](docs/screenshot-groups/group-197-200-connection-testing-health-diagnostics/)
 - [Groups 193-196 - Configuration Readiness and Secret Boundaries](docs/screenshot-groups/group-193-196-configuration-readiness-secret-boundaries/)
 - [Groups 189-192 - Device Transfer and Conflict Review](docs/screenshot-groups/group-189-192-device-transfer-conflict-review/)
 - [Groups 185-188 - Accounts and Local-First Sync Foundation](docs/screenshot-groups/group-185-188-accounts-local-first-sync/)
@@ -164,9 +165,9 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 ## Current development boundary
 
-LifeOS v28.0.0-alpha.19 is active through Group 196. Configuration Readiness &
-Secret Boundaries now has a real ordinary-mode local workspace on the shared
-storage, forms and problem-state spine. SG-196 Pack 2 is closed with exact,
+LifeOS v28.0.0-alpha.20 is active through Group 200. Connection Testing & Health
+Diagnostics now has a real ordinary-mode local workspace on the shared storage,
+forms and problem-state spine. SG-200 Pack 2 is closed with exact,
 inspected product and validation evidence. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.

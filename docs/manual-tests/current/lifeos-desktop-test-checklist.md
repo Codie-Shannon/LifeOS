@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v28.0.0-alpha.19 active.
-- Group 196 / SG-196 Pack 2 closed with exact inspected evidence.
-- Configuration Readiness & Secret Boundaries is a real ordinary-mode embedded workspace.
+- LifeOS v28.0.0-alpha.20 active.
+- Group 200 / SG-200 Pack 2 closed with exact inspected evidence.
+- Connection Testing & Health Diagnostics is a real ordinary-mode embedded workspace.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation

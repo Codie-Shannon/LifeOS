@@ -1,0 +1,15 @@
+using System.Text.Json; using LifeOS.Core.ConfigurationReadiness; using LifeOS.Core.ConnectionHealth; using LifeOS.Shared.ConnectionHealth; using Xunit;
+namespace LifeOS.Core.Tests;
+public sealed class Groups197To200ConnectionHealthTests
+{
+ static readonly DateTimeOffset Now=new(2026,8,18,2,3,4,TimeSpan.Zero); static ConnectionHealthDraft Draft()=>new("Calendar read","Integration owner",ConfigurationEnvironment.Test,ConnectionCheckKind.ProviderRead,"LIFEOS_CALENDAR_TOKEN","Reference only.");
+ [Fact]public void Required_fields_and_enums_are_validated(){var r=ConnectionHealthService.Validate(Draft() with{Capability=null,Owner=null,Kind=(ConnectionCheckKind)99});Assert.False(r.IsValid);Assert.NotEmpty(r.ForField("health-capability"));Assert.NotEmpty(r.ForField("health-owner"));Assert.NotEmpty(r.ForField("health-kind"));}
+ [Fact]public void Reference_value_is_rejected(){var r=ConnectionHealthService.Validate(Draft() with{SecretReferenceName="private-value"});Assert.Equal("reference-name",Assert.Single(r.ForField("health-secret-reference")).Code);}
+ [Fact]public void Secret_like_observation_is_rejected(){var r=ConnectionHealthService.Create(Draft(),Now);Assert.Throws<ArgumentException>(()=>ConnectionHealthService.RecordObservation(r,ConnectionHealthState.Passed,"token=private",Now.AddMinutes(1)));}
+ [Fact]public void Creation_is_readiness_only(){var r=ConnectionHealthService.Create(Draft(),Now);Assert.Equal(ConnectionHealthState.ReadyForCredentialedTest,r.State);Assert.Equal("No credentialed test has run.",r.Observation);}
+ [Fact]public void Observation_requires_explicit_result(){var r=ConnectionHealthService.Create(Draft(),Now);var x=ConnectionHealthService.RecordObservation(r,ConnectionHealthState.Blocked,"Adapter is not configured.",Now.AddMinutes(1));Assert.Equal(ConnectionHealthState.Blocked,x.State);}
+ [Fact]public void Missing_repository_is_empty_without_file(){using Temp t=new();string p=Path.Combine(t.Path,"h.json");var r=new ConnectionHealthRepository(p).LoadResult();Assert.Empty(r.Value);Assert.False(File.Exists(p));}
+ [Fact]public void Repository_is_versioned(){using Temp t=new();string p=Path.Combine(t.Path,"h.json");var repo=new ConnectionHealthRepository(p);repo.Save([ConnectionHealthService.Create(Draft(),Now)]);using var j=JsonDocument.Parse(File.ReadAllText(p));Assert.Equal("connection-health",j.RootElement.GetProperty("storeId").GetString());}
+ [Fact]public void Unsafe_record_does_not_overwrite(){using Temp t=new();string p=Path.Combine(t.Path,"h.json");var repo=new ConnectionHealthRepository(p);var v=ConnectionHealthService.Create(Draft(),Now);repo.Save([v]);Assert.Throws<InvalidDataException>(()=>repo.Save([v with{Observation="password=private"}]));Assert.Single(repo.Load());}
+ sealed class Temp:IDisposable{public Temp(){Path=System.IO.Path.Combine(System.IO.Path.GetTempPath(),"lifeos-health-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(Path);}public string Path{get;}public void Dispose(){if(Directory.Exists(Path))Directory.Delete(Path,true);}}
+}

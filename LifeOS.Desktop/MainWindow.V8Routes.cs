@@ -21,6 +21,7 @@ public partial class MainWindow
         "command-centre",
         "communications",
         "configuration-readiness",
+        "connection-health",
         "control-plane",
         "career-applications",
         "career-cvs",
@@ -196,6 +197,7 @@ public partial class MainWindow
                 ShowDesktopReleasePage();
                 break;
             case "configuration-readiness": MainContentControl.Content = new ConfigurationReadinessWorkspaceView(false); break;
+            case "connection-health": MainContentControl.Content = new ConnectionHealthWorkspaceView(false); break;
             case "device-transfer-review":
                 MainContentControl.Content = new DeviceTransferWorkspaceView(false);
                 break;

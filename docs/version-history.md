@@ -4,10 +4,20 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.19 is active through Group 196 with genuine ordinary-mode
-Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
+LifeOS v28.0.0-alpha.20 is active through Group 200 with genuine ordinary-mode
+Connection Health, Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
 
 ## v28 - Career Documents Studio
+
+### Groups 197-200
+
+- Added one real embedded Settings workspace for connection-health plans.
+- Added validated capability, ownership, environment, check kind and reference names.
+- Added explicit manual passed, degraded, failed and blocked observations.
+- Rejected secret-like values, notes and observations before state mutation.
+- Registered the sixteenth versioned operational store in Local Data & Recovery.
+- Kept network connections, secret-value reads, authentication and provider calls unavailable.
+- Closed SG-200 Pack 2 with five inspected Desktop captures and three validation records.
 
 ### Groups 193-196
 

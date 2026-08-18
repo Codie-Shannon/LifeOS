@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
-    "currentReleaseName":  "Configuration Readiness and Secret Boundaries",
-    "currentSemanticVersion":  "28.0.0-alpha.19",
+    "currentReleaseName":  "Connection Testing and Health Diagnostics",
+    "currentSemanticVersion":  "28.0.0-alpha.20",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  196,
-    "latestCompletedGroupName":  "Configuration Readiness and Secret Boundaries",
-    "latestCompletedHead":  "sg196-pack2-evidence",
-    "nextGroup":  197,
-    "nextGroupName":  "Connection Testing and Health Diagnostics",
-    "roadmapApprovedThroughGroup":  196,
+    "latestCompletedGroup":  200,
+    "latestCompletedGroupName":  "Connection Testing and Health Diagnostics",
+    "latestCompletedHead":  "sg200-pack2-evidence",
+    "nextGroup":  201,
+    "nextGroupName":  "Provider Adapter Registry and Capability Matrix",
+    "roadmapApprovedThroughGroup":  200,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  196,
+                    "currentThroughGroup":  200,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-196",
-                                      "status":  "configuration-readiness-pack2-complete"
+                                      "groups":  "121-200",
+                                      "status":  "connection-health-pack2-complete"
                                   }
                               ],
     "safetyBoundaries":  {
@@ -187,7 +187,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-193-196-configuration-readiness-secret-boundaries",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-197-200-connection-testing-health-diagnostics",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

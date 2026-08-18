@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.13 is active through Group 172 with real ordinary-mode
-Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
+**LifeOS v28.0.0-alpha.14 is active through Group 176 with real ordinary-mode
+Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -55,7 +55,7 @@ checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-172 | Career Documents, Platform Spine, Projects, Work Time, Money Pressure, Documents, Household, Life and Weekly Review |
+| v28 | 121-176 | Career Documents, Platform Spine, Projects, Work Time, Money Pressure, Documents, Household, Life, Weekly Review and Agenda |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -202,6 +202,16 @@ sequential counter.
 - Weekly review uses the shared versioned, atomic, recoverable local-store contract.
 - Automatic task roll-forward, calendar events, messages, assignments and provider writes remain unavailable.
 - SG-172 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
+
+### v28 / Groups 173-176 - Agenda and Commitment Planning
+
+- Agenda is replaced by a genuine ordinary local workspace.
+- Title, optional due date and time, type, pressure, next action and notes are validated.
+- Planned, in-progress, waiting, parked, completed and cancelled transitions remain explicit.
+- Fixed commitments remain local context without automatic reminders or escalation.
+- Agenda continues on the shared versioned, atomic, recoverable local-store contract.
+- Calendar events, reminders, provider tasks, messages, payments and background actions remain unavailable.
+- SG-176 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

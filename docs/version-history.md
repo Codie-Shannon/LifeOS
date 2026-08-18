@@ -4,10 +4,19 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.13 is active through Group 172 with genuine ordinary-mode
-Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
+LifeOS v28.0.0-alpha.14 is active through Group 176 with genuine ordinary-mode
+Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
 
 ## v28 - Career Documents Studio
+
+### Groups 173-176
+
+- Replaced the Agenda legacy surface with one real local workspace.
+- Added validated commitments, dates, pressure, fixed context and next actions.
+- Added explicit planned, in-progress, waiting, parked, completed and cancelled transitions.
+- Preserved the existing versioned operational store and recoverable Trash.
+- Kept calendar, reminder, provider-task, message, payment and background writes unavailable.
+- Closed SG-176 Pack 2 with five inspected Desktop captures and three validation records.
 
 ### Groups 169-172
 

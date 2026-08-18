@@ -1,6 +1,6 @@
 # LifeOS current status
 
-LifeOS is current through **v28.0.0-alpha.13 / Group 172 / SG-172 Pack 2**.
+LifeOS is current through **v28.0.0-alpha.14 / Group 176 / SG-176 Pack 2**.
 SG-124 is complete with screenshot evidence. SG-128 adds templates, A4 review,
 ATS/readability checks, version history and safe PDF/DOCX derivatives; its
 visible Pack 2 capture remains open. SG-132 closes the configuration-free
@@ -54,6 +54,10 @@ Groups 169-172 replace the Weekly Close-Out legacy direct-write surface with a
 genuine ordinary local workspace. Close-out fields are validated, pressure and
 next-week focus remain visible, and review state only changes explicitly.
 
+Groups 173-176 replace the Agenda legacy surface with a genuine ordinary local
+workspace. Commitments have validated dates, pressure and next actions, while
+state changes remain explicit and destructive deletion is unavailable.
+
 The 2026-08-18 recovery pass corrected the execution baseline without claiming
 a new group: ordinary and portfolio-demo data are now explicitly separated,
 Career document history is durable across restarts, PDF export paginates instead
@@ -70,13 +74,26 @@ preserved v27 release candidate.
 
 | Product | Status |
 |---|---|
-| Desktop | Current through Group 172 with ordinary-mode Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
+| Desktop | Current through Group 176 with ordinary-mode Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects, validated forms, actionable problems and local-data recovery |
 | Full Mobile | Current through Group 132 with ordinary empty state, opportunity capture, document review and derivative sharing |
 | Mobile Companion | Separate lightweight companion product; beta complete and closed |
 | Website | Product, documentation, onboarding, portfolio and release-candidate evidence surface |
 | Shared Core | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
 
 ## Latest implemented capability
+
+Groups 173-176 establish Agenda and Commitment Planning:
+
+- genuine ordinary-mode local state with no seeded commitments
+- validated title, optional due date and time, pressure, next action and notes
+- explicit planned, in-progress, waiting, parked, completed and cancelled transitions
+- versioned atomic persistence, legacy next-action normalization and recoverable Trash
+- no calendar event, reminder, provider task, message, payment or background action
+
+SG-176 Pack 2 is closed with five directly rendered Desktop images and three
+inspected validation records.
+
+## Prior completed capability
 
 Groups 169-172 establish Weekly Review and Personal Planning:
 
@@ -86,10 +103,7 @@ Groups 169-172 establish Weekly Review and Personal Planning:
 - versioned atomic persistence and recoverable Trash registration
 - no automatic task roll-forward, calendar event, message, assignment or provider write
 
-SG-172 Pack 2 is closed with five directly rendered Desktop images and three
-inspected validation records.
-
-## Prior completed capability
+SG-172 Pack 2 is closed with five directly rendered Desktop images and three inspected validation records.
 
 Groups 165-168 establish Life Routines and Personal Administration:
 
@@ -246,6 +260,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 
 ## Validation baseline
 
+- Groups 173-176 targeted tests: 8 passed
 - Groups 169-172 targeted tests: 8 passed
 - Groups 165-168 targeted tests: 8 passed
 - Groups 161-164 targeted tests: 8 passed
@@ -256,7 +271,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Groups 141-144 targeted tests: 8 passed
 - Groups 137-140 targeted tests: 7 passed
 - Groups 133-136 targeted tests: 8 passed
-- Core tests: 557 passed
+- Core tests: 565 passed
 - Companion tests: 34 passed
 - Website tests: 28 passed
 - Mobile tests: 56 passed
@@ -267,7 +282,7 @@ This builds on completed Work Time, Guarded Provider Contracts, Closed Beta, Nat
 - Groups 129-132 targeted tests: 11 passed
 - Prior Android runtime baseline: fresh installs launched on API 36 at SG-132
 - Website runtime smoke test: HTTP 200
-- Latest closed evidence: [`group-169-172-weekly-review-personal-planning`](screenshot-groups/group-169-172-weekly-review-personal-planning/)
+- Latest closed evidence: [`group-173-176-agenda-commitment-planning`](screenshot-groups/group-173-176-agenda-commitment-planning/)
 
 SG-140 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-144 Pack 2 is closed with exact, inspected product and validation evidence.
@@ -278,12 +293,13 @@ SG-160 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-164 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-168 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-172 Pack 2 is closed with exact, inspected product and validation evidence.
+SG-176 Pack 2 is closed with exact, inspected product and validation evidence.
 SG-128 Pack 2 remains a historical evidence gap and must be closed without
 inferring UI proof from builds or automated tests.
 
 ## Next completion work
 
-Continue Agenda and Commitment Planning productization. SG-128’s historical
+Continue Focus Timer and Session Control productization. SG-128’s historical
 visible Pack 2 capture remains open.
 Credentialed integrations, signing, public deployment, store submission and
 owner acceptance remain final gates.

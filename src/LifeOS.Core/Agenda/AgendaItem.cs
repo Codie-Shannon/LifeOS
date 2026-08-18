@@ -16,6 +16,8 @@ public sealed class AgendaItem
 
     public string TimeText { get; set; } = string.Empty;
 
+    public string NextAction { get; set; } = string.Empty;
+
     public bool IsFixedCommitment { get; set; }
 
     public string Notes { get; set; } = string.Empty;

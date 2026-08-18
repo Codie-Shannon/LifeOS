@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v28.0.0-alpha.13 active.
-- Group 172 / SG-172 Pack 2 closed with exact inspected evidence.
-- Weekly Review & Personal Planning is a real ordinary-mode embedded workspace.
+- LifeOS v28.0.0-alpha.14 active.
+- Group 176 / SG-176 Pack 2 closed with exact inspected evidence.
+- Agenda & Commitment Planning is a real ordinary-mode embedded workspace.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation

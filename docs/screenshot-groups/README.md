@@ -40,6 +40,7 @@ work appear to stop at SG-82 even though implementation had reached Group 128.
 | 161-164 | SG-164 |
 | 165-168 | SG-168 |
 | 169-172 | SG-172 |
+| 173-176 | SG-176 |
 
 ## Evidence preservation
 
@@ -81,4 +82,7 @@ SG-168 is closed with the exact eight-image Desktop and validation Pack 2
 evidence set.
 
 SG-172 is closed with the exact eight-image Desktop and validation Pack 2
+evidence set.
+
+SG-176 is closed with the exact eight-image Desktop and validation Pack 2
 evidence set.

@@ -218,7 +218,7 @@ internal static class WorkspaceCatalog
                         "Existing modules form one clear personal operating loop.",
                         new WorkspaceModuleDefinition[]
                         {
-                            Route("agenda", "Agenda", "Canonical records", "Commitments, dates, time, pressure, status and notes."),
+                            Route("agenda", "Agenda", "SG-176 active", "Validated commitments, dates, pressure, next actions and explicit state."),
                             Route("daily-state", "Daily State", "SG-168 active", "Validated local routines, personal administration, pressure and next actions."),
                             Route("daily-operating-flow", "Daily Operating Flow", "SG-168 active", "A manual, visible and recoverable personal operating sequence."),
                             Route("operating-day", "Operating Day & Work Proof", "SG-72 ready", "Protected blocks, calendar proposals, pressure-aware reminders, boundaries and proof-linked closure."),

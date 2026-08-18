@@ -161,7 +161,7 @@ internal static class WorkspaceCatalog
                             Route("career-applications", "Cover Letters & Application Packs", "SG-132 active", "Opportunity-linked cover letters, explicit evidence acceptance, current-document checks and application-pack review."),
                             Route("v12-career-studio", "Career Studio", "Canonical records", "Authoritative opportunity and application pipeline with review-first imported candidates."),
                             Native("career-interviews", "Interviews", "Native workspace surface", "Interview preparation and follow-up structure."),
-                            Route("relationship-radar", "Relationship Radar", "Canonical records", "Relationship and follow-up records where they support career activity.")
+                            Route("relationship-radar", "Relationships", "SG-184 active", "Validated relationship context, waiting state and respectful next actions.")
                         })
                 }),
             new(

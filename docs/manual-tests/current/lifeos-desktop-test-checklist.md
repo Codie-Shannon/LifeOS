@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v28.0.0-alpha.21 active.
-- Group 204 / SG-204 Pack 2 closed with exact inspected evidence.
-- Provider Adapter Registry & Capability Matrix is a real ordinary-mode embedded workspace.
+- LifeOS v28.0.0-alpha.22 configuration-free development complete.
+- Group 208 / SG-208 Pack 2 closed with exact inspected evidence.
+- Provider Consent & Permission Profiles is a real ordinary-mode embedded workspace.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation

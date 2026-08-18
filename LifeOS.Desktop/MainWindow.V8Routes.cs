@@ -23,6 +23,7 @@ public partial class MainWindow
         "configuration-readiness",
         "connection-health",
         "provider-adapters",
+        "provider-consent",
         "control-plane",
         "career-applications",
         "career-cvs",
@@ -200,6 +201,7 @@ public partial class MainWindow
             case "configuration-readiness": MainContentControl.Content = new ConfigurationReadinessWorkspaceView(false); break;
             case "connection-health": MainContentControl.Content = new ConnectionHealthWorkspaceView(false); break;
             case "provider-adapters": MainContentControl.Content = new ProviderAdapterWorkspaceView(false); break;
+            case "provider-consent": MainContentControl.Content = new ProviderConsentWorkspaceView(false); break;
             case "device-transfer-review":
                 MainContentControl.Content = new DeviceTransferWorkspaceView(false);
                 break;

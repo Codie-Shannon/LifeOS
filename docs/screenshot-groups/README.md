@@ -48,6 +48,7 @@ work appear to stop at SG-82 even though implementation had reached Group 128.
 | 193-196 | SG-196 |
 | 197-200 | SG-200 |
 | 201-204 | SG-204 |
+| 205-208 | SG-208 |
 
 ## Evidence preservation
 
@@ -114,3 +115,6 @@ evidence set.
 
 SG-204 is closed with the exact eight-image Desktop and validation Pack 2
 evidence set.
+
+SG-208 closes the approved configuration-free development lane with the exact
+eight-image Desktop and validation Pack 2 evidence set.

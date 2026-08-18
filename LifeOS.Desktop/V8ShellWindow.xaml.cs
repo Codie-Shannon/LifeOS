@@ -1212,6 +1212,7 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
         if (string.Equals(routeId, "configuration-readiness", StringComparison.OrdinalIgnoreCase)) { ShowEmbeddedModule(routeId, title, subtitle, new ConfigurationReadinessWorkspaceView(_preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo)); return; }
         if (string.Equals(routeId, "connection-health", StringComparison.OrdinalIgnoreCase)) { ShowEmbeddedModule(routeId, title, subtitle, new ConnectionHealthWorkspaceView(_preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo)); return; }
         if (string.Equals(routeId, "provider-adapters", StringComparison.OrdinalIgnoreCase)) { ShowEmbeddedModule(routeId, title, subtitle, new ProviderAdapterWorkspaceView(_preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo)); return; }
+        if (string.Equals(routeId, "provider-consent", StringComparison.OrdinalIgnoreCase)) { ShowEmbeddedModule(routeId, title, subtitle, new ProviderConsentWorkspaceView(_preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo)); return; }
 
         MainWindow legacyModule = new()
         {

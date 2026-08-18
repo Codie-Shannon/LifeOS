@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.21 is active through Group 204 with real ordinary-mode
-Provider Adapter Registry, Connection Health, Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
+**LifeOS v28.0.0-alpha.22 completes the approved configuration-free development lane through Group 208 with real ordinary-mode
+Provider Consent, Provider Adapter Registry, Connection Health, Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -55,7 +55,7 @@ checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-204 | Career Documents, Platform Spine, Projects, Work Time, Money Pressure, Documents, Household, Life, Weekly Review, Agenda, Focus Timer, Relationships, Local-First Sync, Device Transfer Review, Configuration Readiness, Connection Health and Provider Adapter Registry |
+| v28 | 121-208 | Career Documents, Platform Spine, Projects, Work Time, Money Pressure, Documents, Household, Life, Weekly Review, Agenda, Focus Timer, Relationships, Local-First Sync, Device Transfer Review, Configuration Readiness, Connection Health, Provider Adapter Registry and Provider Consent |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -282,6 +282,16 @@ sequential counter.
 - Adapter metadata uses versioned atomic persistence and recoverable Trash.
 - SDK loading, credential resolution, endpoints and provider-write activation remain unavailable.
 - SG-204 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
+
+### v28 / Groups 205-208 - Provider Consent and Permission Profiles
+
+- Settings gains a genuine embedded provider-consent workspace.
+- Profile, provider, owner, purpose, expiry and capability flags are validated.
+- Proposed, approved, paused, revoked and expired states remain explicit.
+- Credential-like purpose or notes are rejected before mutation.
+- Consent metadata uses versioned atomic persistence and recoverable Trash.
+- Approval still enables no OAuth, credential resolution, endpoint or provider access.
+- SG-208 Pack 2 closes the approved configuration-free development lane with the exact eight-image Desktop and validation evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

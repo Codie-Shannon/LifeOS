@@ -377,6 +377,7 @@
                                         <Button Content="Open Configuration Readiness" Tag="configuration-readiness" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.configuration-readiness" />
                                         <Button Content="Open Connection Health Diagnostics" Tag="connection-health" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.connection-health" />
                                         <Button Content="Open Provider Adapter Registry" Tag="provider-adapters" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.provider-adapters" />
+                                        <Button Content="Open Provider Consent &amp; Permissions" Tag="provider-consent" Click="OpenModule_Click" HorizontalAlignment="Left" Margin="0,8,0,0" Style="{StaticResource LifeOS.Button}" AutomationProperties.AutomationId="Workspace.Module.provider-consent" />
                                     </StackPanel>
                                 </Border>
 

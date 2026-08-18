@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
-    "currentReleaseName":  "Provider Adapter Registry and Capability Matrix",
-    "currentSemanticVersion":  "28.0.0-alpha.21",
-    "currentStatus":  "active-development",
-    "latestCompletedGroup":  204,
-    "latestCompletedGroupName":  "Provider Adapter Registry and Capability Matrix",
-    "latestCompletedHead":  "sg204-pack2-evidence",
-    "nextGroup":  205,
-    "nextGroupName":  "Provider Consent and Permission Profiles",
-    "roadmapApprovedThroughGroup":  204,
+    "currentReleaseName":  "Provider Consent and Permission Profiles",
+    "currentSemanticVersion":  "28.0.0-alpha.22",
+    "currentStatus":  "configuration-free-development-complete",
+    "latestCompletedGroup":  208,
+    "latestCompletedGroupName":  "Provider Consent and Permission Profiles",
+    "latestCompletedHead":  "sg208-pack2-evidence",
+    "nextGroup":  null,
+    "nextGroupName":  "Configuration, credentialed integration testing and release gates",
+    "roadmapApprovedThroughGroup":  208,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  204,
+                    "currentThroughGroup":  208,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-204",
-                                      "status":  "provider-adapter-pack2-complete"
+                                      "groups":  "121-208",
+                                      "status":  "configuration-free-development-complete"
                                   }
                               ],
     "safetyBoundaries":  {
@@ -187,7 +187,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-201-204-provider-adapter-capability-matrix",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-205-208-provider-consent-permission-profiles",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

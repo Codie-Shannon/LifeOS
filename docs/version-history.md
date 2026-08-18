@@ -4,10 +4,20 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.21 is active through Group 204 with genuine ordinary-mode
-Provider Adapter Registry, Connection Health, Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
+LifeOS v28.0.0-alpha.22 completes configuration-free development through Group 208 with genuine ordinary-mode
+Provider Consent, Provider Adapter Registry, Connection Health, Configuration Readiness, Device Transfer Review, Local Account & Sync, Relationships, Focus Timer, Agenda, Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
 
 ## v28 - Career Documents Studio
+
+### Groups 205-208
+
+- Added one real embedded Settings workspace for provider-consent profiles.
+- Added validated purpose, ownership, provider, environment, expiry and capabilities.
+- Added explicit proposed, approved, paused, revoked and expired states.
+- Rejected credential-like purpose and notes before state mutation.
+- Registered the eighteenth versioned operational store in Local Data & Recovery.
+- Kept OAuth, credential resolution, endpoints and provider access unavailable.
+- Closed SG-208 Pack 2 and the approved configuration-free development lane with five inspected Desktop captures and three validation records.
 
 ### Groups 201-204
 

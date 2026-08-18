@@ -11,6 +11,7 @@ using LifeOS.Shared.LocalFirstSync;
 using LifeOS.Shared.Money;
 using LifeOS.Shared.Projects;
 using LifeOS.Shared.ProviderAdapters;
+using LifeOS.Shared.ProviderConsent;
 using LifeOS.Shared.RelationshipRadar;
 using LifeOS.Shared.WorkPipeline;
 using LifeOS.Shared.WorkSessions;
@@ -45,7 +46,8 @@ public static class OperationalLocalDataCatalog
         Status("device-transfer-review", "Device transfer review", "Settings", DeviceTransferStorage.Inspect(), DeviceTransferStorage.ListTrash()),
         Status("configuration-readiness", "Configuration readiness", "Settings", ConfigurationReadinessStorage.Inspect(), ConfigurationReadinessStorage.ListTrash()),
         Status("connection-health", "Connection health", "Settings", ConnectionHealthStorage.Inspect(), ConnectionHealthStorage.ListTrash()),
-        Status("provider-adapters", "Provider adapters", "Settings", ProviderAdapterStorage.Inspect(), ProviderAdapterStorage.ListTrash())
+        Status("provider-adapters", "Provider adapters", "Settings", ProviderAdapterStorage.Inspect(), ProviderAdapterStorage.ListTrash()),
+        Status("provider-consent-profiles", "Provider consent profiles", "Settings", ProviderConsentStorage.Inspect(), ProviderConsentStorage.ListTrash())
     ];
 
     public static void RestoreTrash(string storeId, string entryId)
@@ -97,6 +99,7 @@ public static class OperationalLocalDataCatalog
             case "configuration-readiness": ConfigurationReadinessStorage.RestoreTrash(entryId); break;
             case "connection-health": ConnectionHealthStorage.RestoreTrash(entryId); break;
             case "provider-adapters": ProviderAdapterStorage.RestoreTrash(entryId); break;
+            case "provider-consent-profiles": ProviderConsentStorage.RestoreTrash(entryId); break;
             default:
                 throw new ArgumentException("The local store is not registered.", nameof(storeId));
         }

@@ -20,6 +20,7 @@ public partial class MainWindow
         "bills-payments",
         "command-centre",
         "communications",
+        "configuration-readiness",
         "control-plane",
         "career-applications",
         "career-cvs",
@@ -194,6 +195,7 @@ public partial class MainWindow
             case "desktop-release":
                 ShowDesktopReleasePage();
                 break;
+            case "configuration-readiness": MainContentControl.Content = new ConfigurationReadinessWorkspaceView(false); break;
             case "device-transfer-review":
                 MainContentControl.Content = new DeviceTransferWorkspaceView(false);
                 break;

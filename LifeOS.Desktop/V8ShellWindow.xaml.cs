@@ -1209,6 +1209,7 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
                 _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
             return;
         }
+        if (string.Equals(routeId, "configuration-readiness", StringComparison.OrdinalIgnoreCase)) { ShowEmbeddedModule(routeId, title, subtitle, new ConfigurationReadinessWorkspaceView(_preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo)); return; }
 
         MainWindow legacyModule = new()
         {

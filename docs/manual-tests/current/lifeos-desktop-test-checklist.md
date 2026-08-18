@@ -21,9 +21,9 @@ Release build succeeds.
 
 Confirm the repository and visible product state align with:
 
-- LifeOS v28.0.0-alpha.18 active.
-- Group 192 / SG-192 Pack 2 closed with exact inspected evidence.
-- Device Transfer & Conflict Review is a real ordinary-mode embedded workspace.
+- LifeOS v28.0.0-alpha.19 active.
+- Group 196 / SG-196 Pack 2 closed with exact inspected evidence.
+- Configuration Readiness & Secret Boundaries is a real ordinary-mode embedded workspace.
 - Desktop, Full Mobile, Mobile Companion, Website and Shared Core are represented correctly.
 
 ## Desktop navigation

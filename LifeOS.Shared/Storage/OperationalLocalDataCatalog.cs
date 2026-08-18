@@ -1,4 +1,5 @@
 using LifeOS.Shared.Agenda;
+using LifeOS.Shared.ConfigurationReadiness;
 using LifeOS.Shared.Documents;
 using LifeOS.Shared.DeviceTransfer;
 using LifeOS.Shared.FollowUps;
@@ -39,7 +40,8 @@ public static class OperationalLocalDataCatalog
         Status("focus-timers", "Focus timers", "Life", FocusTimerStorage.Inspect(), FocusTimerStorage.ListTrash()),
         Status("relationship-radar", "Relationship radar", "Career", RelationshipRadarStorage.Inspect(), RelationshipRadarStorage.ListTrash()),
         Status("local-account-sync", "Local account and sync", "Settings", LocalFirstSyncStorage.Inspect(), LocalFirstSyncStorage.ListTrash()),
-        Status("device-transfer-review", "Device transfer review", "Settings", DeviceTransferStorage.Inspect(), DeviceTransferStorage.ListTrash())
+        Status("device-transfer-review", "Device transfer review", "Settings", DeviceTransferStorage.Inspect(), DeviceTransferStorage.ListTrash()),
+        Status("configuration-readiness", "Configuration readiness", "Settings", ConfigurationReadinessStorage.Inspect(), ConfigurationReadinessStorage.ListTrash())
     ];
 
     public static void RestoreTrash(string storeId, string entryId)
@@ -88,6 +90,7 @@ public static class OperationalLocalDataCatalog
             case "device-transfer-review":
                 DeviceTransferStorage.RestoreTrash(entryId);
                 break;
+            case "configuration-readiness": ConfigurationReadinessStorage.RestoreTrash(entryId); break;
             default:
                 throw new ArgumentException("The local store is not registered.", nameof(storeId));
         }

@@ -17,7 +17,7 @@ LifeOS is a safety-first platform built by Codie Shannon around purpose-built De
 | **LifeOS Mobile Companion** | Separate lightweight companion product; beta complete and closed |
 | **LifeOS Website** | Product, documentation, onboarding, factual portfolio and release-candidate evidence surface |
 | **Shared Core** | Authoritative contracts, deterministic validation, read models, provenance, audit, conflict and safety boundaries |
-| **Current release lane** | v28 ordinary-mode productization; Life Routines and Personal Administration implemented through SG-168 Pack 1 |
+| **Current release lane** | v28 ordinary-mode productization; Life Routines and Personal Administration complete through SG-168 Pack 2 |
 
 Full Mobile and Mobile Companion are separate products. They can share contracts and libraries, but retain different scope, UX and release tracks.
 
@@ -95,6 +95,7 @@ Official evidence is stored under [`docs/screenshot-groups/`](docs/screenshot-gr
 
 Recent evidence:
 
+- [Groups 165-168 - Life Routines and Personal Administration](docs/screenshot-groups/group-165-168-life-routines-personal-admin/)
 - [Groups 161-164 - Household and Grocery Planning](docs/screenshot-groups/group-161-164-household-grocery-planning/)
 - [Groups 157-160 - Documents and Evidence Intake](docs/screenshot-groups/group-157-160-document-evidence-intake/)
 - [Groups 153-156 - Money Pressure and Safe to Spend](docs/screenshot-groups/group-153-156-money-pressure-safe-spend/)
@@ -158,8 +159,8 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass `
 
 LifeOS v28.0.0-alpha.12 is active through Group 168. Life Routines & Personal
 Administration now has a real ordinary-mode local workspace on the shared
-storage, forms and problem-state spine. SG-168 Pack 1 is implemented and visible
-Pack 2 evidence is next. SG-128 visible
+storage, forms and problem-state spine. SG-168 Pack 2 is closed with exact,
+inspected product and validation evidence. SG-128 visible
 Pack 2 evidence remains open; v27 release-candidate evidence remains preserved
 in SG-120.
 

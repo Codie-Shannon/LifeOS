@@ -5,7 +5,7 @@
     "currentStatus":  "active-development",
     "latestCompletedGroup":  168,
     "latestCompletedGroupName":  "Life Routines and Personal Administration",
-    "latestCompletedHead":  "sg168-pack1-implemented",
+    "latestCompletedHead":  "sg168-pack2-evidence",
     "nextGroup":  169,
     "nextGroupName":  "Weekly Review and Personal Planning",
     "roadmapApprovedThroughGroup":  168,
@@ -166,7 +166,7 @@
                                   {
                                       "release":  "v28",
                                       "groups":  "121-168",
-                                      "status":  "life-routines-pack1"
+                                      "status":  "life-routines-pack2-complete"
                                   }
                               ],
     "safetyBoundaries":  {
@@ -187,7 +187,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-161-164-household-grocery-planning",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-165-168-life-routines-personal-admin",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

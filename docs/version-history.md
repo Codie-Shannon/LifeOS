@@ -16,7 +16,7 @@ Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
 - Added explicit planned, active, waiting, deferred, done and archived transitions.
 - Registered the ninth versioned operational store in Local Data & Recovery.
 - Kept calendar, reminder, provider-task, message, payment and background writes unavailable.
-- Implemented SG-168 Pack 1; visible product and validation evidence remains open.
+- Closed SG-168 Pack 2 with five inspected Desktop captures and three validation records.
 
 ### Groups 161-164
 

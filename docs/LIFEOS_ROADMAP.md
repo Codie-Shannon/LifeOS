@@ -191,7 +191,7 @@ sequential counter.
 - Pinned attention is local context and does not create reminders or escalation.
 - Life routines use the shared versioned, atomic, recoverable local-store contract.
 - Calendar events, provider tasks, messages, payments and background actions remain unavailable.
-- SG-168 Pack 1 is implemented; directly rendered product and validation evidence remains Pack 2 work.
+- SG-168 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

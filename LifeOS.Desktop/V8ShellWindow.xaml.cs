@@ -1158,6 +1158,17 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
                     _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
             return;
         }
+        if (string.Equals(routeId, "daily-state", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(routeId, "daily-operating-flow", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(
+                routeId,
+                title,
+                subtitle,
+                new LifeRoutinesWorkspaceView(
+                    _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
+            return;
+        }
 
         MainWindow legacyModule = new()
         {

@@ -58,7 +58,7 @@ public sealed class LocalDataRecoveryView : UserControl
 
         root.Children.Add(Heading("Operational stores", 20, new Thickness(0, 8, 0, 4)));
         root.Children.Add(Text(
-            "Agenda, follow-ups, work pipeline, work sessions, projects, money pressure, document intake and household grocery use the shared versioned contract. Other modules remain on their existing paths until migrated deliberately.",
+            "Agenda, follow-ups, work pipeline, work sessions, projects, money pressure, document intake, household grocery and life routines use the shared versioned contract. Other modules remain on their existing paths until migrated deliberately.",
             12,
             "#A9B6CA"));
 

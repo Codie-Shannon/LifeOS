@@ -1,12 +1,12 @@
 <Project>
   <PropertyGroup>
-    <Version>28.0.0-alpha.11</Version>
+    <Version>28.0.0-alpha.12</Version>
     <VersionPrefix>28.0.0</VersionPrefix>
-    <VersionSuffix>alpha.11</VersionSuffix>
+    <VersionSuffix>alpha.12</VersionSuffix>
     <AssemblyVersion>28.0.0.0</AssemblyVersion>
     <FileVersion>28.0.0.0</FileVersion>
-    <InformationalVersion>28.0.0-alpha.11</InformationalVersion>
-    <LifeOSDisplayVersion>v28.0.0-alpha.11</LifeOSDisplayVersion>
-    <LifeOSReleaseName>v28 Household and Grocery Planning</LifeOSReleaseName>
+    <InformationalVersion>28.0.0-alpha.12</InformationalVersion>
+    <LifeOSDisplayVersion>v28.0.0-alpha.12</LifeOSDisplayVersion>
+    <LifeOSReleaseName>v28 Life Routines and Personal Administration</LifeOSReleaseName>
   </PropertyGroup>
 </Project>

@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.11 is active through Group 164 with real ordinary-mode
-Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
+**LifeOS v28.0.0-alpha.12 is active through Group 168 with real ordinary-mode
+Life, Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -182,6 +182,16 @@ sequential counter.
 - Household grocery data uses the shared versioned, atomic, recoverable local-store contract.
 - Ordering, payments, price trust, substitution and external-cart mutation remain unavailable.
 - SG-164 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
+
+### v28 / Groups 165-168 - Life Routines and Personal Administration
+
+- Daily State and Daily Operating Flow share a genuine ordinary local workspace.
+- Date, title, area, next action, time window, kind, pressure and notes are validated.
+- Planned, active, waiting, deferred, done and archived transitions remain explicit.
+- Pinned attention is local context and does not create reminders or escalation.
+- Life routines use the shared versioned, atomic, recoverable local-store contract.
+- Calendar events, provider tasks, messages, payments and background actions remain unavailable.
+- SG-168 Pack 1 is implemented; directly rendered product and validation evidence remains Pack 2 work.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
-    "currentReleaseName":  "Household and Grocery Planning",
-    "currentSemanticVersion":  "28.0.0-alpha.11",
+    "currentReleaseName":  "Life Routines and Personal Administration",
+    "currentSemanticVersion":  "28.0.0-alpha.12",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  164,
-    "latestCompletedGroupName":  "Household and Grocery Planning",
-    "latestCompletedHead":  "sg164-pack2-evidence",
-    "nextGroup":  165,
-    "nextGroupName":  "Life Routines and Personal Administration",
-    "roadmapApprovedThroughGroup":  164,
+    "latestCompletedGroup":  168,
+    "latestCompletedGroupName":  "Life Routines and Personal Administration",
+    "latestCompletedHead":  "sg168-pack1-implemented",
+    "nextGroup":  169,
+    "nextGroupName":  "Weekly Review and Personal Planning",
+    "roadmapApprovedThroughGroup":  168,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  164,
+                    "currentThroughGroup":  168,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-164",
-                                      "status":  "household-grocery-pack2-complete"
+                                      "groups":  "121-168",
+                                      "status":  "life-routines-pack1"
                                   }
                               ],
     "safetyBoundaries":  {

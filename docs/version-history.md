@@ -4,10 +4,19 @@ This file summarizes the release lineage without rewriting historical evidence. 
 
 ## Current
 
-LifeOS v28.0.0-alpha.12 is active through Group 168 with genuine ordinary-mode
-Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
+LifeOS v28.0.0-alpha.13 is active through Group 172 with genuine ordinary-mode
+Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces.
 
 ## v28 - Career Documents Studio
+
+### Groups 169-172
+
+- Replaced the Weekly Close-Out legacy direct-write surface with one real local workspace.
+- Added validated weekly accomplishments, movement, blockers, pressure and next focus.
+- Added explicit draft, ready, closed and archived transitions.
+- Registered the tenth versioned operational store in Local Data & Recovery.
+- Kept automatic roll-forward, scheduling, messaging, assignment and provider writes unavailable.
+- Closed SG-172 Pack 2 with five inspected Desktop captures and three validation records.
 
 ### Groups 165-168
 

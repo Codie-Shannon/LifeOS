@@ -1,18 +1,18 @@
 {
     "currentRelease":  "v28",
-    "currentReleaseName":  "Life Routines and Personal Administration",
-    "currentSemanticVersion":  "28.0.0-alpha.12",
+    "currentReleaseName":  "Weekly Review and Personal Planning",
+    "currentSemanticVersion":  "28.0.0-alpha.13",
     "currentStatus":  "active-development",
-    "latestCompletedGroup":  168,
-    "latestCompletedGroupName":  "Life Routines and Personal Administration",
-    "latestCompletedHead":  "sg168-pack2-evidence",
-    "nextGroup":  169,
-    "nextGroupName":  "Weekly Review and Personal Planning",
-    "roadmapApprovedThroughGroup":  168,
+    "latestCompletedGroup":  172,
+    "latestCompletedGroupName":  "Weekly Review and Personal Planning",
+    "latestCompletedHead":  "sg172-pack2-evidence",
+    "nextGroup":  173,
+    "nextGroupName":  "Agenda and Commitment Planning",
+    "roadmapApprovedThroughGroup":  172,
     "desktop":  {
                     "status":  "active-current",
                     "role":  "deep-administration-review-planning-audit-reporting",
-                    "currentThroughGroup":  168,
+                    "currentThroughGroup":  172,
                     "detachedModuleWindowsAllowed":  false,
                     "childModulesOpenInParentWorkspace":  true
                 },
@@ -165,8 +165,8 @@
                                   },
                                   {
                                       "release":  "v28",
-                                      "groups":  "121-168",
-                                      "status":  "life-routines-pack2-complete"
+                                      "groups":  "121-172",
+                                      "status":  "weekly-review-pack2-complete"
                                   }
                               ],
     "safetyBoundaries":  {
@@ -187,7 +187,7 @@
                              "destructiveEvidenceHandlingEnabled":  false
                          },
     "evidence":  {
-        "latestScreenshotGroup":  "docs/screenshot-groups/group-165-168-life-routines-personal-admin",
+        "latestScreenshotGroup":  "docs/screenshot-groups/group-169-172-weekly-review-personal-planning",
         "officialScreenshotsPerGroup":  8,
         "documentedGenuineCaptureOverridesAllowed":  true,
                      "privateContextPdfsCommitted":  false

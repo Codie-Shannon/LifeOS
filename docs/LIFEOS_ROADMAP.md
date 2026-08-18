@@ -4,8 +4,8 @@ This is the current approved compressed roadmap. Historical plans remain in Git 
 
 ## Current release
 
-**LifeOS v28.0.0-alpha.12 is active through Group 168 with real ordinary-mode
-Life, Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
+**LifeOS v28.0.0-alpha.13 is active through Group 172 with real ordinary-mode
+Weekly Review, Life, Household, Documents, Money Pressure, Work Time and Projects workspaces on the shared spine.**
 
 The v27/Group 120 release candidate remains preserved as a historical
 checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
@@ -55,7 +55,7 @@ checkpoint. Career Documents Studio Pack 1 is implemented through Group 132.
 | v25 | 108-111 | Privacy, Export, Backup and Controls |
 | v26 | 112-116 | Website Packaging and Onboarding |
 | v27 | 117-120 | Product-Complete Release Candidate |
-| v28 | 121-160 | Career Documents, Platform Spine, Projects, Work Time, Money Pressure and Document Intake |
+| v28 | 121-172 | Career Documents, Platform Spine, Projects, Work Time, Money Pressure, Documents, Household, Life and Weekly Review |
 
 Version numbers follow shipped product checkpoints; v17 was not used as a completed release lane.
 
@@ -192,6 +192,16 @@ sequential counter.
 - Life routines use the shared versioned, atomic, recoverable local-store contract.
 - Calendar events, provider tasks, messages, payments and background actions remain unavailable.
 - SG-168 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
+
+### v28 / Groups 169-172 - Weekly Review and Personal Planning
+
+- Weekly Close-Out is replaced by a genuine ordinary local workspace.
+- Week, accomplishments, movement, blockers, pressure, focus and notes are validated.
+- Draft, ready, closed and archived transitions remain explicit.
+- Ordinary mode starts empty and portfolio proof remains isolated.
+- Weekly review uses the shared versioned, atomic, recoverable local-store contract.
+- Automatic task roll-forward, calendar events, messages, assignments and provider writes remain unavailable.
+- SG-172 Pack 2 is closed with the exact eight-image Desktop and validation evidence set.
 
 Public rollout, broader Desktop redesign, telemetry expansion, extension SDKs
 and optional cloud services require separate approval.

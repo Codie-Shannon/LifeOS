@@ -222,7 +222,7 @@ internal static class WorkspaceCatalog
                             Route("daily-state", "Daily State", "SG-168 active", "Validated local routines, personal administration, pressure and next actions."),
                             Route("daily-operating-flow", "Daily Operating Flow", "SG-168 active", "A manual, visible and recoverable personal operating sequence."),
                             Route("operating-day", "Operating Day & Work Proof", "SG-72 ready", "Protected blocks, calendar proposals, pressure-aware reminders, boundaries and proof-linked closure."),
-                            Route("weekly-close-out", "Weekly Close-Out", "Canonical records", "Done, moved, waiting and next-week review."),
+                            Route("weekly-close-out", "Weekly Review", "SG-172 active", "Validated close-out, pressure and explicit next-week focus."),
                             Route("timer-agent", "TimerAgent", "Canonical utility", "Desktop-only timing utility inside Life.")
                         })
                 }),

@@ -7,6 +7,7 @@ using LifeOS.Shared.Money;
 using LifeOS.Shared.Projects;
 using LifeOS.Shared.WorkPipeline;
 using LifeOS.Shared.WorkSessions;
+using LifeOS.Shared.WeeklyReview;
 
 namespace LifeOS.Shared.Storage;
 
@@ -29,7 +30,8 @@ public static class OperationalLocalDataCatalog
         Status("money-pressure", "Money pressure", "Money", MoneyPressureStorage.Inspect(), MoneyPressureStorage.ListTrash()),
         Status("document-intake", "Document intake", "Documents", DocumentIntakeStorage.Inspect(), DocumentIntakeStorage.ListTrash()),
         Status("household-grocery", "Household grocery", "Household", HouseholdGroceryStorage.Inspect(), HouseholdGroceryStorage.ListTrash()),
-        Status("life-routines", "Life routines", "Life", LifeRoutineStorage.Inspect(), LifeRoutineStorage.ListTrash())
+        Status("life-routines", "Life routines", "Life", LifeRoutineStorage.Inspect(), LifeRoutineStorage.ListTrash()),
+        Status("weekly-review", "Weekly review", "Life", WeeklyReviewStorage.Inspect(), WeeklyReviewStorage.ListTrash())
     ];
 
     public static void RestoreTrash(string storeId, string entryId)
@@ -62,6 +64,9 @@ public static class OperationalLocalDataCatalog
                 break;
             case "life-routines":
                 LifeRoutineStorage.RestoreTrash(entryId);
+                break;
+            case "weekly-review":
+                WeeklyReviewStorage.RestoreTrash(entryId);
                 break;
             default:
                 throw new ArgumentException("The local store is not registered.", nameof(storeId));

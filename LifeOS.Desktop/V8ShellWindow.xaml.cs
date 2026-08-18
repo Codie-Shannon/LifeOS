@@ -1169,6 +1169,16 @@ foreach (Button button in TopBarActions.Children.OfType<Button>())
                     _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
             return;
         }
+        if (string.Equals(routeId, "weekly-close-out", StringComparison.OrdinalIgnoreCase))
+        {
+            ShowEmbeddedModule(
+                routeId,
+                title,
+                subtitle,
+                new WeeklyReviewWorkspaceView(
+                    _preferences.ExperienceMode == V8ExperienceMode.PortfolioDemo));
+            return;
+        }
 
         MainWindow legacyModule = new()
         {
